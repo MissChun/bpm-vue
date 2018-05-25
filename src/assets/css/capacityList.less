@@ -1,0 +1,78 @@
+.capacity-list {
+  .capacity-list-header {
+    padding: 10px 20px;
+    border: 1px solid #e4e7ed;
+    background: #fff;
+    .search-filters-form {
+      .el-row {
+        margin-top: 10px;
+      }
+    }
+    .input-with-select {
+      .el-input-group__prepend {
+        background-color: #fff;
+      }
+      .el-select .el-input {
+        width: 180px;
+      }
+    }
+  }
+  .capacity-list-content {
+  }
+}
+
+.capacity-list-dialog {
+  .el-dialog__body {
+    padding-top: 6px;
+    .notice-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .el-icon-warning {
+        font-size: 30px;
+        color: #e6a23c;
+        margin: 24px 0 16px;
+      }
+      .notice-msg {
+      }
+    }
+    .el-form {
+      width: 340px;
+      margin: 0 auto;
+      h2 {
+        text-align: center;
+        font-weight: normal;
+        padding-bottom: 46px;
+        span {
+          color: #4a9bf8;
+        }
+      }
+      .el-form-item {
+        .el-autocomplete {
+          display: block;
+        }
+        .el-select {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// reset element ui
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  max-height: calc(100% - 30px);
+  max-width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+
+  >.el-dialog__body {
+    overflow: auto;
+  }
+}

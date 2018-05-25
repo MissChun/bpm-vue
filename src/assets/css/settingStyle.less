@@ -1,0 +1,111 @@
+.setting {
+    .nav-tab-mt {
+        margin-top: 36px;
+    }
+    .setting-content {
+        position: relative;
+
+        // margin-top: 10px;
+        .user-no-data {
+            height: 200px;
+            padding: 20px 10px;
+            margin-top: 36px;
+
+            line-height: 200px;
+
+            border: 1px solid @tms-border-two-level;
+            background: @tms-white;
+        }
+        .add-user-btn {
+            position: absolute;
+            top: -10px;
+            right: 11px;
+            z-index: 1;
+
+            display: inline-block;
+        }
+        .power-op {
+            .el-checkbox {
+                margin-right: 20px;
+                margin-left: 0;
+            }
+        }
+        .department-list {
+            padding-bottom: 25px;
+
+            border: 1px solid @tms-border-two-level;
+            background: @tms-white;
+            .department-btn {
+                button {
+                    // padding: 0 12px;
+                }
+            }
+            .el-menu {
+                max-height: 600px;
+                padding: 10px;
+                margin-bottom: 5px;
+                overflow-x: hidden;
+
+                border-right: 0;
+
+                .el-menu-item {
+                    position: relative;
+
+                    height: 40px;
+                    padding-left: 60px!important;
+
+                    line-height: 40px;
+
+                    border-bottom: 1px solid @tms-border-two-level;
+                    background: @tms-white!important;
+                    &:last-child {
+                        border-bottom: 0;
+                    }
+                    &.is-active {
+                        color: @tms-font-main;
+                        background: @tms-light-gray!important;
+                        &:after {
+                            position: absolute;
+                            top: 18px;
+                            left: 35px;
+
+                            display: block;
+                            width: 4px;
+                            height: 4px;
+
+                            content: " ";
+                            -webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+                               -moz-transform: rotate(45deg);  /* Firefox */
+                                -ms-transform: rotate(45deg);   /* IE 9 */
+                                 -o-transform: rotate(45deg);  /* Opera */
+                                    transform: rotate(45deg);
+
+                            background-color: @tms-blue;
+                        }
+                    }
+                    &:hover {
+                        background: @tms-light-gray!important;
+                    }
+                }
+            }
+        }
+        .position-list {
+            padding: 20px 10px;
+
+            background-color: @tms-white;
+            .staff-radio {
+                margin: 10px 0 20px 0;
+            }
+            .cell {
+                a {
+                    color: @tms-blue;
+                }
+            }
+        }
+    }
+    .nav-tab-power {
+        .el-tabs__header {
+            width: 100%;
+        }
+    }
+}

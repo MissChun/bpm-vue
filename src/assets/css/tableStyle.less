@@ -1,0 +1,40 @@
+.table-list {
+    min-height: 50px;
+
+    border: 1px solid @tms-border-two-level;
+    .el-table--mini {
+        th {
+            padding: 10px 0;
+
+            font-weight: 400;
+
+            color: @tms-font-main;
+
+            .font-size(14px);
+        }
+        td {
+
+            // min-height: 24px;
+            // padding: 0 6px;
+            dt {
+                min-height: 24px;
+                padding: 6px 0;
+
+                border-bottom: 1px solid @tms-border-two-level;
+                &:last-child {
+                    border-bottom: 0;
+                }
+            }
+            .font-size(13px);
+
+        }
+    }
+    .el-table__header {
+        th {
+            background: @tms-light-gray;
+        }
+    }
+}
+.page-list {
+    margin: 20px 0;
+}
