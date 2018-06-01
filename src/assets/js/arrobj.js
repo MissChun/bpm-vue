@@ -591,3 +591,10 @@ export const fifterbyArr = function(Obj, fifterArr) {
   }
   return newObj;
 }
+export const dealNullData = function(data) {
+  if(data === null || data === undefined || data === ''){
+    return '<span class="text-stance">无</span>'
+  }else{
+    return data
+  }
+}

@@ -29,7 +29,7 @@
                   <el-menu :default-active="active" class="el-menu-vertical-demo" v-loading="departmentLoading">
                     <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item.id,key)" :index="key.toString()" :key="key">
                       <i class="tab-icon"></i>
-                      <span slot="title">{{item.group_name}}</span>
+                      <span slot="title">{{item.department_name}}</span>
                     </el-menu-item>
                   </el-menu>
                 </div>
@@ -40,11 +40,11 @@
         <el-col :span="19">
           <div class="nav-tab-setting">
             <el-tabs v-model="staffsActive" @tab-click="staffClick">
-              <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
+              <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.position_name" :name="item.id">
                 <div class="position-list table-list">
                   <div class="staff-radio">
-                    <el-radio v-model="isValid" label="1" @change="getStaffsList(currentDepartmentId,currentPositionId,false)">有效</el-radio>
-                    <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,true)">已注销</el-radio>
+                    <el-radio v-model="isValid" label="1" @change="getStaffsList(currentDepartmentId,currentPositionId,'True')">有效</el-radio>
+                    <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,'False')">已注销</el-radio>
                   </div>
                   <el-table :data="staffsTableData" stripe style="width: 100%" size="mini" v-loading="staffLoading">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
@@ -53,10 +53,10 @@
                       <template slot-scope="scope">
                         <div v-if="!scope.row.is_deleted">
                           <el-button type="primary" size="mini" @click="staffsDialog('update',scope.row)">修改</el-button>
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,true)">注销</el-button>
+                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, false)">注销</el-button>
                         </div>
                         <div v-if="scope.row.is_deleted">
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,false)">启用</el-button>
+                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, true)">启用</el-button>
                         </div>
                       </template>
                     </el-table-column>
@@ -88,7 +88,7 @@ export default {
   data() {
     return {
       departmentLoading: true, //部门列表loading
-      staffLoading: true, //员工列表loading
+      staffLoading: false, //员工列表loading
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -115,30 +115,22 @@ export default {
         ]
       },
       thTableList: [{
-        title: '登录用户名',
-        param: 'username',
+        title: '手机号码',
+        param: 'mobile_number',
         width: ''
       }, {
-        title: '姓名',
+        title: '用户名',
         param: 'nick_name',
         width: ''
       }, {
         title: '部门',
-        param: 'department.group_name',
+        param: 'department',
         param_two: '',
         width: ''
       }, {
         title: '职位',
-        param: 'carrier_role.role_name',
+        param: 'position',
         param_two: '',
-        width: ''
-      }, {
-        title: '电话',
-        param: 'phone',
-        width: ''
-      }, {
-        title: '邮箱',
-        param: 'email',
         width: ''
       }],
       departmentTableData: [], //部门列表
@@ -167,45 +159,45 @@ export default {
       }
 
     },
+
     // 获取部门列表
     getDepartmentList: function() {
       this.departmentLoading = true;
-      this.$$http('getDepartmentList', { pagination: false }).then((results) => {
+      this.$$http('getDepartmentList', { need_all: true }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.departmentTableData = results.data.data;
           this.active = '0';
           this.departmentLoading = false;
           if (this.departmentTableData.length) {
+            this.currentDepartmentId = this.departmentTableData[0].id;
             this.getPositionList(this.departmentTableData[0].id, this.active)
           }
+
         }
       }).catch((err) => {
         this.departmentLoading = false;
         this.$message.error('获取部门列表失败');
       })
     },
+
     // 获取职位列表
     getPositionList: function(departmentId, index) {
+      this.isValid = '1';
       let postData = {
-        pagination: false,
+        need_all: true,
         department: departmentId
       }
-      this.currentDepartmentId = departmentId;
-      this.positionLoading = true;
-      this.isValid = '1',
-        this.active = index.toString();
+      this.active = index.toString();
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data;
-          this.positionLoading = false;
           if (this.positionTableData.length) {
             this.staffsActive = this.positionTableData[0].id;
             this.currentPositionId = this.positionTableData[0].id;
-            this.getStaffsList(departmentId, this.staffsActive, false);
+            this.getStaffsList(departmentId, this.staffsActive, 'True');
           }
         }
       }).catch((err) => {
-        this.positionLoading = false;
         this.$message.error('获取职位列表失败');
       })
     },
@@ -213,14 +205,16 @@ export default {
     getStaffsList: function(departmentId, positionId, isDeletd) {
       let postData = {
         department: departmentId,
-        is_deleted: isDeletd,
+        is_active: isDeletd,
         page: this.pageData.currentPage,
-        carrier_role: positionId
+        page_size: this.pageData.pageSize,
+        position: positionId
       };
+      console.log('员工', postData)
       this.staffLoading = true;
       this.$$http('getStaffs', postData).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.staffsTableData = results.data.data.results;
+          this.staffsTableData = results.data.data.data;
           this.staffLoading = false;
           this.pageData.totalCount = results.data.data.count;
         }
@@ -232,13 +226,8 @@ export default {
     // 注销 激活员工
     isDeletdStaff: function(row, isDeletd) {
       let postData = {
-        username: row.username,
-        nick_name: row.nick_name,
-        phone: row.phone,
-        email: row.email,
-        department: row.department.id,
-        carrier_role: row.carrier_role.id,
-        is_deleted: isDeletd,
+        position: row.position_id,
+        is_active: isDeletd,
         id: row.id
       }
       console.log(postData)
@@ -293,7 +282,7 @@ export default {
       console.log('职位', tab, event);
       this.currentPositionId = tab.name;
       this.isValid = '1',
-        this.getStaffsList(this.currentDepartmentId, tab.name, false)
+        this.getStaffsList(this.currentDepartmentId, tab.name, 'True')
     },
 
 

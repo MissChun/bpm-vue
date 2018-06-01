@@ -4,9 +4,14 @@
     <el-dialog :title="title" :visible="departmentDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="departmentRules" status-icon ref="departmentRules">
-          <el-form-item label="部门名称：" prop="group_name">
-            <el-input :autofocus="true" placeholder="请输入" v-model="departmentRules.group_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-form-item label="部门名称：" prop="department_name">
+            <el-input :autofocus="true" placeholder="请输入" v-model="departmentRules.department_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
+          </el-form-item>
+          <el-form-item label="部门类型：" prop="department_type">
+            <el-select v-model="departmentRules.department_type" placeholder="请选择">
+              <el-option v-for="(item,key) in departmentTypeList" :key="key" :label="item.title" :value="item.type"></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -38,13 +43,24 @@ export default {
       type: 'department', //弹窗类型
       operation: this.departmentDialog.type,
       departmentRules: {
-        group_name: ''
+        department_name: '',
+        department_type:''
       },
+      departmentTypeList:[{
+        title:'后台用户部门',
+        type:'backend'
+      },{
+        title:'移动端用户部门',
+        type:'app'
+      }],
       rules: {
-        group_name: [
+        department_name: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
           { min: 1, max: 20, message: '部门名称字数为1-20字', trigger: 'blur' }
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
+        ],
+        department_type: [
+          { required: true, message: '请选择部门类型', trigger: 'blur' },
         ],
       },
       submitBtn: {
@@ -76,7 +92,8 @@ export default {
           } else if (this.departmentDialog.type === 'update') {
             apiName = 'updateDepartment';
             postData = {
-              group_name: this.departmentRules.group_name,
+              department_name: this.departmentRules.department_name,
+              department_type: this.departmentRules.department_type,
               id: this.departmentRow.id
             }
           }
@@ -114,12 +131,18 @@ export default {
         console.log('编辑', val, oldVal)
         if (val.isShow && val.type === 'update') {
 
-          this.departmentRules.group_name = this.departmentRow.group_name;
+          this.departmentRules.department_name = this.departmentRow.department_name;
+          this.departmentRules.department_type = this.departmentRow.department_type.key;
           this.title = '编辑部门';
         } else {
           this.title = '新增部门';
-          this.departmentRules.group_name = '';
-        }　　　　
+          this.departmentRules.department_name = '';
+          this.departmentRules.department_type = '';
+        }
+        if(this.$refs['departmentRules']){
+          this.$refs['departmentRules'].clearValidate();　　　　
+        }
+
       }, 　　　　deep: true
 
     }
