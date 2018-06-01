@@ -25,6 +25,9 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
+    },
+    operationStatus: function() {
+      return this.$route.params.type;
     }
   },
   data() {
@@ -36,10 +39,10 @@ export default {
     clicktabs: function(targetName) {
       console.log('this', this.id);
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${this.id}` });
+        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${this.id}/${this.operationStatus}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}` });
+        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderRecordsTab/${this.id}/${this.operationStatus}` });
       }
     },
   },

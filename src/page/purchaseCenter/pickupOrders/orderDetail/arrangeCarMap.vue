@@ -32,7 +32,7 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}` });
+        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}` });
       }
     },
   },

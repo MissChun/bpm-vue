@@ -254,6 +254,44 @@ export default [{
     }]
 
   }, {
+    path: 'businessManage',
+    name: 'businessManage',
+    meta: {
+      isVerificationL: false,
+      title: '贸易业务',
+      iconName: 'icon-lng-dashboard',
+    },
+    component: (resolve) => require(['../page/businessManage/businessManage'], resolve),
+    children: [{
+      path: 'tradeBusiness',
+      name: 'tradeBusiness',
+      redirect: '/businessManage/tradeBusiness/tradeBusinessList',
+      meta: {
+        isVerificationL: false,
+        title: '贸易业务单',
+        iconName: 'icon-lng-dashboard',
+      },
+      component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusiness'], resolve),
+      children: [{
+        path: 'businessList',
+        name: 'tradeBusinessList',
+        meta: {
+          isVerificationL: false,
+          title: '贸易业务单列表',
+        },
+        component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusinessList'], resolve),
+      }, {
+        path: 'businessDetail',
+        name: 'tradeBusinessDetail',
+        meta: {
+          isVerificationL: false,
+          title: '贸易业务单详情',
+        },
+        component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusinessDetail'], resolve),
+      }]
+    }]
+
+  }, {
     path: 'logisticsManage',
     name: 'logisticsManage',
     meta: {

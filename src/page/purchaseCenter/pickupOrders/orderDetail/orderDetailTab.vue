@@ -25,7 +25,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>订单号:</label>
-                        <div class="detail-form-item">{{detailData.id}}</div>
+                        <div class="detail-form-item">{{detailData.order_number}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
@@ -37,7 +37,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>托运方:</label>
-                        <div class="detail-form-item">{{detailData.created_at}}</div>
+                        <div class="detail-form-item">{{detailData.trader}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -88,8 +88,8 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>
-                          <卸货地:</label>
-                            <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                          卸货地:</label>
+                        <div class="detail-form-item">{{detailData.destination[0]}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
@@ -179,34 +179,16 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
+    },
+    operationStatus: function() {
+      return this.$route.params.type;
     }
   },
   data() {
     return {
       activeName: 'first',
       pageLoading: false,
-      detailData: {},
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        four: 'xxx',
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄',
-        four: 'xxx',
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄',
-        four: 'xxx',
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄',
-        four: 'xxx',
-      }],
+      detailData: { destination: [] },
       thTableList: [{
         title: '装卸地',
         param: 'name',
@@ -225,10 +207,10 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}` });
+        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}/${this.operationStatus}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}` });
+        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderRecordsTab/${this.id}/${this.operationStatus}` });
       }
     },
     getOrderDetail: function() {
