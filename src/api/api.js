@@ -9,6 +9,50 @@
  */
 
 const api = {
+  getBusinessDetail: {
+    url: '/api/v1/business_order/:business_order_id',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+      business_order_id: {
+        desc: '业务ID'
+      }
+    }
+  },
+  getBusinessList:{
+    url: '/api/v1/business_order/',
+    method: 'get',
+    desc: '业务单列表',
+    param: {
+      business_type: {
+        desc: '业务单类型；0—批发,1—零售,2—点供，3—外提,4—外采,5—承运'
+      },
+      short_name: {
+        desc: '客户简称'
+      },
+      customer_name: {
+        desc: '客户名称'
+      },
+      order_number: {
+        desc: '业务单号'
+      },
+      plan_arrive_time_start: {
+        desc: '计划到站时间（开始）'
+      },
+      plan_arrive_time_end: {
+        desc: '计划到站时间（结束）'
+      },
+      created_at_start: {
+        desc: '下计划时间(开始)'
+      },
+      created_at_end: {
+        desc: '下计划时间（结束）'
+      },
+      status: {
+        desc: '业务单状态 '
+      }
+    }
+  },
   addCustomer: {
     url: '/carrier/customer/',
     method: 'post',
@@ -116,7 +160,7 @@ const api = {
     }
   },
   getPermissionsList: {
-    url: '/permissions/menus/',
+    url: '/api/v1/permissions/',
     method: 'get',
     desc: '系统可分配菜单 权限列表',
     param: {
@@ -124,7 +168,7 @@ const api = {
     }
   },
   getPositionDetail: {
-    url: '/carrier/roles/:id/',
+    url: '/api/v1/positions/:id/',
     method: 'get',
     desc: '获取职位详情',
     param: {
@@ -134,99 +178,78 @@ const api = {
     }
   },
   addStaff: {
-    url: '/carrier/users/',
+    url: '/api/v1/users/register/',
     method: 'post',
     desc: '新增员工',
     param: {
-      username: {
-        desc: '用户名'
-      },
-      password: {
-        desc: '密码'
-      },
-      phone: {
+      phone_number: {
         desc: '电话号码'
       },
-      nick_name: {
-        desc: '姓名'
-      },
-      email: {
-        desc: '邮箱'
-      },
-      carrier_role: {
+      position: {
         desc: '职位资源id'
       }
     }
   },
   updateStaff: {
-    url: '/carrier/users/:id/',
+    url: '/api/v1/users/:id/',
     method: 'PATCH',
     desc: '修改员工',
     param: {
-      username: {
-        desc: '用户名'
-      },
-      is_deleted: {
-        desc: '是否删除该用户'
-      },
-      phone: {
-        desc: '电话号码'
-      },
-      password: {
-        desc: '密码'
-      },
-      nick_name: {
-        desc: '姓名'
-      },
-      email: {
-        desc: '邮箱'
-      },
-      carrier_role: {
+      position: {
         desc: '职位资源id'
       }
     }
   },
   getStaffs: {
-    url: '/carrier/users/',
+    url: '/api/v1/users/',
     method: 'get',
     desc: '员工列表',
     param: {
-      pagination: {
-        desc: '是否分页'
-      },
-      is_deleted: {
+      is_active: {
         desc: '是否删除该用户'
       },
       department: {
         desc: '部门资源id'
       },
-      carrier_role: {
+      position: {
         desc: '职位资源id'
       }
     }
   },
   addPosition: {
-    url: '/carrier/roles/',
+    url: '/api/v1/positions/',
     method: 'post',
     desc: '新增职位',
     param: {
       department: {
         desc: '部门ID'
       },
-      role_name: {
+      position_name: {
         desc: '职位名称'
+      },
+      position_description: {
+        desc: '职位描述'
+      },
+      leader: {
+        desc: '领导职位ID'
+      },
+      permissions:{
+        desc:'权限集合列表'
       }
     }
   },
   updatePosition: {
-    url: '/carrier/roles/:carrier_role_id/',
+    url: '/api/v1/positions/:id/',
     method: 'PATCH',
     desc: '修改职位',
     param: {
-      carrier_role_id: {
+      id: {
         desc: '职位ID'
       },
-      role_name: {
+      leader: {
+        desc: '领导职位ID'
+      },
+      position_name: {
         desc: '职位名称'
       },
       permissions: {
@@ -235,32 +258,41 @@ const api = {
     }
   },
   deletePosition: {
-    url: '/carrier/roles/:carrier_role_id/',
+    url: '/api/v1/positions/:id/',
     method: 'DELETE',
     desc: '修改职位',
     param: {
-      carrier_role_id: {
+      id: {
         desc: '职位ID'
       }
     }
   },
   addDepartment: {
-    url: '/carrier/departments/',
+    url: '/api/v1/departments/',
     method: 'post',
     desc: '新增部门',
     param: {
       group_name: {
         desc: '部门名称'
-      }
+      },
+      department_description: {
+        desc: '部门描述'
+      },
+      department_type: {
+        desc: '部门类型 1. backend-后台用户部门 2. app - 移动端用户部门'
+      },
     }
   },
   updateDepartment: {
-    url: '/carrier/departments/:id/',
+    url: '/api/v1/departments/:id/',
     method: 'PATCH',
     desc: '修改部门',
     param: {
-      group_name: {
+      department_name: {
         desc: '部门名称'
+      },
+      department_description: {
+        desc: '部门描述'
       },
       id: {
         desc: '部门id'
@@ -268,36 +300,39 @@ const api = {
     }
   },
   getDepartmentList: {
-    url: '/carrier/departments/',
+    url: '/api/v1/departments/',
     method: 'get',
     desc: '部门列表',
     param: {
       page: {
         desc: '分页'
       },
-      pagination: {
+      need_all: {
         desc: '是否分页'
       }
     }
   },
   getPositionList: {
-    url: '/carrier/roles/',
+    url: '/api/v1/positions/',
     method: 'get',
     desc: '职位列表',
     param: {
       page: {
         desc: '分页'
       },
-      pagination: {
+      need_all: {
         desc: '是否分页'
       },
       department: {
         desc: '部门ID'
-      }
+      },
+      position_name: {
+        desc: '职位名称'
+      },
     }
   },
   login: {
-    url: '/auth/login/',
+    url: '/api/v1/auth/login/',
     method: 'post',
     notNeedToken: true,
     desc: '登录',
@@ -307,12 +342,6 @@ const api = {
       },
       password: {
         desc: '密码',
-      },
-      verify_key: {
-        desc: '验证码key值'
-      },
-      verify_code: {
-        desc: '验证码'
       }
     }
   },

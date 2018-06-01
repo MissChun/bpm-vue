@@ -20,20 +20,20 @@
           <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
+       <!--  <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
               <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
             </el-col>
             <el-col :span="8" :offset="1"><img :src="verifyCodeData.image_code_path" width="100%" height="32" v-on:click="refreshVaImg"></el-col>
           </el-row>
-        </el-form-item>
+        </el-form-item> -->
         <div class="user-page-btn">
-          <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item>
+          <!-- <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item> -->
           <el-form-item>
             <el-button @click.native="login()" type="success" :loading="submitBtn.isBtnLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>
-          <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item>
+          <!-- <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item> -->
         </div>
         <div class="user-page-img"><img class="img-left" src="../assets/img/user_1.png"></div>
       </el-form>
@@ -77,8 +77,8 @@ export default {
       ruleForm: {
         username: '',
         password: '',
-        verify_key: '',
-        verify_code: ''
+        // verify_key: '',
+        // verify_code: ''
       },
       isLogin: false,
       userId: '',
@@ -92,10 +92,10 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
-        verify_code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' },
-          { validator: checkImgCode, trigger: 'blur' }
-        ]
+        // verify_code: [
+        //   { required: true, message: '请输入验证码', trigger: 'blur' },
+        //   { validator: checkImgCode, trigger: 'blur' }
+        // ]
       },
       submitBtn: {
         btnText: '登录',
@@ -124,7 +124,7 @@ export default {
     },
     loginAjax() {
       return new Promise((resolve, reject) => {
-        this.ruleForm.verify_key = this.verifyCodeData.verify_key;
+        // this.ruleForm.verify_key = this.verifyCodeData.verify_key;
         this.submitBtn.isDisabled = true;
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
@@ -137,19 +137,14 @@ export default {
               console.log('登录', results.data)
               if (results.data && results.data.code === 0) {
                 resolve(results);
-                console.log('登录success', results.data)
-                // this.$message({
-                //   message: '登录成功',
-                //   type: 'success'
-                // });
-                this.pbFunc.setLocalData('token', results.data.data.ticket, true);
+                this.pbFunc.setLocalData('token', results.data.data.token, true);
+                this.pbFunc.setLocalData('user', results.data.data.user, true);
                 this.getUser();
-                //this.$emit('login', this.$router.currentRoute.query.from);
               } else {
-                if (results.data && results.data.code === 600) {
-                  this.isLogin = true;
-                  this.userId = results.data.data.id;
-                }
+                // if (results.data && results.data.code === 600) {
+                //   this.isLogin = true;
+                //   this.userId = results.data.data.id;
+                // }
                 reject(results);
               }
             }).catch((err) => {
@@ -166,7 +161,6 @@ export default {
 
     },
     getMunusList() {
-      console.log('5555555')
       this.$$http('getMenusList').then((results) => {
         if (results.data && results.data.code === 0) {
           if (results.data.data.length) {
@@ -192,7 +186,8 @@ export default {
     login() {
       this.loginAjax().then((results) => {
         console.log('resultsxxx', results);
-        this.getMunusList();
+        // this.getMunusList();
+         this.$emit('login');
       })
     },
     toLink(type) {
@@ -233,7 +228,7 @@ export default {
   },
   created() {
     sessionStorage.clear();
-    this.refreshVaImg();
+    // this.refreshVaImg();
     // this.enterLogin(event);
   }
 };

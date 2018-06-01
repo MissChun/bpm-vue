@@ -1,15 +1,20 @@
 <!-- positionDialog.vue -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="positionDialog.isShow"  width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="positionDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="positionRules" status-icon ref="positionRules">
           <el-form-item label="部门名称：">
-            <div>{{departmentRow.group_name}}</div>
+            <div>{{departmentRow.department_name}}</div>
           </el-form-item>
-          <el-form-item label="职位名称：" prop="role_name">
-            <el-input placeholder="请输入" :autofocus="true" v-model="positionRules.role_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-form-item label="职位名称：" prop="position_name">
+            <el-input placeholder="请输入" :autofocus="true" v-model="positionRules.position_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
+          </el-form-item>
+          <el-form-item label="领导职位：" prop="leader">
+            <el-select v-model="positionRules.leader" placeholder="请选择">
+              <el-option v-for="(item,key) in positionList" :key="key" :label="item.position_name" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </div>
@@ -46,10 +51,11 @@ export default {
       operation: this.positionDialog.type,
       positionRules: {
         department: '',
-        role_name: ''
+        position_name: '',
+        leader: ''
       },
       rules: {
-        role_name: [
+        position_name: [
           { required: true, message: '请输入职位名称', trigger: 'blur' },
           { min: 1, max: 20, message: '职位名称字数为1-20字', trigger: 'blur' }
         ],
@@ -59,7 +65,8 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      title:'新增职位'
+      title: '新增职位',
+      positionList: []
     }
   },
   computed: {
@@ -68,6 +75,17 @@ export default {
   methods: {
     closeBtn: function() {
       this.$emit('closeDialogBtn', this.type);
+    },
+    getPositionList(id) {
+      let postData = {
+        need_all: true,
+        department: id
+      }
+      this.$$http('getPositionList', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.positionList = results.data.data.data;
+        }
+      }).catch((err) => {})
     },
     editposition: function(positionRules) {
       this.$refs[positionRules].validate((valid) => {
@@ -85,8 +103,9 @@ export default {
             apiName = 'updatePosition';
             console.log('修改职位')
             postData = {
-              role_name: this.positionRules.role_name,
-              carrier_role_id: this.positionRow.id
+              position_name: this.positionRules.position_name,
+              id: this.positionRow.id,
+              leader: this.positionRow.leader
             }
           }
 
@@ -122,13 +141,19 @@ export default {
       handler(val, oldVal) {　　　　　　
         console.log('编辑', val, oldVal);
         console.log('部门', this.departmentRow)
+        this.getPositionList(this.departmentRow.id)
         if (val.isShow && val.type === 'update') {
-          this.positionRules.role_name = this.positionRow.role_name;
+          this.positionRules.position_name = this.positionRow.position_name;
+          this.positionRules.leader = this.positionRow.leader;
           this.title = '编辑职位';
         } else {
-          this.positionRules.role_name = '';
+          this.positionRules.position_name = '';
+          this.positionRules.leader = '';
           this.title = '新增职位';
-        }　　　　
+        }　　
+        if (this.$refs['positionRules']) {
+          this.$refs['positionRules'].clearValidate();　　　　
+        }　　　
       },
       　　　　deep: true
 

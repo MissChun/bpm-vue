@@ -27,7 +27,7 @@
                   <el-menu :default-active="active" class="el-menu-vertical-demo" v-loading="departmentLoading">
                     <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item.id,key)" :index="key.toString()" :key="key">
                       <i class="tab-icon"></i>
-                      <span slot="title">{{item.group_name}}</span>
+                      <span slot="title">{{item.department_name}}</span>
                     </el-menu-item>
                   </el-menu>
                 </div>
@@ -38,7 +38,7 @@
         <el-col :span="19">
           <div class="nav-tab-setting nav-tab-power">
             <el-tabs v-model="powerActive" @tab-click="powerClick">
-              <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
+              <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.position_name" :name="item.id">
                 <div class="position-list table-list">
                   <div class="staff-radio text-right">
                     <el-button type="primary" size="medium" @click="setPower">保存</el-button>
@@ -46,28 +46,19 @@
                   </div>
                   <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                      <template slot-scope="scope">
-                        <div v-if="item.param ==='menu_name'">{{scope.row.menu_name}}</div>
-                        <div v-if="item.param ==='menu'">
-                          <dl>
-                            <dt v-for="(item,key) in scope.row.second_menus">
-                              {{item.menu_name}}
-                            </dt>
-                          </dl>
-                        </div>
-                        <div v-if="item.param==='desc'">{{}}</div>
-                        <div v-if="item.param==='desc'">{{}}</div>
-                      </template>
                     </el-table-column>
-                    <el-table-column label="操作" width="450">
+                    <el-table-column label="操作" width="200" align="center">
                       <template slot-scope="scope">
-                        <dl class="power-op">
+                        <el-checkbox-group v-model="selectMenus">
+                          <el-checkbox :label="scope.row.id"><span></span></el-checkbox>
+                        </el-checkbox-group>
+                        <!-- <dl class="power-op">
                           <dt v-for="(item,key) in scope.row.second_menus">
                             <el-checkbox-group v-model="selectMenus">
                               <el-checkbox v-for="(itemThird,index) in item.third_menus" :label="itemThird.id" :key="index">{{itemThird.menu_name}}</el-checkbox>
                             </el-checkbox-group>
                           </dt>
-                        </dl>
+                        </dl> -->
                       </template>
                     </el-table-column>
                   </el-table>
@@ -127,15 +118,7 @@ export default {
       },
       thTableList: [{
         title: '功能模块',
-        param: 'menu_name',
-        width: ''
-      }, {
-        title: '子功能',
-        param: 'menu',
-        width: ''
-      }, {
-        title: '说明',
-        param: 'department',
+        param: 'permission_name',
         width: ''
       }],
       departmentTableData: [], //部门列表
@@ -155,7 +138,7 @@ export default {
     // 获取部门列表
     getDepartmentList: function() {
       this.departmentLoading = true;
-      this.$$http('getDepartmentList', { pagination: false }).then((results) => {
+      this.$$http('getDepartmentList', { need_all: true }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.departmentTableData = results.data.data;
           this.active = '0';
@@ -183,7 +166,7 @@ export default {
     // 获取职位列表
     getPositionList: function(departmentId, index) {
       let postData = {
-        pagination: false,
+        need_all: true,
         department: departmentId
       }
       this.currentDepartmentId = departmentId;
@@ -216,8 +199,9 @@ export default {
       this.permissionsLoading = true;
       this.$$http('getPermissionsList', {}).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.permissionsTableData = results.data.data;
+          this.permissionsTableData = results.data.data.data;
           this.permissionsLoading = false;
+          console.log('权限列表', this.permissionsTableData)
         }
       }).catch((err) => {
         this.permissionsLoading = false;
@@ -238,16 +222,16 @@ export default {
           this.currentPositionName = results.data.data.role_name;
           this.selectMenus = [];
           this.positionDetailMenus = results.data.data.menus;
-          for (let i in this.positionDetailMenus) {
-            for (let j in this.positionDetailMenus[i].second_menus) {
-              if (this.positionDetailMenus[i].second_menus[j].third_menus.length) {
-                for (let z in this.positionDetailMenus[i].second_menus[j].third_menus) {
-                  this.selectMenus.push(this.positionDetailMenus[i].second_menus[j].third_menus[z].id);
-                }
-              }
+          // for (let i in this.positionDetailMenus) {
+          //   for (let j in this.positionDetailMenus[i].second_menus) {
+          //     if (this.positionDetailMenus[i].second_menus[j].third_menus.length) {
+          //       for (let z in this.positionDetailMenus[i].second_menus[j].third_menus) {
+          //         this.selectMenus.push(this.positionDetailMenus[i].second_menus[j].third_menus[z].id);
+          //       }
+          //     }
 
-            }
-          }
+          //   }
+          // }
           this.selectMenusCopy = this.selectMenus;
           console.log('this.selectMenus', this.selectMenus);
 

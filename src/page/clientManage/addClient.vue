@@ -104,7 +104,7 @@
                   <el-form-item label="代码:">
                     <el-row>
                       <el-col :span="8">
-                        <el-select v-model="customerMsgForm.code" placeholder="请选择">
+                        <el-select v-model="customerMsgForm.code" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
@@ -220,14 +220,14 @@ export default {
           { required: true, message: '请输入联系人姓名', trigger: 'blur' },
           { min: 2, max: 20, message: '联系人为2~10个字符', trigger: 'blur' }
         ],
-        deficiency_standard:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '亏吨标准仅支持数字输入', trigger: 'blur' }
+        deficiency_standard: [
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '亏吨标准仅支持数字输入', trigger: 'blur' }
         ],
-        free_hour:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        free_hour: [
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        overtime_price:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        overtime_price: [
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         contact_phone: [
           { required: true, message: '请输入联系方式', trigger: 'blur' },
@@ -295,7 +295,7 @@ export default {
               deficiency_standard: this.customerList[i].deficiency_standard,
               free_hour: this.customerList[i].free_hour,
               overtime_price: this.customerList[i].overtime_price,
-              code: this.customerList[i].license3in1_code ? 'license3in1_code' : 'license_code',
+              code: this.customerList[i].license_code ? 'license_code' : 'license3in1_code',
               codeMsg: this.customerList[i].license3in1_code ? this.customerList[i].license3in1_code : this.customerList[i].license_code,
               license_pic: this.customerList[i].license_pic ? this.customerList[i].license_pic : [],
             }
@@ -318,9 +318,12 @@ export default {
 
     },
     getDetail: function() {
+      console.log('sdfhdjksfhks')
       this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
+          console.log('form555', this.detail);
+
           this.customerMsgForm = {
             name: this.detail.name,
             contact_name: this.detail.contact_name,
@@ -329,10 +332,11 @@ export default {
             deficiency_standard: this.detail.deficiency_standard,
             free_hour: this.detail.free_hour,
             overtime_price: this.detail.overtime_price,
-            code: this.detail.license3in1_code ? 'license3in1_code' : 'license_code',
-            codeMsg: this.detail.license3in1_code ? this.detail.license3in1_code : this.detail.license_code,
+            code: this.detail.license_code ? 'license_code' : 'license3in1_code',
+            codeMsg: this.detail.license_code ? this.detail.license_code : this.detail.license3in1_code,
             license_pic: this.detail.license_pic ? this.detail.license_pic : [],
           }
+
         }
       })
 
@@ -372,7 +376,7 @@ export default {
                 this.$router.push({ path: "/clientManage/clientDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
-                this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum-1, id: id } });
+                this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {

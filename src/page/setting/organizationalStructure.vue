@@ -27,7 +27,7 @@
                   <el-menu :default-active="active" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" v-loading="departmentLoading">
                     <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item,key)" :index="key.toString()" :key="key">
                       <i class="tab-icon"></i>
-                      <span slot="title">{{item.group_name}}</span>
+                      <span slot="title">{{item.department_name}}</span>
                     </el-menu-item>
                   </el-menu>
                   <div class="text-center department-btn">
@@ -48,7 +48,7 @@
               <el-table :data="positionTableData" stripe style="width: 100%" size="mini" v-loading="positionLoading">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                   <template slot-scope="scope">
-                    <div v-if="item.param==='role_name'">{{scope.row.role_name}}</div>
+                    <div v-if="item.param==='position_name'">{{scope.row.position_name}}</div>
                     <div v-if="item.param==='work_type'">
                       <router-link class="text-blur" :to="{path: '/setting/powerManage', query: { departmentId: scope.row.department.id, positionId:scope.row.id}}">权限设置</router-link>
                     </div>
@@ -121,7 +121,7 @@ export default {
       },
       thTableList: [{
         title: '职位名称',
-        param: 'role_name',
+        param: 'position_name',
         width: ''
       }, {
         title: '职位权限',
@@ -186,12 +186,14 @@ export default {
     // 获取部门列表
     getDepartmentList: function() {
       this.departmentLoading = true;
-      this.$$http('getDepartmentList', { pagination: false }).then((results) => {
+      this.$$http('getDepartmentList', {need_all:true}).then((results) => {
         if (results.data && results.data.code == 0) {
           this.departmentTableData = results.data.data;
           this.active = '0';
           this.departmentLoading = false;
+          console.log('部门列表',this.departmentTableData)
           if (this.departmentTableData.length) {
+            this.departmentRow = this.departmentTableData[0];
             this.getPositionList(this.departmentTableData[0], this.active)
           }
 
@@ -208,14 +210,15 @@ export default {
       }
       let postData = {
         page: this.pageData.currentPage,
+        page_size:this.pageData.pageSize,
         department: departmentInfo.id
       }
       this.positionLoading = true;
       this.active = index.toString();
       this.$$http('getPositionList', postData).then((results) => {
+        this.positionLoading = false;
         if (results.data && results.data.code == 0) {
-          this.positionTableData = results.data.data.results;
-          this.positionLoading = false;
+          this.positionTableData = results.data.data.data;
           this.pageData.totalCount = results.data.data.count;
           console.log('分页', this.pageData.totalCount)
         }
@@ -231,7 +234,7 @@ export default {
           type: "warning"
         })
         .then(() => {
-          this.$$http('deletePosition', { carrier_role_id: id }).then((results) => {
+          this.$$http('deletePosition', { id: id }).then((results) => {
             if (results.data && results.data.code == 0) {
               this.$message({
                 message: '删除职位成功',
@@ -262,7 +265,7 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
+        console.log('currentPage', this.pageData.currentPage,this.departmentRow);
         this.getPositionList(this.departmentRow, this.active);
       })
     }
