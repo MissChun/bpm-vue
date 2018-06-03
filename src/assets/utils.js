@@ -45,6 +45,7 @@ export const objKeys = ARROBJ.objKeys
 export const deepcopy = ARROBJ.deepcopy
 export const fifterObjIsNull = ARROBJ.fifterObjIsNull
 export const fifterbyArr = ARROBJ.fifterbyArr
+export const dealNullData = ARROBJ.dealNullData
 
 /* 字符串相关 */
 export const paddingZero = STR.paddingZero

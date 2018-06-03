@@ -40,8 +40,18 @@
         background-color: @tms-light-blue;
     }
     &.is-plain {
+        color: @tms-blue;
         border-color: @tms-transparent-border-blue;
         background-color: @tms-transparent-blue;
+        &:hover {
+            border-color: @tms-blue;
+            background-color: @tms-blue;
+        }
+    }
+    &.is-active,
+    &:active {
+        border-color: @tms-blue;
+        background-color: @tms-blue;
     }
 }
 .el-button--success {

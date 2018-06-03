@@ -1,68 +1,109 @@
     // 新增 编辑 查看详情
-    .detail-main {
-      border: 1px solid @tms-border-two-level;
-      background: @tms-white;
-      .el-main {
+.detail-main {
+    border: 1px solid @tms-border-two-level;
+    background: @tms-white;
+    .el-main {
         overflow: visible;
-      }
-      .el-header p {
+    }
+    .el-header p {
         height: 60px;
         margin: 0 0;
+
         font-size: 26px;
         line-height: 60px;
 
         text-align: center;
-      }
-      .detail-form-title {
+    }
+    .detail-form-title {
         height: 46px;
         padding: 0 20px;
         margin: 0 -25px;
 
-        line-height: 46px;
+        line-height: 48px;
 
         background: @tms-border-there-level;
 
         .font-size(16px);
-      }
-      .detail-form {
+    }
+    .detail-form {
         margin: 30px 2%;
         .el-input {
-          width: 100%;
+            width: 100%;
         }
         .el-select {
-          width: 100%;
+            width: 100%;
         }
-      }
-      .detail-btn {
-        .el-button {
-          width: 200px;
-
-          .font-size(16px);
-        }
-      }
-      .detail-list {
-        .detail-form-title {
-          margin: 30px -52px;
-        }
-      }
     }
+    .detail-btn {
+        .el-button {
+            width: 200px;
 
-    .label-list {
-      position: relative;
+            .font-size(16px);
+        }
+    }
+    .detail-list {
+        .detail-form-title {
+            margin: 30px -52px;
+        }
+    }
+    &.process {
+        .el-main {
+            position: relative;
+            &:after {
+                position: absolute;
+                top: 80px;
+                left: 117px;
 
-      padding-left: 140px;
-      margin-bottom: 25px;
+                display: block;
+                width: 3px;
+                height: 100%;
 
-      font-size: 14px;
-      label {
+                content: " ";
+
+                background-color: @tms-border-one-level;
+            }
+        }
+        .detail-form-title {
+            position: relative;
+            &:after {
+                position: absolute;
+                top: 15px;
+                left: 108px;
+                z-index: 1;
+
+                display: block;
+                width: 16px;
+                height: 16px;
+
+                content: " ";
+
+                border-radius: 16px;
+                background-color: @tms-blue;
+            }
+        }
+        .process-content {
+            padding: 0 115px;
+        }
+    }
+}
+
+.label-list {
+    position: relative;
+
+    padding-left: 140px;
+    margin-bottom: 25px;
+
+    font-size: 14px;
+    label {
         position: absolute;
         left: 0;
+
         display: block;
         width: 140px;
 
         text-align: right;
-      }
-      .detail-form-item {
-        padding-left: 15px;
-      }
     }
+    .detail-form-item {
+        padding-left: 15px;
+    }
+}

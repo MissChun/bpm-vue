@@ -26,8 +26,8 @@ if (currentUrl.match('91lng.cn')) {
 } else if (currentUrl.match('prepare.hhtdlng.com')) {
   domainUrl = 'http://prepare.hhtdlng.com';
 } else {
-  domainUrl = 'http://39.104.71.159:8080';
-  // domainUrl = 'http://192.168.0.56:8001';
+  // domainUrl = 'http://39.104.71.159:8080';
+  domainUrl = 'http://192.168.0.56:8001';
 }
 
 

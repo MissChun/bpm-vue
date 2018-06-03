@@ -90,7 +90,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
+          // { validator: validatePass, trigger: 'blur' }
         ],
         // verify_code: [
         //   { required: true, message: '请输入验证码', trigger: 'blur' },

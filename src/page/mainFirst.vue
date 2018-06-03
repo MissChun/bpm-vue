@@ -98,7 +98,7 @@
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
-        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div>
+        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
         <div class="nav">
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">
