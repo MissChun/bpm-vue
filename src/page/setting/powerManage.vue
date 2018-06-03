@@ -219,19 +219,12 @@ export default {
       this.$$http('getPositionDetail', { id: this.currentPositionId }).then((results) => {
         if (results.data && results.data.code == 0) {
           console.log('getPositionDetail', results.data);
-          this.currentPositionName = results.data.data.role_name;
+          this.currentPositionName = results.data.data.position_name;
           this.selectMenus = [];
-          this.positionDetailMenus = results.data.data.menus;
-          // for (let i in this.positionDetailMenus) {
-          //   for (let j in this.positionDetailMenus[i].second_menus) {
-          //     if (this.positionDetailMenus[i].second_menus[j].third_menus.length) {
-          //       for (let z in this.positionDetailMenus[i].second_menus[j].third_menus) {
-          //         this.selectMenus.push(this.positionDetailMenus[i].second_menus[j].third_menus[z].id);
-          //       }
-          //     }
-
-          //   }
-          // }
+          this.positionDetailMenus = results.data.data.permissions;
+          for (let i in this.positionDetailMenus) {
+            this.selectMenus.push(this.positionDetailMenus[i].id);
+          }
           this.selectMenusCopy = this.selectMenus;
           console.log('this.selectMenus', this.selectMenus);
 
@@ -280,8 +273,8 @@ export default {
             })
             .then(() => {
               let postData = {
-                carrier_role_id: this.currentPositionId,
-                menus: this.selectMenus
+                id: this.currentPositionId,
+                permissions: this.selectMenus
               }
               this.$$http('updatePosition', postData).then((results) => {
                 if (results.data && results.data.code == 0) {

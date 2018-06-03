@@ -51,12 +51,12 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
-                        <div v-if="!scope.row.is_deleted">
+                        <div v-if="scope.row.is_active">
                           <el-button type="primary" size="mini" @click="staffsDialog('update',scope.row)">修改</el-button>
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, false)">注销</el-button>
+                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, 'False')">注销</el-button>
                         </div>
-                        <div v-if="scope.row.is_deleted">
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, true)">启用</el-button>
+                        <div v-if="!scope.row.is_active">
+                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row, 'True')">启用</el-button>
                         </div>
                       </template>
                     </el-table-column>
@@ -237,7 +237,7 @@ export default {
             message: isDeletd ? '员工注销成功' : '员工启用成功',
             type: 'success'
           });
-          this.getStaffsList(this.currentDepartmentId, this.currentPositionId, !isDeletd)
+          this.getStaffsList(this.currentDepartmentId, this.currentPositionId, isDeletd)
         }
       }).catch((err) => {
         this.$message.error(isDeletd ? '员工注销失败' : '员工启用失败');

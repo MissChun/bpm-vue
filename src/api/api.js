@@ -9,6 +9,32 @@
  */
 
 const api = {
+  toExamineBusiness: {
+    url: '/api/v1/check_order/',
+    method: 'post',
+    desc: '业务审批',
+    param: {
+      order_id: {
+        desc: '业务ID'
+      },
+      action: {
+        desc: '审批动作，可填pass或denied。pass：通过 denied: 拒绝'
+      },
+      approval_mark: {
+        desc: '拒绝理由'
+      }
+    }
+  },
+  getProcessDetail: {
+    url: '/api/v1/business_order/record/',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+      id: {
+        desc: '业务ID'
+      }
+    }
+  },
   getBusinessDetail: {
     url: '/api/v1/business_order/:business_order_id',
     method: 'get',
@@ -19,7 +45,7 @@ const api = {
       }
     }
   },
-  getBusinessList:{
+  getBusinessList: {
     url: '/api/v1/business_order/',
     method: 'get',
     desc: '业务单列表',
@@ -233,8 +259,8 @@ const api = {
       leader: {
         desc: '领导职位ID'
       },
-      permissions:{
-        desc:'权限集合列表'
+      permissions: {
+        desc: '权限集合列表'
       }
     }
   },
@@ -913,7 +939,7 @@ const api = {
 
     }
   },
-  patchLandMarkDetail:{
+  patchLandMarkDetail: {
     url: '/map/land_marks/:id/',
     method: 'patch',
     desc: '地标详情',
