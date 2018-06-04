@@ -228,44 +228,45 @@ export default [{
         }]
       }]
 
-    }, {
-      path: 'businessManage',
-      name: 'businessManage',
+    },{
+    path: 'serviceManage',
+    name: 'serviceManage',
+    meta: {
+      isVerificationL: false,
+      title: '服务中心',
+      iconName: 'icon-lng-dashboard',
+    },
+    component: (resolve) => require(['../page/serviceManage/serviceManage'], resolve),
+    children: [{
+      path: 'businessToExamine',
+      name: 'businessToExamine',
+      redirect: '/serviceManage/businessToExamine/tradeBusinessList',
       meta: {
         isVerificationL: false,
-        title: '贸易业务',
+        title: '业务单审批',
         iconName: 'icon-lng-dashboard',
       },
-      component: (resolve) => require(['../page/businessManage/businessManage'], resolve),
+      component: (resolve) => require(['../page/serviceManage/businessToExamine/business'], resolve),
       children: [{
-        path: 'tradeBusiness',
-        name: 'tradeBusiness',
-        redirect: '/businessManage/tradeBusiness/tradeBusinessList',
-        meta: {
-          isVerificationL: false,
-          title: '贸易业务单',
-          iconName: 'icon-lng-dashboard',
-        },
-        component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusiness'], resolve),
-        children: [{
           path: 'businessList',
-          name: 'tradeBusinessList',
+          name: 'businessList',
           meta: {
             isVerificationL: false,
-            title: '贸易业务单列表',
+            title: '业务单审批列表',
           },
-          component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusinessList'], resolve),
-        }, {
+          component: (resolve) => require(['../page/serviceManage/businessToExamine/businessList'], resolve),
+        },{
           path: 'businessDetail',
-          name: 'tradeBusinessDetail',
+          name: 'businessDetail',
           meta: {
             isVerificationL: false,
-            title: '贸易业务单详情',
+            title: '业务单审批详情',
           },
-          component: (resolve) => require(['../page/businessManage/tradeBusiness/tradeBusinessDetail'], resolve),
+          component: (resolve) => require(['../page/serviceManage/businessToExamine/businessDetail'], resolve),
         }]
-      }]
-    }, {
+    }]
+
+  },{
       path: 'logisticsManage',
       name: 'logisticsManage',
       meta: {
