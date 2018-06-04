@@ -60,7 +60,9 @@ export const getLocalData = function(storageKey, isPermanent) {
   var windowStorageObj = (_isPermanent) ? window.localStorage : window.sessionStorage;
   //if (pbDebug) console.log('getLocalData', storageKey);
   try {
+
     if (storageKey in windowStorageObj) {
+
       //return angular.fromJson(windowStorageObj.getItem(storageKey));
       return JSON.parse(windowStorageObj.getItem(storageKey));
     }
