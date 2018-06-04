@@ -11,7 +11,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <el-row v-if="false">
+      <el-row v-if="true">
         <el-col :span="2" :offset="22">
           <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
         </el-col>
@@ -22,18 +22,16 @@
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" size="medium">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
-              </el-row>
-              <el-row style="margin-top:20px;">
-                <el-col :span="8">
+                <el-col :span="8" :offset="2">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" size="medium">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -48,35 +46,35 @@
         <el-tab-pane label="全部" name="all">
           <div v-if="fifterName=='all'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="待指派" name="appoint">
           <div v-if="fifterName=='appoint'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="待确认" name="determine">
           <div v-if="fifterName=='determine'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="已确认" name="confirmed">
           <div v-if="fifterName=='confirmed'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="历史" name="loaded">
           <div v-if="fifterName=='loaded'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -97,7 +95,7 @@ export default {
   },
   data() {
     return {
-      pageStatus: false,
+      searchStatus: false,
       pageLoading: false,
       fifterParam: {
         keyword: "",
@@ -110,8 +108,8 @@ export default {
       activeName: 'first',
       fifterName: 'all',
       pageData: {
-        currentPage: 100,
-        totalPage: 2,
+        currentPage: 1,
+        totalPage: 1,
         pageSize: 10,
       },
       selectData: {
@@ -134,10 +132,11 @@ export default {
 
     },
     goAddNewOder: function() {
-      this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
+      this.$router.push({ path: "/purchaseCenter/pickupOrders/addNewPickUpOrder" });
     },
     searchList: function() {
       var sendData = {};
+      var vm = this;
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
@@ -148,14 +147,20 @@ export default {
       if (this.fifterName != "all") {
         sendData.status = this.fifterName;
       }
-      if (this.pageStatus) {
-        sendData.page = this.pageData.currentPage;
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
       }
+      sendData.page = this.pageData.currentPage;
+      sendData.page_size = this.pageData.pageSize;
       this.pageLoading = true;
+
       this.$$http("searchPickOrderList", sendData).then((results) => {
         this.pageLoading = false;
         if (results.data.code == 0) {
+          vm.saveSendData = sendData;
+          vm.searchStatus = false;
           var dataBody = results.data.data.data;
+          vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           this.listFifterData = dataBody;
         }
       }).catch(() => {
@@ -169,7 +174,7 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        this.pageStatus = true;
+        this.searchStatus = true;
         this.searchList();
       });
     }

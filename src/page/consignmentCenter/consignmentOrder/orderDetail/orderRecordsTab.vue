@@ -34,10 +34,10 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: "/orders/orderDetail/orderDetailTab" });
+        this.$router.push({ path: "/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab" });
       }
       if (targetName.name == 'second') {
-        this.$router.push({ path: "/orders/orderDetail/arrangeCarTab" });
+        this.$router.push({ path: "/consignmentCenter/consignmentOrders/orderDetail/arrangeCarTab" });
       }
     },
   },
