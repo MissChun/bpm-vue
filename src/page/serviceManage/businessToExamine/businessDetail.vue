@@ -18,7 +18,7 @@
         <trade-detail></trade-detail>
       </el-tab-pane>
       <el-tab-pane label="贸易单进程" name="process">
-        <trade-process></trade-process>
+        <trade-process :is-to-examine="true"></trade-process>
       </el-tab-pane>
     </el-tabs>
   </div>

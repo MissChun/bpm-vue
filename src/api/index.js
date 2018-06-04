@@ -21,8 +21,8 @@ let currentUrl = document.location.href.toString();
 
 if (currentUrl.match('91lng.cn')) {
   domainUrl = 'http://91lng.cn';
-} else if (currentUrl.match('tms.hhtdlng.com/')) {
-  domainUrl = 'http://39.104.71.159:8001';
+} else if (currentUrl.match('bpm.hhtdlng.com/')) {
+  domainUrl = 'http://bpm.hhtdlng.com';
 } else if (currentUrl.match('prepare.hhtdlng.com')) {
   domainUrl = 'http://prepare.hhtdlng.com';
 } else {

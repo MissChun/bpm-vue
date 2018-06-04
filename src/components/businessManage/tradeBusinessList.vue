@@ -46,7 +46,8 @@
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                   <template slot-scope="scope">
                     <div v-if="item.param === 'order_number'" class="order-color">
-                      <router-link :to="{path: '/businessManage/tradeBusiness/businessDetail', query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link>
+                      <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link>
+                      <span v-else>{{scope.row.order_number}}</span>
                     </div>
                     <div v-else>{{scope.row[item.param]}}</div>
                   </template>
@@ -72,6 +73,7 @@
 
 export default {
   name:'tradeBusinessList',
+  props:['detailLink'],
   computed: {
     // statusTabList(){
     //   return this.tabList[0].tabs;
@@ -235,7 +237,7 @@ export default {
       }, {
         title: '状态',
         param: 'status_display',
-        width: ''
+        width: '200'
       }, {
         title: '业务员',
         param: 'sale_name',
