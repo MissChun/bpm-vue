@@ -8,7 +8,7 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 import api from './api';
-import {getLocalData} from '../assets/js/cache'
+import { getLocalData } from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
@@ -27,7 +27,10 @@ if (currentUrl.match('91lng.cn')) {
   domainUrl = 'http://prepare.hhtdlng.com';
 } else {
   // domainUrl = 'http://39.104.71.159:8080';
-  domainUrl = 'http://192.168.0.56:8001';
+  //domainUrl = 'http://192.168.0.56:8001';
+  domainUrl = 'http://bpm.hhtdlng.com';
+  // domainUrl = 'http://192.168.0.56:8001';
+  //domainUrl = 'http://192.168.3.114:8018';
 }
 
 
@@ -163,7 +166,7 @@ const dealConfig = function(apiName, postData) {
   if (api.hasOwnProperty(apiName)) {
     let apiUrl = api[apiName].url ? api[apiName].url : '';
     let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
-    let token = getLocalData('token',true);
+    let token = getLocalData('token', true);
     httpConfig.method = method;
 
     if (method == 'get') {
@@ -179,7 +182,7 @@ const dealConfig = function(apiName, postData) {
       }
     }
 
-    if(!api[apiName].notNeedToken){
+    if (!api[apiName].notNeedToken) {
       httpConfig.headers.Authorization = 'JWT ' + token;
     }
 

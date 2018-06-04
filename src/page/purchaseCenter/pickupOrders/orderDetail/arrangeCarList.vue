@@ -36,11 +36,10 @@
                     </el-form-item>
                   </el-col> -->
                   <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
-                    需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
+                    需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
                   </el-col>
                   <el-col :span="2">
-                    <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
-                    <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
+                    <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
                   </el-col>
                 </el-row>
               </el-form>
@@ -49,7 +48,7 @@
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
-                <el-table-column label="勾选" type="selection" width="55" fixed="right">
+                <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
                 </el-table-column>
               </el-table>
             </div>
@@ -75,7 +74,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
-        pageSize: 10,
+        pageSize: 1,
       },
       searchFilters: {
         keyword: '',
@@ -144,19 +143,12 @@ export default {
         width: ''
       }],
       tableData: [],
-      tractor_semitrailers_List: [], //运力列表
-      renderAll_list: [], //查询筛选后的所有需要渲染列表
-      trueAll_list: [], //查询筛选后的所有数据
-      upTo_list: [], //最近三天已经被使用的运力
-      delivery_list: [], //提货单拥有的运单，审核后
-      haveTranspower_list: [], //提货单所拥有的运力,未审核
-      renderPage_list: [], //当前页渲染的数据
-      alreadyList: {},
-      lastSearch_list: [],
-      add_capacities: [], //增加的运力表
-      del_capacities: [], //取消的运力表
-      start_capacities: [],
+      renderPage_list: [],
+      allTrue_list: [],
+      delivery_list: [],
+      tractor_semitrailers_List: [],
       now_capacities: [],
+      alerySureList: []
     }
   },
   computed: {
@@ -168,6 +160,9 @@ export default {
     }
   },
   methods: {
+    checkSelectable: function(row) {
+      return !row.disableChoose
+    },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
         this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarMap/${this.id}` });
@@ -175,284 +170,111 @@ export default {
     },
     checkRows: function(selection, row) {
       var vm = this;
-      console.log("selection", selection);
-      console.log("row", row);
-
-      var addArr = [];
-      selection.forEach((sItem) => {
-        var addflag = true;
-        vm.now_capacities.forEach((item) => {
-          if (item.id == sItem.id) {
-            addflag = false;
-          }
-        });
-        if (addflag) {
-          addArr.push(sItem);
+      var sendJudge = false;
+      selection.forEach(item => {
+        if (item.id == row.id) {
+          sendJudge = true;
         }
       });
-      this.now_capacities = this.now_capacities.concat(addArr);
-      if (row.id) {
-        var sendJudge = false;
-        selection.forEach(item => {
-          if (item.id == row.id) {
-            sendJudge = true;
+      if (sendJudge) {
+        this.now_capacities.push(row);
+      } else {
+        var arr1 = [];
+        this.now_capacities.forEach((items, index) => {
+          if (items.id != row.id) {
+            arr1.push(items);
           }
         });
-        if (sendJudge) {
-          //如果是勾选,那么判断是否在别的订单。
-          let postData3 = {
-            transport_id: row.id
-          };
-          this.$$http('searchNoUse', postData3).then((results) => {
-
-            if (results.data && results.data.code == 0) {
-              console.log("绑定的订单", results.data.data);
-              vm.pageLoading = false;
-              if (results.data.data.data.length > 0) {
-                var orderListText = "";
-                results.data.data.data.forEach((item) => {
-                  orderListText += item + ",";
-                });
-                const h = this.$createElement;
-                // vm.$confirm({
-                //   title: '请注意',
-                //   message: h('p', null, [
-                //     h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
-                //     h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
-                //   ]),
-                //   showCancelButton: true,
-                //   confirmButtonText: '继续添加',
-                //   cancelButtonText: '返回',
-                //   beforeClose: (action, instance, done) => {
-                //     if (action === 'confirm') {
-                //       done();
-
-                //     } else {
-
-                //       done();
-                //     }
-                //   }
-                // })
-                vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
-                  confirmButtonText: '继续添加',
-                  cancelButtonText: '返回',
-                  type: 'warning',
-                  center: true,
-                  showClose: false,
-                  closeOnClickModal: false
-                }).then(() => {
-                  row.bindCheckBox = !row.bindCheckBox;
-                  vm.trueAll_list.forEach((Titem) => {
-                    if (Titem.id == row.id) {
-                      Titem.bindCheckBox = true;
-                    }
-
-                  });
-                }).catch(() => {
-                  vm.$refs.multipleTable.toggleRowSelection(row, false);
-                });
-              } else {
-                row.bindCheckBox = !row.bindCheckBox;
-                vm.trueAll_list.forEach((Titem) => {
-                  if (Titem.id == row.id) {
-                    Titem.bindCheckBox = true;
-                  }
-
-                });
-              }
-            }
-          }).catch((err) => {
-            vm.pageLoading = false;
-          });
-        } else {
-          //如果是取消勾选,判断当前车辆是否能取消勾选
-          if (row.waybill.waybill) {
-            vm.pageLoading = true;
-            vm.$$http("judgeCanCancle", { waybill_id: row.waybill.waybill_id }).then((results) => {
-              vm.pageLoading = false;
-              if (results.data.code == 0) {
-                if (results.data.data.status) {
-                  row.bindCheckBox = !row.bindCheckBox;
-                  vm.trueAll_list.forEach((Titem) => {
-                    if (Titem.id == row.id) {
-                      Titem.bindCheckBox = false;
-                    }
-
-                  });
-                  var new_now_capacities1 = [];
-                  vm.now_capacities.forEach((item, index) => {
-                    if (item.id != row.id) {
-                      new_now_capacities1.push(item);
-                    }
-                  });
-                  vm.now_capacities = new_now_capacities1;
-                } else {
-                  vm.$confirm('当前运单不能被取消', '请注意', {
-                    confirmButtonText: '确认',
-                    type: 'warning',
-                    showCancelButton: false,
-                    center: true,
-                    closeOnClickModal: false,
-                    showClose: false
-                  }).then(() => {
-                    vm.$refs.multipleTable.toggleRowSelection(row, true);
-                  })
-                }
-              }
-            }).catch(() => {
-              vm.pageLoading = false;
-              vm.$refs.multipleTable.toggleRowSelection(row, true);
-            });
-          } else {
-            row.bindCheckBox = !row.bindCheckBox;
-            vm.trueAll_list.forEach((Titem) => {
-              if (Titem.id == row.id) {
-                Titem.bindCheckBox = true;
-              }
-
-            });
-            var new_now_capacities = [];
-            vm.now_capacities.forEach((item, index) => {
-              if (item.id != row.id) {
-                new_now_capacities.push(item);
-              }
-            });
-            vm.now_capacities = new_now_capacities;
-          }
-        }
+        this.now_capacities = arr1;
       }
+      vm.trueAll_list.forEach((Titem) => {
+        if (Titem.id == row.id) {
+          Titem.bindCheckBox = !Titem.bindCheckBox;
+        }
+      });
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searchThisByData();
     },
     operation: function(type) {
+      var capacitiesList = [];
       var vm = this;
-      if (type == 'addCar') {
-        if (this.now_capacities.length > 0) {
-          var sendData = {
-            delivery_order_id: "",
-            add_capacities: []
-          };
-          this.now_capacities.forEach(item => {
-            sendData.add_capacities.push(item.id);
-          });
-          sendData.delivery_order_id = this.delivery_list.id;
-          this.pageLoading = true;
-          this.$$http("addCarPower", sendData).then((results) => {
-            this.pageLoading = false;
-            if (results.data.code == 0) {
-              vm.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
-            }
-          }).catch(() => {
-            this.pageLoading = false;
-          });
-        } else {
-          vm.$confirm('提交车辆不能为零哦', '请注意', {
-            confirmButtonText: '确认',
-            showCancelButton: false,
-            type: 'warning',
-            center: true,
-            closeOnClickModal: false,
-            showClose: false
-          }).then(() => {
-
-          })
-        }
-      } else if (type == 'changeCar') {
-        var sendData = {
-          delivery_order_id: "",
-          add_capacities: [],
-          del_capacities: [],
-          id: this.delivery_list.id,
-          yid: this.delivery_list.id,
-          delivery_order_id: this.delivery_list.id
-        };
-        this.now_capacities.forEach(item => {
-          var addFalg = true;
-          vm.start_capacities.forEach(startItem => {
-            if (item.id == startItem) {
-              addFalg = false;
-            }
-          });
-          if (addFalg) {
-            sendData.add_capacities.push(item.id);
-          }
-        });
-
-        this.start_capacities.forEach(item => {
-          var cancleFalg = true;
-          vm.now_capacities.forEach(nowItem => {
-            if (item == nowItem.id) {
-              cancleFalg = false;
-            }
-          });
-          if (cancleFalg) {
-            sendData.del_capacities.push(item);
-          }
-        });
-        if (vm.now_capacities.length > 0) {
-          this.pageLoading = true;
-          this.$$http("editCarPower", sendData).then((results) => {
-            this.pageLoading = false;
-            if (results.data.code == 0) {
-              vm.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
-            }
-          }).catch(() => {
-            this.pageLoading = false;
-          });
-        } else {
-          vm.$confirm('修改后车辆为零,状态会置为带指派', '请注意', {
-            confirmButtonText: '确认提交',
-            cancelButtonText: '返回',
-            type: 'warning',
-            center: true,
-            closeOnClickModal: false,
-            showClose: false
-
-          }).then(() => {
-            vm.$$http("editCarPower", sendData).then((results) => {
-              vm.pageLoading = false;
-              if (results.data.code == 0) {
-                vm.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
-              }
-            }).catch(() => {
-              this.pageLoading = false;
-            });
-          }).catch(() => {
-
-          });
-        }
+      this.now_capacities.forEach(item => {
+        capacitiesList.push(item.id);
+      });
+      var sendData = {
+        delivery_order_id: this.id,
+        capacities: capacitiesList,
+        id: this.id
       }
+      this.pageLoading = true;
+      this.$$http("surePickOrder", sendData).then(results => {
+        this.pageLoading = false;
+        if (results.data.code == 0) {
+          vm.$router.push({ path: "/purchaseCenter/pickupOrders" });
+          this.$message({
+            message: '确认计划成功',
+            type: 'success'
+          });
+        }
+      }).catch(() => {
+        this.pageLoading = false;
+      });
     },
     getList: function() {
       var vm = this;
-      let postData = {
-        pagination: false,
-        complete_status: true
-      };
-      this.pageLoading = true;
       var getDataNum = 0;
+      // let postData = {
+      //   pagination: false,
+      //   complete_status: true
+      // };
+      // this.pageLoading = true;
+      // 
 
-      vm.$$http('searchCapacityList', postData).then((results) => {
+      // vm.$$http('searchCapacityList', postData).then((results) => {
 
+      //   if (results.data && results.data.code == 0) {
+      //     console.log("运力列表", results.data.data);
+      //     vm.tractor_semitrailers_List = results.data.data;
+      //   }
+      //   getDataNum++;
+      //   if (getDataNum == 2) {
+      //     vm.pageLoading = false;
+      //     vm.sortData(true);
+      //   }
+      // }).catch((err) => {
+      //   getDataNum++;
+      //   vm.sortData(false);
+      //   if (getDataNum == 2) {
+      //     vm.pageLoading = false;
+      //   }
+      // });
+
+
+
+      let postData4 = {
+        id: vm.id
+      };
+      vm.$$http('searchOrderHasPower', postData4).then((results) => {
         if (results.data && results.data.code == 0) {
-          console.log("运力列表", results.data.data);
-          vm.tractor_semitrailers_List = results.data.data;
+          console.log("已经添加列表上面的数据", results.data);
+          vm.alreadyList = results.data.data;
+          var getlistParam = { tractor_list: results.data.data.capacities }
+          vm.$$http("getTransPowerInfo", getlistParam).then((transPower) => {
+            getDataNum++;
+            if (transPower.data.code == 0) {
+              vm.tractor_semitrailers_List = transPower.data.data.results;
+            }
+            if (getDataNum == 2) {
+              vm.pageLoading = false;
+              vm.sortData(true);
+            }
+          });
         }
-        getDataNum++;
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-          vm.sortData(true);
-        }
-      }).catch((err) => {
-        getDataNum++;
-        vm.sortData(false);
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-        }
-        console.log('err', err);
+
       });
+
       let postData1 = {
         id: this.id
       };
@@ -463,61 +285,18 @@ export default {
           console.log("当前订单数据", results.data.data);
           vm.delivery_list = results.data.data;
         }
-        if (getDataNum == 4) {
+        if (getDataNum == 2) {
           vm.pageLoading = false;
           vm.sortData(true);
         }
       }).catch((err) => {
         getDataNum++;
         vm.sortData(false);
-        if (getDataNum == 4) {
+        if (getDataNum == 2) {
           vm.pageLoading = false;
         }
-        console.log('err', err);
       });
-      let postData2 = {};
-      vm.$$http('searchNoUse', postData2).then((results) => {
-        if (results.data && results.data.code == 0) {
-          console.log("最近未指派的车辆数据", results.data);
-          vm.upTo_list = results.data.data;
-        }
-        getDataNum++;
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-          vm.sortData(true);
-        }
-      }).catch((err) => {
-        getDataNum++;
-        vm.sortData(false);
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-        }
-        console.log('err', err);
-      });
-      let postData4 = {
-        id: vm.id
-      };
-      vm.$$http('searchOrderHasPower', postData4).then((results) => {
-        if (results.data && results.data.code == 0) {
-          console.log("已经添加列表上面的数据", results.data);
-          vm.alreadyList = results.data.data;
-          if (!results.data.data || !vm.alreadyList.capacities) {
-            vm.alreadyList.capacities = [];
-          }
-        }
-        getDataNum++;
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-          vm.sortData(true);
-        }
-      }).catch((err) => {
-        getDataNum++;
-        vm.sortData(false);
-        if (getDataNum == 4) {
-          vm.pageLoading = false;
-        }
-        console.log('err', err);
-      });
+
 
     },
     sortData: function(status) {
@@ -526,79 +305,30 @@ export default {
         let newArr = [];
         let fifterArr = [];
         for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
-          var addflag = false;
+          var addflag = true;
+
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              operationArr[i].bindCheckBox = true;
-              this.now_capacities.push(operationArr[i]);
-              addflag = true;
+              operationArr.disableChoose = true;
+              addflag = false;
+              newArr.push(operationArr[i]);
             }
+
           }
           if (addflag) {
-            newArr.push(operationArr[i]);
-          } else {
+            operationArr[i].bindCheckBox = true;
             fifterArr.push(operationArr[i]);
+            this.now_capacities.push(operationArr[i]);
           }
         }
-        //筛选出待确认列表中不在已确认列表的数据 加入到绑定选择列表 并且删除
-        var fifterArr4 = [];
-        for (let findex1 = 0; findex1 < fifterArr.length; findex1++) {
-          var addAlreaListflag = false;
-          for (let findex4 = 0; findex4 < this.alreadyList.capacities.length; findex4++) {
-            if (fifterArr[findex1].id == this.alreadyList.capacities[findex4]) {
-              addAlreaListflag = true;
-              break;
-            }
-          }
-          if (addAlreaListflag) {
-            fifterArr[findex1].waybill = {};
-            fifterArr[findex1].bindCheckBox = true;
-            this.now_capacities.push(fifterArr[findex1]);
-            newArr.push(fifterArr[findex1]);
-          } else {
-            fifterArr4.push(fifterArr[findex1]);
-          }
-        }
-        //筛选出最近三天没有使用过的运力
-        var fifterArr2 = [];
-        for (var findex = 0; findex < fifterArr4.length; findex++) {
-          var upaddfalg = false;
-          for (let o = 0; o < this.upTo_list.length; o++) {
-            if (fifterArr4[findex].id == this.upTo_list[o]) {
-              upaddfalg = true;
-              break;
-            }
-          }
-          if (!upaddfalg) {
-            fifterArr4[findex].waybill = {};
-            newArr.push(fifterArr4[findex]);
-          } else {
-            fifterArr2.push(fifterArr4[findex]);
-          }
-        }
-        // var newArr1 = [];
-        // for (let m = 0; m < operationArr.length; m++) {
-        //   var addflag = true;
-        //   for (let n = 0; n < newArr.length; n++) {
-        //     if (newArr[n].id == operationArr[m].id) {
-        //       addflag = false;
-        //     }
-        //   }
-        //   if (addflag) {
-        //     operationArr[m].waybill = {};
-        //     newArr1.push(operationArr[m]);
-        //   }
-        // }
-        newArr = newArr.concat(fifterArr2);
-        this.trueAll_list = newArr;
-        this.renderAll_list = newArr;
-
+        this.alerySureList = newArr;
+        this.trueAll_list = fifterArr.concat(newArr);
+        this.renderAll_list = fifterArr.concat(newArr);
         this.bindChekboxFunction(0, this.renderAll_list);
-      } else {
-        console.log("获取数据失败,请刷新页面重试或联系管理员");
       }
+
     },
     searchThisByData: function(searchPage, type) {
       var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
@@ -640,7 +370,6 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill.capacity);
         });
       });
     },

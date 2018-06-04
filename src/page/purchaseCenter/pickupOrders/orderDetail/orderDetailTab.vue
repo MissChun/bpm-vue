@@ -54,32 +54,32 @@
                   <div class="detail-form-title">
                     <el-row>
                       <el-col :span="12" :offset="6" class="text-center">
-                        运输信息
+                        装货信息
                       </el-col>
                     </el-row>
                   </div>
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>装货地:</label>
+                        <label>承运商:</label>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">item.carrier_name+","</span></div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>卸货区域:</label>
+                        <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>液厂:</label>
                         <div class="detail-form-item">{{detailData.fluid_name}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划时间:</label>
-                        <div class="detail-form-item">{{detailData.created_at}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划吨位:</label>
+                        <label>液厂地址:</label>
                         <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
@@ -88,26 +88,20 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>
-                          卸货地:</label>
-                        <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                          计划装货时间:</label>
+                        <div class="detail-form-item">{{detailData.plan_time}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item"></div>
+                        <label>计划装货吨位:</label>
+                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>计划时间:</label>
-                        <div class="detail-form-item"></div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划吨位:</label>
-                        <div class="detail-form-item"></div>
+                        <label>备注:</label>
+                        <div class="detail-form-item">{{detailData.mark}}</div>
                       </div>
                     </el-col>
                   </el-row>

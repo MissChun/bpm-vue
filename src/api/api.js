@@ -705,7 +705,7 @@ const api = {
     }
   },
   getPickOrderDetail: {
-    url: '/order/delivery-order/:id/',
+    url: '/api/v1/delivery-orders/:id/',
     method: 'get',
     desc: '托运单详情',
     param: {
@@ -714,7 +714,7 @@ const api = {
   },
 
   getCarriers: {
-    url: '/order/trader/carriers/',
+    url: '/api/v1/trader-carriers/',
     method: 'get',
     desc: '获取承运商',
     param: {
@@ -723,7 +723,7 @@ const api = {
   },
 
   getUnload: {
-    url: '/order/trader/unload_area/',
+    url: '/api/v1/trader-unload-areas/',
     method: 'get',
     desc: '获取卸货区域',
     param: {
@@ -732,7 +732,7 @@ const api = {
   },
 
   getSupplier: {
-    url: '/order/supplier/',
+    url: '/api/v1/suppliers/',
     method: 'get',
     desc: '获取供应商',
 
@@ -753,7 +753,7 @@ const api = {
   },
 
   getFulid: {
-    url: '/order/fluid/',
+    url: '/api/v1/fluids/',
     method: 'get',
     desc: '获取液厂',
     param: {
@@ -762,7 +762,7 @@ const api = {
   },
 
   cratePickUpOrder: {
-    url: '/order/delivery-order/',
+    url: '/api/v1/delivery-orders/',
     method: 'POST',
     desc: '创建提货订单',
     param: {
@@ -771,7 +771,7 @@ const api = {
   },
 
   searchPickOrderList: {
-    url: '/order/delivery-order/',
+    url: '/api/v1/delivery-orders/',
     method: 'get',
     desc: '获取提货单列表',
     param: {
@@ -780,7 +780,7 @@ const api = {
     }
   },
   searchConOrderList: {
-    url: '/order/waybill/',
+    url: '/api/v1/section-trips/',
     method: 'get',
     desc: '获取运单列表',
     param: {
@@ -789,7 +789,7 @@ const api = {
     }
   },
   getTransPowerInfo: {
-    url: '/truck/tractor_semitrailers/:id/',
+    url: '/api/v1/tractor_semitrailers/',
     method: 'get',
     desc: '获取运力详情',
     param: {
@@ -947,6 +947,46 @@ const api = {
 
     }
   },
+  surePickOrder: {
+    url: '/api/v1/delivery-order/:id/confirm/',
+    method: 'PUT',
+    desc: '确认订单',
+    param: {
+
+    }
+  },
+  canclePickOrder: {
+    url: '/api/v1/delivery-order/:id/cancel/',
+    method: 'DELETE',
+    desc: '取消订单',
+    param: {
+
+    }
+  },
+  getCompanies: {
+    url: '/api/v1/companies/',
+    method: 'get',
+    desc: '获取贸易商',
+    param: {
+
+    }
+  },
+  searchOrderHasPower: {
+    url: '/api/v1/appoint-capacities/',
+    method: 'get',
+    desc: '获取订单已有运力',
+    param: {
+
+    }
+  },
+  getTransPowerInfo: {
+    url: '/api/v1/tractor_semitrailers/',
+    method: 'get',
+    desc: '获取运力的详细信息',
+    param: {
+
+    }
+  }
 }
 
 

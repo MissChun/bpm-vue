@@ -76,8 +76,8 @@
           </div>
           <el-row class="mt-20">
             <el-col :span="7" :offset="3">
-              <el-form-item label="供应商名称:" prop="supplier_id">
-                <el-select v-model="pickOrderParam.supplier_id" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading">
+              <el-form-item label="供应商名称:" prop="supplier">
+                <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading">
                   <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -85,7 +85,7 @@
             </el-col>
             <el-col :span="7" :offset="3">
               <el-form-item label="液厂:" prop="fluid_id">
-                <el-select v-model="pickOrderParam.fluid_id" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading">
+                <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading">
                   <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -159,25 +159,25 @@
               <el-form-item label="承运方式:" prop="consignment_type">
                 <el-radio v-model="pickOrderParam.consignment_type" label="own" border>只有贸易</el-radio>
                 <el-radio v-model="pickOrderParam.consignment_type" label="external" border>外部承运</el-radio>
-                <el-radio v-model="pickOrderParam.consignment_type" label="together" border>共同承运</el-radio>
+                <!--  <el-radio v-model="pickOrderParam.consignment_type" label="together" border>共同承运</el-radio> -->
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="13" :offset="3">
               <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading">
-                <el-col :span="11" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
+                <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                   <el-form-item label="自有:" label-width="60px">
-                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.carriersList" :key="item.id" :label="item.carrier_name" :value="item.id">
+                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" multiple collapse-tags>
+                      <el-option v-for="(item,key) in selectData.carriersOwnList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="11" :offset="1" v-if="pickOrderParam.consignment_type=='external'||pickOrderParam.consignment_type=='together'">
+                <el-col :span="13" :offset="1" v-if="pickOrderParam.consignment_type=='external'||pickOrderParam.consignment_type=='together'">
                   <el-form-item label="外部:" label-width="60px">
-                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.carriersList" :key="item.id" :label="item.carrier_name" :value="item.id">
+                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" multiple collapse-tags>
+                      <el-option v-for="(item,key) in selectData.carriersOutList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -209,11 +209,11 @@ export default {
         carriersLoading: false
       },
       pickOrderParam: {
-        supplier_id: "",
-        fluid_id: "",
+        supplier: "",
+        fluid: "",
         plan_time: '',
         require_car_number: '',
-        trader: '685fa60c-464b-42e7-8153-73402faf1997',
+        trader: '',
         consignment_type: 'own',
         plan_tonnage: '',
         discount_price: '',
@@ -222,15 +222,16 @@ export default {
         unload_area: ''
       },
       carriersParam: {
-        ownCarriers: "",
-        extendCarriers: ""
+        ownCarriers: [],
+        extendCarriers: []
       },
       rules: [],
       selectData: {
         supplierList: [],
         fluidList: [],
         unloadList: [],
-        carriersList: []
+        carriersOwnList: [],
+        carriersOutList: []
       }
     };
   },
@@ -245,18 +246,11 @@ export default {
       var carriers = [];
       if (this.pickOrderParam.consignment_type == 'own') {
         if (this.carriersParam.ownCarriers) {
-          carriers.push(this.carriersParam.ownCarriers);
+          carriers = this.carriersParam.ownCarriers;
         }
       } else if (this.pickOrderParam.consignment_type == 'external') {
         if (this.carriersParam.extendCarriers) {
-          carriers.push(this.carriersParam.extendCarriers);
-        }
-      } else {
-        if (this.carriersParam.extendCarriers) {
-          carriers.push(this.carriersParam.extendCarriers);
-        }
-        if (this.carriersParam.ownCarriers) {
-          carriers.push(this.carriersParam.ownCarriers);
+          carriers = this.carriersParam.extendCarriers;
         }
       }
       var sendData = this.pbFunc.deepcopy(this.pickOrderParam);
@@ -269,14 +263,14 @@ export default {
             message: '创建托运单成功',
             type: 'success'
           });
-          this.$router.push({ path: "/orders/pickupOrders" });
+          this.$router.push({ path: "/purchaseCenter/pickupOrders" });
         }
       }).catch(() => {
         this.loadingArr.pageLoading = false;
       });
     },
     searchList: function() {
-      this.getFulid(this.pickOrderParam.supplier_id);
+      this.getFulid(this.pickOrderParam.supplier);
     },
     getFulid: function(supplierId) {
       var sendData = {};
@@ -296,6 +290,7 @@ export default {
     },
     getSupplier: function() {
       var sendData = {};
+
       this.loadingArr.supplierLoading = true;
       this.$$http("getSupplier", sendData).then((results) => {
         this.loadingArr.supplierLoading = false;
@@ -306,24 +301,35 @@ export default {
       }).catch(() => {
         this.loadingArr.supplierLoading = false;
       });
+
     },
     getCarriers: function() {
       var sendData = {};
       this.loadingArr.carriersLoading = true;
+      sendData.carrier_type = "own";
       this.$$http("getCarriers", sendData).then((results) => {
         this.loadingArr.carriersLoading = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
-          this.selectData.carriersList = dataBody;
+          this.selectData.carriersOwnList = dataBody;
+        }
+      }).catch(() => {
+        this.loadingArr.carriersLoading = false;
+      });
+      sendData.carrier_type = "external";
+      this.$$http("getCarriers", sendData).then((results) => {
+        this.loadingArr.carriersLoading = false;
+        if (results.data.code == 0) {
+          var dataBody = results.data.data.data;
+          this.selectData.carriersOutList = dataBody;
         }
       }).catch(() => {
         this.loadingArr.carriersLoading = false;
       });
     },
-    getUnload: function() {
+    getUnload: function(trader) {
       var sendData = {};
-      this.loadingArr.unloadLoading = true;
-      sendData.trader = "685fa60c-464b-42e7-8153-73402faf1997"
+      sendData.trader = trader;
       this.$$http("getUnload", sendData).then((results) => {
         this.loadingArr.unloadLoading = false;
         if (results.data.code == 0) {
@@ -334,13 +340,24 @@ export default {
         this.loadingArr.unloadLoading = false;
       });
     },
+    getTrade: function() {
+      var sendData = {};
+      var vm = this;
+      this.loadingArr.unloadLoading = true;
+      this.$$http("getCompanies", sendData).then((results) => {
+        if (results.data.code == 0) {
+          vm.pickOrderParam.trader = results.data.data.data[0].id;
+          vm.getUnload(results.data.data.data[0].id);
+        }
+      });
+    },
   },
   created() {
     this.getSupplier();
-    this.getFulid();
-
+    //this.getFulid();
+    this.getTrade();
     this.getCarriers();
-    this.getUnload();
+    //this.getUnload();
   }
 };
 
