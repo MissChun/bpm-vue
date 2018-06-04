@@ -730,7 +730,6 @@ const api = {
 
     }
   },
-
   getSupplier: {
     url: '/api/v1/suppliers/',
     method: 'get',
