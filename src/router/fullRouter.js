@@ -189,6 +189,40 @@ export default [{
             }]
           }
         ]
+      },{
+        path: 'carrierManage',
+        name: 'carrierManage',
+        meta: {
+          isVerificationL: false,
+          title: '承运商管理'
+        },
+        redirect: '/consignmentCenter/carrierManage/carrierManage',
+        component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierManage'], resolve),
+        children: [{
+            path: 'carrierList',
+            name: 'carrierManageList',
+            meta: {
+              isVerificationL: false,
+              title: '承运商列表'
+            },
+            component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierList'], resolve),
+          },{
+            path: 'carrierDetail',
+            name: 'carrierDetail',
+            meta: {
+              isVerificationL: false,
+              title: '承运商详情'
+            },
+            component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierDetail'], resolve),
+          },{
+            path: 'editCarrier',
+            name: 'editCarrier',
+            meta: {
+              isVerificationL: false,
+              title: '编辑承运商'
+            },
+            component: (resolve) => require(['../page/consignmentCenter/carrierManage/editCarrier'], resolve),
+          }]
       }]
     }, {
       path: 'businessManage',

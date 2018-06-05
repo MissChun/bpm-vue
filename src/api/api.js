@@ -9,6 +9,84 @@
  */
 
 const api = {
+  addCarrier: {
+    url: '/api/v1/trader-carriers/',
+    method: 'post',
+    desc: '承运商新增',
+    param: {
+      company: {
+        desc: '公司ID'
+      },
+      carrier_type: {
+        desc: '承运商类型 (‘own’, ‘自有承运商(自有)’),(‘external’, ‘外部承运商(合作)’)'
+      },
+      carrier_name: {
+        desc: '承运商名字'
+      },
+      contact: {
+        desc: ' 联系人'
+      },
+      contact_phone: {
+        desc: '联系人电话'
+      },
+      address: {
+        desc: '地址'
+      },
+      is_valid: {
+        desc: '是否启用 (‘valid’, ‘已启用’),(‘invalid’, ‘未启用’)'
+      },
+      credit_code: {
+        desc: '统一社会信用代码'
+      },
+      organization_code: {
+        desc: '组织机构代码'
+      }
+    }
+  },
+  getCarrierDetail: {
+    url: '/api/v1/trader-carriers/:id/',
+    method: 'get',
+    desc: '承运商列表',
+    param: {
+      company: {
+        desc: '公司ID'
+      },
+      id: {
+        desc: '承运商ID'
+      },
+      carrier_type: {
+        desc: '承运商类型 (‘own’, ‘自有承运商(自有)’),(‘external’, ‘外部承运商(合作)’)'
+      }
+    }
+  },
+  getCarrierList: {
+    url: '/api/v1/trader-carriers/',
+    method: 'get',
+    desc: '承运商列表',
+    param: {
+      company: {
+        desc: '公司ID'
+      },
+      carrier_type: {
+        desc: '承运商类型 (‘own’, ‘自有承运商(自有)’),(‘external’, ‘外部承运商(合作)’)'
+      },
+      carrier_name: {
+        desc: '公司名字'
+      },
+      contact: {
+        desc: ' 联系人'
+      },
+      contact_phone: {
+        desc: '联系人电话'
+      },
+      page: {
+        desc: '页码'
+      },
+      page_size: {
+        desc: '每页数量'
+      }
+    }
+  },
   toExamineBusiness: {
     url: '/api/v1/check_order/',
     method: 'post',
@@ -425,34 +503,34 @@ const api = {
       }
     }
   },
-  addCarrier: {
-    url: '/carrier/carriers/',
-    method: 'post',
-    desc: '创建承运商',
-    param: {
-      user_id: {
-        desc: 'user_id',
-      },
-      name: {
-        desc: '企业名称',
-      },
-      contact_name: {
-        desc: '联系姓名',
-      },
-      contact_phone: {
-        desc: '联系电话',
-      },
-      area: {
-        desc: '所在区域',
-      },
-      detail_address: {
-        desc: '详细地址'
-      },
-      carrier_type: {
-        desc: '企业类型'
-      }
-    }
-  },
+  // addCarrier: {
+  //   url: '/carrier/carriers/',
+  //   method: 'post',
+  //   desc: '创建承运商',
+  //   param: {
+  //     user_id: {
+  //       desc: 'user_id',
+  //     },
+  //     name: {
+  //       desc: '企业名称',
+  //     },
+  //     contact_name: {
+  //       desc: '联系姓名',
+  //     },
+  //     contact_phone: {
+  //       desc: '联系电话',
+  //     },
+  //     area: {
+  //       desc: '所在区域',
+  //     },
+  //     detail_address: {
+  //       desc: '详细地址'
+  //     },
+  //     carrier_type: {
+  //       desc: '企业类型'
+  //     }
+  //   }
+  // },
   imageVerifyCode: {
     url: '/common/image_verify_code/',
     method: 'get',
