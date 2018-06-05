@@ -181,7 +181,6 @@ const dealConfig = function(apiName, postData) {
       }
     }
 
-    console.log('token',token);
     if (!api[apiName].notNeedToken) {
       httpConfig.headers.Authorization = 'JWT ' + token;
     }

@@ -24,7 +24,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传来源:</label>
-                <div class="detail-form-item">{{detailData.source_type.verbose}}</div>
+                <div class="detail-form-item">{{detailData.mark_source.verbose}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -41,19 +41,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.operate_remark}}</div>
+                <div class="detail-form-item">{{detailData.check_status.verbose}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.user.username}}</div>
+                <div class="detail-form-item">{{detailData.audit}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.operate_datetime}}</div>
+                <div class="detail-form-item">{{detailData.audit_datetime}}</div>
               </div>
             </el-col>
           </el-row>
@@ -70,13 +70,14 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>地标类型:</label>
-                <div class="detail-form-item">加油站</div>
+                <div class="detail-form-item">{{detailData.mark_type.verbose}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>地标同步:</label>
-                <div class="detail-form-item">一同步</div>
+                <div class="detail-form-item" v-if="detailData.is_syncd">已同步</div>
+                <div class="detail-form-item" v-if="!detailData.is_syncd">未同步</div>
               </div>
             </el-col>
           </el-row>
@@ -125,10 +126,10 @@ export default {
       return this.$route.params.id;
     },
     isSucess: function() {
-      return this.detailData.confirm_status.key !== 'SUCCESS' ? false : true;
+      return this.detailData.check_status.key !== 'SUCCESS' ? false : true;
     },
     isFailure: function() {
-      return this.detailData.confirm_status.key !== 'FAILURE' ? false : true;
+      return this.detailData.check_status.key !== 'FAILURE' ? false : true;
     },
   },
   data() {
@@ -137,9 +138,10 @@ export default {
       pageLoading: 'pageLoading',
       dialogTableVisible: false,
       detailData: {
-        source_type: {},
-        confirm_status: {},
-        confirm_info: { user: {} },
+        mark_source: {},
+        check_status: {},
+        check_status: {},
+        mark_type: {},
       },
       imgObject: {
         imgList: [{
@@ -188,7 +190,7 @@ export default {
       let postData = {
         id: this.id,
       }
-      postData.confirm_status = isSucess ? 'SUCCESS' : 'FAILURE';
+      postData.check_status = isSucess ? 'SUCCESS' : 'FAILURE';
       this.$$http('patchLandMarkDetail', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
@@ -220,16 +222,19 @@ export default {
     landmarkMap = new AMap.Map('map-container', {
       zoom: 15,
     });
+
     /*创建点标记*/
     positionMark = new AMap.Marker({
       map: landmarkMap,
     });
-    this.getDetail().then((results) => {
-      let lnglat = [results.data.data.location.longitude, results.data.data.location.latitude];
 
-      landmarkMap.setCenter(lnglat);
-      positionMark.setPosition(lnglat);
+    this.getDetail().then((results) => {
+      //let lnglat = [this.detailData.location.longitude, this.detailData.location.latitude];
+
+      //landmarkMap.setCenter(lnglat);
+      //positionMark.setPosition(lnglat);
     });
+
   }
 }
 
