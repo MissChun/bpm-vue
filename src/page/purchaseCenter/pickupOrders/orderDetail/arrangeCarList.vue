@@ -74,7 +74,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
-        pageSize: 1,
+        pageSize: 10,
       },
       searchFilters: {
         keyword: '',
@@ -99,11 +99,11 @@ export default {
       },
       thTableList: [{
         title: '变更',
-        param: 'waybill.waybill_change_status',
+        param: 'waybill.waybill_change_status_display',
         width: ''
       }, {
         title: '运单状态',
-        param: 'waybill.status',
+        param: 'waybill.status_display',
         width: ''
       }, {
         title: '运单号',
@@ -144,11 +144,13 @@ export default {
       }],
       tableData: [],
       renderPage_list: [],
-      allTrue_list: [],
+
+      trueAll_list: [],
       delivery_list: [],
       tractor_semitrailers_List: [],
       now_capacities: [],
-      alerySureList: []
+      alerySureList: [],
+      allChangeList: [],
     }
   },
   computed: {
@@ -259,22 +261,15 @@ export default {
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
         if (results.data && results.data.code == 0) {
           console.log("已经添加列表上面的数据", results.data);
+          getDataNum++;
           vm.alreadyList = results.data.data;
-          var getlistParam = { tractor_list: results.data.data.capacities }
-          vm.$$http("getTransPowerInfo", getlistParam).then((transPower) => {
-            getDataNum++;
-            if (transPower.data.code == 0) {
-              vm.tractor_semitrailers_List = transPower.data.data.results;
-            }
-            if (getDataNum == 2) {
-              vm.pageLoading = false;
-              vm.sortData(true);
-            }
-          });
+          vm.allChangeList = results.data.data.add_capacities.concat(results.data.data.del_capacities);
+          if (getDataNum == 2) {
+            vm.pageLoading = false;
+            vm.getTrueList(true);
+          }
         }
-
       });
-
       let postData1 = {
         id: this.id
       };
@@ -287,17 +282,42 @@ export default {
         }
         if (getDataNum == 2) {
           vm.pageLoading = false;
-          vm.sortData(true);
+          vm.getTrueList(true);
         }
       }).catch((err) => {
         getDataNum++;
-        vm.sortData(false);
+        vm.getTrueList(false);
         if (getDataNum == 2) {
           vm.pageLoading = false;
         }
       });
 
 
+    },
+    getTrueList: function() {
+      var vm = this;
+      var newArrs = this.pbFunc.deepcopy(vm.allChangeList);
+      vm.delivery_list.trips.forEach((Ditem) => {
+        var addflag = true;
+        vm.allChangeList.forEach((item) => {
+          if (Ditem.capacity == item) {
+            addflag = false;
+          }
+        });
+        if (addflag) {
+          newArrs.push(Ditem.capacity);
+        }
+      });
+      var getlistParam = {
+        tractor_list: newArrs
+      }
+      vm.$$http("getTransPowerInfo", getlistParam).then((transPower) => {
+        if (transPower.data.code == 0) {
+          vm.tractor_semitrailers_List = transPower.data.data.results;
+          vm.sortData(true);
+        }
+
+      });
     },
     sortData: function(status) {
       if (status) {
@@ -309,17 +329,20 @@ export default {
 
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
-            if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              operationArr[i].waybill = this.delivery_list.trips[j];
-              operationArr.disableChoose = true;
+            if (operationArr[i].id == this.delivery_list.trips[j].capacity && this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
+              operationArr[i].disableChoose = true;
               addflag = false;
+              operationArr[i].bindCheckBox = true;
               newArr.push(operationArr[i]);
             }
-
+            if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
+              operationArr[i].waybill = this.delivery_list.trips[j];
+            }
           }
           if (addflag) {
             operationArr[i].bindCheckBox = true;
             fifterArr.push(operationArr[i]);
+            operationArr[i].disableChoose = false;
             this.now_capacities.push(operationArr[i]);
           }
         }

@@ -143,9 +143,6 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
-    },
-    operationStatus: function() {
-      return this.$route.params.type;
     }
   },
   methods: {
@@ -153,7 +150,19 @@ export default {
       setTimeout(() => {
 
       })
-    }
+    },
+    getList: function() {
+      var sendData = {};
+      sendData.id = this.id;
+      this.$$http("getConOrderDetalis", sendData).then((results) => {
+        if (results.data.code == 0) {
+          console.log(results.data.data);
+        }
+      }).catch(() => {
+
+      });
+    },
+
   },
   startSearch: function() {
 
@@ -162,7 +171,7 @@ export default {
     this.activeName = 'first';
   },
   created: function() {
-
+    this.getList();
   }
 }
 

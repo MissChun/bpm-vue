@@ -985,6 +985,14 @@ const api = {
     param: {
 
     }
+  },
+  getConOrderDetalis: {
+    url: '/api/v1/section-trips/:id/',
+    method: 'get',
+    desc: '获取运单分段详情',
+    param: {
+
+    }
   }
 }
 
