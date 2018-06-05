@@ -6,6 +6,9 @@
   /deep/ tr td .cell {
     text-align: center;
   }
+  /deep/ tr th .cell {
+    text-align: center;
+  }
 }
 
 </style>
@@ -13,7 +16,7 @@
   <div class="tab-screen">
     <div>
       <div class="nav-tab">
-        <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+        <el-tabs v-model="activeName" type="card">
           <el-tab-pane label="列表" name="first">
             <div class="tab-screen">
               <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
@@ -28,21 +31,29 @@
                   </el-col>
                 </el-row>
                 <el-row :gutter="10">
-                  <!-- <el-col :span="4">
-                    <el-form-item label="状态:">
-                      <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
-                        <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
+                  <el-col :span="8">
+                    <el-form-item label="计划到站时间:" label-width="105px">
+                      <el-date-picker v-model="searchTimeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                      </el-date-picker>
                     </el-form-item>
-                  </el-col> -->
-                  <el-col :span="2">
+                  </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                  <el-col :span="2" :offset="22">
+                    <el-button type="primary" @click="operation('sureCar')">提交卸货单</el-button>
                   </el-col>
                 </el-row>
               </el-form>
             </div>
             <div class="table-list">
-              <el-table :data="aa" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading">
+              <el-table :data="renderList" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="100">
+                  <template slot-scope="props">
+                    <el-button type="text" @click="operation('sureMatch',props.row)" v-if="props.row.orderMatch">匹配</el-button>
+                    <el-button type="text" @click="operation('cancleMatch',props.row)" v-if="!props.row.orderMatch">取消匹配</el-button>
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -75,66 +86,74 @@ export default {
         field: '',
         orderStateList: '',
       },
+      searchTimeParam: [],
       selectData: {
         fieldSelect: [{
-          value: '车号',
-          id: 'tractor.plate_number',
+          value: '业务单号',
+          id: 'order_number',
         }, {
-          value: '姓名',
-          id: 'master_driver.name',
+          value: '客户名称',
+          id: 'customer_name',
         }, {
-          value: '电话',
-          id: 'master_driver.mobile_phone',
+          value: '液厂',
+          id: 'actual_fluid',
+        }, {
+          value: '收货人',
+          id: 'consignee',
+        }, {
+          value: '业务员',
+          id: 'sale_man',
         }],
         orderStateListSelect: [{
-          value: '车号',
+          value: '收货人',
           id: '1',
         }]
       },
-      aa: [],
+      renderList: [],
+      trueAllList: [],
       thTableList: [{
-        title: '变更',
-        param: 'waybill.waybill_change_status',
+        title: '业务单号',
+        param: 'order_number',
         width: ''
       }, {
-        title: '运单状态',
-        param: 'waybill.status',
+        title: '业务单状态',
+        param: 'status_display',
         width: ''
       }, {
-        title: '运单号',
-        param: 'waybill.waybill',
+        title: '客户简称',
+        param: 'short_name',
         width: ''
       }, {
-        title: '车号',
-        param: 'tractor.plate_number',
+        title: '业务员',
+        param: 'sale_name',
         width: ''
       }, {
-        title: '挂车',
-        param: 'semitrailer.plate_number',
+        title: '液厂',
+        param: 'actual_fluid',
         width: '250'
       }, {
-        title: '司机',
-        param: 'master_driver.name',
+        title: '站点',
+        param: 'station',
         width: ''
       }, {
-        title: '司机电话',
-        param: 'master_driver.mobile_phone',
+        title: '站点地址',
+        param: 'station_address',
         width: ''
       }, {
-        title: '押运',
-        param: 'escort_staff.name',
+        title: '计划到站时间',
+        param: 'plan_arrive_time',
         width: ''
       }, {
-        title: '押运电话',
-        param: 'escort_staff.mobile_phone',
+        title: '计划吨位',
+        param: 'plan_tonnage',
         width: ''
       }, {
-        title: '副驾',
-        param: 'vice_driver.name',
+        title: '收货人',
+        param: 'consignee',
         width: ''
       }, {
-        title: '副驾电话',
-        param: 'vice_driver.mobile_phone',
+        title: '收货人电话',
+        param: 'consignee_phone',
         width: ''
       }],
 
@@ -151,22 +170,95 @@ export default {
 
       })
     },
-    getList: function() {
+    startSearch: function() {
+
+    },
+    operation: function(type, row) {
       var sendData = {};
-      sendData.id = this.id;
-      this.$$http("getConOrderDetalis", sendData).then((results) => {
+      sendData.waybill_order_id = this.id;
+      sendData.business_order_id = row.id;
+      if (type == 'sureMatch') {
+        this.$$http('sureMatchLoad', sendData).then(results => {
+          if (results.data.code == 0) {
+            this.$message({
+              type: success,
+              message: '匹配成功',
+            });
+            this.getList();
+          }
+        }).catch(() => {
+
+        });
+      } else if (type == 'cancleMatch') {
+        this.$$http('cancleMatchLoad', sendData).then(results => {
+          if (results.data.code == 0) {
+            this.$message({
+              type: success,
+              message: '取消匹配成功',
+            });
+            this.getList();
+          }
+        }).catch(() => {
+
+        });
+      }
+    },
+    getList: function() {
+      var vm = this;
+      var sendData = {};
+      var needNum = 0;
+      sendData.pagination = false;
+      this.$$http("getBusinessList", sendData).then((results) => {
+        needNum++;
         if (results.data.code == 0) {
+          vm.trueAllList = results.data.data.data
           console.log(results.data.data);
+          if (needNum == 2) {
+            vm.sortParam(true);
+          }
         }
       }).catch(() => {
+        needNum++;
+        if (needNum == 2) {
+          vm.sortParam(false);
+        }
+      });
 
+      var sendData1 = {};
+      sendData1.waybill_order_id = this.id;
+      this.$$http("getHasLoadOrder", sendData1).then((results) => {
+        needNum++;
+        if (results.data.code == 0) {
+          vm.hasList = results.data.data;
+          if (needNum == 2) {
+            vm.sortParam(true);
+          }
+        }
+      }).catch(() => {
+        needNum++;
+        if (needNum == 2) {
+          vm.sortParam(false);
+        }
       });
     },
+    sortParam: function(falag) {
+      if (falag) {
+        this.trueAllList.forEach((item) => {
+          if (item.status == 'waiting_related') {
+            item.orderMatch = true;
+          } else if (item.status == 'waiting_confirm' || item.status == 'to_site') {
+            this.hasList.forEach((Hitem) => {
 
-  },
-  startSearch: function() {
+            });
+          }
+        });
+        this.renderList = this.pbFunc.deepcopy(this.trueAllList);
+      } else {
 
+      }
+    },
   },
+
   activated: function() {
     this.activeName = 'first';
   },

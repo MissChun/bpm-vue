@@ -1071,6 +1071,38 @@ const api = {
     param: {
 
     }
+  },
+  getHasLoadOrder: {
+    url: '/api/v1/waybill-business/check-order/',
+    method: 'POST',
+    desc: '获取当前运单已有的卸货单',
+    param: {
+
+    }
+  },
+  getBusinessList: {
+    url: '/api/v1/business_order/',
+    method: 'get',
+    desc: '获取所有的业务单',
+    param: {
+
+    }
+  },
+  cancleMatchLoad: {
+    url: '/api/v1/waybill-business/cancel-business-order/',
+    method: 'post',
+    desc: '取消关联卸货单',
+    param: {
+
+    }
+  },
+  sureMatchLoad: {
+    url: '/api/v1/waybill-business/match-business-order/',
+    method: 'post',
+    desc: '关联卸货单',
+    param: {
+
+    }
   }
 }
 

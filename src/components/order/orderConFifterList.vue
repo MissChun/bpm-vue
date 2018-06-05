@@ -341,7 +341,8 @@ export default {
 
         });
       } else if (type == 'matchUnload') { //匹配卸货单
-        this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.id}` });
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
+.id}` });
       } else if (type == 'upUnload') { //提交卸货单
 
       } else if (type == 'changeUnload') { //变更卸货单
