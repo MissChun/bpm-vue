@@ -170,6 +170,8 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
       }
+      sendData.pageSize = this.pageData.pageSize;
+      sendData.page = this.pageData.currentPage;
       this.pageLoading = true;
       this.$$http("searchConOrderList", sendData).then((results) => {
         vm.pageLoading = false;
