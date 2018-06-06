@@ -39,7 +39,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="地址:">
+                  <el-form-item label="地址:" prop="address">
                     <el-input placeholder="请输入" type="text" v-model="editMsgForm.address"></el-input>
                   </el-form-item>
                 </el-col>
@@ -58,11 +58,11 @@
                 </el-col>
               </el-row>
               <el-row :gutter="40">
-                <el-col :span="16"><!--  prop="codeMsg" -->
-                  <el-form-item label="代码:">
+                <el-col :span="16">
+                  <el-form-item label="代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="8">
-                        <el-select v-model="editMsgForm.code" placeholder="请选择" :disabled="editMsgForm.code==='license3in1_code'?true:false">
+                        <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='credit_code'&&detail.credit_code?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
@@ -86,14 +86,14 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <!-- <el-button type="success" @click="editBasics(nextStepBtn,'next')" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button> -->
+                  <el-button type="success" @click="editBasics(nextStepBtn,'next')" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="editBasics(saveBasicAndReviewBtn,'out')" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
             </div>
           </div>
         </transition>
-        <transition name="el-fade-in-linear" v-if="false">
+        <transition name="el-fade-in-linear">
           <div v-if="activeStep==1">
             <div class="detail-form-title text-center">卸车待时规则</div>
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpTwo" :rules="rules" :model="editMsgForm" status-icon>
@@ -160,17 +160,21 @@ export default {
         carrier_type: 'own',
         license_pic: [],
         code: 'credit_code',
-        codeMsg: ''
+        codeMsg: '',
+        free_hour: '',
+        overtime_price: ''
       },
       sociology: [
+        { required: true, message: '请输入统一社会信用代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
       ],
       structure: [
-        { pattern: /^([A-Z0-9]{8})$/, message: '由8位数字和大写字母组成', trigger: 'blur' }
+        { required: true, message: '请输入组织机构代码', trigger: 'blur' },
+        { pattern: /^([A-Z0-9]{9})$/, message: '由9位数字和大写字母组成', trigger: 'blur' }
       ],
       selectData: {
         codeSelect: [
-          { id: 'credit_code', value: '社会机构代码（三合一）' },
+          { id: 'credit_code', value: '统一社会信用代码（三合一）' },
           { id: 'organization_code', value: '组织机构代码（非三合一）' },
         ],
         carrierTypeSelect: [
@@ -190,14 +194,25 @@ export default {
         carrier_type: [
           { required: true, message: '请选择承运商类型', trigger: 'blur' }
         ],
+        address: [
+          { required: true, message: '请输入地址', trigger: 'blur' }
+        ],
         contact_phone: [
           { required: true, message: '请输入联系方式', trigger: 'blur' },
           { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '请输入座机号或者手机号', trigger: 'blur' }
         ],
-        // codeMsg: [
-        //   { required: true, message: '请输入联系方式', trigger: 'blur' },
-        //   { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
-        // ]
+        codeMsg: [
+          { required: true, message: '请输入统一社会信用代码', trigger: 'blur' },
+          { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
+        ],
+        free_hour: [
+          { required: true, message: '请输入免费等待时长', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        ],
+        overtime_price: [
+          { required: true, message: '请输入超时计算单价', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        ],
 
       },
       saveBasicAndReviewBtn: {
@@ -222,9 +237,9 @@ export default {
   },
   methods: {
     codeTab() {
-      this.customerMsgForm.codeMsg = '';
+      this.editMsgForm.codeMsg = '';
       this.$refs['addFormSetpOne'].clearValidate();
-      if (this.editMsgForm.code === 'license3in1_code') {
+      if (this.editMsgForm.code === 'credit_code') {
         this.rules.codeMsg = this.sociology;
       } else {
         this.rules.codeMsg = this.structure;
@@ -243,46 +258,6 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    selectAddType() {
-      if (this.addType !== 'PLAT') {
-        this.isDisabled = false;
-        this.selectCustomer = '';
-        this.editMsgForm = {
-          name: '',
-          contact_name: '',
-          contact_phone: '',
-          detail_address: '',
-          deficiency_standard: '',
-          free_hour: '',
-          overtime_price: '',
-          code: 'license3in1_code',
-          codeMsg: '',
-          license_pic: [],
-        }
-      }
-    },
-    getSelectInfo() {
-      if (this.addType === 'PLAT') {
-        this.isDisabled = true;
-        for (let i in this.customerList) {
-          if (this.customerList[i].id === this.selectCustomer) {
-            this.editMsgForm = {
-              name: this.customerList[i].name,
-              contact_name: this.customerList[i].contact_name,
-              contact_phone: this.customerList[i].contact_phone,
-              detail_address: this.customerList[i].detail_address,
-              deficiency_standard: this.customerList[i].deficiency_standard,
-              free_hour: this.customerList[i].free_hour,
-              overtime_price: this.customerList[i].overtime_price,
-              code: this.customerList[i].license_code ? 'license_code' : 'license3in1_code',
-              codeMsg: this.customerList[i].license3in1_code ? this.customerList[i].license3in1_code : this.customerList[i].license_code,
-              license_pic: this.customerList[i].license_pic ? this.customerList[i].license_pic : [],
-            }
-          }
-        }
-      }
-
-    },
     getDetail: function() {
       console.log('sdfhdjksfhks')
       this.$$http('getCarrierDetail', { id: this.id }).then((results) => {
@@ -300,8 +275,9 @@ export default {
             carrier_type: this.detail.carrier_type.key,
             license_pic: [],
             code: this.detail.credit_code ? 'credit_code' : 'organization_code',
-            codeMsg: this.detail.credit_code ? this.detail.credit_code : this.detail.organization_code
-
+            codeMsg: this.detail.credit_code ? this.detail.credit_code : this.detail.organization_code,
+            free_hour: this.detail.free_hour,
+            overtime_price: this.detail.overtime_price
 
           }
 
@@ -312,9 +288,9 @@ export default {
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
       console.log('btnTextCopy', btnTextCopy);
-
+      console.log('postData', postData);
       let apiName = 'addCarrier';
-      postData.company = 'cacf2c4d-9290-4f88-bfa0-be842df32e3b';
+      // postData.company = 'cacf2c4d-9290-4f88-bfa0-be842df32e3b';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -328,7 +304,7 @@ export default {
           btnObject.isLoading = true;
 
           //postData = this.pbFunc.fifterObjIsNull(postData);
-           console.log('postDataxxxx',apiName, postData);
+          console.log('参数', postData, formName, btnObject, stepNum, isReview)
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
@@ -339,12 +315,12 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
-              // if (isReview) {
-              //   this.$router.push({ path: "/clientManage/clientDetail", query: { id: results.data.data.id } });
-              // } else {
-              //   let id = results.data.data.id;
-              //   this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum - 1, id: id } });
-              // }
+              if (isReview) {
+                this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: results.data.data.id } });
+              } else {
+                let id = results.data.data.id;
+                this.$router.push({ path: "/consignmentCenter/carrierManage/editCarrier", query: { activeStep: stepNum - 1, id: id } });
+              }
             }
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;
@@ -361,18 +337,21 @@ export default {
 
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      if (this.editMsgForm.code === 'credit_code') {
-        this.editMsgForm.credit_code = this.editMsgForm.codeMsg;
-      } else if (this.editMsgForm.code === 'organization_code') {
-        this.editMsgForm.organization_code = this.editMsgForm.codeMsg;
-      }
+
 
       if (this.editMsgForm.isValidName) {
         this.editMsgForm.is_valid = 'valid'
       } else {
         this.editMsgForm.is_valid = 'invalid'
       }
-      let keyArray = ['carrier_name', 'contact', 'contact_phone', 'address', 'is_valid', 'carrier_type', 'organization_code', 'credit_code'];
+      let keyArray = ['carrier_name', 'contact', 'contact_phone', 'address', 'is_valid', 'carrier_type'];
+      if (this.editMsgForm.code === 'credit_code') {
+        this.editMsgForm.credit_code = this.editMsgForm.codeMsg;
+        keyArray.push('credit_code');
+      } else if (this.editMsgForm.code === 'organization_code') {
+        this.editMsgForm.organization_code = this.editMsgForm.codeMsg;
+        keyArray.push('organization_code');
+      }
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       console.log('postData', postData);
 

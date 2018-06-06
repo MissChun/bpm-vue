@@ -77,7 +77,7 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>社会机构代码:</label>
-                      <div class="detail-form-item"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.credit_code?detailData.credit_code:detailData.organization_code)"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
@@ -103,13 +103,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>待时计算标准:</label>
-                      <div class="detail-form-item"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.free_hour+'小时')"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>待时计费标准:</label>
-                      <div class="detail-form-item">元/小时</div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.free_hour+'元/小时')"></div>
                     </div>
                   </el-col>
                 </el-row>

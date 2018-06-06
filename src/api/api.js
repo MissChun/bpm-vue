@@ -9,6 +9,40 @@
  */
 
 const api = {
+  updateCarrier: {
+    url: '/api/v1/trader-carriers/:id/',
+    method: 'patch',
+    desc: '承运商新增',
+    param: {
+      id: {
+        desc: '承运商ID'
+      },
+      carrier_type: {
+        desc: '承运商类型 (‘own’, ‘自有承运商(自有)’),(‘external’, ‘外部承运商(合作)’)'
+      },
+      carrier_name: {
+        desc: '承运商名字'
+      },
+      contact: {
+        desc: ' 联系人'
+      },
+      contact_phone: {
+        desc: '联系人电话'
+      },
+      address: {
+        desc: '地址'
+      },
+      is_valid: {
+        desc: '是否启用 (‘valid’, ‘已启用’),(‘invalid’, ‘未启用’)'
+      },
+      credit_code: {
+        desc: '统一社会信用代码'
+      },
+      organization_code: {
+        desc: '组织机构代码'
+      }
+    }
+  },
   addCarrier: {
     url: '/api/v1/trader-carriers/',
     method: 'post',
