@@ -103,7 +103,7 @@
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">
               <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index" :to="item">
-                {{ item.name || "" }}
+                {{ item.meta.title || "" }}
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>

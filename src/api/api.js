@@ -1018,15 +1018,32 @@ const api = {
     }
   },
   getLandMarkList: {
-    url: '/map/land_marks/',
+    url: '/api/v1/land-mark/',
     method: 'get',
     desc: '地标列表',
     param: {
-
+      mark_name: {
+        desc: '地标名称',
+      },
+      mark_type: {
+        desc: '地标类型',
+      },
+      mark_source: {
+        desc: '地标来源',
+      },
+      consignee: {
+        desc: '联系人',
+      },
+      creator: {
+        desc: '上传人',
+      },
+      search: {
+        desc: '全部',
+      },
     }
   },
   getLandMarkDetail: {
-    url: '/map/land_marks/:id/',
+    url: '/api/v1/land-mark/:id/',
     method: 'get',
     desc: '地标详情',
     param: {

@@ -9,7 +9,7 @@ export default [{
       path: 'dashborad',
       name: 'dashborad',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '概览',
         iconName: 'icon-lng-dashboard'
       },
@@ -196,7 +196,7 @@ export default [{
           isVerificationL: false,
           title: '承运商管理'
         },
-        redirect: '/consignmentCenter/carrierManage/carrierManage',
+        redirect: '/consignmentCenter/carrierManage/carrierList',
         component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierManage'], resolve),
         children: [{
             path: 'carrierList',
@@ -236,7 +236,7 @@ export default [{
       children: [{
         path: 'tradeBusiness',
         name: 'tradeBusiness',
-        redirect: '/businessManage/tradeBusiness/tradeBusinessList',
+        redirect: '/businessManage/tradeBusiness/businessList',
         meta: {
           isVerificationL: false,
           title: '贸易业务单',
@@ -304,7 +304,7 @@ export default [{
       path: 'logisticsManage',
       name: 'logisticsManage',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '物流管理',
         iconName: 'icon-road',
       },
@@ -313,7 +313,7 @@ export default [{
       path: 'mapManage',
       name: 'mapManage',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '地图',
         iconName: 'icon-road',
       },
@@ -323,7 +323,7 @@ export default [{
         name: 'carMonitor',
         redirect: '/mapManage/carMonitor/realTimeMonitor',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '地图监控',
         },
         component: (resolve) => require(['../page/map/carMonitor/carMonitor'], resolve),
@@ -349,7 +349,7 @@ export default [{
         name: 'standardMile',
         redirect: '/mapManage/standardMile/standardMileList',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '标准里程管理',
         },
         component: (resolve) => require(['../page/map/standardMile/standardMile'], resolve),
@@ -383,7 +383,7 @@ export default [{
         name: 'landmark',
         redirect: '/mapManage/landmark/landmarkList',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '地标管理',
         },
         component: (resolve) => require(['../page/map/landmark/landmark'], resolve),
@@ -417,7 +417,7 @@ export default [{
       path: 'transportPowerManage',
       name: 'transportPowerManage',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '运力',
         iconName: 'icon-map',
       },
@@ -427,7 +427,7 @@ export default [{
         name: 'capacityManage',
         redirect: '/transportPowerManage/capacityManage/capacityList',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '运力管理',
         },
         component: (resolve) => require(['../page/transportPowerManage/capacityManage/capacityManage'], resolve),
@@ -460,7 +460,7 @@ export default [{
         path: 'carManage',
         name: 'carManage',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '车辆管理',
         },
         component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
@@ -525,7 +525,7 @@ export default [{
         redirect: '/transportPowerManage/personManage/personListManage',
         name: 'personManage',
         meta: {
-          isVerificationL: true,
+          isVerificationL: false,
           title: '人员管理',
         },
         component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
@@ -562,7 +562,7 @@ export default [{
       path: 'clientManage',
       name: 'clientManage',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '客户管理',
         iconName: 'icon-customer',
       },
@@ -610,7 +610,7 @@ export default [{
       path: 'statistics',
       name: 'statistics',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '数据统计',
         iconName: 'icon-data',
       },
@@ -619,7 +619,7 @@ export default [{
       path: 'setting',
       name: 'setting',
       meta: {
-        isVerificationL: true,
+        isVerificationL: false,
         title: '设置',
         iconName: 'icon-setting',
       },

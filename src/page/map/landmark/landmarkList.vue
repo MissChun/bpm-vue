@@ -12,9 +12,6 @@
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select v-model="searchFilters.position_type" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                    </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
@@ -31,6 +28,13 @@
                   <el-form-item label="地标来源:">
                     <el-select v-model="searchFilters.landmarkFrom" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="地标类型:">
+                    <el-select v-model="searchFilters.position_type" @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -74,21 +78,7 @@
 <script>
 export default {
   name: 'landMarkList',
-  computed: {
-    landmarkFromSelect: function() {
-      console.log('this.$store.state.common.selectData', this.$store.state.common.selectData);
-      return this.$store.getters.getIncludeAllSelect.landmark_source_type;
-    },
-    checkStatusSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
-    },
-    fieldSelect: function() {
-      return this.$store.state.common.selectData.landmark_position_type;
-    },
-    isSynchronizeSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_async_status;
-    }
-  },
+  computed: {},
   data() {
     return {
       pageData: {
@@ -100,57 +90,100 @@ export default {
       activeName: 'first',
       tableData: [],
       thTableList: [{
-        title: '编号',
-        param: 'position_name',
-        width: ''
-      }, {
         title: '地标名称',
-        param: 'position_name',
+        param: 'mark_name',
         width: '250'
       }, {
         title: '地标类型',
-        param: 'position_type.verbose',
+        param: 'mark_type.verbose',
         width: ''
       }, {
         title: '联系人',
-        param: 'contact',
+        param: 'consignee',
         width: ''
       }, {
         title: '联系电话',
-        param: 'tel',
+        param: 'consignee_phone',
         width: ''
       }, {
         title: '位置',
         param: 'address',
-        width: '260'
+        width: ''
       }, {
         title: '审核状态',
-        param: 'confirm_status.verbose',
+        param: 'check_status.verbose',
         width: ''
       }, {
         title: '上传人',
-        param: 'upload_user.nick_name',
+        param: 'creator',
         width: ''
       }, {
         title: '上传时间',
-        param: 'created_time',
+        param: 'created_at',
         width: '200'
       }, {
         title: '上传来源',
-        param: 'source_type.verbose',
+        param: 'mark_source.verbose',
         width: ''
       }, {
         title: '同步',
-        param: 'async_status.verbose',
+        param: 'xxxx',
         width: ''
       }],
       searchFilters: {
         keyword: '',
         landmarkFrom: '',
-        position_type: 'DELIVER_POSITION',
+        position_type: '',
         confirm_status: '',
         async_status: '',
-      }
+      },
+      landmarkFromSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'PLATFORM',
+        verbose: '平台'
+      }, {
+        key: 'DRIVER_UPLOAD',
+        verbose: '司机端上传'
+      }, {
+        key: 'RESIDENCE_POINT',
+        verbose: '轨迹停留点'
+      }],
+      checkStatusSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'waiting',
+        verbose: '未审核'
+      }, {
+        key: 'pass',
+        verbose: '审核通过'
+      }, {
+        key: 'refuse',
+        verbose: '审核拒绝'
+      }],
+      fieldSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'fluid',
+        verbose: '气源液厂'
+      }, {
+        key: 'station',
+        verbose: '卸货站'
+      }, {
+        key: 'oil_station',
+        verbose: '加油站'
+      }, {
+        key: 'gas_station',
+        verbose: '加气站'
+      }, {
+        key: 'park',
+        verbose: '停车场'
+      }],
+      isSynchronizeSelect: [],
+
     }
   },
   methods: {
@@ -172,14 +205,14 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        source_type: this.searchFilters.landmarkFrom,
+        mark_source: this.searchFilters.landmarkFrom,
         confirm_status: this.searchFilters.confirm_status,
         async_status: this.searchFilters.async_status
       };
 
       if (this.searchFilters.keyword.length) {
-        postData.position_type = this.searchFilters.position_type;
-        postData.position_name = this.searchFilters.keyword;
+        postData.mark_type = this.searchFilters.mark_type;
+        postData.mark_name = this.searchFilters.keyword;
       }
 
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -190,7 +223,7 @@ export default {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.results;
+          this.tableData = results.data.data.data;
 
           this.pageData.totalCount = results.data.data.count;
 
