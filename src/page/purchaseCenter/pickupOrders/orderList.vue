@@ -19,7 +19,7 @@
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="公有提货单" name="first">
           <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
+            <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" size="medium">
@@ -104,7 +104,6 @@ export default {
 
       timeParam: [],
       listFifterData: [],
-      rules: {},
       activeName: 'first',
       fifterName: 'all',
       pageData: {

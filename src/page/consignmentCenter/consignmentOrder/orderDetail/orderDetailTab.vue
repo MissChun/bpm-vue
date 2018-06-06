@@ -353,12 +353,12 @@ export default {
     },
     getTransPowerInfo: function(id) {
       let postData = {
-        id: id
+        tractor_list: [id]
       }
       this.$$http('getTransPowerInfo', postData).then((results) => {
         console.log('getTransPowerInfo', results);
         if (results.data && results.data.code == 0 && results.data.data) {
-          this.transPowerData = results.data.data;
+          this.transPowerData = results.data.data.results[0];
           console.log('this.transPowerData', this.transPowerData);
         } else {
           this.$message({

@@ -40,7 +40,7 @@
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="2" :offset="22">
-                    <el-button type="primary" @click="operation('sureCar')">提交卸货单</el-button>
+                    <el-button type="primary" @click="operation('upMatchList')">提交卸货单</el-button>
                   </el-col>
                 </el-row>
               </el-form>
@@ -51,8 +51,8 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" width="100">
                   <template slot-scope="props">
-                    <el-button type="text" @click="operation('sureMatch',props.row)" v-if="props.row.orderMatch">匹配</el-button>
-                    <el-button type="text" @click="operation('cancleMatch',props.row)" v-if="!props.row.orderMatch">取消匹配</el-button>
+                    <el-button type="text" @click="operation('sureMatch',props.row)" v-if="props.row.orderMatch=='Match'">匹配</el-button>
+                    <el-button type="text" @click="operation('cancleMatch',props.row)" v-if="props.row.orderMatch=='NoMatch'">取消匹配</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -111,6 +111,7 @@ export default {
       },
       renderList: [],
       trueAllList: [],
+      upMatchList: [],
       thTableList: [{
         title: '业务单号',
         param: 'order_number',
@@ -129,7 +130,7 @@ export default {
         width: ''
       }, {
         title: '液厂',
-        param: 'actual_fluid',
+        param: 'actual_fluid_name',
         width: '250'
       }, {
         title: '站点',
@@ -162,6 +163,9 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
+    },
+    setpId: function() {
+      return this.$route.params.setpId;
     }
   },
   methods: {
@@ -175,31 +179,79 @@ export default {
     },
     operation: function(type, row) {
       var sendData = {};
-      sendData.waybill_order_id = this.id;
-      sendData.business_order_id = row.id;
+      var vm = this;
       if (type == 'sureMatch') {
-        this.$$http('sureMatchLoad', sendData).then(results => {
-          if (results.data.code == 0) {
-            this.$message({
-              type: success,
-              message: '匹配成功',
-            });
-            this.getList();
+        vm.upMatchList.push(row.id);
+        vm.renderList.forEach((item, index) => {
+          if (item.id == row.id) {
+            item.orderMatch = 'NoMatch';
           }
-        }).catch(() => {
-
         });
       } else if (type == 'cancleMatch') {
-        this.$$http('cancleMatchLoad', sendData).then(results => {
-          if (results.data.code == 0) {
-            this.$message({
-              type: success,
-              message: '取消匹配成功',
+        sendData.section_trip_id = vm.setpId;
+        sendData.business_order_id = row.id;
+        vm.$$http("judgeIsCancle", sendData).then(judgeResults => {
+          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == -1) {
+            var newArr = [];
+            vm.upMatchList.forEach((item, index) => {
+              if (item != row.id) {
+                newArr.push(item);
+              }
             });
-            this.getList();
+            vm.renderList.forEach((item, index) => {
+              if (item.id == row.id) {
+                item.orderMatch = 'Match';
+              }
+            });
+            vm.upMatchList = newArr;
+          } else {
+            vm.$confirm('当前状态不能取消匹配,请核实', '请注意', {
+              confirmButtonText: '确认',
+              type: 'warning',
+              showCancelButton: false,
+              center: true,
+            }).then(() => {})
           }
-        }).catch(() => {
+        });
+      } else if (type == 'upMatchList') {
+        var cancel_order_list = [],
+          match_order_list = [];
 
+        vm.hasList.forEach(item => {
+          var cancleFalg = true;
+          vm.upMatchList.forEach(Uitem => {
+            if (Uitem == item) {
+              cancleFalg = false;
+            }
+          });
+          if (cancleFalg) {
+            cancel_order_list.push(item);
+          }
+        });
+
+        vm.upMatchList.forEach(Uitem => {
+          var addFalg = true;
+          vm.hasList.forEach(item => {
+            if (Uitem == item) {
+              addFalg = false;
+            }
+          });
+          if (addFalg) {
+            match_order_list.push(Uitem);
+          }
+        });
+        sendData.waybill_id = vm.id;
+        sendData.match_order_list = match_order_list;
+        sendData.cancel_order_list = cancel_order_list;
+        vm.$$http("upMatchList", sendData).then(results => {
+          if (results.data.code == 0) {
+            console.log("成功");
+            vm.$message({
+              type: "success",
+              message: "匹配卸货地成功"
+            })
+          }
+          vm.$router.push({ path: "/consignmentCenter/consignmentOrders" });
         });
       }
     },
@@ -207,7 +259,7 @@ export default {
       var vm = this;
       var sendData = {};
       var needNum = 0;
-      sendData.pagination = false;
+      sendData.all_search = 'bpm_match';
       this.$$http("getBusinessList", sendData).then((results) => {
         needNum++;
         if (results.data.code == 0) {
@@ -230,6 +282,7 @@ export default {
         needNum++;
         if (results.data.code == 0) {
           vm.hasList = results.data.data;
+          vm.upMatchList = vm.hasList;
           if (needNum == 2) {
             vm.sortParam(true);
           }
@@ -245,10 +298,12 @@ export default {
       if (falag) {
         this.trueAllList.forEach((item) => {
           if (item.status == 'waiting_related') {
-            item.orderMatch = true;
-          } else if (item.status == 'waiting_confirm' || item.status == 'to_site') {
+            item.orderMatch = 'Match';
+          } else if (['waiting_confirm', 'to_site', 'modify_manager_check', 'modify_department_check'].indexOf(item.status) > 0) {
             this.hasList.forEach((Hitem) => {
-
+              if (Hitem == item.id) {
+                item.orderMatch = 'NoMatch';
+              }
             });
           }
         });

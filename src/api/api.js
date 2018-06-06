@@ -1191,7 +1191,7 @@ const api = {
     }
   },
   getHasLoadOrder: {
-    url: '/api/v1/waybill-business/check-order/',
+    url: '/api/v1/match-helpers/check-order/',
     method: 'POST',
     desc: '获取当前运单已有的卸货单',
     param: {
@@ -1214,11 +1214,28 @@ const api = {
 
     }
   },
-  sureMatchLoad: {
+  upMatchList: {
     url: '/api/v1/waybill-business/match-business-order/',
     method: 'post',
     desc: '关联卸货单',
     param: {
+
+    }
+  },
+  judgeIsCancle: {
+    url: '/api/v1/whether-opts/can-cancel/',
+    method: 'post',
+    desc: '判断能否取消',
+    param: {
+
+    }
+  },
+  getConOrderDetail: {
+    url: '/api/v1/waybills/:id/',
+    method: 'get',
+    desc: '获取运单详情',
+    param: {
+
 
     }
   }

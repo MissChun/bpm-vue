@@ -342,11 +342,12 @@ export default {
         });
       } else if (type == 'matchUnload') { //匹配卸货单
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
-.id}` });
+.id}/${rowData.id}` });
       } else if (type == 'upUnload') { //提交卸货单
 
       } else if (type == 'changeUnload') { //变更卸货单
-
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
+.id}/${rowData.id}` });
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.waybill.id}` });
       }
