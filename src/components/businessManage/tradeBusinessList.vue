@@ -89,7 +89,7 @@ export default {
         pageSize: 10,
       },
       activeName: 'add',
-      statusActive: 'waiting_manager_check',
+      statusActive: 'create_manager_check',
       planArriveTime: [], //计划到站时间
       createdAt: [], //下计划日期
       searchFilters: {
@@ -103,10 +103,10 @@ export default {
         key: 'add',
         tabs: [{
           title: '经理审批中',
-          key: 'waiting_manager_check',
+          key: 'create_manager_check',
         }, {
           title: '部门审批中',
-          key: 'waiting_department_check',
+          key: 'create_department_check',
         }]
       }, {
         title: '关联',
@@ -164,10 +164,10 @@ export default {
       }],
       statusTabList: [{
         title: '经理审批中',
-        key: 'waiting_manager_check',
+        key: 'create_manager_check',
       }, {
         title: '部门审批中',
-        key: 'waiting_department_check',
+        key: 'create_department_check',
       }],
       selectData: {
         isBindSelect: [
@@ -274,7 +274,7 @@ export default {
     getList(status) {
       let postData = {
         page: this.pageData.currentPage,
-        // status: status
+        status: status
       };
       if (this.planArriveTime instanceof Array&&this.planArriveTime.length > 0) {
         postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';

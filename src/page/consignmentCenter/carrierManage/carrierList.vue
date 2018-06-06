@@ -39,7 +39,7 @@
                   <div v-if="item.param === 'carrier_name'" class="order-color">
                     <router-link :to="{path: '/consignmentCenter/carrierManage/carrierDetail', query: { id: scope.row.id }}">{{scope.row.carrier_name}}</router-link>
                   </div>
-                  <div v-else>{{scope.row[item.param]}}</div>
+                  <div v-else><span v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</span><span v-else>{{scope.row[item.param]}}</span></div>
                 </template>
               </el-table-column>
               <!-- <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -113,11 +113,13 @@ export default {
         width: ''
       }, {
         title: '承运类型',
-        param: 'carrier_type.verbose',
+        param: 'carrier_type',
+        param_two:'verbose',
         width: ''
       }, {
         title: '启用',
-        param: 'is_valid.verbose',
+        param: 'is_valid',
+        param_two:'verbose',
         width: ''
       }],
       tableData: []

@@ -83,7 +83,8 @@ export default {
       }
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.positionList = results.data.data.data;
+
+          this.positionList = results.data.data;
         }
       }).catch((err) => {})
     },

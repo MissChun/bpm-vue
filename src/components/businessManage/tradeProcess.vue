@@ -56,8 +56,8 @@
               </el-col>
               <el-col :span="6" class="text-right">
                 <div class="fs-14">
-                  <span v-if="processData.order.operate_status ==='create_manager_check'">新增经理审批中</span>
-                  <span v-if="processData.order.operate_status ==='create_department_check'">新增部门审批中</span>
+                  <span v-if="processData.order.order_status ==='create_manager_check'">新增经理审批中</span>
+                  <span v-if="processData.order.order_status ==='create_department_check'">新增部门审批中</span>
                 </div>
               </el-col>
             </el-row>
@@ -83,7 +83,15 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row :gutter="10">
+            <el-row :gutter="10" v-if="processData.create_manager_check.operate==='denied'">
+              <el-col :span="24">
+                <div class="label-list">
+                  <label>拒绝理由:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.create_manager_check.refuse_note)"></div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10" v-if="processData.create_manager_check.operate!=='denied'">
               <el-col :span="8">
                 <div class="label-list">
                   <label>新增-部门审核时间:</label>
@@ -93,7 +101,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>新增-部门审核结果:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.create_manager_check.operate_cn)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.create_department_check.operate_cn)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -103,15 +111,15 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row :gutter="10" v-if="processData.create_manager_check.operate==='denied'">
+            <el-row :gutter="10" v-if="processData.create_department_check.operate==='denied'">
               <el-col :span="24">
                 <div class="label-list">
                   <label>拒绝理由:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.create_department_check.operate_time)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.create_department_check.refuse_note)"></div>
                 </div>
               </el-col>
             </el-row>
-            <el-row :gutter="10" v-if="isToExamine&&!processData.create_manager_check.operate">
+            <el-row :gutter="10" v-if="isToExamine&&processData.create_manager_check.operate==='pass'&&!processData.create_department_check.operate">
               <el-col :span="24">
                 <div class="label-list text-right">
                   <el-button type="primary" plain size="medium" @click="refuseDialog.isShow = true">审核拒绝</el-button>
@@ -121,57 +129,57 @@
             </el-row>
           </div>
         </div>
-        <!-- <div class="detail-list detail-form">
-                <div class="detail-form-title">
-                  <el-row>
-                    <el-col :span="12" :offset="6" class="text-center">
-                      <div>关联</div>
-                    </el-col>
-                    <el-col :span="6" class="text-right">
-                      <div class="fs-14">
-                        <span v-if="processData.order.operate_status ==='waiting_related'">待关联</span>
-                        <span v-if="processData.order.operate_status ==='waiting_confirm'">已关联待确认</span>
-                      </div>
-                    </el-col>
-                  </el-row>
+        <div class="detail-list detail-form" v-if="processData.order.order_status ==='waiting_related'||processData.order.order_status ==='waiting_confirm'&&processData.waiting_related.commit_time">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                <div>关联</div>
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <div class="fs-14">
+                  <span v-if="processData.order.order_status ==='waiting_related'">待关联</span>
+                  <span v-if="processData.order.order_status ==='waiting_confirm'">已关联待确认</span>
                 </div>
-                <div class="process-content">
-                  <el-row :gutter="10">
-                    <el-col :span="8">
-                      <div class="label-list">
-                        <label>关联时间:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="label-list">
-                        <label>关联运单号:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="label-list">
-                        <label>操作人:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row :gutter="10">
-                    <el-col :span="8">
-                      <div class="label-list">
-                        <label>关联确认时间:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
-                      </div>
-                    </el-col>
-                    <el-col :span="8">
-                      <div class="label-list">
-                        <label>操作人:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
-                      </div>
-                    </el-col>
-                  </el-row>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="process-content">
+            <el-row :gutter="10">
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>关联时间:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.waiting_related.commit_time)"></div>
                 </div>
-              </div> -->
+              </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>关联运单号:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.waiting_related.order_number)"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>操作人:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.waiting_related.commit_name)"></div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>关联确认时间:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.waiting_related.operator_time)"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>操作人:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.waiting_related.operator_name)"></div>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
         <!-- <div class="detail-list detail-form">
                 <div class="detail-form-title">
                   <el-row>
@@ -274,7 +282,7 @@
                   </el-row>
                 </div>
               </div> -->
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-if="false">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -528,14 +536,12 @@
       <refuse-dialog :refuse-dialog="refuseDialog" v-on:closeDialogBtn="closeDialog"></refuse-dialog>
     </el-container>
   </div>
-
 </template>
-
 <script>
 import refuseDialog from '@/components/businessManage/refuseDialog';
 export default {
   name: 'tradeProcess',
-  props:['isToExamine'],
+  props: ['isToExamine'],
   components: {
     refuseDialog: refuseDialog
   },
@@ -559,6 +565,13 @@ export default {
           operate_time: ''
         },
         create_department_check: { //新增部门审核
+          operate_cn: '',
+          operator_name: '',
+          operate_time: ''
+        },
+        waiting_related:{ //关联
+          commit_name:'',
+          commit_time:'',
           operate_cn: '',
           operator_name: '',
           operate_time: ''
@@ -598,7 +611,7 @@ export default {
     closeDialog: function(isSave) {
       this.refuseDialog.isShow = false;
       if (isSave) {
-        this.getDetail();
+        this.getProcess();
       }
 
     },
@@ -639,7 +652,7 @@ export default {
                 message: '通过审核成功',
                 type: 'success'
               });
-              this.getDetail();
+              this.getProcess();
             }
 
           }).catch((err) => {
