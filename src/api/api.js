@@ -1232,7 +1232,20 @@ const api = {
 
 
     }
-  }
+  },
+  realTimeMonitor: {
+    url: '/api/v1/map/',
+    method: 'get',
+    desc: "实时监控",
+    param: {
+      plate_number: {
+        desc: '车牌号',
+      },
+       status: {
+        desc: '状态',
+      },
+    }
+  },
 }
 
 
