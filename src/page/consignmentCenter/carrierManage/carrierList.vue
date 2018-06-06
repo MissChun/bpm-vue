@@ -16,7 +16,7 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
+              <el-row :gutter="30">
                 <el-col :span="6">
                   <el-form-item label="承运类型:">
                     <el-select v-model="searchFilters.carrierType" @change="startSearch" placeholder="请选择">
