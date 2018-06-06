@@ -298,6 +298,57 @@ export default [{
           },
           component: (resolve) => require(['../page/serviceManage/businessToExamine/businessDetail'], resolve),
         }]
+      },{
+        path: 'standardDataManage',
+        name: 'standardDataManage',
+        redirect: '/serviceManage/standardDataManage/freightDataList',
+        meta: {
+          isVerificationL: false,
+          title: '标准数据管理',
+          iconName: 'icon-lng-dashboard',
+        },
+        component: (resolve) => require(['../page/serviceManage/standardDataManage/standardDataManage'], resolve),
+        children: [{
+          path: 'freightDataList',
+          name: 'freightDataList',
+          meta: {
+            isVerificationL: false,
+            title: '运费约定',
+          },
+          component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDataList'], resolve),
+        }, {
+          path: 'mileageDataList',
+          name: 'mileageDataList',
+          meta: {
+            isVerificationL: false,
+            title: '标准里程',
+          },
+          component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDataList'], resolve),
+        }, {
+          path: 'editMileage',
+          name: 'editMileage',
+          meta: {
+            isVerificationL: false,
+            title: '编辑、新增标准里程',
+          },
+          component: (resolve) => require(['../page/serviceManage/standardDataManage/editMileage'], resolve),
+        }, {
+          path: 'mileageDetail',
+          name: 'mileageDetail',
+          meta: {
+            isVerificationL: false,
+            title: '标准里程详情',
+          },
+          component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDetail'], resolve),
+        }, {
+          path: 'freightDetail',
+          name: 'freightDetail',
+          meta: {
+            isVerificationL: false,
+            title: '运费约定详情',
+          },
+          component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDetail'], resolve),
+        }]
       }]
 
     }, {

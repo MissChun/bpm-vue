@@ -9,6 +9,58 @@
  */
 
 const api = {
+  getFreightDetail: {
+    url: '/api/v1/freight-managements/',
+    method: 'get',
+    desc: '运费详情',
+    param: {
+      id:{
+        desc:'运费约定id'
+      },
+      agreements__carrier:{
+        desc:'承运商id'
+      },
+      agreements__fluid: {
+        desc: '液厂id'
+      }
+    }
+  },
+  getFreightList: {
+    url: '/api/v1/freight-managements/',
+    method: 'get',
+    desc: '运费列表',
+    param: {
+      page:{
+        desc:'页码'
+      },
+      page_size:{
+        desc:'页码'
+      },
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
+  getSiteList: {
+    url: '/api/v1/delivery_point/',
+    method: 'get',
+    desc: '站点列表',
+    param: {
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
+  getFluidList: {
+    url: '/api/v1/actual-fluids/',
+    method: 'get',
+    desc: '实际液厂列表',
+    param: {
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
   updateCarrier: {
     url: '/api/v1/trader-carriers/:id/',
     method: 'patch',
@@ -98,6 +150,9 @@ const api = {
     method: 'get',
     desc: '承运商列表',
     param: {
+      need_all:{
+        desc:'是否分页'
+      },
       company: {
         desc: '公司ID'
       },
@@ -925,22 +980,22 @@ const api = {
 
     }
   },
-  getSiteList: {
-    url: '/map/fluid_sites/',
-    method: 'get',
-    desc: '获取LNG站点列表',
-    param: {
-      position_name: {
-        desc: '站点名称',
-      },
-      page: {
-        desc: '当前页数',
-      },
-      page_size: {
-        desc: '每页数量',
-      },
-    }
-  },
+  // getSiteList: {
+  //   url: '/map/fluid_sites/',
+  //   method: 'get',
+  //   desc: '获取LNG站点列表',
+  //   param: {
+  //     position_name: {
+  //       desc: '站点名称',
+  //     },
+  //     page: {
+  //       desc: '当前页数',
+  //     },
+  //     page_size: {
+  //       desc: '每页数量',
+  //     },
+  //   }
+  // },
   getSiteDetail: {
     url: '/map/fuild_sites/:id/',
     method: 'get',
@@ -950,7 +1005,7 @@ const api = {
     }
   },
   getStandardMileList: {
-    url: '/map/standard_mileages/',
+    url: '/api/v1/standard-miles/',
     method: 'get',
     desc: '获取标准里程列表',
     param: {
@@ -958,26 +1013,29 @@ const api = {
     }
   },
   addStandardMileList: {
-    url: '/map/standard_mileages/',
+    url: '/api/v1/standard-miles/',
     method: 'post',
     desc: '新增标准里程',
     param: {
-      fluid_site_id: {
+      station: {
         desc: '站点资源id',
       },
-      fluid_factory_id: {
+      fluid: {
         desc: '液厂资源id',
       },
-      standard_mileage: {
+      mile: {
         desc: '标准里程',
       },
       is_active: {
         desc: '是否启用',
+      },
+      carriers: {
+        desc: '承运商ID',
       }
     }
   },
   getStandardMileDetail: {
-    url: '/map/standard_mileages/:id/',
+    url: '/api/v1/standard-miles/:id/',
     method: 'get',
     desc: '标准里程详情',
     param: {
@@ -985,19 +1043,28 @@ const api = {
     }
   },
   patchStandardMileDetail: {
-    url: '/map/standard_mileages/:id/',
+    url: '/api/v1/standard-miles/',
     method: 'PATCH',
     desc: '标准里程更新',
     param: {
-      fluid_site_id: {
+      id: {
+        desc: '标准里程ID',
+      },
+      station: {
         desc: '站点资源id',
       },
-      fluid_factory_id: {
+      fluid: {
         desc: '液厂资源id',
       },
-      standard_mileage: {
+      mile: {
         desc: '标准里程',
       },
+      is_active: {
+        desc: '是否启用',
+      },
+      carriers: {
+        desc: '承运商ID',
+      }
     }
   },
   delStandardMile: {

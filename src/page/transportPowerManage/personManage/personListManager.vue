@@ -15,15 +15,15 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
+              <el-row :gutter="40">
+                <el-col :span="6">
                   <el-form-item label="从业类型:">
                     <el-select v-model="searchFilters.employmentType" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="是否绑定:">
                     <el-select v-model="searchFilters.isBind" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isBindSelect" :key="key" :label="item.value" :value="item.id"></el-option>
