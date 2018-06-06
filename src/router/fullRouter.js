@@ -179,7 +179,7 @@ export default [{
             //redirect: '/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/:id',
             component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/unloadPlan/unloadPlanTabs'], resolve),
             children: [{
-              path: "unloadPlanList/:id",
+              path: "unloadPlanList/:id/:setpId",
               name: 'unloadPlanList',
               meta: {
                 isVerificationL: false,
@@ -189,7 +189,7 @@ export default [{
             }]
           }
         ]
-      },{
+      }, {
         path: 'carrierManage',
         name: 'carrierManage',
         meta: {
@@ -199,30 +199,30 @@ export default [{
         redirect: '/consignmentCenter/carrierManage/carrierList',
         component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierManage'], resolve),
         children: [{
-            path: 'carrierList',
-            name: 'carrierManageList',
-            meta: {
-              isVerificationL: false,
-              title: '承运商列表'
-            },
-            component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierList'], resolve),
-          },{
-            path: 'carrierDetail',
-            name: 'carrierDetail',
-            meta: {
-              isVerificationL: false,
-              title: '承运商详情'
-            },
-            component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierDetail'], resolve),
-          },{
-            path: 'editCarrier',
-            name: 'editCarrier',
-            meta: {
-              isVerificationL: false,
-              title: '编辑承运商'
-            },
-            component: (resolve) => require(['../page/consignmentCenter/carrierManage/editCarrier'], resolve),
-          }]
+          path: 'carrierList',
+          name: 'carrierManageList',
+          meta: {
+            isVerificationL: false,
+            title: '承运商列表'
+          },
+          component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierList'], resolve),
+        }, {
+          path: 'carrierDetail',
+          name: 'carrierDetail',
+          meta: {
+            isVerificationL: false,
+            title: '承运商详情'
+          },
+          component: (resolve) => require(['../page/consignmentCenter/carrierManage/carrierDetail'], resolve),
+        }, {
+          path: 'editCarrier',
+          name: 'editCarrier',
+          meta: {
+            isVerificationL: false,
+            title: '编辑承运商'
+          },
+          component: (resolve) => require(['../page/consignmentCenter/carrierManage/editCarrier'], resolve),
+        }]
       }]
     }, {
       path: 'businessManage',
