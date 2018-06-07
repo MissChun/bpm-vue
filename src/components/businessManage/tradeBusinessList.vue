@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div class="nav-tab">
@@ -70,10 +71,9 @@
   </div>
 </template>
 <script>
-
 export default {
-  name:'tradeBusinessList',
-  props:['detailLink'],
+  name: 'tradeBusinessList',
+  props: ['detailLink'],
   computed: {
     // statusTabList(){
     //   return this.tabList[0].tabs;
@@ -276,11 +276,11 @@ export default {
         page: this.pageData.currentPage,
         status: status
       };
-      if (this.planArriveTime instanceof Array&&this.planArriveTime.length > 0) {
+      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';
         postData.plan_arrive_time_end = this.planArriveTime[1] + ' 23:59:59';
       }
-      if (this.createdAt instanceof Array&&this.createdAt.length > 0) {
+      if (this.createdAt instanceof Array && this.createdAt.length > 0) {
         postData.created_at_start = this.createdAt[0] + ' 00:00:00';
         postData.created_at_end = this.createdAt[1] + ' 23:59:59';
       }
@@ -311,8 +311,3 @@ export default {
 }
 
 </script>
-<style>
-
-
-</style>
-

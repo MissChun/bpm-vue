@@ -30,38 +30,38 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="trans-fee" v-for="(fee,index) in detailData">
+                <div class="trans-fee">
                   <div class="table-list">
-                    <el-table :data="fee.records" stripe style="width: 100%" size="mini">
+                    <el-table :data="detailData.records" stripe style="width: 100%" size="mini">
                       <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                       </el-table-column>
                     </el-table>
                   </div>
-                  <el-row :gutter="10" v-if="fee.agreements">
+                  <el-row :gutter="10" v-if="detailData.agreements">
                     <el-col :span="8">
                       <div class="label-list">
                         <label>对应液厂:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(fee.agreements.length?fee.agreements[0].fluid_name:'')"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')"></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>生效时间:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(fee.agreements.length?fee.agreements[0].effective_time:'')"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].effective_time:'')"></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>失效时间:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(fee.agreements.length?fee.agreements[0].dead_time:'')"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].dead_time:'')"></div>
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row :gutter="10" v-if="fee.agreements">
+                  <el-row :gutter="10" v-if="detailData.agreements">
                     <el-col :span="8">
                       <div class="label-list">
                         <label>生效承运商:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(fee.agreements.length?fee.agreements[0].carrier_name:'')"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')"></div>
                       </div>
                     </el-col>
                   </el-row>
@@ -116,24 +116,17 @@ export default {
     id: function() {
       return this.$route.query.id;
     },
-    carrier: function() {
-      return this.$route.query.carrier;
-    },
-    fluid: function() {
-      return this.$route.query.fluid;
-    }
+
   },
   methods: {
     getDetail: function() {
       this.pageLoading = true;
       this.$$http('getFreightDetail', {
-        id: this.id,
-        agreements__carrier: this.carrier,
-        agreements__fluid: this.fluid
+        id: this.id
       }).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.detailData = results.data.data.data;
+          this.detailData = results.data.data;
         }
       }).catch((err) => {
         this.pageLoading = false;

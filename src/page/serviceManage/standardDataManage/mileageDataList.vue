@@ -93,9 +93,18 @@ export default {
         field: '',
       },
       selectData: {
-        carrierSelect: [], //承运商
-        liquidSelect: [], //液厂
-        siteSelect: [], //站点
+        carrierSelect: [{
+          id:'',
+          carrier_name:'全部'
+        }], //承运商
+        liquidSelect: [{
+          id:'',
+          actual_fluid_name:'全部'
+        }], //液厂
+        siteSelect: [{
+          id:'',
+          station_name:'全部'
+        }], //站点
       },
       thTableList: [{
         title: '液厂',
@@ -135,10 +144,11 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        // fluid: this.searchFilters.fluid,
-        // station: this.searchFilters.station,
-        // carriers: this.searchFilters.carriers
+        fluid: this.searchFilters.fluid,
+        station: this.searchFilters.station,
+        carriers: this.searchFilters.carriers
       };
+      postData = this.pbFunc.fifterObjIsNull(postData);
 
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
 
@@ -167,7 +177,7 @@ export default {
       this.$$http('getCarrierList', postData).then((results) => {
         console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
-          this.selectData.carrierSelect = results.data.data;
+          this.selectData.carrierSelect = this.selectData.carrierSelect.concat(results.data.data);
         }
       }).catch((err) => {})
 
@@ -180,7 +190,7 @@ export default {
       this.$$http('getFluidList', postData).then((results) => {
         console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
-          this.selectData.liquidSelect = results.data.data;
+          this.selectData.liquidSelect = this.selectData.liquidSelect.concat(results.data.data);
         }
       }).catch((err) => {})
 
@@ -193,7 +203,7 @@ export default {
       this.$$http('getSiteList', postData).then((results) => {
         console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
-          this.selectData.siteSelect = results.data.data;
+          this.selectData.siteSelect = this.selectData.siteSelect.concat(results.data.data);
         }
       }).catch((err) => {})
 

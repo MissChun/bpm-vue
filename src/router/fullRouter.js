@@ -274,7 +274,7 @@ export default [{
       children: [{
         path: 'businessToExamine',
         name: 'businessToExamine',
-        redirect: '/serviceManage/businessToExamine/tradeBusinessList',
+        redirect: '/serviceManage/businessToExamine/businessList',
         meta: {
           isVerificationL: false,
           title: '业务单审批',

@@ -103,13 +103,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>待时计算标准:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.free_hour+'小时')"></div>
+                      <div class="detail-form-item" v-if="detailData.free_hour" v-html="pbFunc.dealNullData(detailData.free_hour+'小时')"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>待时计费标准:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.free_hour+'元/小时')"></div>
+                      <div class="detail-form-item" v-if="detailData.overtime_price" v-html="pbFunc.dealNullData(detailData.overtime_price+'元/小时')"></div>
                     </div>
                   </el-col>
                 </el-row>

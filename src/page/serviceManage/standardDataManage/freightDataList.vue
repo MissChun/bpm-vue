@@ -1,3 +1,24 @@
+<style scoped lang="less">
+.el-table {
+  /deep/ td{
+    padding:0;
+  }
+  /deep/ .cell {
+    padding: 0!important;
+  }
+}
+.fee-list {
+    ul {
+        li {
+            height: 32px;
+
+            line-height: 32px;
+
+            border-bottom: 1px solid #e4e7ed;
+        }
+    }
+}
+</style>
 <template>
   <div>
     <div class="nav-tab">
@@ -29,10 +50,18 @@
             <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
+                <template slot-scope="scope">
+                  <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'">
+                    <ul>
+                      <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}</li>
+                    </ul>
+                  </div>
+                  <div v-else><span v-if="scope.row.agreements.length&&item.param!=='created_at'">{{scope.row.agreements[0][item.param]}}</span><span v-else>{{scope.row.created_at}}</span></div>
+                </template>
               </el-table-column>
-              <el-table-column label="操作" align="center">
+              <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                 </template>
@@ -74,45 +103,51 @@ export default {
         // field: 'name',
       },
       selectData: {
-        carrierSelect: [], //承运商
-        liquidSelect: [] //液厂
+        carrierSelect: [{
+          id:'',
+          carrier_name:'全部'
+        }], //承运商
+        liquidSelect: [{
+          id:'',
+          actual_fluid_name:'全部'
+        }] //液厂
       },
       thTableList: [{
         title: '起点里程',
-        param: 'name',
+        param: 'start_mileage',
         width: ''
       }, {
         title: '终点里程',
-        param: 'contact_name',
+        param: 'end_mileage',
         width: ''
       }, {
         title: '起步价（元/吨）',
-        param: 'contact_phone',
+        param: 'initial_price',
         width: ''
       }, {
         title: '变动费率（元/吨/公里）',
-        param: 'detail_address',
+        param: 'change_rate',
         width: '200'
       }, {
         title: '生效承运商',
-        param: 'deficiency_standard',
-        width: ''
+        param: 'carrier_name',
+        width: '200'
       }, {
         title: '生效液厂',
-        param: 'created_at',
+        param: 'fluid_name',
         width: ''
       }, {
         title: '生效时间',
-        param: 'detail_address',
-        width: ''
+        param: 'effective_time',
+        width: '200'
       }, {
         title: '失效时间',
-        param: 'deficiency_standard',
-        width: ''
+        param: 'dead_time',
+        width: '200'
       }, {
         title: '添加时间',
         param: 'created_at',
-        width: ''
+        width: '200'
       }],
       tableData: []
     }
@@ -126,9 +161,10 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        // agreements__carrier: this.searchFilters.agreements__carrier,
-        // agreements__fluid: this.searchFilters.agreements__fluid
+        agreements__carrier: this.searchFilters.agreements__carrier,
+        agreements__fluid: this.searchFilters.agreements__fluid
       };
+      postData = this.pbFunc.fifterObjIsNull(postData);
 
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
 
@@ -157,7 +193,7 @@ export default {
       this.$$http('getCarrierList', postData).then((results) => {
         console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
-          this.selectData.carrierSelect = results.data.data;
+          this.selectData.carrierSelect = this.selectData.carrierSelect.concat(results.data.data);
         }
       }).catch((err) => {})
 
@@ -170,7 +206,7 @@ export default {
       this.$$http('getFluidList', postData).then((results) => {
         console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
-          this.selectData.liquidSelect = results.data.data;
+          this.selectData.liquidSelect = this.selectData.liquidSelect.concat(results.data.data);
         }
       }).catch((err) => {})
 
@@ -182,7 +218,7 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id, carrier: 'b57461f6-b221-4620-bc06-304ef3ccac91', fluid: 'fc7fc26a-2de5-40ee-a96c-54c8432fff85' } });
+      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id} });
     },
 
     pageChange: function() {

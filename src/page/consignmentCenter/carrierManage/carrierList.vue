@@ -42,15 +42,15 @@
                   <div v-else><span v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</span><span v-else>{{scope.row[item.param]}}</span></div>
                 </template>
               </el-table-column>
-              <!-- <el-table-column label="操作" align="center" width="150" fixed="right">
+              <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick(scope.row)">查看</el-button>
                 </template>
-              </el-table-column> -->
+              </el-table-column>
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -163,6 +163,10 @@ export default {
       }).catch((err) => {
         this.pageLoading = false;
       })
+
+    },
+    handleMenuClick(row){
+      this.$router.push({path: '/consignmentCenter/carrierManage/carrierDetail', query: { id: row.id }});
 
     }
   },

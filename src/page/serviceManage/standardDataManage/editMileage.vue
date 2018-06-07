@@ -130,7 +130,8 @@ export default {
         ],
         mile: [ //从业类型
           { required: true, message: '请输入标准里程', trigger: 'blur' },
-          { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
+          // { pattern: /^[0-9]+$/, message: '请输入数字', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '请输入数字', trigger: 'blur' }
         ],
         carriers: [
           { required: true, message: '请选择承运商', trigger: 'blur' },
@@ -208,7 +209,7 @@ export default {
     chooseSite: function() {
       for (let i in this.fluidSiteSelect) {
         if (this.userForm.station === this.fluidSiteSelect[i].id) {
-          this.siteAddress = this.fluidSiteSelect[i].address;
+          this.siteAddress = this.fluidSiteSelect[i].address + this.fluidSiteSelect[i].city + this.fluidSiteSelect[i].area + this.fluidSiteSelect[i].address;
           break;
         }
       }
@@ -272,10 +273,12 @@ export default {
             carriers: [],
             isActiveName: this.detailData.is_active.key === 'effective' ? true : false,
           }
-          console.log('编辑',this.userForm);
-          for(let i in this.detailData.carriers){
+          console.log('编辑', this.userForm);
+          for (let i in this.detailData.carriers) {
             this.userForm.carriers.push(this.detailData.carriers[i].id);
           }
+          this.fluidAddress = this.detailData.actual_fluid_address;
+          this.siteAddress = this.detailData.station_address;
 
 
         }
