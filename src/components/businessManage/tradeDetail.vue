@@ -73,12 +73,12 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>来源液厂:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                  <div class="detail-form-item" v-if="detailData.deliver_order" v-html="pbFunc.dealNullData(detailData.deliver_order.fluid_name)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>卸车待时费:</label>
+                  <label>？卸车待时费:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
                 </div>
               </el-col>
@@ -98,13 +98,13 @@
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>结算价格:</label>
+                  <label>？结算价格:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>结算总价:</label>
+                  <label>？结算总价:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
                 </div>
               </el-col>
@@ -117,7 +117,6 @@
                   卸货信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
                 </el-col>
               </el-row>
             </div>
@@ -197,7 +196,6 @@
                   装货信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
                 </el-col>
               </el-row>
             </div>
@@ -285,14 +283,13 @@
                   车辆信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
                 </el-col>
               </el-row>
             </div>
             <el-row :gutter="10">
               <el-col :span="8">
                 <div class="label-list">
-                  <label>车牌号:</label>
+                  <label>?车牌号:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
                 </div>
               </el-col>
@@ -344,60 +341,17 @@ export default {
       pageLoading: false,
       activeStep: 0,
       activeName: 'process',
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6
-        }
-      },
       detailData: {
-        trans_fee: []
+
       },
       refuseDialog: {
         isShow: false,
         id: this.$route.query.id
       },
-      processData: {
-        order: { //生成业务单
-          order_number: '',
-          operator_name: '',
-          created_at: ''
-        },
-        create_manager_check: { //新增经理审核
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        },
-        create_department_check: { //新增部门审核
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        },
-        waiting_confirm: { //关联
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        },
-        unloading: { //卸货
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        },
-        finished: { //结算
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        },
-        in_settlement: { //修改结算  待结算
-          operate_cn: '',
-          operator_name: '',
-          operate_time: ''
-        }
-      },
     }
   },
   created() {
     this.getDetail();
-    this.getProcess()
   },
   computed: {
     id: function() {
@@ -405,13 +359,6 @@ export default {
     }
   },
   methods: {
-    closeDialog: function(isSave) {
-      this.refuseDialog.isShow = false;
-      if (isSave) {
-        this.getDetail();
-      }
-
-    },
     getDetail: function() {
       this.pageLoading = true;
       this.$$http('getBusinessDetail', { business_order_id: this.id }).then((results) => {
@@ -424,58 +371,7 @@ export default {
       })
 
     },
-    getProcess: function() {
-      // this.pageLoading = true;
-      this.$$http('getProcessDetail', { id: this.id }).then((results) => {
-        this.pageLoading = false;
-        if (results.data && results.data.code == 0) {
-          // this.processData = results.data.data;
-          for (let i in results.data.data) {
-            results.data.data[i].operate_cn = results.data.data[i].operate && results.data.data[i].operate === 'pass' ? '通过' : '拒绝';
-            if (results.data.data[i].operate_status) {
-              this.processData[results.data.data[i].operate_status] = results.data.data[i];
-            } else if (results.data.data[i].order_number) {
-              this.processData.order = results.data.data[i];
-            }
-          }
-          console.log('this.processData', this.processData)
-        }
-      }).catch((err) => {
-        this.pageLoading = false;
-      })
 
-    },
-    adopt() {
-      this.$confirm("请确认业务单信息无误，审核通过后将等待匹配车辆", "业务单审核通过", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.$$http('toExamineBusiness', {
-            order_id: this.id,
-            action: 'pass'
-          }).then((results) => {
-            if (results.data && results.data.code == 0) {
-              this.$message({
-                message: '通过审核成功',
-                type: 'success'
-              });
-              this.getDetail();
-            }
-
-          }).catch((err) => {
-            this.$message.error('通过审核失败');
-          })
-
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消通过审核'
-          });
-        });
-    },
     handleRemove: function(file, fileList) {
       console.log(file, fileList);
     },
@@ -485,10 +381,6 @@ export default {
     handleClick() {
 
     },
-    goEditDetail: function(number) {
-      this.$router.push({ path: "/clientManage/addClient?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
-    },
-
   }
 }
 

@@ -1,6 +1,10 @@
 <!-- editCarrier.vue -->
 <style scoped lang="less">
-
+ /deep/ .is-disabled{
+  i{
+    display: none;
+  }
+}
 
 </style>
 <template>
@@ -23,24 +27,24 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="承运商名称:" prop="carrier_name">
-                    <el-input placeholder="请输入" type="text" v-model="editMsgForm.carrier_name"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.carrier_name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="联系人:" prop="contact">
-                    <el-input placeholder="请输入" type="text" v-model="editMsgForm.contact"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="联系电话:" prop="contact_phone">
-                    <el-input placeholder="请输入" type="text" v-model="editMsgForm.contact_phone"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact_phone"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="地址:" prop="address">
-                    <el-input placeholder="请输入" type="text" v-model="editMsgForm.address"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.address"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -67,7 +71,7 @@
                         </el-select>
                       </el-col>
                       <el-col :span="10">
-                        <el-input placeholder="请输入" type="text" v-model="editMsgForm.codeMsg"></el-input>
+                        <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.codeMsg"></el-input>
                       </el-col>
                     </el-row>
                   </el-form-item>
@@ -249,7 +253,7 @@ export default {
       if (this.$route.query.id) {
         this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
       } else {
-        this.$router.push({ path: "/consignmentCenter/carrierManage/editCarrier" });
+        this.$router.push({ path: "/consignmentCenter/carrierManage/carrierList" });
       }
     },
     handleRemove(file, fileList) {
@@ -316,7 +320,7 @@ export default {
                 type: 'success'
               });
               if (isReview) {
-                this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: results.data.data.id } });
+                this.$router.push({ path: "/consignmentCenter/carrierManage/carrierList"});
               } else {
                 let id = results.data.data.id;
                 this.$router.push({ path: "/consignmentCenter/carrierManage/editCarrier", query: { activeStep: stepNum - 1, id: id } });

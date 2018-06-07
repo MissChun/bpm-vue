@@ -10,19 +10,13 @@
 
 const api = {
   getFreightDetail: {
-    url: '/api/v1/freight-managements/',
+    url: '/api/v1/freight-managements/:id/',
     method: 'get',
     desc: '运费详情',
     param: {
       id:{
         desc:'运费约定id'
       },
-      agreements__carrier:{
-        desc:'承运商id'
-      },
-      agreements__fluid: {
-        desc: '液厂id'
-      }
     }
   },
   getFreightList: {
