@@ -112,6 +112,7 @@ export default {
       renderList: [],
       trueAllList: [],
       upMatchList: [],
+      hasList: [],
       thTableList: [{
         title: '业务单号',
         param: 'order_number',
@@ -191,7 +192,7 @@ export default {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;
         vm.$$http("judgeIsCancle", sendData).then(judgeResults => {
-          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == -1) {
+          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == 1) {
             var newArr = [];
             vm.upMatchList.forEach((item, index) => {
               if (item != row.id) {
@@ -281,8 +282,8 @@ export default {
       this.$$http("getHasLoadOrder", sendData1).then((results) => {
         needNum++;
         if (results.data.code == 0) {
-          vm.hasList = results.data.data;
-          vm.upMatchList = vm.hasList;
+          vm.hasList = this.pbFunc.deepcopy(results.data.data);
+          vm.upMatchList = results.data.data;
           if (needNum == 2) {
             vm.sortParam(true);
           }
@@ -299,7 +300,7 @@ export default {
         this.trueAllList.forEach((item) => {
           if (item.status == 'waiting_related') {
             item.orderMatch = 'Match';
-          } else if (['waiting_confirm', 'to_site', 'modify_manager_check', 'modify_department_check'].indexOf(item.status) > 0) {
+          } else if (['waiting_confirm', 'to_site', 'modify_manager_check', 'modify_department_check'].indexOf(item.status) > -1) {
             this.hasList.forEach((Hitem) => {
               if (Hitem == item.id) {
                 item.orderMatch = 'NoMatch';

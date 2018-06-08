@@ -43,35 +43,35 @@
     </div>
     <div class="listOrder nav-tab" v-loading="pageLoading">
       <el-tabs v-model="fifterName" type="card" @tab-click="clickFifter">
-        <el-tab-pane label="全部" name="all">
+        <el-tab-pane :label="statusName.all_count" name="all">
           <div v-if="fifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="待指派" name="appoint">
+        <el-tab-pane :label="statusName.appoint_count" name="appoint">
           <div v-if="fifterName=='appoint'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="待确认" name="determine">
+        <el-tab-pane :label="statusName.determine_count" name="determine">
           <div v-if="fifterName=='determine'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="已确认" name="confirmed">
+        <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
           <div v-if="fifterName=='confirmed'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="历史" name="loaded">
+        <el-tab-pane :label="statusName.history_count" name="loaded">
           <div v-if="fifterName=='loaded'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
@@ -101,7 +101,13 @@ export default {
         keyword: "",
         field: "",
       },
-
+       statusName:{
+        all_count:'全部',
+        appoint_count:'待指派',
+        determine_count:'待确认',
+        confirmed_count:'已确认',
+        history_count:'历史'
+      },
       timeParam: [],
       listFifterData: [],
       activeName: 'first',
@@ -181,6 +187,19 @@ export default {
   created() {
     //this.listFifterData = this.listData;
     this.searchList();
+     this.$$http("getCount",{}).then(results=>{
+        if(results.data.code==0){
+          var dataBody=results.data.data;
+          for(var i in dataBody){
+            if(dataBody[i]>99){
+              dataBody[i]='99+';
+            }
+            this.statusName[i]+="("+dataBody[i]+")";
+          }
+        }
+      }).catch(()=>{
+
+      });
   }
 };
 
