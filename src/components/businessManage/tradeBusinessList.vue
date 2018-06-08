@@ -192,15 +192,15 @@ export default {
         width: ''
       }, {
         title: '供应商',
-        param: 'mobile_phone',
+        param: 'company.supplier',
         width: ''
       }, {
         title: '承运商',
-        param: 'bind_tractors.plate_number',
+        param: 'company.carrier',
         width: ''
       }, {
         title: '客户',
-        param: 'customer_name',
+        param: 'consumer_name',
         width: ''
       }, {
         title: '客户简称',
