@@ -1129,11 +1129,13 @@ const api = {
     }
   },
   patchLandMarkDetail: {
-    url: '/map/land_marks/:id/',
-    method: 'patch',
-    desc: '地标详情',
+    url: '/api/v1/land-mark/:id/audit/',
+    method: 'put',
+    desc: '审核地标',
     param: {
-
+      check_status: {
+        desc: '审核状态',
+      },
     }
   },
   surePickOrder: {
@@ -1232,7 +1234,52 @@ const api = {
 
 
     }
-  }
+  },
+  realTimeMonitor: {
+    url: '/api/v1/map/',
+    method: 'get',
+    desc: "实时监控",
+    param: {
+      plate_number: {
+        desc: '车牌号',
+      },
+       status: {
+        desc: '状态',
+      },
+    }
+  },
+  getDeviceDetail:{
+    url: '/api/v1/map/wallbill_detail/',
+    method: 'get',
+    desc: "车辆详情",
+    param: {
+      plate_number: {
+        desc: '车牌号',
+      }
+    }
+  },
+  getTripRecords: {
+    url: '/api/v1/map/trip_record/',
+    method: 'get',
+    desc: "车辆轨迹查询",
+    param: {
+      start_time: {
+        desc: '开始时间',
+      },
+      end_time: {
+        desc: '结束时间，不填则默认当前时间',
+      },
+      page: {
+        desc: '当前页数',
+      },
+      page_size: {
+        desc: '当前每页条数，默认为1000条每页',
+      },
+      device_id:{
+        desc: '设备号',
+      }
+    }
+  },
 }
 
 

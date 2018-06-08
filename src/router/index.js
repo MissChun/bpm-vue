@@ -30,6 +30,10 @@ let baseRoute = [{
   path: '/404',
   name: '找不到页面',
   component: (resolve) => require(['../page/common/404.vue'], resolve)
+}, {
+  path: '/500',
+  name: '找不到页面',
+  component: (resolve) => require(['../page/common/404.vue'], resolve)
 }];
 let router = new Router({
   routes: baseRoute

@@ -279,7 +279,7 @@ export default {
   methods: {
     gotoDetalis: function(rowData) {
       console.log('rowData', rowData);
-      this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.waybill.id}` });
+      this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {

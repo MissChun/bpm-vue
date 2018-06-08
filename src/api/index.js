@@ -77,6 +77,7 @@ const errorState = function(error) {
         break;
       case 500:
         errorMsg = '服务器错误(500)';
+        router.push({ path: "/500" });
         break;
       case 501:
         errorMsg = '服务未实现(501)';
