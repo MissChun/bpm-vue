@@ -12,7 +12,9 @@
   .el-form {
     margin: 0 auto;
     width: 340px;
-    .el-input, .el-autocomplete, .el-select {
+    .el-input,
+    .el-autocomplete,
+    .el-select {
       width: 100%;
     }
   }
@@ -93,11 +95,7 @@
               <el-row :gutter="80">
                 <el-form-item label="挂车号">
                   <el-select v-model="truckForm.semitrailer" filterable placeholder="请选择">
-                    <el-option
-                      v-for="item in semiList"
-                      :key="item.id"
-                      :label="item.value"
-                      :value="item.id">
+                    <el-option v-for="item in semiList" :key="item.id" :label="item.value" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -110,11 +108,7 @@
               <el-row :gutter="80">
                 <el-form-item label="分组">
                   <el-select v-model="truckForm.group" placeholder="请选择">
-                    <el-option
-                      v-for="item in selectData.groupOptions"
-                      :key="item.id"
-                      :label="item.group_name"
-                      :value="item.id">
+                    <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -128,31 +122,19 @@
             <el-form :model="staffForm" ref="staffForm" label-width="70px" :rules="staffRules">
               <el-form-item label="主驾驶" prop="master_driver">
                 <el-select v-model="staffForm.master_driver" filterable placeholder="请选择">
-                  <el-option
-                    v-for="item in driverList"
-                    :key="item.id"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="item in driverList" :key="item.id" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="副驾驶">
                 <el-select v-model="staffForm.vice_driver" filterable placeholder="请选择">
-                  <el-option
-                    v-for="item in driverList"
-                    :key="item.id"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="item in driverList" :key="item.id" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="押运员">
                 <el-select v-model="staffForm.escort_staff" filterable placeholder="请选择">
-                  <el-option
-                    v-for="item in escortList"
-                    :key="item.id"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="item in escortList" :key="item.id" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -213,16 +195,16 @@ export default {
     }
   },
   computed: {
-    capacityInfo: function () {
+    capacityInfo: function() {
       return this.$route.params.capacityInfo;
     },
     capacityId: function() {
       return this.$route.params.capacityInfo.id;
     },
-    titleType: function () {
+    titleType: function() {
       return parseInt(this.$route.params.activeStep) === 0 ? '编辑绑定挂车' : '编辑绑定人员';
     },
-    activeStep: function () {
+    activeStep: function() {
       return parseInt(this.$route.params.activeStep);
     }
   },
@@ -250,10 +232,10 @@ export default {
     this.init();
   },
   methods: {
-    init: function () {
+    init: function() {
       this.setSelectData();
     },
-    setSelectData: function () {
+    setSelectData: function() {
       let p1 = this.getGroups();
       let p2 = this.getSemiList();
       let p3 = this.getDriverList();
@@ -303,10 +285,10 @@ export default {
     getGroups: function() {
       return this.$$http('getGroups')
     },
-    getSemiList: function () {
-      return this.$$http('searchTailCarList', {pagination: false})
+    getSemiList: function() {
+      return this.$$http('searchTailCarList', { pagination: false })
     },
-    getDriverList: function () {
+    getDriverList: function() {
       let param1 = {
         work_type: 'DRIVER',
         pagination: false
@@ -320,9 +302,9 @@ export default {
       return Promise.all([req1, req2])
     },
     getEscortList: function() {
-      return this.$$http('getDriversList', {work_type: 'ESCORT', pagination: false})
+      return this.$$http('getDriversList', { work_type: 'ESCORT', pagination: false })
     },
-    submitTruckForm: function () {
+    submitTruckForm: function() {
       this.$refs.truckForm.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -332,7 +314,7 @@ export default {
             group: this.truckForm.group
           }
           this.$$http('bindTruck', send).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -349,7 +331,7 @@ export default {
         }
       });
     },
-    submitStaffForm: function () {
+    submitStaffForm: function() {
       this.$refs.staffForm.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -359,7 +341,7 @@ export default {
             escort_staff: this.staffForm.escort_staff
           }
           this.$$http('bindStaff', send).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -374,7 +356,7 @@ export default {
         }
       });
     },
-    forceSubmitTruckForm: function () {
+    forceSubmitTruckForm: function() {
       let send = {
         id: this.truckForm.capacityId,
         semitrailer: this.truckForm.semitrailer,
@@ -382,7 +364,7 @@ export default {
         group: this.truckForm.group
       }
       this.$$http('forceBindTruck', send).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'
@@ -393,7 +375,7 @@ export default {
         console.log(err);
       });
     },
-    forceSubmitStaffForm: function () {
+    forceSubmitStaffForm: function() {
       let send = {
         id: this.staffForm.capacityId,
         master_driver: this.staffForm.master_driver,
@@ -401,7 +383,7 @@ export default {
         escort_staff: this.staffForm.escort_staff
       }
       this.$$http('forceBindStaff', send).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'

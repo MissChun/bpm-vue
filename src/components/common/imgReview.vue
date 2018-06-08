@@ -64,9 +64,9 @@ export default {
       if (this.imgObject && this.imgObject.imgList && this.imgObject.imgList.length) {
         for (let i in this.imgObject.imgList) {
           imgListArray[i] = {};
-          if (this.imgObject.imgList[i].src) {
+          if (this.imgObject.imgList[i]) {
             imgListArray[i] = {};
-            imgListArray[i].src = this.imgObject.imgList[i].src;
+            imgListArray[i].src = this.imgObject.imgList[i];
             imgListArray[i].rotate = 0;
           }
         }
@@ -88,9 +88,9 @@ export default {
       if (val.length) {
         for (let i in val) {
           imgListArray[i] = {};
-          if (val[i].src) {
+          if (val[i]) {
             imgListArray[i] = {};
-            imgListArray[i].src = val[i].src;
+            imgListArray[i].src = val[i];
             imgListArray[i].rotate = 0;
           }
         }

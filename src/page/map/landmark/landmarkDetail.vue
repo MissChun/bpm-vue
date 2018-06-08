@@ -18,13 +18,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传时间:</label>
-                <div class="detail-form-item">{{detailData.created_at}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.created_at)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>上传来源:</label>
-                <div class="detail-form-item">{{detailData.mark_source.verbose}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.mark_source && detailData.mark_source.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -41,19 +41,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item">{{detailData.check_status.verbose}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.check_status && detailData.check_status.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item">{{detailData.audit}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.audit)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item">{{detailData.audit_datetime}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.audit_datetime)"></div>
               </div>
             </el-col>
           </el-row>
@@ -70,7 +70,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>地标类型:</label>
-                <div class="detail-form-item">{{detailData.mark_type.verbose}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.mark_type && detailData.mark_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -91,8 +91,8 @@
             </el-row>
           </div>
           <div class="img-box clearfix">
-            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item.src" /></div>
-            <div ng-if="!detailData.position_pics.length">无图片</div>
+            <div class="float-left" v-for="(item,key) in detailData.images" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
+            <div ng-if="!detailData.images.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -126,10 +126,10 @@ export default {
       return this.$route.params.id;
     },
     isSucess: function() {
-      return this.detailData.check_status.key !== 'SUCCESS' ? false : true;
+      return (this.detailData.check_status && this.detailData.check_status.key) !== 'pass' ? false : true;
     },
     isFailure: function() {
-      return this.detailData.check_status.key !== 'FAILURE' ? false : true;
+      return (this.detailData.check_status.key) !== 'refuse' ? false : true;
     },
   },
   data() {
@@ -144,15 +144,7 @@ export default {
         mark_type: {},
       },
       imgObject: {
-        imgList: [{
-          src: 'http://91lng.cn/img/banner_1.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_2.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_3.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_4.jpg',
-        }],
+        imgList: [],
         showPreview: false,
         previewIndex: 0,
       }
@@ -171,10 +163,13 @@ export default {
         };
         this.pageLoading = true;
         this.$$http('getLandMarkDetail', postData).then((results) => {
-          console.log('results', results.data.data.results);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
+            this.imgObject.imgList = [];
+            for (let i in this.detailData.images) {
+              this.imgObject.imgList.push(this.detailData.images[i]);
+            }
             resolve(results);
           } else {
             reject(results);
@@ -190,7 +185,7 @@ export default {
       let postData = {
         id: this.id,
       }
-      postData.check_status = isSucess ? 'SUCCESS' : 'FAILURE';
+      postData.check_status = isSucess ? 'pass' : 'refuse';
       this.$$http('patchLandMarkDetail', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({

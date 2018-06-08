@@ -8,8 +8,9 @@
               <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
             </el-input>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
+          <el-col :span="1">
+            &nbsp;
+          </el-col>
           <el-col :span="4">
             <el-form-item label="任务状态:">
               <el-select v-model="searchFilters.waybillStatus" @change="startSearch" placeholder="请选择">
@@ -22,27 +23,13 @@
     </div>
     <div class="map-out-container">
       <div class="map-loading" v-loading="pageLoading"></div>
-      <div class="icon-description">
-        <div class="clearfix">
-          <img src="@/assets/img/direction_1.png" class="float-left" />
-          <span class="float-left">行驶中</span>
-        </div>
-        <div class="clearfix">
-          <img src="@/assets/img/direction_2.png" class="float-left" />
-          <span class="float-left">停留</span>
-        </div>
-        <div class="clearfix">
-          <img src="@/assets/img/direction_4.png" class="float-left" />
-          <span class="float-left">离线</span>
-        </div>
-      </div>
       <div class="total-data">
         <div class="total-data-item">全部({{monitorData.total_count}})</div>
-        <div class="total-data-item">行驶中({{monitorData.driving_count}})</div>
-        <div class="total-data-item">停留({{monitorData.stopping_count}})</div>
-        <div class="total-data-item">离线({{monitorData.offline_count}})</div>
-        <div class="total-data-item">空闲({{monitorData.free_count}})</div>
-        <div class="total-data-item">任务中({{monitorData.tasking_count}})</div>
+        <div class="total-data-item"><span><img src="@/assets/img/direction_1.png" class="float-left" /></span><span class="float-left">行驶中({{monitorData.driving && monitorData.driving.length}})</span></div>
+        <div class="total-data-item"><span><img src="@/assets/img/direction_2.png" class="float-left" /></span><span class="float-left">停留({{monitorData.stopping && monitorData.stopping.length}})</span></div>
+        <div class="total-data-item"><span><img src="@/assets/img/direction_4.png" class="float-left" /></span><span class="float-left">离线({{monitorData.offline}})</span></div>
+        <div class="total-data-item">空闲({{monitorData.free_count && monitorData.free_count.length}})</div>
+        <div class="total-data-item">任务中({{monitorData.tasking_count && monitorData.tasking_count.length}})</div>
       </div>
       <div id="map-container"></div>
     </div>
@@ -67,13 +54,44 @@ export default {
         waybillStatus: '',
       },
       typeSelect: [],
+      waybillStatusSelect: [{
+          key: '',
+          verbose: '全部',
+        },
+        {
+          key: 'to_fluid',
+          verbose: '前往装车',
+        },
+        {
+          key: 'reach_fluid',
+          verbose: '已到装货地',
+        },
+        {
+          key: 'waiting_seal',
+          verbose: '待上传铅封',
+        },
+        {
+          key: 'waiting_match',
+          verbose: '待匹配卸货单',
+        },
+        {
+          key: 'already_match',
+          verbose: '已匹配卸货单',
+        },
+        {
+          key: 'to_site',
+          verbose: '前往卸货地',
+        },
+        {
+          key: 'reach_site',
+          verbose: '已到达卸货地',
+        },
+      ]
 
     };
   },
   computed: {
-    waybillStatusSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.map_waybill_vehicle_status;
-    }
+
   },
   methods: {
     /* 获取车辆数据 */
@@ -87,20 +105,42 @@ export default {
           postData.plate_number = this.searchFilters.keyword;
         }
         if (this.searchFilters.waybillStatus) {
-          postData.waybill_vehicle_status = this.searchFilters.waybillStatus;
+          postData.status = this.searchFilters.waybillStatus;
         }
         this.$$http('realTimeMonitor', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
-            this.monitorData = results.data.data;
-            this.carList = results.data.data.data;
+            this.carList = results.data.data;
+            this.monitorData = {
+              total_count: [],
+              driving: [],
+              stopping: [],
+              offline: [],
+            };
+            this.monitorData.total_count = this.carList.length;
+            for (let i in this.carList) {
+              if (this.carList[i].device_status && this.carList[i].device_status.key) {
+                let key = this.carList[i].device_status.key;
+
+                switch (key) {
+                  case 'OFF_LINE':
+                    this.monitorData.offline.push(this.carList[i]);
+                    break;
+                  case 'STOPPING':
+                    this.monitorData.stopping.push(this.carList[i]);
+                    break;
+                  default:
+                    this.monitorData.driving.push(this.carList[i]);
+                }
+
+              }
+            }
             console.log('this.carList', this.carList);
             resolve(results)
           } else {
             reject(results);
           }
         }).catch((err) => {
-
           this.pageLoading = false;
           reject(err);
         })
@@ -128,10 +168,10 @@ export default {
       return src;
     },
     /* 获取设备详情，在获取列表时没有返回设备数据，必须单独获取 */
-    getDeviceDetail: function(id) {
+    getDeviceDetail: function(plate_number) {
       return new Promise((resolve, reject) => {
         let postData = {
-          id: id
+          plate_number: plate_number
         };
         this.$$http('getDeviceDetail', postData).then((results) => {
           this.pageLoading = false;
@@ -225,16 +265,35 @@ export default {
 
           _this.markerList.on('selectedChanged', function(event, info) {
 
-            let device_id = info.selected.data.device_id;
+            let plate_number = info.selected.data.tractor.plate_number;
+            let infoWindow = _this.markerList.getInfoWindow();
             if (info.selected) {
-              _this.getDeviceDetail(device_id).then((results) => {
+              _this.getDeviceDetail(plate_number).then((results) => {
 
-                let infoWindowDom = _this.getInfoWindowDom(results, jQuery);
-                let infoWindow = _this.markerList.getInfoWindow();
+                AMap.plugin('AMap.Geocoder', function() {
 
-                infoWindow.setInfoTitle(infoWindowDom.infoTitleStr);
-                infoWindow.setInfoBody(infoWindowDom.infoBodyStr);
+                  let lnglat = [116.396574, 39.992706]
+                  let geocoder = new AMap.Geocoder({
+                    // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+                    city: '010'
+                  })
+                  geocoder.getAddress(lnglat, function(status, data) {
+                    if (status === 'complete' && data.info === 'OK') {
+                      results.data.data.addressDetail = data.regeocode.formattedAddress;
+                      let infoWindowDom = _this.getInfoWindowDom(results, jQuery);
 
+                      infoWindow.setInfoTitle(infoWindowDom.infoTitleStr);
+                      infoWindow.setInfoBody(infoWindowDom.infoBodyStr);
+                      console.log('data', data);
+                    }
+                  })
+                })
+
+              }).catch(() => {
+                let infoTitleStr = `<div class="fs-13 ">车辆信息:${plate_number}</div>`;
+                let infoBodyStr = `<br><div class="fs-13 ">数据加载失败</div><br>`;
+                infoWindow.setInfoTitle(infoTitleStr);
+                infoWindow.setInfoBody(infoBodyStr);
               })
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
               if (!info.sourceEventInfo.isListElementEvent) {
@@ -255,35 +314,33 @@ export default {
       let _this = this;
       let infoWindowDom = {};
       let detailData = results.data.data;
-      let carMsg = detailData.tractor ? detailData.tractor.plate_number : '无';
-      let semitrailer = detailData.semitrailer ? detailData.semitrailer.plate_number : '无';
-      let waybill_vehicle_status = detailData.waybill_vehicle_status ? detailData.waybill_vehicle_status.verbose : '无';
-      let device_status = detailData.location_info ? detailData.location_info.device_status.verbose : '无';
+      let carMsg = (detailData.driver && detailData.driver.tractor) ? detailData.driver.tractor.plate_number : '无';
+      let create_time = (detailData.map_data && detailData.map_data.create_time) ? detailData.map_data.create_time : '无';
+
+      let device_status = detailData.map_data ? detailData.map_data.device_status.verbose : '无';
+      let status = (detailData.status) ? detailData.status.verbose : '无';
+      let master_driver = (detailData.driver && detailData.driver.master_driver) ? detailData.driver.master_driver.name : '无';
+      let vice_driver = (detailData.driver && detailData.driver.vice_driver) ? detailData.driver.vice_driver.name : '无';
+      let escort_staff = (detailData.driver && detailData.driver.escort_staff) ? detailData.driver.escort_staff.name : '无';
+
       let operatorDom = '';
-      let routePlayback = () => {
-        _this.$router.push({
-          path: `/mapManage/carMonitor/routePlayback/${results.data.data.device_id}`,
-        })
-      };
+
       let fellowOrder = () => {
-        console.log('xxxx');
-      }
-      if (waybill_vehicle_status !== '无' && waybill_vehicle_status !== 'free') {
-        operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--primary el-button--mini">订单跟踪</a>&nbsp;<a href="javascript:void(0)"  id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
-      } else {
-        operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
+        _this.$router.push({
+          path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${detailData.id}/${detailData.waybill}`,
+        })
       }
 
-      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</span>`;
-      infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">运单状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><br>${operatorDom}`;
+      operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--success el-button--mini">订单跟踪</a></div>`;
+
+
+      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</div>`;
+      infoWindowDom.infoBodyStr = `<div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
       setTimeout(function() {
         jQuery('#order-follow').click(function() {
           fellowOrder();
-        })
-        jQuery('#route-playback').click(function() {
-          routePlayback();
         })
       }, 200)
 
@@ -293,7 +350,7 @@ export default {
     renderMarker: function() {
       console.log('markerList', this.markerList);
       let _this = this;
-      if (_this.markerList) {
+      let renderAndCluster = function() {
         /* 生成marker，详见高德地图标注列表api */
         _this.markerList.render(_this.carList);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
@@ -307,20 +364,12 @@ export default {
             maxZoom: 17,
           });
         });
+      }
+      if (_this.markerList) {
+        renderAndCluster();
       } else {
-
         setTimeout(() => {
-          _this.markerList.render(_this.carList);
-          _this.map.plugin(["AMap.MarkerClusterer"], function() {
-            _this.allMakers = _this.markerList.getAllMarkers();
-            if (_this.cluster) {
-              _this.cluster.clearMarkers();
-            }
-            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
-          });
+          renderAndCluster();
         }, 1000)
 
       }
@@ -351,12 +400,12 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
-  .map-loading {
+  .search-cloumn {
     position: absolute;
-    height: 50px;
     width: 100%;
-    left: 0;
-    top: 0;
+    left: 0px;
+    top: 0px;
+    z-index: 9999;
   }
   .total-data {
     background-color: #fff;
@@ -364,12 +413,19 @@ export default {
     width: 100%;
     line-height: 40px;
 
-    >div {
+    .total-data-item {
       text-align: center;
       width: 100px;
       padding-left: 10px;
       border-right: 1px solid #ddd;
       float: left;
+      img {
+        width: 18px;
+        height: 18px;
+        position: relative;
+        top: 10px;
+        margin-right: 5px;
+      }
     }
     position: absolute;
     left: 0px;

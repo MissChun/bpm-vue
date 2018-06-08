@@ -6,6 +6,7 @@ import * as COOKIE from './js/cookie'
 import * as CACHE from './js/cache'
 import * as ARROBJ from './js/arrobj'
 import * as STR from './js/str'
+import * as DATE from './js/date'
 
 /* 浏览器相关 */
 export const isMobile = COOKIE.isMobile
@@ -62,6 +63,9 @@ export const htmlToSms = STR.htmlToSms
 export const cnNum = STR.cnNum
 export const toPinyin = STR.toPinyin
 export const toPinyinObjArr = STR.toPinyinObjArr
+
+/* 日期相关 */
+export const getDateDetail = DATE.getDateDetail
 
 export default {
 

@@ -143,7 +143,7 @@ export default [{
             },
             component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail'], resolve),
             children: [{
-              path: 'orderDetailTab/:id',
+              path: 'orderDetailTab/:setpId/:willId',
               name: 'consignmentOrderDetailTab',
               meta: {
                 isVerificationL: false,
@@ -151,22 +151,21 @@ export default [{
               },
               component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail/orderDetailTab'], resolve),
             }, {
-              path: 'arrangeCarTab',
+              path: 'orderProcess/:setpId/:willId',
               name: 'consignmentArrangeCarTab',
-              redirect: '/orders/consignmentOrder/orderDetail/arrangeCarTab/arrangeCarList',
               meta: {
                 isVerificationL: false,
                 title: '运单进程',
               },
-              component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail/arrangeCarTab'], resolve),
+              component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail/orderProcess'], resolve),
             }, {
-              path: 'orderRecordsTab/:id',
-              name: 'consignmentOrderRecordsTab',
+              path: 'consignmentRouteplay/:setpId/:willId',
+              name: 'consignmentRouteplay',
               meta: {
                 isVerificationL: false,
                 title: '轨迹地图',
               },
-              component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail/orderRecordsTab'], resolve),
+              component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderDetail/consignmentRouteplay'], resolve),
             }]
           }, {
             //卸车计划
