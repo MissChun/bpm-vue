@@ -43,8 +43,8 @@
                 <template slot-scope="scope">
                   <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
                   <div v-else>
-                    <span v-if="item.param==='carriers'">
-                      <span v-for="(row,key) in scope.row.carriers" class="text-blue">{{row.carrier_name}}<br></span>
+                    <span v-if="item.param==='carriers'" :title="scope.row.carriers.join('<br>')">
+                      <span v-for="(row,key) in scope.row.carriers" v-if="key<5" class="text-blue">{{row.carrier_name}}<br></span>
 
                     </span>
                     <span v-else>{{scope.row[item.param]}}</span>
@@ -159,6 +159,7 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
+
 
           this.pageData.totalCount = results.data.data.count;
 
