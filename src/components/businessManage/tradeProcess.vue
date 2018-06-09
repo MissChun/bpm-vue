@@ -230,7 +230,7 @@
                     </el-row>
                   </div>
                 </div>
-                <div class="detail-list detail-form" v-if="item.type === 'settlement_check'">
+                <div class="detail-list detail-form" v-if="item.type === 's---settlement_check'">
                   <div class="process-content">
                     <el-row :gutter="10">
                       <el-col :span="8">
@@ -248,7 +248,7 @@
                       <el-col :span="8">
                         <div class="label-list">
                           <label>操作人:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.operator)"></div>
                         </div>
                       </el-col>
                     </el-row>
@@ -256,7 +256,7 @@
                       <el-col :span="8">
                         <div class="label-list">
                           <label>操作时间:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.operated_at)"></div>
                         </div>
                       </el-col>
                     </el-row>

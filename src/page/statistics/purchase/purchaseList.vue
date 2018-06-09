@@ -1,7 +1,8 @@
 <style type="text/css" scoped lang="less">
-  /deep/ .total-data{
-    line-height: 40px;
-  }
+/deep/ .total-data {
+  line-height: 40px;
+}
+
 </style>
 <template>
   <div>
@@ -29,30 +30,30 @@
       </div>
       <div class="operation-btn">
         <el-row>
-         <el-col :span="20" class="total-data">
-           一共0单，实际装车吨位0吨，采购总额0元，优惠总额0元
-         </el-col>
-         <el-col :span="4" class="text-right">
-           <el-button type="primary">导出</el-button>
-         </el-col>
+          <el-col :span="20" class="total-data">
+            一共0单，实际装车吨位0吨，采购总额0元，优惠总额0元
+          </el-col>
+          <el-col :span="4" class="text-right">
+            <el-button type="primary">导出</el-button>
+          </el-col>
         </el-row>
       </div>
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
             <template slot-scope="scope">
-              <div v-if="item.param === 'order_number'" class="order-color">
-                <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link>
-                <span v-else>{{scope.row.order_number}}</span>
+              <div v-if="item.param === 'waybill'">
+                <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
+                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.id})">{{scope.row.waybill}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div>
             </template>
           </el-table-column>
-          <!-- <el-table-column label="操作" align="center" width="150" fixed="right">
-                  <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                  </template>
-                </el-table-column> -->
+          <el-table-column label="操作" align="center" width="150" fixed="right">
+            <template slot-scope="scope">
+              <el-button type="primary" size="mini" @click="handleMenuClick({operator:'edit',id:scope.row.id})">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <div class="page-list text-center">
@@ -160,7 +161,7 @@ export default {
   methods: {
     pageChange() {
       setTimeout(() => {
-        this.getList(this.statusActive);
+        this.getList();
       })
     },
 
@@ -171,7 +172,7 @@ export default {
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size:this.pageData.pageSize
+        page_size: this.pageData.pageSize
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';

@@ -311,19 +311,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶员:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.master_driver&&detailData.tms_tractor.master_driver.name)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.master_driver&&detailData.tms_tractor.master_driver.name+' '+detailData.tms_tractor.master_driver.mobile_phone)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>副驾驶:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.vice_driver&&detailData.tms_tractor.vice_driver.name)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.vice_driver&&detailData.tms_tractor.vice_driver.name+' '+detailData.tms_tractor.vice_driver.mobile_phone)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>押运员:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.escort_staff&&detailData.tms_tractor.escort_staff.name)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.escort_staff&&detailData.tms_tractor.escort_staff.name+' '+detailData.tms_tractor.escort_staff.mobile_phone)"></div>
               </div>
             </el-col>
           </el-row>
