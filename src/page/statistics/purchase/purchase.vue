@@ -1,3 +1,4 @@
+
 <style scoped lang="less">
 
 
@@ -9,7 +10,7 @@
 </template>
 <script>
 export default {
-  name: 'statistics',
+  name: 'purchase',
   data() {
     return {
 

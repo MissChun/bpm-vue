@@ -9,6 +9,22 @@
  */
 
 const api = {
+  getPurchaseStatisticsList: {
+    url: '/api/v1/discounts-statistic/',
+    method: 'get',
+    desc: '运费列表',
+    param: {
+      page:{
+        desc:'页码'
+      },
+      page_size:{
+        desc:'页码'
+      },
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
   getFreightDetail: {
     url: '/api/v1/freight-managements/:id/',
     method: 'get',

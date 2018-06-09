@@ -39,7 +39,33 @@
         <el-row style="">
           <el-col :span="20" class="orderPossing">
             <el-collapse v-model="processData.length-1">
-              <el-collapse-item :title="item.type_cn" :name="key" v-for="(item,key) in processData" :key="key">
+              <el-collapse-item :title="'业务单生成'">
+                <div class="detail-list detail-form" v-if="processData.length">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>业务单号:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData[0].order_number)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>业务单生成时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData[0].operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData[0].operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+              </el-collapse-item>
+              <el-collapse-item :title="item.type_cn" :name="key" v-for="(item,key) in processData" v-if="key" :key="key">
                 <!-- <div v-if="item.type === 'driver_pending_confirmation'">
                   <el-row>
                     <el-col :span="8">
@@ -62,37 +88,6 @@
                     </el-col>
                   </el-row>
                 </div> -->
-                <div class="detail-list detail-form" v-if="false">
-                  <div class="detail-form-title">
-                    <el-row>
-                      <el-col :span="24" class="text-center">
-                        <div>生成业务单</div>
-                      </el-col>
-                    </el-row>
-                  </div>
-                  <div class="process-content">
-                    <el-row :gutter="10">
-                      <el-col :span="8">
-                        <div class="label-list">
-                          <label>业务单号:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.order.order_number)"></div>
-                        </div>
-                      </el-col>
-                      <el-col :span="8">
-                        <div class="label-list">
-                          <label>业务单生成时间:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.order.created_at)"></div>
-                        </div>
-                      </el-col>
-                      <el-col :span="8">
-                        <div class="label-list">
-                          <label>操作人:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(processData.order.operator_name)"></div>
-                        </div>
-                      </el-col>
-                    </el-row>
-                  </div>
-                </div>
                 <div class="detail-list detail-form" v-if="item.type === 'create_manager_check'">
                   <div class="process-content">
                     <el-row :gutter="10">
@@ -187,7 +182,7 @@
                       <el-col :span="8">
                         <div class="label-list">
                           <label>关联卸货地确认时间:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operate_at)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
                         </div>
                       </el-col>
                       <el-col :span="8">
@@ -199,16 +194,72 @@
                     </el-row>
                   </div>
                 </div>
-                <div class="detail-list detail-form" v-if="item.type === 'create_manager_check'">
+                <div class="detail-list detail-form" v-if="item.type === 'unloading'">
                   <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>卸货时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
                   </div>
                 </div>
-                <div class="detail-list detail-form" v-if="item.type === 'create_manager_check'">
+                <div class="detail-list detail-form" v-if="item.type === 'in_settlement'">
                   <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>提交结算时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
                   </div>
                 </div>
-                <div class="detail-list detail-form" v-if="item.type === 'create_manager_check'">
+                <div class="detail-list detail-form" v-if="item.type === 'settlement_check'">
                   <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改前:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number?'售价-'+detailData.order_number:detailData.order_number)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改后:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number?detailData.order_number:'售价-'+detailData.order_number)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
                   </div>
                 </div>
               </el-collapse-item>

@@ -222,7 +222,9 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>卸货区域:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.destination)"></div>
+                <div class="detail-form-item" v-if="detailData.deliver_order&&detailData.deliver_order.destination">
+                  <span v-for="item in detailData.deliver_order.destination">{{item}}、</span>
+                </div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -295,7 +297,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>燃油类型:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.tractor&&detailData.tms_tractor.tractor.fuel_type)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.tractor&&detailData.tms_tractor.tractor.fuel_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
