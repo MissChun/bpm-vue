@@ -2,7 +2,7 @@
 <!-- departmentDialog -->
 <template>
   <div>
-    <el-dialog :title="'业务单审核拒绝'" :visible="refuseDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title?title:'审核拒绝'" :visible="refuseDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="refuseRules" status-icon ref="refuseRules">
           <el-form-item label="拒绝原因：" prop="approval_mark">
@@ -27,13 +27,14 @@ export default {
       required: true
     },
     closeDialogBtn: Function,
+    title: String
   },
 
   data: function() {
     return {
       refuseRules: {
         approval_mark: '',
-        action:'denied'
+        action: 'denied'
       },
       rules: {
         approval_mark: [
@@ -53,7 +54,7 @@ export default {
   },
   methods: {
     closeBtn: function() {
-      this.$emit('closeDialogBtn', this.type);
+      this.$emit('closeDialogBtn', false);
     },
     refuse: function() {
       this.$refs['refuseRules'].validate((valid) => {
@@ -63,7 +64,7 @@ export default {
           this.submitBtn.isLoading = true;
           let postData = this.refuseRules;
           postData.order_id = this.refuseDialog.id;
-          console.log('拒绝',postData)
+          console.log('拒绝', postData)
           this.$$http('toExamineBusiness', postData).then((results) => {
 
             this.submitBtn.btnText = '确 定';
@@ -74,7 +75,7 @@ export default {
                 message: '审核拒绝成功',
                 type: 'success'
               });
-              this.$emit('closeDialogBtn', this.type, true);
+              this.$emit('closeDialogBtn', true);
             }
 
           }).catch((err) => {
@@ -94,11 +95,12 @@ export default {
     refuseDialog: {
       handler(val, oldVal) {　　　　　　
         this.refuseRules.approval_mark = '';
-        if(this.$refs['refuseRules']){
+        if (this.$refs['refuseRules']) {
           this.$refs['refuseRules'].clearValidate();　　　　
         }
 
-      }, 　　　　deep: true
+      },
+      　　　　deep: true
 
     }
   },

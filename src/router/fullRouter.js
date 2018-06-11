@@ -481,6 +481,14 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
+        },{
+          path: 'purchaseDetail',
+          name: "purchaseDetail",
+          meta: {
+            title: '采购统计详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/purchase/purchaseDetail'], resolve)
         }]
       }]
     }, {

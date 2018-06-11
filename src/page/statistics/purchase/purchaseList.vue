@@ -164,10 +164,15 @@ export default {
         this.getList();
       })
     },
-
+    handleMenuClick(row){
+      if(row.operator === 'check'){
+        this.$router.push({ path: `/statistics/purchase/purchaseDetail/${row.id}/` });
+      }
+    },
     startSearch() {
       this.pageData.currentPage = 1;
       this.getList(this.statusActive);
+
     },
     getList() {
       let postData = {

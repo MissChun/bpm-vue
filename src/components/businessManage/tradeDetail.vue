@@ -129,7 +129,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>业务单生成时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.created_at)"></div>
               </div>
             </el-col>
             <el-col :span="8">
