@@ -80,7 +80,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+        <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
       <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
@@ -92,11 +92,7 @@
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
             <el-select v-model="truckDialog.semitrailer" filterable placeholder="请选择">
-              <el-option
-                v-for="item in semiList"
-                :key="item.id"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="item in semiList" :key="item.id" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -128,31 +124,19 @@
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
           <el-form-item label="主驾驶" prop="master_driver">
             <el-select v-model="staffDialog.master_driver" filterable placeholder="请选择">
-              <el-option
-                v-for="item in driverList"
-                :key="item.id"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="item in driverList" :key="item.id" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="副驾驶">
             <el-select v-model="staffDialog.vice_driver" filterable placeholder="请选择">
-              <el-option
-                v-for="item in driverList"
-                :key="item.id"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="item in driverList" :key="item.id" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="押运员">
             <el-select v-model="staffDialog.escort_staff" filterable placeholder="请选择">
-              <el-option
-                v-for="item in escortList"
-                :key="item.id"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="item in escortList" :key="item.id" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -318,7 +302,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function() {
       this.searchList();
       this.getGroups();
       this.getSemiList();
@@ -417,7 +401,7 @@ export default {
               result.data.data.count / vm.pageData.pageSize
             );
             vm.tableData.map((n, i) => {
-              for(let key in n) {
+              for (let key in n) {
                 if (key === 'truck_bind_status' || key === 'staff_bind_status') {
                   n[key] = n[key] ? '已绑定' : '未绑定';
                 }

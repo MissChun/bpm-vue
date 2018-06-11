@@ -92,7 +92,7 @@
           </div>
           <div class="img-box clearfix">
             <div class="float-left" v-for="(item,key) in detailData.images" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
-            <div ng-if="!detailData.images.length">无图片</div>
+            <div v-if="detailData.images && !detailData.images.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -218,16 +218,21 @@ export default {
       zoom: 15,
     });
 
-    /*创建点标记*/
-    positionMark = new AMap.Marker({
-      map: landmarkMap,
-    });
+
 
     this.getDetail().then((results) => {
-      //let lnglat = [this.detailData.location.longitude, this.detailData.location.latitude];
 
-      //landmarkMap.setCenter(lnglat);
-      //positionMark.setPosition(lnglat);
+      if (this.detailData.coordinate && this.detailData.coordinate.latitude && this.detailData.coordinate.longitude) {
+        /*创建点标记*/
+        positionMark = new AMap.Marker({
+          map: landmarkMap,
+        });
+        let lnglat = [this.detailData.coordinate.longitude, this.detailData.coordinate.latitude];
+
+        landmarkMap.setCenter(lnglat);
+        positionMark.setPosition(lnglat);
+      }
+
     });
 
   }

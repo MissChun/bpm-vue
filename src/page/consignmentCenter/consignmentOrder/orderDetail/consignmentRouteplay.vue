@@ -44,7 +44,7 @@
                         </el-table-column>
                       </el-table>
                       <div class="page-list text-center">
-                        <el-pagination background layout="prev, pager, next" :total="stopPointPage.total" :page-size="stopPointPage.pageSize" :current-page.sync="stopPointPage.currentPage" @current-change="stopPointPageChange" v-if="!pageLoading && stopPointPage.total>10">
+                        <el-pagination background layout="prev, pager, next,jumper" :total="stopPointPage.total" :page-size="stopPointPage.pageSize" :current-page.sync="stopPointPage.currentPage" @current-change="stopPointPageChange" v-if="!pageLoading && stopPointPage.total>10">
                         </el-pagination>
                       </div>
                     </el-tab-pane>
@@ -59,7 +59,7 @@
                         </el-table-column>
                       </el-table>
                       <div class="page-list text-center">
-                        <el-pagination background layout="prev, pager, next" :total="offlinePointPage.total" :page-size="offlinePointPage.pageSize" :current-page.sync="offlinePointPage.currentPage" @current-change="offlinePointPageChange" v-if="!pageLoading && offlinePointPage.total>10">
+                        <el-pagination background layout="prev, pager, next,jumper" :total="offlinePointPage.total" :page-size="offlinePointPage.pageSize" :current-page.sync="offlinePointPage.currentPage" @current-change="offlinePointPageChange" v-if="!pageLoading && offlinePointPage.total>10">
                         </el-pagination>
                       </div>
                     </el-tab-pane>

@@ -15,7 +15,7 @@
       <el-table-column prop="address" label="地址">
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+    <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
     </el-pagination>
   </div>
 </template>
