@@ -1,7 +1,10 @@
 <!-- editCarrier.vue -->
 <style scoped lang="less">
- /deep/ .is-disabled{
-  i{
+/deep/ .code {
+  input {
+    border-color: #dcdfe6!important;
+  }
+  i {
     display: none;
   }
 }
@@ -43,7 +46,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="地址:" prop="address">
+                  <el-form-item label="地址:">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.address"></el-input>
                   </el-form-item>
                 </el-col>
@@ -66,9 +69,11 @@
                   <el-form-item label="代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="8">
-                        <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='credit_code'&&detail.credit_code?true:false">
-                          <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                        </el-select>
+                        <div class="code">
+                          <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='credit_code'&&detail.credit_code?true:false">
+                            <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                          </el-select>
+                        </div>
                       </el-col>
                       <el-col :span="10">
                         <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.codeMsg"></el-input>
@@ -320,7 +325,15 @@ export default {
                 type: 'success'
               });
               if (isReview) {
-                this.$router.push({ path: "/consignmentCenter/carrierManage/carrierList"});
+                if (this.id) {
+                  this.$router.push({
+                    path: "/consignmentCenter/carrierManage/carrierDetail",
+                    query: { activeStep: stepNum - 1, id: id }
+                  });
+                } else {
+                  this.$router.push({ path: "/consignmentCenter/carrierManage/carrierList" });
+                }
+
               } else {
                 let id = results.data.data.id;
                 this.$router.push({ path: "/consignmentCenter/carrierManage/editCarrier", query: { activeStep: stepNum - 1, id: id } });

@@ -49,10 +49,13 @@
                       <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link>
                       <span v-else>{{scope.row.order_number}}</span>
                     </div>
-                    <div v-else>{{scope.row[item.param]}}</div>
+                    <div v-else>
+                      <span v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</span>
+                      <span v-else>{{scope.row[item.param]}}</span>
+                    </div>
                   </template>
                 </el-table-column>
-                <!-- <el-table-column label="操作" align="center" width="150" fixed="right">
+               <!--  <el-table-column label="操作" align="center" width="150" fixed="right">
                   <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                   </template>
@@ -101,10 +104,10 @@ export default {
         title: '新增',
         key: 'add',
         tabs: [{
-          title: '经理审批中',
+          title: '新增经理审批中',
           key: 'create_manager_check',
         }, {
-          title: '部门审批中',
+          title: '新增部门审批中',
           key: 'create_department_check',
         }]
       }, {
@@ -142,13 +145,13 @@ export default {
         key: 'reviseAndCancel',
         tabs: [{
           title: '修改经理审批',
-          key: 'to_site',
+          key: 'modify_manager_check',
         }, {
           title: '修改部门审批',
-          key: 'unloading',
+          key: 'modify_department_check',
         }, {
           title: '取消部门审批',
-          key: 'unloading',
+          key: 'cancel_check',
         }]
       }, {
         title: '历史',
@@ -159,6 +162,12 @@ export default {
         }, {
           title: '已完成',
           key: 'finished',
+        },{
+          title: '新增经理拒绝',
+          key: 'manager_check_refused',
+        }, {
+          title: '新增部门拒绝',
+          key: 'department_check_refused',
         }]
       }],
       statusTabList: [{
@@ -191,12 +200,14 @@ export default {
         width: ''
       }, {
         title: '供应商',
-        param: 'company.supplier',
-        width: ''
+        param: 'company',
+        param_two:'supplier',
+        width: '300'
       }, {
         title: '承运商',
-        param: 'company.carrier',
-        width: ''
+        param: 'company',
+        param_two:'carrier',
+        width: '200'
       }, {
         title: '客户',
         param: 'consumer_name',

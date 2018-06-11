@@ -19,7 +19,7 @@
               <el-row :gutter="30">
                 <el-col :span="6">
                   <el-form-item label="承运类型:">
-                    <el-select v-model="searchFilters.carrierType" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.carrier_type" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.carrierTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -77,7 +77,7 @@ export default {
       },
       activeName: 'carrier',
       searchFilters: {
-        carrierType: '',
+        carrier_type: '',
         keyword: '',
         field: 'carrier_name',
       },
@@ -144,10 +144,11 @@ export default {
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        carrier_type: this.searchFilters.carrier_type
       };
       postData[this.searchFilters.field] = this.searchFilters.keyword;
-
+      postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
       this.$$http('getCarrierList', postData).then((results) => {

@@ -1053,7 +1053,7 @@ const api = {
     }
   },
   patchStandardMileDetail: {
-    url: '/api/v1/standard-miles/',
+    url: '/api/v1/standard-miles/:id/',
     method: 'PATCH',
     desc: '标准里程更新',
     param: {
