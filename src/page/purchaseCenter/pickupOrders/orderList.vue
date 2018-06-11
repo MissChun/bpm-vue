@@ -22,7 +22,7 @@
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" size="medium">
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" @keyup.native.13="searchList" class="search-filters-screen" size="medium">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
@@ -72,7 +72,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.history_count" name="loaded">
-          <div v-if="fifterName=='loaded'">
+          <div v-if="fifterName=='history'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>

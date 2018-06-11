@@ -38,7 +38,7 @@
                   <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
                     需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
                   </el-col>
-                  <el-col :span="2">
+                  <el-col :span="2" v-if="delivery_list.status.key!='confirmed'">
                     <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
                   </el-col>
                 </el-row>
@@ -57,8 +57,7 @@
               </el-pagination>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="地图" name="second">
-          </el-tab-pane>
+         
         </el-tabs>
       </div>
     </div>
@@ -347,13 +346,25 @@ export default {
           }
         }
         this.alerySureList = newArr;
+        
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
+        if(this.delivery_list.status.key=="confirmed"){
+        this.trueAll_list.forEach(item=>{
+            item.disableChoose=true;
+          });
+        this.renderAll_list.forEach(item=>{
+            item.disableChoose=true;
+          });
+        }
         this.bindChekboxFunction(0, this.renderAll_list);
       }
 
     },
     searchThisByData: function(searchPage, type) {
+      if(this.delivery_list.status.key!="confirmed"){
+
+     
       var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
       var value = this.searchFilters.keyword;
       var newArr = [];
@@ -373,8 +384,10 @@ export default {
       if (type == 'pageChange') {
         newArr = this.lastSearch_list;
       }
+      
       this.renderAll_list = newArr;
       this.bindChekboxFunction(searchPage, newArr);
+       }
     },
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);

@@ -9,8 +9,7 @@
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
           </el-tab-pane>
-          <el-tab-pane label="地图" name="second">
-          </el-tab-pane>
+         
         </el-tabs>
       </div>
     </div>
