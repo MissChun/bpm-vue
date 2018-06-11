@@ -80,7 +80,22 @@
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
               <el-row class="loadInfo commh" style="width:100%;">
-                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.supplier_name}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
+                </el-col>
+                <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
+                </el-col>
+                <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
+                </el-col>
+                <el-col :span="4" class="colinfo"><span v-if="props.row.active_time">{{props.row.active_time.split(" ")[0]}}</br>{{props.row.active_time.split(" ")[1]}}</span><span v-else>无</span>
+                </el-col>。2
+                <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+                </el-col>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
+                </el-col>
+              </el-row>
+
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;">
+                <el-col :span="7" class="colinfo">卸:<span>{{props.row.business_order.station_address}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -93,6 +108,7 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
+
             </div>
           </div>
           <div class="listDetalis carList" style="width:15%">
@@ -210,11 +226,6 @@ export default {
           text: "匹配卸货单",
           type: "primary",
           methods_type: "matchUnload",
-          attrPlan: true
-        }, {
-          text: "提交卸货单",
-          type: "success",
-          methods_type: "upUnload",
           attrPlan: true
         }],
         already_match: [{ //已匹配卸货单
