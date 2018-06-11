@@ -4,7 +4,8 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运单详情" name="first">
-          <div class="detail-main" v-loading="pageLoading">
+          <purchase-detail></purchase-detail>
+          <!--  <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-main>
                 <div class="detail-list detail-form">
@@ -271,7 +272,7 @@
                 </div>
               </el-main>
             </el-container>
-          </div>
+          </div> -->
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>
@@ -282,8 +283,12 @@
   </div>
 </template>
 <script>
+import purchaseDetail from '@/components/consignmentCenter/purchaseDetail';
 export default {
   name: 'orderDetailTab',
+  components: {
+    purchaseDetail: purchaseDetail
+  },
   computed: {
     setpId: function() {
       return this.$route.params.setpId;
@@ -295,17 +300,6 @@ export default {
   data() {
     return {
       activeName: 'first',
-      pageLoading: false,
-      detailData: {
-        delivery_order: {},
-      },
-      transPowerData: {
-        tractor: {
-          carrier: {}
-        }
-      },
-      loadArr: [{}],
-      unloadArr: []
     }
   },
   methods: {
@@ -317,69 +311,13 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${this.setpId}/${this.willId}` });
       }
     },
-    getOrderDetail: function() {
-      this.pageLoading = true;
-      var vm = this;
-      let postData = {
-        id: this.willId
-      }
-      this.$$http('getConOrderDetail', postData).then((results) => {
-        this.pageLoading = false;
-        console.log('results', results);
-        if (results.data && results.data.code == 0 && results.data.data) {
-          this.detailData = results.data.data;
-          /* 获取运力 */
-          var unloadArr = [],
-            loadArr = [];
 
-          for (var i = 0; i < vm.detailData.trips.length; i++) {
-            if (vm.detailData.trips[i].section_type == 'unload') {
-              unloadArr.push(vm.detailData.trips[i]);
-            } else {
-              loadArr.push(this.detailData.trips[i]);
-            }
-          }
-          vm.unloadArr = unloadArr;
-          vm.loadArr = loadArr;
-          if (vm.detailData.trips && vm.detailData.trips.length && vm.detailData.trips[0].capacity) {
-            vm.getTransPowerInfo(vm.detailData.trips[0].capacity);
-          }
-        } else {
-          vm.$message({
-            message: results.data.msg,
-            type: 'error'
-          });
-        }
-      }).catch((err) => {
-
-      })
-    },
-    getTransPowerInfo: function(id) {
-      let postData = {
-        tractor_list: [id]
-      }
-      this.$$http('getTransPowerInfo', postData).then((results) => {
-        console.log('getTransPowerInfo', results);
-        if (results.data && results.data.code == 0 && results.data.data) {
-          this.transPowerData = results.data.data.results[0];
-          console.log('this.transPowerData', this.transPowerData);
-        } else {
-          this.$message({
-            message: results.data.msg,
-            type: 'error'
-          });
-        }
-      }).catch((err) => {
-
-      })
-    }
   },
   activated: function() {
     this.activeName = 'first';
   },
   created: function() {
-    console.log('this.$route', this.$route.params.id, this.id);
-    this.getOrderDetail();
+
   }
 }
 

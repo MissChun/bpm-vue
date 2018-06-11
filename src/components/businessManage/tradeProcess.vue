@@ -283,6 +283,39 @@
                     </el-row>
                   </div>
                 </div>
+                <div class="detail-list detail-form" v-if="item.type === 'modify_manager_check_end'">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改前:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.to_be_modify)">
+                          </div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改后:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
               </el-collapse-item>
             </el-collapse>
           </el-col>
@@ -324,10 +357,10 @@ export default {
         in_settlement: '待结算',
         finished: '已完成',
         canceled: '已取消',
-        manager_check_refused: '新建审核——经理拒绝',
-        department_check_refused: '新建审核——服务中心拒绝',
         modify_manager_check: '修改审核——经理审核中',
-        modify_department_check: '修改审核——服务中心审核中',
+        modify_manager_check_end: '修改审核——经理审核完成',
+        modify_department_check: '修改审核——部门审核中',
+        modify_department_check_end: '修改审核——部门审核完成',
         settlement_check: '结算审核——经理审核中',
         cancel_check: '取消审核——服务中心审核中',
       },
@@ -360,17 +393,18 @@ export default {
           this.processData = results.data.data;
           for (let i in this.processData) {
             this.processData[i].operation_cn = this.processData[i].operation && this.processData[i].operation === 'pass' ? '通过' : '拒绝';
+            if(this.processData[i].type ==='modify_department_check'){
+              if(!this.processData[i].after_opt){
+                this.processData[i].type='modify_department_check_end'
+              }
+            }
             for (let j in this.statusType) {
               console.log('状态', this.processData[i].type, j)
               if (this.processData[i].type === j) {
                 this.processData[i].type_cn = this.statusType[j];
               }
+
             }
-            // if (results.data.data[i].operate_status) {
-            //   this.processData[results.data.data[i].operate_status] = results.data.data[i];
-            // } else if (results.data.data[i].order_number) {
-            //   this.processData.order = results.data.data[i];
-            // }
           }
           console.log('this.processData', this.processData)
         }
