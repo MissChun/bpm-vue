@@ -10,7 +10,7 @@
 @import './assets/css/settingStyle.less'; //个人设置
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
-@import './assets/css/capacityList';
+@import './assets/css/elementReset';
 
 </style>
 <template>

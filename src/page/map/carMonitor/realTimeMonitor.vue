@@ -27,7 +27,7 @@
         <div class="total-data-item">全部({{monitorData.total_count}})</div>
         <div class="total-data-item"><span><img src="@/assets/img/direction_1.png" class="float-left" /></span><span class="float-left">行驶中({{monitorData.driving && monitorData.driving.length}})</span></div>
         <div class="total-data-item"><span><img src="@/assets/img/direction_2.png" class="float-left" /></span><span class="float-left">停留({{monitorData.stopping && monitorData.stopping.length}})</span></div>
-        <div class="total-data-item"><span><img src="@/assets/img/direction_4.png" class="float-left" /></span><span class="float-left">离线({{monitorData.offline}})</span></div>
+        <div class="total-data-item"><span><img src="@/assets/img/direction_4.png" class="float-left" /></span><span class="float-left">离线({{monitorData.offline && monitorData.offline.length}})</span></div>
         <div class="total-data-item">空闲({{monitorData.free_count && monitorData.free_count.length}})</div>
         <div class="total-data-item">任务中({{monitorData.tasking_count && monitorData.tasking_count.length}})</div>
       </div>

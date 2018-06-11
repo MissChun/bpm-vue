@@ -39,7 +39,7 @@ let router = new Router({
   routes: baseRoute
 });
 router.beforeEach((to, from, next) => {
-  let routeName = to.meta.name || to.name;
+  let routeName = to.meta.title || to.name;
   window.document.title = (routeName ? routeName : '');
   next();
 });

@@ -81,7 +81,7 @@
       </el-tabs>
     </div>
     <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+      <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
       </el-pagination>
     </div>
   </div>
@@ -101,12 +101,12 @@ export default {
         keyword: "",
         field: "",
       },
-       statusName:{
-        all_count:'全部',
-        appoint_count:'待指派',
-        determine_count:'待确认',
-        confirmed_count:'已确认',
-        history_count:'历史'
+      statusName: {
+        all_count: '全部',
+        appoint_count: '待指派',
+        determine_count: '待确认',
+        confirmed_count: '已确认',
+        history_count: '历史'
       },
       timeParam: [],
       listFifterData: [],
@@ -170,7 +170,7 @@ export default {
         }
       }).catch((err) => {
         this.pageLoading = false;
-        console.log('err',err);
+        console.log('err', err);
       });
     },
     clickFifter: function(targetName) {
@@ -188,20 +188,20 @@ export default {
   created() {
     //this.listFifterData = this.listData;
     this.searchList();
-     this.$$http("getCount",{}).then(results=>{
-        if(results.data.code==0){
-          var dataBody=results.data.data;
-          for(var i in dataBody){
-            if(dataBody[i]>99){
-              dataBody[i]='99+';
-            }
-            this.statusName[i]+="("+dataBody[i]+")";
+    this.$$http("getCount", {}).then(results => {
+      if (results.data.code == 0) {
+        var dataBody = results.data.data;
+        for (var i in dataBody) {
+          if (dataBody[i] > 99) {
+            dataBody[i] = '99+';
           }
+          this.statusName[i] += "(" + dataBody[i] + ")";
         }
-      }).catch((err)=>{
-        console.log('err',err);
-      });
-   }
+      }
+    }).catch((err) => {
+      console.log('err', err);
+    });
+  }
 };
 
 </script>

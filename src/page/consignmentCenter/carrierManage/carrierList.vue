@@ -50,7 +50,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -114,12 +114,12 @@ export default {
       }, {
         title: '承运类型',
         param: 'carrier_type',
-        param_two:'verbose',
+        param_two: 'verbose',
         width: ''
       }, {
         title: '启用',
         param: 'is_valid',
-        param_two:'verbose',
+        param_two: 'verbose',
         width: ''
       }],
       tableData: []
@@ -131,8 +131,8 @@ export default {
         this.getList();
       })
     },
-    goEditDetail(){
-      this.$router.push({path: '/consignmentCenter/carrierManage/editCarrier'});
+    goEditDetail() {
+      this.$router.push({ path: '/consignmentCenter/carrierManage/editCarrier' });
     },
     handleClick: function(tab, event) {
       console.log('tabhandleClick', tab);
@@ -165,8 +165,8 @@ export default {
       })
 
     },
-    handleMenuClick(row){
-      this.$router.push({path: '/consignmentCenter/carrierManage/carrierDetail', query: { id: row.id }});
+    handleMenuClick(row) {
+      this.$router.push({ path: '/consignmentCenter/carrierManage/carrierDetail', query: { id: row.id } });
 
     }
   },

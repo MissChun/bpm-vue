@@ -20,37 +20,38 @@
               <el-row :gutter="10">
                 <el-col :span="4">
                   <el-form-item label="地标类型:">
-                    <el-select v-model="searchFilters.position_type" placeholder="请选择">
+                    <el-select v-model="searchFilters.mark_type" placeholder="请选择">
                       <el-option v-for="(item,key) in typeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="审核状态:">
-                    <el-select v-model="searchFilters.confirm_status" placeholder="请选择">
+                    <el-select v-model="searchFilters.check_status" placeholder="请选择">
                       <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="地标来源:">
-                    <el-select v-model="searchFilters.landmarkFrom" placeholder="请选择">
+                    <el-select v-model="searchFilters.mark_source" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
-                  <el-form-item label="是否同步:">
-                    <el-select v-model="searchFilters.async_status" placeholder="请选择">
-                      <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
+                <!-- <el-col :span="4">
+  <el-form-item label="是否同步:">
+    <el-select v-model="searchFilters.is_synced" placeholder="请选择">
+      <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+    </el-select>
+  </el-form-item>
+</el-col>
+ -->
+                <!-- <el-col :span="8">
                   <el-form-item label="地标区域:" class="map-choose-address">
                     <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
               </el-row>
               <el-row>
                 <el-col :span="20">
@@ -84,7 +85,7 @@
                 <span class="float-left">食宿停</span>
               </div>
               <div class="clearfix">
-                <i class="float-left bg-1"></i>
+                <i class="float-left bg-3"></i>
                 <span class="float-left">待审核</span>
               </div>
               <div class="clearfix">
@@ -92,7 +93,7 @@
                 <span class="float-left">审核通过</span>
               </div>
               <div class="clearfix">
-                <i class="float-left bg-3"></i>
+                <i class="float-left bg-1"></i>
                 <span class="float-left">已经同步</span>
               </div>
               <div class="clearfix">
@@ -109,26 +110,13 @@
 </template>
 <script>
 import chooseAddress from '@/components/chooseAddress';
-//创建地图
-let map, markerList, allMakers, cluster;
 export default {
   name: 'landMarkMap',
   components: {
     chooseAddress: chooseAddress,
   },
   computed: {
-    landmarkFromSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_source_type;
-    },
-    checkStatusSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
-    },
-    typeSelect: function() {
-      return this.$store.state.common.selectData.landmark_position_type;
-    },
-    isSynchronizeSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_async_status;
-    }
+
   },
   data() {
     return {
@@ -140,6 +128,7 @@ export default {
       pageLoading: true,
       activeName: 'second',
       landmarkList: [],
+      landmarkListFilter: [],
       address: {
         province: '',
         city: '',
@@ -152,23 +141,68 @@ export default {
       },
       searchFilters: {
         keyword: '',
-        landmarkFrom: '',
-        position_type: 'LNG',
-        confirm_status: 'SUCCESS',
-        async_status: '',
-        field: 'position_name',
+        mark_source: '',
+        mark_type: 'oil_station',
+        check_status: 'pass',
+        is_synced: '',
+        field: 'mark_name',
       },
       fieldSelect: [{
         label: '地标名称',
-        id: 'position_name',
+        id: 'mark_name',
       }, {
         label: '联系人',
-        id: 'contacts',
+        id: 'consignee',
       }, {
         label: '联系电话',
-        id: 'tel',
+        id: 'consignee_phone',
       }],
       landmarkDetail: {},
+      typeSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'fluid',
+        verbose: '气源液厂'
+      }, {
+        key: 'station',
+        verbose: '卸货站'
+      }, {
+        key: 'oil_station',
+        verbose: '加油站'
+      }, {
+        key: 'gas_station',
+        verbose: '加气站'
+      }, {
+        key: 'park',
+        verbose: '停车场'
+      }],
+      checkStatusSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'waiting',
+        verbose: '未审核'
+      }, {
+        key: 'pass',
+        verbose: '审核通过'
+      }, {
+        key: 'refuse',
+        verbose: '审核拒绝'
+      }],
+      landmarkFromSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'PLATFORM',
+        verbose: '平台'
+      }, {
+        key: 'DRIVER_UPLOAD',
+        verbose: '司机端上传'
+      }, {
+        key: 'RESIDENCE_POINT',
+        verbose: '轨迹停留点'
+      }]
     }
   },
   methods: {
@@ -181,11 +215,12 @@ export default {
       return new Promise((resolve, reject) => {
         let postData = {
           pagination: false,
-          source_type: this.searchFilters.landmarkFrom,
-          confirm_status: this.searchFilters.confirm_status,
-          async_status: this.searchFilters.async_status,
-          position_type: this.searchFilters.position_type,
-          simplify: true,
+          mark_source: this.searchFilters.mark_source,
+          check_status: this.searchFilters.check_status,
+
+          //is_synced: this.searchFilters.is_synced,
+          mark_type: this.searchFilters.mark_type,
+          // simplify: true,
         };
 
         if (this.searchFilters.keyword.length) {
@@ -210,7 +245,15 @@ export default {
           console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
-            this.landmarkList = results.data.data.results;
+            this.landmarkList = results.data.data.data;
+            this.landmarkListFilter = [];
+            for (let i in this.landmarkList) {
+              if (this.landmarkList[i].coordinate && this.landmarkList[i].coordinate.latitude) {
+                this.landmarkListFilter.push(this.landmarkList[i]);
+
+              }
+            }
+            console.log('this.landmarkListFilter', this.landmarkListFilter);
             resolve(results)
           } else {
             reject(results);
@@ -252,11 +295,15 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
+      let mark_type = (data.mark_type && data.mark_type.verbose) ? data.mark_type.verbose : '无';
+      let check_status = (data.check_status && data.check_status.verbose) ? data.check_status.verbose : '无';
+      let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
+      let is_synced = data.is_synced ? '已同步' : '未同步';
+      let infoBodyStr = '<div class="fs-13">地标类型：' + mark_type +
         '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-        '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-        '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
+        '</div><div class="fs-13">审核状态：' + check_status +
+        '</div><div class="fs-13">上传来源：' + mark_source +
+        '</div><div class="fs-13">是否同步：' + is_synced +
         '</div></div>';
 
       return infoBodyStr;
@@ -264,15 +311,15 @@ export default {
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.position_type && item.position_type === 'LNG') {
-        if (item.async_status === 'ASYNCED') {
+      if (item.mark_type && item.mark_type.key === 'oil_station') {
+        if (item.is_synced) {
           src = 'gas_1.png';
         } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
+          switch (item.check_status.key) {
+            case 'pass':
               src = 'gas_2.png'
               break;
-            case 'TO_CONFIRM':
+            case 'waiting':
               src = 'gas_3.png'
               break;
             default:
@@ -281,15 +328,15 @@ export default {
         }
       }
       /*卸货站*/
-      if (item.position_type && item.position_type === 'DELIVER_POSITION') {
-        if (item.async_status === 'ASYNCED') {
+      if (item.mark_type && item.mark_type.key === 'station') {
+        if (item.is_synced) {
           src = 'l_1.png';
         } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
+          switch (item.check_status.key) {
+            case 'pass':
               src = 'l_2.png'
               break;
-            case 'TO_CONFIRM':
+            case 'waiting':
               src = 'l_3.png'
               break;
             default:
@@ -298,15 +345,15 @@ export default {
         }
       }
       /*食宿停*/
-      if (item.position_type && item.position_type === 'REST_AREA') {
-        if (item.async_status === 'ASYNCED') {
+      if (item.mark_type && item.mark_type.key === 'park') {
+        if (item.is_synced) {
           src = 'parking_1.png';
         } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
+          switch (item.check_status.key) {
+            case 'pass':
               src = 'parking_2.png'
               break;
-            case 'TO_CONFIRM':
+            case 'waiting':
               src = 'parking_3.png'
               break;
             default:
@@ -315,15 +362,15 @@ export default {
         }
       }
       /*气源液厂*/
-      if (item.position_type && item.position_type === 'LNG_FACTORY') {
-        if (item.async_status === 'ASYNCED') {
+      if (item.mark_type && item.mark_type.key === 'fluid') {
+        if (item.is_synced) {
           src = 'lng_1.png';
         } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
+          switch (item.check_status.key) {
+            case 'pass':
               src = 'lng_2.png'
               break;
-            case 'TO_CONFIRM':
+            case 'waiting':
               src = 'lng_3.png'
               break;
             default:
@@ -353,7 +400,7 @@ export default {
 
             //从数据中读取位置, 返回lngLat
             getPosition: function(item) {
-              return [item.location.longitude, item.location.latitude];
+              return [item.coordinate.longitude, item.coordinate.latitude];
             },
 
             //数据ID，如果不提供，默认使用数组索引，即index
@@ -362,7 +409,7 @@ export default {
             },
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.mark_name + '</span>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);
@@ -390,9 +437,9 @@ export default {
                   }
                 });
                 recycledMarker.setLabel({
-                  content: dataItem.position_name,
+                  content: dataItem.mark_name,
                   offset: new AMap.Pixel(30, 0)
-                })
+                });
 
                 return recycledMarker
               } else {
@@ -406,7 +453,7 @@ export default {
                     }
                   },
                   label: {
-                    content: dataItem.position_name,
+                    content: dataItem.mark_name,
                     offset: new AMap.Pixel(30, 0)
                   }
                 });
@@ -424,16 +471,18 @@ export default {
 
           _this.markerList.on('selectedChanged', function(event, info) {
             console.log('info', info);
+            let infoBodyStr = '';
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
                 console.log('detailresults', results);
-                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
+                infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
+                console.log('infoBodyStr', infoBodyStr);
                 infoWindow.setInfoBody(infoBodyStr);
 
               }).catch(() => {
-                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
+                infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
                 infoWindow.setInfoBody(infoBodyStr);
               })
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
@@ -451,13 +500,11 @@ export default {
     },
     renderMarker: function() {
       let _this = this;
-      console.log('markerList', _this.markerList);
-      if (_this.markerList) {
-        _this.markerList.render(_this.landmarkList);
+      const renderAndCluster = () => {
+        _this.markerList.render(_this.landmarkListFilter);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
           _this.allMakers = _this.markerList.getAllMarkers();
           if (_this.cluster) {
-            //_this.cluster.clearMarkers();
             _this.cluster.setMarkers(_this.allMakers);
           } else {
             _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
@@ -467,26 +514,13 @@ export default {
           }
 
         });
+      }
+      if (_this.markerList) {
+        renderAndCluster();
       } else {
-
         setTimeout(() => {
-          _this.markerList.render(_this.landmarkList);
-          _this.map.plugin(["AMap.MarkerClusterer"], function() {
-            _this.allMakers = _this.markerList.getAllMarkers();
-            if (_this.cluster) {
-              // _this.cluster.clearMarkers();
-              _this.cluster.setMarkers(_this.allMakers);
-            } else {
-              console.log('_this.map', _this.map, _this.allMakers);
-              _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-                minClusterSize: 4,
-                maxZoom: 17,
-              });
-            }
-
-          });
-        }, 1000)
-
+          _this.renderMarker();
+        }, 200)
       }
 
       _this.map.setFitView(_this.allMakers);
@@ -495,7 +529,7 @@ export default {
   },
   mounted: function() {
     let _this = this;
-    map = new AMap.Map('map-container', {
+    _this.map = new AMap.Map('map-container', {
       zoom: 5
     });
     this.initMarkList();
