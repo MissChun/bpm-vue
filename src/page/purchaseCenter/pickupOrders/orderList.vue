@@ -145,7 +145,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam.length > 0) {
+      if (this.timeParam) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }
