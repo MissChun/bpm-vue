@@ -14,11 +14,11 @@ const api = {
     method: 'get',
     desc: '运费列表',
     param: {
-      page:{
-        desc:'页码'
+      page: {
+        desc: '页码'
       },
-      page_size:{
-        desc:'页码'
+      page_size: {
+        desc: '页码'
       },
       need_all: {
         desc: '是否分页'
@@ -30,8 +30,8 @@ const api = {
     method: 'get',
     desc: '运费详情',
     param: {
-      id:{
-        desc:'运费约定id'
+      id: {
+        desc: '运费约定id'
       },
     }
   },
@@ -160,8 +160,8 @@ const api = {
     method: 'get',
     desc: '承运商列表',
     param: {
-      need_all:{
-        desc:'是否分页'
+      need_all: {
+        desc: '是否分页'
       },
       company: {
         desc: '公司ID'
@@ -1259,12 +1259,12 @@ const api = {
       plate_number: {
         desc: '车牌号',
       },
-       status: {
+      status: {
         desc: '状态',
       },
     }
   },
-  getDeviceDetail:{
+  getDeviceDetail: {
     url: '/api/v1/map/wallbill_detail/',
     method: 'get',
     desc: "车辆详情",
@@ -1291,11 +1291,43 @@ const api = {
       page_size: {
         desc: '当前每页条数，默认为1000条每页',
       },
-      device_id:{
+      device_id: {
         desc: '设备号',
       }
     }
   },
+  orderProcess: {
+    url: '/api/v1/section-trips/record/',
+    method: 'get',
+    desc: "获取分段进程",
+    param: {
+
+    }
+  },
+  getSectionTrips: {
+    url: '/api/v1/section-trips/:id/',
+    method: 'GET',
+    desc: "获取运单分段详情",
+    param: {
+
+    }
+  },
+  getPundList: {
+    url: '/api/v1/weight-note/',
+    method: 'GET',
+    desc: "获取磅单数据",
+    param: {
+
+    }
+  },
+  getSeal: {
+    url: '/api/v1/car-seal/',
+    method: 'GET',
+    desc: "获取铅封数据",
+    param: {
+
+    }
+  }
 }
 
 
