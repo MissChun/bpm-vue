@@ -202,7 +202,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>运单号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.order_number)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[0].waybill)"></div>
               </div>
             </el-col>
             <el-col :span="8">

@@ -139,7 +139,7 @@ export default {
                 resolve(results);
                 this.pbFunc.setLocalData('token', results.data.data.token, true);
                 this.pbFunc.setLocalData('user', results.data.data.user, true);
-                this.getUser();
+                // this.getUser();
               } else {
                 // if (results.data && results.data.code === 600) {
                 //   this.isLogin = true;
