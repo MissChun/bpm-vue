@@ -94,7 +94,7 @@
                 </el-col>
               </el-row>
 
-               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;">
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
                 <el-col :span="7" class="colinfo">卸:<span>{{props.row.business_order.station_address}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -124,6 +124,9 @@
             <el-row class="commh carInfo">
               <el-col>副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:"11"}}</span></el-col>
             </el-row>
+            <el-row class="commh carInfo">
+              <el-col>押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
+            </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]">
@@ -144,7 +147,7 @@
             </el-col>
             <el-col :span="4" v-if="1==0">卸货单号:{{props.row.order_number}}</el-col>
             <el-col :span="4">托运商:{{props.row.delivery_order.trader}}</el-col>
-            <el-col :span="3">标准运费:</el-col>
+            <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
@@ -201,6 +204,7 @@ export default {
   data() {
     return {
       lockFalg: false,
+      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match'],
       buttonAll: {
         //装车
         driver_pending_confirmation: [{ //司机未确认
@@ -336,17 +340,24 @@ export default {
       var sendData = {};
       if (type == 'cancleOrder') { //取消运单
         sendData.id = rowData.id;
-        this.$confirm('取消运单后,系统将通知承运商确认,并痛着驾驶员?', '确认取消运单', {
+        sendData.status="canceled";
+        this.$confirm('取消运单后,系统将通知承运商确认,并通知驾驶员?', '确认取消运单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          vm.$$http("cancleConOrder", sendData).then((results) => {
+          vm.$$http("changeStatusSection", sendData).then((results) => {
             if (results.data.code == 0) {
-
+              vm.$message({
+                type:"success",
+                message:"取消运单成功",
+              });
+              vm.$emit("refreshList");
+            }else{
+              vm.$message.error("取消运单失败");
             }
           })
-          this.$emit("refreshList");
+          
         }).catch((err) => {
           console.log('errs',err);
         });

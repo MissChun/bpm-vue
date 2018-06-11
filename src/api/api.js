@@ -1312,6 +1312,14 @@ const api = {
 
     }
   },
+  changeStatusSection: {
+    url: '/api/v1/section-trip/:id/',
+    method: 'put',
+    desc: "获取运单分段详情",
+    param: {
+
+    }
+  },
   getPundList: {
     url: '/api/v1/weight-note/',
     method: 'GET',
@@ -1344,6 +1352,14 @@ const api = {
 
     }
   },
+  cancleOrder: {
+    url: '/api/v1/waybill/check/',
+    method: 'POST',
+    desc: '取消运单',
+    param: {
+
+    }
+  }
 }
 
 

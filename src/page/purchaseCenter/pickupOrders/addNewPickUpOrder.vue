@@ -168,7 +168,7 @@
               <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading">
                 <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                   <el-form-item label="自有:" label-width="60px">
-                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" multiple collapse-tags>
+                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" >
                       <el-option v-for="(item,key) in selectData.carriersOwnList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -176,7 +176,7 @@
                 </el-col>
                 <el-col :span="13" :offset="1" v-if="pickOrderParam.consignment_type=='external'||pickOrderParam.consignment_type=='together'">
                   <el-form-item label="外部:" label-width="60px">
-                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" multiple collapse-tags>
+                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" >
                       <el-option v-for="(item,key) in selectData.carriersOutList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -222,8 +222,8 @@ export default {
         unload_area: ''
       },
       carriersParam: {
-        ownCarriers: [],
-        extendCarriers: []
+        ownCarriers: "",
+        extendCarriers: ""
       },
       rules: [],
       selectData: {
@@ -240,17 +240,17 @@ export default {
   },
   methods: {
     goOrderList: function() {
-      this.$router.push({ path: "/orders/pickupOrders" });
+      this.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
     },
     upOrder: function() {
       var carriers = [];
       if (this.pickOrderParam.consignment_type == 'own') {
         if (this.carriersParam.ownCarriers) {
-          carriers = this.carriersParam.ownCarriers;
+          carriers = [this.carriersParam.ownCarriers];
         }
       } else if (this.pickOrderParam.consignment_type == 'external') {
         if (this.carriersParam.extendCarriers) {
-          carriers = this.carriersParam.extendCarriers;
+          carriers = [this.carriersParam.extendCarriers];
         }
       }
       var sendData = this.pbFunc.deepcopy(this.pickOrderParam);
