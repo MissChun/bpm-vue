@@ -57,7 +57,7 @@
   font-size: 1.4em;
   text-decoration: none;
   color: #fff;
-  line-height: 65px;
+  line-height: 59px;
   border: 1px solid rgb(222, 222, 222);
   border-top: none;
 }
@@ -75,6 +75,12 @@
   float: right;
   padding: 0 2em;
   color: black;
+  i {
+    font-size: 24px;
+    margin-right: 6px;
+    position: relative;
+    top: 4px;
+  }
 }
 
 .usermenu a {
@@ -98,7 +104,9 @@
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
-        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        <router-link :to="{path: '/'}">
+          <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        </router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">
@@ -107,10 +115,15 @@
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <div class="usermenu" v-if="user.name">
-            欢迎您：{{user.name}}
-            <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
-            <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
+          <div class="usermenu" v-if="user.nick_name">
+            <i class="icon-user"></i><span></span>
+            <el-dropdown trigger="click" @command="logout">
+              <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
           </div>
         </div>
       </el-row>
@@ -159,9 +172,12 @@
 export default {
   data() {
     return {
-      user: { name: "aa" },
+      user: {},
       menus: []
     };
+  },
+  components: {
+    mainHeader: 'mainHeader'
   },
   computed: {
     activeMenu: function() {
@@ -192,7 +208,7 @@ export default {
       this.$confirm("确定退出?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "info"
+          type: "warning"
         })
         .then(() => {
           this.signOut();
@@ -211,9 +227,9 @@ export default {
     }
   },
   created: function() {
-    let user = this.$store.state.common.userData;
+    let user = this.pbFunc.getLocalData('user',true);
     if (user) {
-      this.user = user;
+      this.user = user.profile;
     } else {
       console.log(user);
     }

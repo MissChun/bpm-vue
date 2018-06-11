@@ -549,8 +549,8 @@ const api = {
     }
   },
   signOut: {
-    url: '/auth/logout/',
-    method: 'post',
+    url: '/api/v1/auth/login-out/',
+    method: 'delete',
     desc: '退出登录',
     param: {
 

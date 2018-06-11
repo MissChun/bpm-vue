@@ -187,6 +187,7 @@ export default {
         need_all: true,
         department: departmentId
       }
+      this.currentDepartmentId = departmentId;
       this.active = index.toString();
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -194,7 +195,7 @@ export default {
           if (this.positionTableData.length) {
             this.staffsActive = this.positionTableData[0].id;
             this.currentPositionId = this.positionTableData[0].id;
-            this.getStaffsList(departmentId, this.staffsActive, 'True');
+            this.getStaffsList(departmentId, this.currentPositionId, 'True');
           }
         }
       }).catch((err) => {
