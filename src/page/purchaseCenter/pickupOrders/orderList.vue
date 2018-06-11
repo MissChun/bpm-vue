@@ -168,8 +168,9 @@ export default {
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           this.listFifterData = dataBody;
         }
-      }).catch(() => {
+      }).catch((err) => {
         this.pageLoading = false;
+        console.log('err',err);
       });
     },
     clickFifter: function(targetName) {
@@ -197,10 +198,10 @@ export default {
             this.statusName[i]+="("+dataBody[i]+")";
           }
         }
-      }).catch(()=>{
-
+      }).catch((err)=>{
+        console.log('err',err);
       });
-  }
+   }
 };
 
 </script>

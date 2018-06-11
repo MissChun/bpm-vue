@@ -40,11 +40,11 @@ const api = {
     method: 'get',
     desc: '运费列表',
     param: {
-      page:{
-        desc:'页码'
+      page: {
+        desc: '页码'
       },
-      page_size:{
-        desc:'页码'
+      page_size: {
+        desc: '页码'
       },
       need_all: {
         desc: '是否分页'
@@ -1327,7 +1327,23 @@ const api = {
     param: {
 
     }
-  }
+  },
+  getCount: {
+    url: '/api/v1/delivery-orders/count/',
+    method: 'GET',
+    desc: "获取订单数目",
+    param: {
+
+    }
+  },
+  getRecordsData: {
+    url: '/api/v1/delivery-orders/record/',
+    method: 'get',
+    desc: '获取订单记录列表',
+    param: {
+
+    }
+  },
 }
 
 

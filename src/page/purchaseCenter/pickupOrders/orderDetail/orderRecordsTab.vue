@@ -31,7 +31,7 @@
                     </el-row>
                   </div>
                   <div class="table-list" v-if="allTableList.create_list.length>0">
-                    <el-table :data="renderList.r_create_list" style="width: 80%" max-height="500">
+                    <el-table :data="renderList.r_create_list"  max-height="500">
                       <el-table-column fixed prop="driver_no" label="生成提货单号">
                         <template slot-scope="rowsData">
                           {{rowsData.row.msg}}
@@ -68,7 +68,7 @@
                           {{rowsData.row.msg}}
                         </template>
                       </el-table-column>
-                      <el-table-column prop="driver_no" label="车号">
+                      <el-table-column prop="driver_no.semitrailer.plate_number" label="车号">
                       </el-table-column>
                       <el-table-column prop="operator" label="操作人">
                       </el-table-column>
@@ -98,10 +98,10 @@
                     <el-table :data="renderList.r_confirm_list" style="width: 100%" max-height="500">
                       <el-table-column fixed prop="driver_no" label="确定订单操作">
                         <template slot-scope="rowsData">
-                          {{rowsData.row.msg}}
+                          {{rowsData.row.operation}}:{{rowsData.row.waybill}}
                         </template>
                       </el-table-column>
-                      <el-table-column prop="driver_no" label="车号">
+                      <el-table-column prop="driver_no.semitrailer.plate_number" label="车号">
                       </el-table-column>
                       <el-table-column prop="operator" label="操作人">
                       </el-table-column>
@@ -134,7 +134,7 @@
                           {{rowsData.row.msg}}
                         </template>
                       </el-table-column>
-                      <el-table-column prop="driver_no" label="车号">
+                      <el-table-column prop="driver_no.semitrailer.plate_number" label="车号">
                       </el-table-column>
                       <el-table-column prop="operator" label="操作人">
                       </el-table-column>
@@ -254,65 +254,9 @@ export default {
         vm.pageLoading = false;
         console.log(results);
         if (results.data.code == 0) {
-
           results.data.data.forEach(item => {
             vm.allTableList[item.type + "_list"].push(item);
           });
-          vm.allTableList.add_driver_list = [{
-            msg: "生成运单: Y2018052500001",
-            type: "confirm",
-            driver_no: "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            operator: "王大爷",
-            operator_time: "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }, {
-            "msg": "生成运单: Y2018052500001",
-            "type": "confirm",
-            "driver_no": "b7086274-d08e-47d6-b1a7-6403c492cfcd",
-            "operator": "王大爷",
-            "operator_time": "2018-05-25 09:48:28"
-          }]
           var infoList = vm.pbFunc.deepcopy(vm.allTableList);
           vm.renderList.r_create_list = infoList.create_list.splice(0, 5);
           vm.renderList.r_add_driver_list = infoList.add_driver_list.splice(0, 5);

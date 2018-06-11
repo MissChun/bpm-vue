@@ -87,7 +87,7 @@
                 <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
                 </el-col>
                 <el-col :span="4" class="colinfo"><span v-if="props.row.active_time">{{props.row.active_time.split(" ")[0]}}</br>{{props.row.active_time.split(" ")[1]}}</span><span v-else>无</span>
-                </el-col>。2
+                </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
                 </el-col>
                 <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
@@ -309,26 +309,25 @@ export default {
         console.log('results', results)
         vm.$emit("changeTabs", 'fifth');
         vm.changeSatusShow = false;
-      }).catch(() => {
-
+      }).catch((err) => {
+         console.log('errs',err);
       });
     },
     getRowKeys: function(row) {
       return row.id;
     },
     changeExpand: function(row, expandedRows) {
-      console.log('row', row);
-      console.log('expandedRows', expandedRows);
       var vm = this;
       if (row.transPowerInfo) {} else {
         var sendData = {};
-        sendData.id = row.capacity;
+        sendData.tractor_list = [row.capacity];
         vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
           if (transPowerInfo.data.code == 0) {
-            row.transPowerInfo = transPowerInfo.data.data;
+            row.transPowerInfo = transPowerInfo.data.data.results[0];
+            //vm.ListData[1].transPowerInfo=transPowerInfo.data.data.results[0];
           }
-        }).catch(() => {
-
+        }).catch((err) => {
+          console.log('errs',err);
         });
       }
     },
@@ -348,8 +347,8 @@ export default {
             }
           })
           this.$emit("refreshList");
-        }).catch(() => {
-
+        }).catch((err) => {
+          console.log('errs',err);
         });
       } else if (type == 'matchUnload') { //匹配卸货单
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
@@ -387,8 +386,9 @@ export default {
               vm.changeSatusCarList = results.data.data;
             }
             console.log('carList', results);
-          }).catch(() => {
+          }).catch((err) => {
             vm.seletPadding = false;
+            console.log('errs',err);
           });
         }
         if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
@@ -400,8 +400,9 @@ export default {
               vm.changeSatusPerList = results.data.data;
             }
             console.log('PerList', results);
-          }).catch(() => {
+          }).catch((err) => {
             vm.seletPadding = false;
+            console.log('errs',err);
           });
         }
       },
