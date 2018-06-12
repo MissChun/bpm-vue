@@ -35,7 +35,7 @@
           </el-form-item>
           <!-- <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item> -->
         </div>
-        <div class="user-page-img"><img class="img-left" src="../assets/img/user_1.png"></div>
+        <div class="user-page-img"><img src="../assets/img/user_1.png"></div>
       </el-form>
     </div>
   </div>

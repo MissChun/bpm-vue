@@ -1,7 +1,11 @@
 <!-- purchaseDetail.vue -->
+<style type="text/css"  scoped lang="less">
+  .detail-main{
+    border-top: 0;
+  }
 </style>
 <template>
-  <div class="detail-main">
+
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="采购详情" name="first">
@@ -11,10 +15,10 @@
 
       </el-tabs>
     </div>
-  </div>
+
 </template>
 <script>
-import purchaseDetail from '@/components/consignmentCenter/purchaseDetail';
+import purchaseDetail from '@/components/order/purchaseDetail';
 export default {
   name: 'orderDetailTab',
   components: {

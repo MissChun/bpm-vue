@@ -166,7 +166,7 @@ export default {
     },
     handleMenuClick(row){
       if(row.operator === 'check'){
-        this.$router.push({ path: `/statistics/purchase/purchaseDetail/${row.id}/` });
+        this.$router.push({ path: `/statistics/purchase/purchaseDetail/${row.id}` });
       }
     },
     startSearch() {

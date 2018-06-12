@@ -1,4 +1,4 @@
-</style>
+
 <template>
   <div class="detail-main">
     <div class="nav-tab">
@@ -332,7 +332,7 @@
 </template>
 
 <script>
-import purchaseDetail from '@/components/consignmentCenter/purchaseDetail';
+import purchaseDetail from '@/components/order/purchaseDetail';
 export default {
   name: 'orderDetailTab',
   components: {
@@ -429,3 +429,4 @@ export default {
 .detail-main {
   min-height: 500px;
 }
+</style>
