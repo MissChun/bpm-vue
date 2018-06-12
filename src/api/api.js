@@ -251,7 +251,7 @@ const api = {
     }
   },
   getBusinessDetail: {
-    url: '/api/v1/business_order_detail/:business_order_id',
+    url: '/api/v1/business_order_detail/:business_order_id/',
     method: 'get',
     desc: '客户管理',
     param: {
