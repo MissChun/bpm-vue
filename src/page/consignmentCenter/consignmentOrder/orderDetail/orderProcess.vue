@@ -595,7 +595,7 @@
         <el-tab-pane label="轨迹地图" name="third">
         </el-tab-pane>
       </el-tabs>
-  </div>               
+      </div>               
     <img-review :imgObject.sync='imgObject'></img-review>
   </div>
 </template>

@@ -136,7 +136,7 @@
             <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
             <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
             <el-col :span="5">
-              <el-tooltip :content="props.row.mark" placement="top" effect="light">
+              <el-tooltip :content="props.row.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
@@ -179,6 +179,7 @@ export default {
   name: 'orderFifterList',
   data() {
     return {
+      delayTime:500,
       expandStatus: true,
       pageLoading: false,
       expandFalg: true
@@ -266,7 +267,13 @@ export default {
         this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
-        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}` });
+      var type = "";
+      if (row.status.key == 'appoint') {
+        type = 'add';
+      } else {
+        type = 'edit';
+      }
+      this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}` });
       }
     },
     upPlanMethod: function() {
