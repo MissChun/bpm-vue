@@ -326,10 +326,7 @@ export default {
               });
               if (isReview) {
                 if (this.id) {
-                  this.$router.push({
-                    path: "/consignmentCenter/carrierManage/carrierDetail",
-                    query: { activeStep: stepNum - 1, id: id }
-                  });
+                  this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.id } });
                 } else {
                   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierList" });
                 }

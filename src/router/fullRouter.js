@@ -483,13 +483,21 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
         },{
-          path: 'purchaseDetail',
+          path: 'purchaseDetail/:willId/',
           name: "purchaseDetail",
           meta: {
             title: '采购统计详情',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseDetail'], resolve)
+        },{
+          path: 'editPurchase',
+          name: "editPurchase",
+          meta: {
+            title: '采购统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/purchase/editPurchase'], resolve)
         }]
       }]
     }, {

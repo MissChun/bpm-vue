@@ -9,10 +9,48 @@
  */
 
 const api = {
+  updatePurchaseStatistics: {
+    url: '/api/v1/discounts-statistic/:id/',
+    method: 'patch',
+    desc: '修改采购统计',
+    param: {
+      id: {
+        desc: '采购统计ID'
+      },
+      active_time: {
+        desc: '实际装车时间'
+      },
+      unit_price: {
+        desc: '采购单价'
+      },
+      discount_price: {
+        desc: '优惠单价'
+      },
+      active_tonnage: {
+        desc: '实际装车吨位'
+      },
+      unit_sum_price: {
+        desc: '采购总额'
+      },
+      discounts_sum_price: {
+        desc: '优惠后总额'
+      },
+    }
+  },
+  getPurchaseStatisticsDetail: {
+    url: '/api/v1/discounts-statistic/:id/',
+    method: 'get',
+    desc: '采购统计详情',
+    param: {
+      id: {
+        desc: '采购统计ID'
+      }
+    }
+  },
   getPurchaseStatisticsList: {
     url: '/api/v1/discounts-statistic/',
     method: 'get',
-    desc: '运费列表',
+    desc: '采购统计列表',
     param: {
       page: {
         desc: '页码'
@@ -213,7 +251,7 @@ const api = {
     }
   },
   getBusinessDetail: {
-    url: '/api/v1/business_order_detail/:business_order_id',
+    url: '/api/v1/business_order_detail/:business_order_id/',
     method: 'get',
     desc: '客户管理',
     param: {
