@@ -1382,6 +1382,14 @@ const api = {
 
     }
   },
+  getConCount: {
+    url: '/api/v1/section-trips/count/',
+    method: 'GET',
+    desc: "获取运单数目",
+    param: {
+
+    }
+  },
   getRecordsData: {
     url: '/api/v1/delivery-orders/record/',
     method: 'get',

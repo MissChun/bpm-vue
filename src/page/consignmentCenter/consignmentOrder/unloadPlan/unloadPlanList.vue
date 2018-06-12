@@ -260,7 +260,7 @@ export default {
       var vm = this;
       var sendData = {};
       var needNum = 0;
-      sendData.all_search = 'bpm_match';
+      sendData.waybill_id = this.id;
       this.$$http("getBusinessList", sendData).then((results) => {
         needNum++;
         if (results.data.code == 0) {
