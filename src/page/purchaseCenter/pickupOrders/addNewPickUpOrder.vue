@@ -157,7 +157,7 @@
           <el-row class="mt-20">
             <el-col :span="10" :offset="3">
               <el-form-item label="承运方式:" prop="consignment_type">
-                <el-radio v-model="pickOrderParam.consignment_type" label="own" border>只有贸易</el-radio>
+                <el-radio v-model="pickOrderParam.consignment_type" label="own" border>自有贸易</el-radio>
                 <el-radio v-model="pickOrderParam.consignment_type" label="external" border>外部承运</el-radio>
                 <!--  <el-radio v-model="pickOrderParam.consignment_type" label="together" border>共同承运</el-radio> -->
               </el-form-item>
@@ -275,7 +275,7 @@ export default {
     getFulid: function(supplierId) {
       var sendData = {};
       if (supplierId) {
-        sendData.supplier_id = supplierId;
+        sendData.supplier = supplierId;
       }
       this.loadingArr.fluidLoading = true;
       this.$$http("getFulid", sendData).then((results) => {

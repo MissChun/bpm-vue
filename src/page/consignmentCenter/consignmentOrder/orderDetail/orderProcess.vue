@@ -30,7 +30,25 @@
 .el-button {
   margin-left: 0;
 }
-
+.garyColor{
+  color:gary;
+}
+.label-list label{
+  width:100px;
+}
+.label-list {
+  padding-left:100px;
+}
+.borderB {
+  border-bottom:1px solid #ebeef5;
+}
+.paddingCancle /deep/ .el-collapse-item__content{
+  padding-top:0;
+  padding-bottom:0; 
+}
+.padds{
+  padding: 25px 0 0px 0
+}
 </style>
 <template>
   <div>
@@ -44,7 +62,7 @@
               <el-row style="">
                 <el-col :span="20" class="orderPossing">
                   <el-collapse v-model="extendsArr">
-                    <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key">
+                    <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key"  v-bind:class="{paddingCancle: item.type=='confirm_match'}">
                       <div v-if="item.type === 'driver_pending_confirmation'">
                         <el-row>
                           <el-col :span="8">
@@ -169,8 +187,8 @@
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>审核时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
                             </div>
                           </el-col>
                         </el-row>
@@ -178,7 +196,7 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划到厂时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plan_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
@@ -189,7 +207,7 @@
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>审核人:</label>
+                              <label>操作人:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
@@ -260,47 +278,47 @@
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>审核时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <label>收货人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.contact)"></div>
                             </div>
                           </el-col>
                         </el-row>
                         <el-row :gutter="40">
-                          <el-col :span="8">
+                           <el-col :span="8">
                             <div class="label-list">
-                              <label>计划到厂时间:</label>
+                              <label>收货人电话:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.contact_phone)"></div>
+                            </div>
+                          </el-col>
+                           <el-col :span="8">
+                            <div class="label-list">
+                              <label>计划到站时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车毛重:</label>
+                              <label>卸车毛重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.gross_weight)"></div>
                             </div>
                           </el-col>
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>审核人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                            </div>
-                          </el-col>
                         </el-row>
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>实际到厂时间:</label>
+                              <label>实际到站时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车皮重:</label>
+                              <label>卸车皮重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.tare_weight)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车净重:</label>
+                              <label>卸车净重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.net_weight)"></div>
                             </div>
                           </el-col>
@@ -308,13 +326,13 @@
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装液开始时间:</label>
+                              <label>卸车开始时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_start_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装液完成时间:</label>
+                              <label>卸车完成时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_end_time)"></div>
                             </div>
                           </el-col>
@@ -322,7 +340,7 @@
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车磅单审核:</label>
+                              <label>卸车磅单审核:</label>
                               <div class="detail-form-item">
                                 <el-button type="text " style="height:0;line-height:0;text-align:left;padding-left:0;" @click="showImg('showPound',item.weight_id)">点击查看磅单</el-button>
                               </div>
@@ -331,24 +349,27 @@
                         </el-row>
                       </div>
 
-                      <div v-if="item.type === 'already_match'">
+                      <div v-if="item.type === 'confirm_match'" style="margin-top:-20px;">
+                        <div v-for="(Mitem,Mkey) in item.waiting_matchArr" v-bind:class="{ garyColor: Mitem.status!='new',padds:Mkey==0,borderB:item.waiting_matchArr.length>1&&Mkey!=item.waiting_matchArr.length-1 }"  style="border-left:none;border-right:none;">
+                        <el-row style="padding:15px 0;" >
+                        <el-col :span="22">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
                               <label>站点:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.station)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>收货人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.consignee)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.consignee)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划卸车吨位:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plan_tonnage)">吨</div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plan_tonnage)">吨</div>
                             </div>
                           </el-col>
                         </el-row>
@@ -356,22 +377,29 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>站点地址:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.station_address)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station_address)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>收货人电话:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.consignee_phone)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.consignee_phone)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划到站时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plate_number)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plate_number)"></div>
                             </div>
                           </el-col>
                         </el-row>
+                         </el-col>
+                         <el-col :span="2">
+                          <div v-if="Mitem.status!='new'" style="line-height:48px;"><el-tag type="success">待取消</el-tag></div>
+                          <div v-else style="line-height:48px;"><el-tag type="success">待确认</el-tag></div>
+                         </el-col>
+                      </el-row>
+                      </div>
                       </div>
                       <div v-if="item.type === 'to_site'">
                         <el-row :gutter="40">
@@ -389,6 +417,40 @@
                           </el-col>
                         </el-row>
                       </div>
+                       <div v-if="item.type === 'confirm_match'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                      
+                      <div v-if="item.type === 'waiting_match'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+
                       <div v-if="item.type === 'reach_site'">
                         <el-row :gutter="40">
                           <el-col :span="8">
@@ -425,6 +487,12 @@
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
                             </div>
                           </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>拒绝原因:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.reason)"></div>
+                            </div>
+                          </el-col>
                         </el-row>
                       </div>
                        <div v-if="item.type === 'in_settlement'">
@@ -443,6 +511,73 @@
                           </el-col>
                         </el-row>
                       </div>
+                      <div v-if="item.type === 'to_site'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                       <div v-if="item.type === 'already_match'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+
+
+                      <div v-if="item.type === 'waiting_settlement'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                       <div v-if="item.type === 'finished'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+
                     </el-collapse-item>
                   </el-collapse>
                 </el-col>
@@ -460,8 +595,7 @@
         <el-tab-pane label="轨迹地图" name="third">
         </el-tab-pane>
       </el-tabs>
-    </div>
- 
+  </div>               
     <img-review :imgObject.sync='imgObject'></img-review>
   </div>
 </template>
@@ -485,21 +619,22 @@ export default {
     return {
       extendsArr:[],
       statusType:{
-        driver_pending_confirmation:'司机未确认',
+       driver_pending_confirmation:'司机未确认',
         to_fluid:'前往装车',
         reach_fluid:'已到装货地',
         waiting_seal:'待上传铅封',
         loading_waiting_audit:'已装车待审核',
         loading_audit_failed:'装车审核失败',
         waiting_match:'待匹配卸货单',
+        confirm_match:'待确认卸货单',
         already_match:'已匹配卸货单',
         to_site:'前往卸货地',
         reach_site:'已到卸货地',
         unloading_waiting_audit:'已卸车待审核',
         unloading_audit_failed:'卸车审核失败',
         waiting_settlement:'待提交结算',
-        in_settlement:'已完成',
-        finished:'已到装货地',
+        in_settlement:'结算中',
+        finished:'已完成',
         canceled:'已取消'
       },
       lockFalg: false,
