@@ -133,7 +133,7 @@ export default {
     },
     loginDirect: function(newPath) {
       this.signin(() => {
-        this.$router.replace({ path: newPath || '/' });
+        this.$router.replace({ path: newPath || '/dashborad' });
       });
       //this.pathIn(true);
     },
