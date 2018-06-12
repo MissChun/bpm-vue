@@ -151,7 +151,7 @@ export default {
         param: 'unit_sum_price',
         width: ''
       }, {
-        title: '优惠总额',
+        title: '优惠后总额',
         param: 'discounts_sum_price',
         width: ''
       }],
@@ -167,6 +167,8 @@ export default {
     handleMenuClick(row){
       if(row.operator === 'check'){
         this.$router.push({ path: `/statistics/purchase/purchaseDetail/${row.id}` });
+      }else if(row.operator === 'edit'){
+        this.$router.push({ path: `/statistics/purchase/editPurchase/`, query: { id: row.id } });
       }
     },
     startSearch() {

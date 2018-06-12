@@ -43,12 +43,10 @@
                 <template slot-scope="scope">
                   <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
                   <div v-else>
-                    <span v-if="item.param==='carriers'" :title="scope.row.carriers.join('<br>')">
+                    <span v-if="item.param==='carriers'" :title="scope.row.carriersList">
                       <span v-for="(row,key) in scope.row.carriers" v-if="key<5" class="text-blue">{{row.carrier_name}}<br></span>
-
                     </span>
                     <span v-else>{{scope.row[item.param]}}</span>
-
                   </div>
                 </template>
               </el-table-column>
@@ -94,16 +92,16 @@ export default {
       },
       selectData: {
         carrierSelect: [{
-          id:'',
-          carrier_name:'全部'
+          id: '',
+          carrier_name: '全部'
         }], //承运商
         liquidSelect: [{
-          id:'',
-          actual_fluid_name:'全部'
+          id: '',
+          actual_fluid_name: '全部'
         }], //液厂
         siteSelect: [{
-          id:'',
-          station_name:'全部'
+          id: '',
+          station_name: '全部'
         }], //站点
       },
       thTableList: [{
@@ -129,7 +127,7 @@ export default {
       }, {
         title: '启用状态',
         param: 'is_active',
-        param_two:'verbose',
+        param_two: 'verbose',
         width: ''
       }],
       tableData: []
@@ -155,11 +153,15 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getStandardMileList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-
+          for (let i in this.tableData) {
+            this.tableData[i].carriersList = '';
+            for (let j in this.tableData[i].carriers) {
+              this.tableData[i].carriersList += this.tableData[i].carriers[j].carrier_name + (j < this.tableData[i].carriers.length-1 ? '，' : '')
+            }
+          }
 
           this.pageData.totalCount = results.data.data.count;
 
@@ -217,11 +219,11 @@ export default {
     handleMenuClick: function(command) {
       this.$router.push({ path: "/serviceManage/standardDataManage/mileageDetail", query: { id: command.id } });
     },
-    editMile(isEdit){
+    editMile(isEdit) {
       // if(isEdit){
 
       // }else{
-        this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
+      this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
       // }
 
     },
