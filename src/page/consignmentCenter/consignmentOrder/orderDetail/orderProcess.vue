@@ -30,7 +30,25 @@
 .el-button {
   margin-left: 0;
 }
-
+.garyColor{
+  color:gary;
+}
+.label-list label{
+  width:100px;
+}
+.label-list {
+  padding-left:100px;
+}
+.borderB {
+  border-bottom:1px solid #ebeef5;
+}
+.paddingCancle /deep/ .el-collapse-item__content{
+  padding-top:0;
+  padding-bottom:0; 
+}
+.padds{
+  padding: 25px 0 0px 0
+}
 </style>
 <template>
   <div>
@@ -240,7 +258,7 @@
                         </el-row>
                       </div>
 
-                <div v-if="item.type=='unloading_waiting_audit'">
+                      <div v-if="item.type=='unloading_waiting_audit'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -331,7 +349,6 @@
                         </el-row>
                       </div>
 
-
                       <div v-if="item.type === 'confirm_match'" style="margin-top:-20px;">
                         <div v-for="(Mitem,Mkey) in item.waiting_matchArr" v-bind:class="{ garyColor: Mitem.status!='new',padds:Mkey==0,borderB:item.waiting_matchArr.length>1&&Mkey!=item.waiting_matchArr.length-1 }"  style="border-left:none;border-right:none;">
                         <el-row style="padding:15px 0;" >
@@ -400,7 +417,7 @@
                           </el-col>
                         </el-row>
                       </div>
-                       <div v-if="item.type === 'already_match'">
+                       <div v-if="item.type === 'confirm_match'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -510,7 +527,7 @@
                           </el-col>
                         </el-row>
                       </div>
-                       <div v-if="item.type === 'confirm_match'">
+                       <div v-if="item.type === 'already_match'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -578,17 +595,7 @@
         <el-tab-pane label="轨迹地图" name="third">
         </el-tab-pane>
       </el-tabs>
-    </div>
-  
-                  
-              
-         
-        
-      
-             
-          
-   
- 
+  </div>               
     <img-review :imgObject.sync='imgObject'></img-review>
   </div>
 </template>

@@ -42,37 +42,37 @@
       </el-tabs>
     </div>
     <div class="listOrder nav-tab" v-loading="pageLoading">
-      <el-tabs v-model="fifterName" type="card" @tab-click="clickFifter">
+      <el-tabs v-model="thisFifterName" type="card" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-          <div v-if="fifterName=='all'">
+          <div v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.appoint_count" name="appoint">
-          <div v-if="fifterName=='appoint'">
+          <div v-if="thisFifterName=='appoint'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.determine_count" name="determine">
-          <div v-if="fifterName=='determine'">
+          <div v-if="thisFifterName=='determine'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
-          <div v-if="fifterName=='confirmed'">
+          <div v-if="thisFifterName=='confirmed'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.history_count" name="loaded">
-          <div v-if="fifterName=='history'">
+        <el-tab-pane :label="statusName.history_count" name="history">
+          <div v-if="thisFifterName=='history'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
@@ -93,6 +93,15 @@ export default {
     orderFifterList: () =>
       import ("../../../components/order/orderFifterList.vue")
   },
+  computed: {
+    fifterName:function(){
+      if(this.$route.query.goTo){
+        return this.$route.query.goTo
+      }else{
+        return 'all'
+      }
+    },
+  },
   data() {
     return {
       searchStatus: false,
@@ -111,7 +120,7 @@ export default {
       timeParam: [],
       listFifterData: [],
       activeName: 'first',
-      fifterName: 'all',
+      thisFifterName: 'all',
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -129,9 +138,6 @@ export default {
       },
     };
   },
-  computed: {
-
-  },
   methods: {
     clicktabs: function(targetName) {
 
@@ -145,15 +151,19 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam) {
+      if (this.thisFifterName&&this.timeParam.length>0) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }
-      if (this.fifterName != "all") {
-        sendData.status = this.fifterName;
+      if (this.thisFifterName != "all") {
+        sendData.status = this.thisFifterName;
       }
       if (this.searchStatus) {
         sendData = this.saveSendData;
+      }
+      if(this.thisFifterName=='history'){
+        sendData.history=true;
+        delete sendData.status;
       }
       sendData.page = this.pageData.currentPage;
       sendData.page_size = this.pageData.pageSize;
@@ -201,6 +211,9 @@ export default {
     }).catch((err) => {
       console.log('err', err);
     });
+  },
+  mounted(){
+      this.thisFifterName=this.fifterName;
   }
 };
 
