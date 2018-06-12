@@ -216,24 +216,34 @@
                   </div>
                 </div>
                 <div class="detail-list detail-form" v-if="item.type === 'settlement_check'">
-                  <div class="process-content" v-if="false">
+                  <div class="process-content">
                     <el-row :gutter="10">
                       <el-col :span="8">
                         <div class="label-list">
                           <label>修改前:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number?'售价-'+detailData.order_number:detailData.order_number)"></div>
+                          <div class="detail-form-item" v-if="item.to_be_modify">
+                            <span v-for="(data,index) in item.to_be_modify" v-if="data!=-1&&data!==''">
+                              <span v-html="updateCn(index)+' - '"></span>{{item.before_opt[index]}}
+                            <br>
+                            </span>
+                          </div>
                         </div>
                       </el-col>
                       <el-col :span="8">
                         <div class="label-list">
                           <label>修改后:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.order_number?detailData.order_number:'售价-'+detailData.order_number)"></div>
+                          <div class="detail-form-item" v-if="item.to_be_modify">
+                            <span v-for="(data,index) in item.to_be_modify" v-if="data!=-1&&data!==''">
+                              <span v-html="updateCn(index)+' - '"></span>{{data}}
+                            <br>
+                            </span>
+                          </div>
                         </div>
                       </el-col>
                       <el-col :span="8">
                         <div class="label-list">
                           <label>操作人:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.operator)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                         </div>
                       </el-col>
                     </el-row>
@@ -241,7 +251,39 @@
                       <el-col :span="8">
                         <div class="label-list">
                           <label>操作时间:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.operated_at)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+                <div class="detail-list detail-form" v-if="item.type === 'settlement_check_end'">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改-经理审核时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>修改-经理审核结果:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operation_cn)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                    <el-row :gutter="10" v-if="item.operation==='denied'">
+                      <el-col :span="24">
+                        <div class="label-list">
+                          <label>拒绝理由:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.refuse_note)"></div>
                         </div>
                       </el-col>
                     </el-row>
@@ -318,31 +360,37 @@
                 <div class="detail-list detail-form" v-if="item.type === 'modify_department_check'">
                   <div class="process-content">
                     <el-row :gutter="10">
-                      <el-col :span="12">
+                      <el-col :span="8">
                         <div class="label-list">
                           <label>修改前:</label>
                           <div class="detail-form-item" v-if="item.to_be_modify">
-                            <span v-for="(data,index) in item.to_be_modify" v-if="data!=-1">
-                              <span v-html="updateCn(index)+' - '"></span>{{data}}，
+                            <span v-for="(data,index) in item.to_be_modify" v-if="data!=-1&&data!==''">
+                              <span v-html="updateCn(index)+' - '"></span>{{item.before_opt[index]}}
+                            <br>
                             </span>
                           </div>
                         </div>
                       </el-col>
-                      <el-col :span="12">
+                      <el-col :span="8">
                         <div class="label-list">
                           <label>修改后:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                          <div class="detail-form-item" v-if="item.to_be_modify">
+                            <span v-for="(data,index) in item.to_be_modify" v-if="data!=-1&&data!==''">
+                              <span v-html="updateCn(index)+' - '"></span>{{data}}
+                            <br>
+                            </span>
+                          </div>
                         </div>
                       </el-col>
-                    </el-row>
-                    <el-row :gutter="10">
-                      <el-col :span="12">
+                      <el-col :span="8">
                         <div class="label-list">
                           <label>操作人:</label>
                           <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                         </div>
                       </el-col>
-                      <el-col :span="12">
+                    </el-row>
+                    <el-row :gutter="10">
+                      <el-col :span="8">
                         <div class="label-list">
                           <label>操作时间:</label>
                           <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
@@ -429,7 +477,8 @@ export default {
         modify_manager_check_end: '修改审核——经理审核完成',
         modify_department_check: '修改审核——部门审核中',
         modify_department_check_end: '修改审核——部门审核完成',
-        settlement_check: '结算审核——经理审核中',
+        settlement_check: '结算审核',
+        settlement_check_end: '结算审核完成',
         cancel_check: '取消审核——部门审核中',
         cancel_check_end: '取消审核——部门审核完成',
       },
@@ -458,9 +507,9 @@ export default {
         case 'create_department_check': //部门审核
           return true;
           break;
-          case 'cancel_check'://取消审核
-            return true;
-            break;
+        case 'cancel_check': //取消审核
+          return true;
+          break;
           // case 'total_price':
           //   return '销售总价';
           //   break;
@@ -486,6 +535,9 @@ export default {
         case 'plan_arrive_time':
           return '到站时间';
           break;
+        case 'settlement_total_price':
+          return '结算总价';
+          break;
       }
     },
     closeDialog: function(isSave) {
@@ -504,14 +556,19 @@ export default {
           this.processData = results.data.data;
           for (let i in this.processData) {
             this.processData[i].operation_cn = this.processData[i].operation && this.processData[i].operation === 'pass' ? '通过' : '拒绝';
-            if (i>0&&this.processData[i].type === 'modify_department_check') {
+            if (i > 0 && this.processData[i].type === 'modify_department_check') {
               if (typeof this.processData[i].to_be_modify != "object") {
                 this.processData[i].type = 'modify_department_check_end'
               }
             }
-            if (i>0&&this.processData[i].type === 'cancel_check') {
+            if (i > 0 && this.processData[i].type === 'cancel_check') {
               if (typeof this.processData[i].to_be_modify != "object") {
                 this.processData[i].type = 'cancel_check_end'
+              }
+            }
+            if (i > 0 && this.processData[i].type === 'settlement_check') {
+              if (typeof this.processData[i].to_be_modify != "object") {
+                this.processData[i].type = 'settlement_check_end'
               }
             }
             for (let j in this.statusType) {
@@ -542,7 +599,7 @@ export default {
       if (status === 'create_department_check') {
         title = '业务单审核通过';
         desc = '请确认业务单信息无误，审核通过后将等待匹配车辆';
-      }else if (status === 'modify_department_check') {
+      } else if (status === 'modify_department_check') {
         title = '业务单取修改核通过';
         desc = '修改审核';
       } else if (status === 'cancel_check') {
