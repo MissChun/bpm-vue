@@ -9,6 +9,22 @@
  */
 
 const api = {
+  getSalesStatisticsList: {
+    url: '/api/v1/sale-statistic/',
+    method: 'get',
+    desc: '销售统计列表',
+    param: {
+      page: {
+        desc: '页码'
+      },
+      page_size: {
+        desc: '页码'
+      },
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
   updatePurchaseStatistics: {
     url: '/api/v1/discounts-statistic/:id/',
     method: 'patch',

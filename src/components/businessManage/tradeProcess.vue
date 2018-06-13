@@ -411,7 +411,7 @@
                       <el-col :span="8">
                         <div class="label-list">
                           <label>修改-部门审核结果:</label>
-                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operation_cn)"></div>
                         </div>
                       </el-col>
                       <el-col :span="8">
@@ -426,6 +426,48 @@
                         <div class="label-list">
                           <label>拒绝理由:</label>
                           <div class="detail-form-item" v-html="pbFunc.dealNullData(item.refuse_note)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+                <div class="detail-list detail-form" v-if="item.type === 'canceled'">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>取消时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
+                <div class="detail-list detail-form" v-if="item.type === 'canceled_end'">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>取消-部门审核时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>取消-部门审核结果:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operation_cn)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                         </div>
                       </el-col>
                     </el-row>
@@ -472,7 +514,8 @@ export default {
         unloading: '已卸货',
         in_settlement: '待结算',
         finished: '已完成',
-        canceled: '已取消',
+        canceled: '取消审核',
+        canceled_end: '已取消',
         modify_manager_check: '修改审核——经理审核中',
         modify_manager_check_end: '修改审核——经理审核完成',
         modify_department_check: '修改审核——部门审核中',
@@ -507,7 +550,7 @@ export default {
         case 'create_department_check': //部门审核
           return true;
           break;
-        case 'cancel_check': //取消审核
+        case 'canceled': //取消审核
           return true;
           break;
           // case 'total_price':
@@ -571,6 +614,11 @@ export default {
                 this.processData[i].type = 'settlement_check_end'
               }
             }
+            if (i > 0 && this.processData[i].type === 'canceled') {
+              if (typeof this.processData[i].to_be_modify != "object") {
+                this.processData[i].type = 'canceled_end'
+              }
+            }
             for (let j in this.statusType) {
               // console.log('状态', this.processData[i].type, j)
               if (this.processData[i].type === j) {
@@ -600,11 +648,11 @@ export default {
         title = '业务单审核通过';
         desc = '请确认业务单信息无误，审核通过后将等待匹配车辆';
       } else if (status === 'modify_department_check') {
-        title = '业务单取修改核通过';
-        desc = '修改审核';
-      } else if (status === 'cancel_check') {
+        title = '业务单修改审核通过';
+        desc = '请确认，修改被拒绝后，业务单将回置为修改前状态';
+      } else if (status === 'canceled') {
         title = '业务单取消审核通过';
-        desc = '通过后，业务单取消，卸货计划将被自动取消';
+        desc = '通过后，业务单将被取消，卸货计划将被自动取消';
       }
       this.$confirm(desc, title, {
           confirmButtonText: "确定通过",
