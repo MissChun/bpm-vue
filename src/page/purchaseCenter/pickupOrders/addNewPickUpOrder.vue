@@ -257,7 +257,7 @@ export default {
   name: 'addNewPickUpOrder',
   data() {
     var needNumVa=(rule, value, callback)=>{
-      if (!value.match(/^[0-9]{2}$/)||value=='0') {
+      if (!value.match(/^[0-9]\d{0,2}$/)||value=='0') {
         callback(new Error("只能是1-99的正整数"));
       }else{
         callback();
