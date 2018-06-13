@@ -145,7 +145,7 @@
             <el-col :span="4">
               <el-button style="height:0;line-height:0;" type="text" @click="gotoDetalis(props.row)">运单号:{{props.row.waybill.waybill_number}}</el-button>
             </el-col>
-            <el-col :span="4" v-if="1==0">卸货单号:{{props.row.order_number}}</el-col>
+            <el-col :span="4" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
             <el-col :span="4">托运商:{{props.row.delivery_order.trader}}</el-col>
             <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">

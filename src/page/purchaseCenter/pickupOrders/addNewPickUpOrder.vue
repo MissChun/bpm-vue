@@ -66,7 +66,7 @@
         </el-row>
       </el-header>
       <el-main v-loading="loadingArr.pageLoading">
-        <el-form class="addPickOrder" label-width="125px" :model="pickOrderParam" status-icon :rules="rules" rel="addPickOrderForm">
+        <el-form class="addPickOrder" label-width="125px" :model="pickOrderParam" status-icon :rules="rules" ref="addPickOrderForm">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="24" class="text-center">
@@ -85,7 +85,7 @@
             </el-col>
             <el-col :span="7" :offset="3">
               <el-form-item label="液厂:" prop="fluid_id">
-                <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading">
+                <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="changeBindText('fluidName')">
                   <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -165,18 +165,18 @@
           </el-row>
           <el-row>
             <el-col :span="13" :offset="3">
-              <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading">
+              <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading" prop="carriers">
                 <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                   <el-form-item label="自有:" label-width="60px">
-                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" >
+                    <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">
                       <el-option v-for="(item,key) in selectData.carriersOwnList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="13" :offset="1" v-if="pickOrderParam.consignment_type=='external'||pickOrderParam.consignment_type=='together'">
-                  <el-form-item label="外部:" label-width="60px">
-                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" >
+                  <el-form-item label="外部:" label-width="60px" prop="carriers">
+                    <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">
                       <el-option v-for="(item,key) in selectData.carriersOutList" :key="item.id" :label="item.carrier_name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -194,13 +194,94 @@
         </el-form>
       </el-main>
     </el-container>
+    <el-dialog title="确认生产订单" :visible.sync="sureAdd" center width="20%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+      <el-form label-width="125px" status-icon>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+          <div class="label-list">
+             <label>提货液厂:</label>
+             <div class="detail-form-item" v-html="pbFunc.dealNullData(bindText.fluidName)"></div>
+           </div>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+          <div class="label-list">
+              <label>提货时间:</label>
+             <div class="detail-form-item" v-html="pbFunc.dealNullData(pickOrderParam.plan_time)"></div>
+           </div>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+          <div class="label-list">
+              <label>提货车数:</label>
+             <div class="detail-form-item" v-if="pickOrderParam.require_car_number!=''"><span v-html="pbFunc.dealNullData(pickOrderParam.require_car_number)"></span>车</div>
+           </div>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+          <div class="label-list">
+              <label>提货吨位:</label>
+              <div class="detail-form-item" v-if="pickOrderParam.plan_tonnage!=''"><span v-html="pbFunc.dealNullData(pickOrderParam.plan_tonnage)"></span>吨</div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+          <div class="label-list">
+              <label>指定承运:</label>
+             <div class="detail-form-item" v-html="pbFunc.dealNullData(bindText.carriersName)"></div>
+           </div>
+          </el-col>
+        </el-row>
+        <el-row justify="center">
+          <el-col :span="18" :offset="3">
+           <div class="label-list">
+              <label>此订单采购价:</label>
+             <div class="detail-form-item" v-html="pbFunc.dealNullData(pickOrderParam.unit_price)"></div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer" style="text-align: center;">
+       <el-button @click="sureAdd = false">返 回</el-button>
+       <el-button type="primary" @click="sendRe">确认</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   name: 'addNewPickUpOrder',
   data() {
+    var needNumVa=(rule, value, callback)=>{
+      if (!value.match(/^[0-9]{2}$/)||value=='0') {
+        callback(new Error("只能是1-99的正整数"));
+      }else{
+        callback();
+      }  
+    };
+    var planTongVa=(rule, value, callback)=>{
+      if ((!(value+"").match(/^([1-9]\d{0,2}|0)(\.\d{1,3})?$/))||value=='0') {
+        callback(new Error("不能大于99且最多3位小数"));
+      }else{
+        callback();
+      }  
+    };
+    var discountVa=(rule, value, callback)=>{
+      if (parseInt(value)>parseInt(this.pickOrderParam.unit_price)) {
+        callback(new Error("不能大于采购价"));
+      }else if(!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)){
+        callback(new Error("只能输入数字"));
+      }else{
+        callback();
+      }  
+    }
     return {
+      lockFalg:false,
+      sureAdd:false,
       loadingArr: {
         supplierLoading: false,
         pageLoading: false,
@@ -221,11 +302,40 @@ export default {
         mark: '',
         unload_area: ''
       },
+      bindText:{
+        fluidName:'',
+        carriersName:''
+      },
       carriersParam: {
         ownCarriers: "",
         extendCarriers: ""
       },
-      rules: [],
+      rules: {
+        supplier: [
+          { required: true, message: '请选择供应商', trigger: 'change' },
+        ],
+        fluid_id: [
+          { required: true, message: '液厂', trigger: 'change' },
+        ],
+        plan_time: [
+          { required: true, message: '请填写计划时间', trigger: 'blur' },
+        ],
+        require_car_number: [
+          { validator: needNumVa, trigger: 'blur' }
+        ],
+        plan_tonnage: [
+          { validator: planTongVa, trigger: 'blur' }
+        ],
+        unit_price: [
+          { required: true, message: '请填写采购价', trigger: 'blur' },
+        ],
+        discount_price: [
+          { validator: discountVa, trigger: 'blur' }
+        ],
+        mark: [
+           { min: 0, max: 200, message: '最多200个字段', trigger: 'blur' }
+        ],
+      },
       selectData: {
         supplierList: [],
         fluidList: [],
@@ -243,6 +353,13 @@ export default {
       this.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
     },
     upOrder: function() {
+      this.$refs['addPickOrderForm'].validate((valid) => {
+        if (valid) {
+          this.sureAdd=true;
+        }
+      });
+    },
+    sendRe:function(){
       var carriers = [];
       if (this.pickOrderParam.consignment_type == 'own') {
         if (this.carriersParam.ownCarriers) {
@@ -271,6 +388,31 @@ export default {
     },
     searchList: function() {
       this.getFulid(this.pickOrderParam.supplier);
+    },
+    changeBindText:function(type){
+      if(type=='fluidName'){
+        //液厂变化
+        var fluidId=this.pickOrderParam.fluid;
+        for(let i in this.selectData.fluidList){
+          if(this.selectData.fluidList[i].id==fluidId){
+            this.bindText.fluidName=this.selectData.fluidList[i].fluid_name;
+          }
+        }
+      }else{
+        //承运商变化
+        var ownCarriersId=this.carriersParam.ownCarriers;
+        var extendCarriersId=this.carriersParam.extendCarriers;
+        for(let j in this.selectData.carriersOwnList){
+          if(this.selectData.carriersOwnList[j].id==ownCarriersId){
+            this.bindText.carriersName=this.selectData.carriersOwnList[j].carrier_name;
+          }
+        }
+        for(let o in this.selectData.carriersOutList){
+          if(this.selectData.carriersOutList[o].id==extendCarriersId){
+            this.bindText.carriersName=this.selectData.carriersOutList[o].carrier_name;
+          }
+        }
+      }
     },
     getFulid: function(supplierId) {
       var sendData = {};
