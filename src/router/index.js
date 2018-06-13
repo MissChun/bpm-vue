@@ -3,6 +3,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 let baseRoute = [{
+  path: '/',
+  name: '首页',
+  component: (resolve) => require(['../page/index.vue'], resolve)
+},{
   path: '/login',
   name: '登录',
   component: (resolve) => require(['../page/login.vue'], resolve)
