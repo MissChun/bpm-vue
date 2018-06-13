@@ -1,7 +1,7 @@
 export default [{
-  path: '/',
+  path: '',
   name: 'index',
-  redirect:'/login',
+  redirect:'/dashborad',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
     title: '首页'
@@ -498,6 +498,40 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/purchase/editPurchase'], resolve)
+        }]
+      },{
+        path: 'sales',
+        name: "sales",
+        redirect: '/statistics/sales/salesList',
+        meta: {
+          title: '销售统计',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/sales/sales'], resolve),
+        children: [{
+          path: 'salesList',
+          name: "salesList",
+          meta: {
+            title: '销售统计列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/sales/salesList'], resolve)
+        },{
+          path: 'salesDetail/:willId/',
+          name: "salesDetail",
+          meta: {
+            title: '销售统计详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/sales/salesDetail'], resolve)
+        },{
+          path: 'editSales',
+          name: "editSales",
+          meta: {
+            title: '销售统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/sales/editSales'], resolve)
         }]
       }]
     }, {
