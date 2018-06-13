@@ -1,111 +1,111 @@
 export default [{
   path: '',
   name: 'index',
-  redirect:'/dashborad',
+  redirect: '/dashborad',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
     title: '首页'
   },
   children: [{
-    path: 'dashborad',
-    name: 'dashborad',
-    meta: {
-      isVerificationL: false,
-      title: '概览',
-      iconName: 'icon-lng-dashboard'
-    },
-    component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
-  }, {
-    path: 'purchaseCenter',
-    name: 'purchaseCenter',
-    meta: {
-      isVerificationL: false,
-      title: '采购中心',
-      iconName: 'icon-lng-dashboard',
-    },
-    component: (resolve) => require(['../page/purchaseCenter/orders'], resolve),
-    children: [{
-      path: 'pickupOrders',
-      name: 'pickupOrders',
-      redirect: '/purchaseCenter/pickupOrders/ordersList',
+      path: 'dashborad',
+      name: 'dashborad',
       meta: {
         isVerificationL: false,
-        title: '提货订单',
+        title: '概览',
+        iconName: 'icon-lng-dashboard'
       },
-      component: (resolve) => require(['../page/purchaseCenter/pickupOrders/pickupOrders'], resolve),
+      component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
+    }, {
+      path: 'purchaseCenter',
+      name: 'purchaseCenter',
+      meta: {
+        isVerificationL: false,
+        title: '采购中心',
+        iconName: 'icon-lng-dashboard',
+      },
+      component: (resolve) => require(['../page/purchaseCenter/orders'], resolve),
       children: [{
-        path: 'ordersList',
-        name: 'pickupOrdersList',
+        path: 'pickupOrders',
+        name: 'pickupOrders',
+        redirect: '/purchaseCenter/pickupOrders/ordersList',
         meta: {
           isVerificationL: false,
-          title: '提货订单列表',
+          title: '提货订单',
         },
-        component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderList'], resolve),
-      },
-        {
-          path: 'addNewPickUpOrder',
-          name: 'addOrder',
-          meta: {
-            isVerificationL: false,
-            title: '新增提货订单',
-          },
-          component: (resolve) => require(['../page/purchaseCenter/pickupOrders/addNewPickUpOrder'], resolve),
-        },
-        {
-          path: 'orderDetail',
-          name: 'pickupOrdersDetail',
-          meta: {
-            isVerificationL: false,
-            title: '订单详情'
-          },
-          component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail'], resolve),
-          children: [{
-            path: 'orderDetailTab/:id/:type',
-            name: 'pickupOrderDetailTab',
+        component: (resolve) => require(['../page/purchaseCenter/pickupOrders/pickupOrders'], resolve),
+        children: [{
+            path: 'ordersList',
+            name: 'pickupOrdersList',
             meta: {
               isVerificationL: false,
-              title: '订单详情',
+              title: '提货订单列表',
             },
-            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/orderDetailTab'], resolve),
-          }, {
-            path: 'arrangeCarTab',
-            name: 'pickupArrangeCarTab',
-            redirect: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList',
+            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderList'], resolve),
+          },
+          {
+            path: 'addNewPickUpOrder',
+            name: 'addOrder',
             meta: {
               isVerificationL: false,
-              title: '车辆指派'
+              title: '新增提货订单',
             },
-            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab'], resolve),
+            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/addNewPickUpOrder'], resolve),
+          },
+          {
+            path: 'orderDetail',
+            name: 'pickupOrdersDetail',
+            meta: {
+              isVerificationL: false,
+              title: '订单详情'
+            },
+            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail'], resolve),
             children: [{
-              path: 'arrangeCarList/:id/:type',
-              name: 'pickArrangeCarList',
+              path: 'orderDetailTab/:id/:type',
+              name: 'pickupOrderDetailTab',
               meta: {
                 isVerificationL: false,
-                title: '车辆指派列表'
+                title: '订单详情',
               },
-              component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarList'], resolve),
+              component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/orderDetailTab'], resolve),
             }, {
-              path: 'arrangeCarMap/:id/:type',
-              name: 'pickupArrangeCarMap',
+              path: 'arrangeCarTab',
+              name: 'pickupArrangeCarTab',
+              redirect: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList',
               meta: {
                 isVerificationL: false,
-                title: '地图'
+                title: '车辆指派'
               },
-              component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarMap'], resolve),
+              component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab'], resolve),
+              children: [{
+                path: 'arrangeCarList/:id/:type',
+                name: 'pickArrangeCarList',
+                meta: {
+                  isVerificationL: false,
+                  title: '车辆指派列表'
+                },
+                component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarList'], resolve),
+              }, {
+                path: 'arrangeCarMap/:id/:type',
+                name: 'pickupArrangeCarMap',
+                meta: {
+                  isVerificationL: false,
+                  title: '地图'
+                },
+                component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/arrangeCarMap'], resolve),
+              }]
+            }, {
+              path: 'orderRecordsTab/:id/:type',
+              name: 'pickupOrderRecordsTab',
+              meta: {
+                isVerificationL: false,
+                title: '订单记录'
+              },
+              component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/orderRecordsTab'], resolve),
             }]
-          }, {
-            path: 'orderRecordsTab/:id/:type',
-            name: 'pickupOrderRecordsTab',
-            meta: {
-              isVerificationL: false,
-              title: '订单记录'
-            },
-            component: (resolve) => require(['../page/purchaseCenter/pickupOrders/orderDetail/orderRecordsTab'], resolve),
-          }]
-        }
-      ]
-    }]
-  },
+          }
+        ]
+      }]
+    },
     //托运中心
     {
       path: 'consignmentCenter',
@@ -127,14 +127,14 @@ export default [{
         redirect: '/consignmentCenter/consignmentOrders/ordersList',
         component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/consignmentOrders'], resolve),
         children: [{
-          path: 'ordersList',
-          name: 'consignmentOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '托运订单'
+            path: 'ordersList',
+            name: 'consignmentOrdersList',
+            meta: {
+              isVerificationL: false,
+              title: '托运订单'
+            },
+            component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderList'], resolve),
           },
-          component: (resolve) => require(['../page/consignmentCenter/consignmentOrder/orderList'], resolve),
-        },
           {
             path: 'orderDetail',
             name: 'consignmentOrderDetail',
@@ -272,85 +272,86 @@ export default [{
       },
       component: (resolve) => require(['../page/serviceManage/serviceManage'], resolve),
       children: [{
-        path: 'businessToExamine',
-        name: 'businessToExamine',
-        redirect: '/serviceManage/businessToExamine/businessList',
-        meta: {
-          isVerificationL: false,
-          title: '业务单审批',
-          iconName: 'icon-lng-dashboard',
+          path: 'businessToExamine',
+          name: 'businessToExamine',
+          redirect: '/serviceManage/businessToExamine/businessList',
+          meta: {
+            isVerificationL: false,
+            title: '业务单审批',
+            iconName: 'icon-lng-dashboard',
+          },
+          component: (resolve) => require(['../page/serviceManage/businessToExamine/business'], resolve),
+          children: [{
+            path: 'businessList',
+            name: 'businessList',
+            meta: {
+              isVerificationL: false,
+              title: '业务单审批列表',
+            },
+            component: (resolve) => require(['../page/serviceManage/businessToExamine/businessList'], resolve),
+          }, {
+            path: 'businessDetail',
+            name: 'businessDetail',
+            meta: {
+              isVerificationL: false,
+              title: '业务单审批详情',
+            },
+            component: (resolve) => require(['../page/serviceManage/businessToExamine/businessDetail'], resolve),
+          }]
         },
-        component: (resolve) => require(['../page/serviceManage/businessToExamine/business'], resolve),
-        children: [{
-          path: 'businessList',
-          name: 'businessList',
-          meta: {
-            isVerificationL: false,
-            title: '业务单审批列表',
-          },
-          component: (resolve) => require(['../page/serviceManage/businessToExamine/businessList'], resolve),
-        }, {
-          path: 'businessDetail',
-          name: 'businessDetail',
-          meta: {
-            isVerificationL: false,
-            title: '业务单审批详情',
-          },
-          component: (resolve) => require(['../page/serviceManage/businessToExamine/businessDetail'], resolve),
-        }]
-      }, {
-        path: 'standardDataManage',
-        name: 'standardDataManage',
-        redirect: '/serviceManage/standardDataManage/freightDataList',
-        meta: {
-          isVerificationL: false,
-          title: '标准数据管理',
-          iconName: 'icon-lng-dashboard',
-        },
-        component: (resolve) => require(['../page/serviceManage/standardDataManage/standardDataManage'], resolve),
-        children: [{
-          path: 'freightDataList',
-          name: 'freightDataList',
-          meta: {
-            isVerificationL: false,
-            title: '运费约定',
-          },
-          component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDataList'], resolve),
-        }, {
-          path: 'mileageDataList',
-          name: 'mileageDataList',
-          meta: {
-            isVerificationL: false,
-            title: '标准里程',
-          },
-          component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDataList'], resolve),
-        }, {
-          path: 'editMileage',
-          name: 'editMileage',
-          meta: {
-            isVerificationL: false,
-            title: '编辑、新增标准里程',
-          },
-          component: (resolve) => require(['../page/serviceManage/standardDataManage/editMileage'], resolve),
-        }, {
-          path: 'mileageDetail',
-          name: 'mileageDetail',
-          meta: {
-            isVerificationL: false,
-            title: '标准里程详情',
-          },
-          component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDetail'], resolve),
-        }, {
-          path: 'freightDetail',
-          name: 'freightDetail',
-          meta: {
-            isVerificationL: false,
-            title: '运费约定详情',
-          },
-          component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDetail'], resolve),
-        }]
-      }]
-
+        // }, {
+        //   path: 'standardDataManage',
+        //   name: 'standardDataManage',
+        //   redirect: '/serviceManage/standardDataManage/freightDataList',
+        //   meta: {
+        //     isVerificationL: false,
+        //     title: '标准数据管理',
+        //     iconName: 'icon-lng-dashboard',
+        //   },
+        //   component: (resolve) => require(['../page/serviceManage/standardDataManage/standardDataManage'], resolve),
+        //   children: [{
+        //     path: 'freightDataList',
+        //     name: 'freightDataList',
+        //     meta: {
+        //       isVerificationL: false,
+        //       title: '运费约定',
+        //     },
+        //     component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDataList'], resolve),
+        //   }, {
+        //     path: 'mileageDataList',
+        //     name: 'mileageDataList',
+        //     meta: {
+        //       isVerificationL: false,
+        //       title: '标准里程',
+        //     },
+        //     component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDataList'], resolve),
+        //   }, {
+        //     path: 'editMileage',
+        //     name: 'editMileage',
+        //     meta: {
+        //       isVerificationL: false,
+        //       title: '编辑、新增标准里程',
+        //     },
+        //     component: (resolve) => require(['../page/serviceManage/standardDataManage/editMileage'], resolve),
+        //   }, {
+        //     path: 'mileageDetail',
+        //     name: 'mileageDetail',
+        //     meta: {
+        //       isVerificationL: false,
+        //       title: '标准里程详情',
+        //     },
+        //     component: (resolve) => require(['../page/serviceManage/standardDataManage/mileageDetail'], resolve),
+        //   }, {
+        //     path: 'freightDetail',
+        //     name: 'freightDetail',
+        //     meta: {
+        //       isVerificationL: false,
+        //       title: '运费约定详情',
+        //     },
+        //     component: (resolve) => require(['../page/serviceManage/standardDataManage/freightDetail'], resolve),
+        //   }]
+        // }]
+      ]
     }, {
       path: 'mapManage',
       name: 'mapManage',
@@ -482,7 +483,7 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
-        },{
+        }, {
           path: 'purchaseDetail/:willId/',
           name: "purchaseDetail",
           meta: {
@@ -490,7 +491,7 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseDetail'], resolve)
-        },{
+        }, {
           path: 'editPurchase',
           name: "editPurchase",
           meta: {
@@ -499,7 +500,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/purchase/editPurchase'], resolve)
         }]
-      },{
+      }, {
         path: 'sales',
         name: "sales",
         redirect: '/statistics/sales/salesList',
@@ -516,7 +517,7 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/sales/salesList'], resolve)
-        },{
+        }, {
           path: 'salesDetail/:willId/',
           name: "salesDetail",
           meta: {
@@ -524,7 +525,7 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/sales/salesDetail'], resolve)
-        },{
+        }, {
           path: 'editSales',
           name: "editSales",
           meta: {
@@ -544,14 +545,14 @@ export default [{
       },
       component: (resolve) => require(['../page/setting/setting'], resolve),
       children: [{
-        path: 'organizationalStructure',
-        name: "组织架构",
-        meta: {
-          title: '组织架构',
-          isVerificationL: true
+          path: 'organizationalStructure',
+          name: "组织架构",
+          meta: {
+            title: '组织架构',
+            isVerificationL: true
+          },
+          component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
         },
-        component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
-      },
         {
           path: 'staffsManage',
           name: "员工管理",
