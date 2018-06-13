@@ -150,19 +150,19 @@ export default {
         sendData.status = this.fifterName;
       }
 
-      if (this.timeParam.unload_active_time&&this.timeParam.unload_active_time.length>0) {
+      if (this.timeParam.unload_active_time instanceof Array&&this.timeParam.unload_active_time.length>0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
       }
-      if (this.timeParam.unload_plan_time&&this.timeParam.unload_plan_time.length>0 ) {
+      if (this.timeParam.unload_plan_time instanceof Array&&this.timeParam.unload_plan_time.length>0 ) {
         sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
         sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
       }
-      if (this.timeParam.active_time &&this.timeParam.active_time.length>0) {
+      if (this.timeParam.active_time instanceof Array &&this.timeParam.active_time.length>0) {
         sendData.active_time_start = this.timeParam.active_time[0]; //实际装车
         sendData.active_time_end = this.timeParam.active_time[1];
       }
-      if (this.timeParam.load_plan_time &&this.timeParam.load_plan_time.length>0) {
+      if (this.timeParam.load_plan_time instanceof Array &&this.timeParam.load_plan_time.length>0) {
         sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
       }
@@ -172,13 +172,14 @@ export default {
 
       if (this.searchStatus) {
         sendData = this.saveSendData;
+      }else{
+        vm.saveSendData = sendData;
       }
       sendData.pageSize = this.pageData.pageSize;
       sendData.page = this.pageData.currentPage;
       this.pageLoading = true;
       this.$$http("searchConOrderList", sendData).then((results) => {
         vm.pageLoading = false;
-        vm.saveSendData = sendData;
         vm.searchStatus = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;

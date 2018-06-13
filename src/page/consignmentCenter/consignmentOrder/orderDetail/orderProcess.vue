@@ -54,7 +54,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="订单详情" name="first">
+        <el-tab-pane label="运单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
           <el-container v-show="!pageLoading">
@@ -436,7 +436,7 @@
                       
                       <div v-if="item.type === 'waiting_match'">
                         <el-row :gutter="40">
-                          <el-col :span="8">
+                          <el-col :span="8"> 
                             <div class="label-list">
                               <label>操作人:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
@@ -474,6 +474,28 @@
                         </el-row>
                       </div>
                       <div v-if="item.type === 'unloading_audit_failed'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>拒绝原因:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.reason)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                       <div v-if="item.type === 'loading_audit_failed'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -737,7 +759,8 @@ export default {
                 vm.suerId=stepInfo.data.data.identify;
               }
             });
-            vm.detailData = results.data.data;
+            //vm.detailData = results.data.data;
+            vm.matchData(results.data.data);
             vm.extendsArr.push(vm.detailData.length-1);
             if(vm.detailData[vm.detailData.length-1].operation=="上传装车铅封"){
               vm.extendsArr.push(vm.detailData.length-2);
@@ -746,8 +769,39 @@ export default {
         }).catch(() => {
           vm.pageLoading = false;
         });
-    }
+    },
+    matchData:function(allData){
+      var middleArr=[];
+      var middleAlone=[];
+      var addFlag=false;
+      for(var i in allData){
+        if(!allData[i].identify_id){
+          if(addFlag){
+            var waiting_matchOb={};
+            waiting_matchOb.waiting_matchArr=middleAlone;
+            waiting_matchOb.type=middleAlone[middleAlone.length-1].type;
+            middleArr.push(waiting_matchOb);
+            middleAlone=[];
+          }
+          middleArr.push(allData[i]);
+          addFlag=false;
+        }else{
+          middleAlone.push(allData[i]);
+          if(i==allData.length-1){
+            var waiting_matchOb={};
+            waiting_matchOb.waiting_matchArr=middleAlone;
+            waiting_matchOb.type=middleAlone[middleAlone.length-1].type;
+            waiting_matchOb.identify_id=middleAlone[middleAlone.length-1].identify_id;
+            middleArr.push(waiting_matchOb);
+            middleAlone=[];
+          }
+           addFlag=true;
+        }
+      };
+      this.detailData = middleArr;
+    },
   },
+   
   created: function() {
     this.getData();
   },

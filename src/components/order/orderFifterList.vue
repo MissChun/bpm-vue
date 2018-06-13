@@ -268,7 +268,7 @@ export default {
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
       var type = "";
-      if (row.status.key == 'appoint') {
+      if (rowData.status.key == 'appoint') {
         type = 'add';
       } else {
         type = 'edit';
