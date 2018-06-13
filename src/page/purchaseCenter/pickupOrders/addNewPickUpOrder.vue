@@ -84,7 +84,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="7" :offset="3">
-              <el-form-item label="液厂:" prop="fluid_id">
+              <el-form-item label="液厂:" prop="fluid">
                 <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="changeBindText('fluidName')">
                   <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                   </el-option>
@@ -194,7 +194,7 @@
         </el-form>
       </el-main>
     </el-container>
-    <el-dialog title="确认生产订单" :visible.sync="sureAdd" center width="20%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog title="确认生产订单" :visible.sync="sureAdd" center width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form label-width="125px" status-icon>
         <el-row justify="center">
           <el-col :span="18" :offset="3">
@@ -314,7 +314,7 @@ export default {
         supplier: [
           { required: true, message: '请选择供应商', trigger: 'change' },
         ],
-        fluid_id: [
+        fluid: [
           { required: true, message: '液厂', trigger: 'change' },
         ],
         plan_time: [

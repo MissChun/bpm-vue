@@ -322,19 +322,19 @@ export default {
       return row.id;
     },
     changeExpand: function(row, expandedRows) {
-      var vm = this;
-      if (row.transPowerInfo) {} else {
-        var sendData = {};
-        sendData.tractor_list = [row.capacity];
-        vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
-          if (transPowerInfo.data.code == 0) {
-            row.transPowerInfo = transPowerInfo.data.data.results[0];
-            //vm.ListData[1].transPowerInfo=transPowerInfo.data.data.results[0];
-          }
-        }).catch((err) => {
-          console.log('errs',err);
-        });
-      }
+      // var vm = this;
+      // if (row.transPowerInfo) {} else {
+      //   var sendData = {};
+      //   sendData.tractor_list = [row.capacity];
+      //   vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+      //     if (transPowerInfo.data.code == 0) {
+      //       row.transPowerInfo = transPowerInfo.data.data.results[0];
+      //       //vm.ListData[1].transPowerInfo=transPowerInfo.data.data.results[0];
+      //     }
+      //   }).catch((err) => {
+      //     console.log('errs',err);
+      //   });
+      // }
     },
     operation: function(type, rowData) {
       var vm = this;
@@ -371,7 +371,7 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
 .id}/${rowData.id}` });
       } else if (type == 'showDetalis') { //查看详情
-        this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.waybill.id}` });
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }
     },
 

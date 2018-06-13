@@ -186,11 +186,22 @@ export default {
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           var sendData = {};
           if (dataBody.length > 0) {
-            sendData.tractor_list = [dataBody[0].capacity]
+            var capacityList=[];
+            for(var i=0;i<dataBody.length;i++){
+              capacityList.push(dataBody[i].capacity);
+            }
+            sendData.tractor_list = capacityList
             vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
               if (transPowerInfo.data.code == 0) {
-
-                dataBody[0].transPowerInfo = transPowerInfo.data.data.results[0];
+                var transPowerInfoList = transPowerInfo.data.data.results;
+                transPowerInfoList.forEach((Ttiem)=>{
+                  dataBody.forEach((Ditem)=>{
+                    if(Ditem.capacity==Ttiem.id){
+                      Ditem.transPowerInfo=Ttiem;
+                    }
+                  });
+                });
+                //dataBody[0].transPowerInfo = transPowerInfo.data.data.results[0];
                 vm.listFifterData = dataBody;
               }
             }).catch(() => {
