@@ -78,14 +78,63 @@ a {
   .advantage {
     width: 1200px;
     margin: 0 auto;
+    height: 835px;
+    padding-bottom: 90px;
+    .advantage-content {
+      height: 650px;
+    }
     .advantage-list {
       height: 650px;
+      width: 100%;
+      transition: linear 0.2s;
+      -moz-transition: linear 0.2s;
+      /* Firefox 4 */
+      -webkit-transition: linear 0.2s;
+      /* Safari and Chrome */
+      -o-transition: linear 0.2s;
+      /* Opera */
+      &:hover {
+        width: 110%;
+        position: relative;
+        box-shadow: 0 0 10px #ccc;
+        z-index: 9;
+        padding: 15px;
+        background: #fff;
+        margin-top: -15px;
+        margin-left: -5%;
+        -moz-transform: scale(1, 1);
+          -webkit-transform: scale(1, 1);
+          -o-transform: scale(1, 1);
+
+        .advantage-list-msg {
+          background: #fff;
+        }
+        .advantage-list-img {
+          margin-top: -30px;
+          -moz-transform: scale(1, 1);
+          -webkit-transform: scale(1, 1);
+          -o-transform: scale(1, 1);
+          /* Opera */
+          img {
+            width: 100%;
+            -moz-transform: scale(1, 1);
+            -webkit-transform: scale(1, 1);
+            -o-transform: scale(1, 1);
+          }
+        }
+      }
       .advantage-list-msg {
         height: 295px;
         margin-bottom: 15px;
         background: #F7F8FA;
         text-align: center;
         padding: 0 22px;
+        transition: background linear 0.3s;
+        -moz-transition: background linear 0.3s;
+        /* Firefox 4 */
+        -webkit-transition: background linear 0.3s;
+        /* Safari and Chrome */
+        -o-transition: background linear 0.3s;
         img {
           margin: 46px 0 22px;
         }
@@ -99,6 +148,24 @@ a {
           font-size: 16px;
           color: #50565C;
           line-height: 22px;
+          width: 345px;
+          margin: 0 auto;
+        }
+      }
+      .advantage-list-img {
+        transition: linear 0.2s;
+          -moz-transition: linear 0.2s;
+          /* Firefox 4 */
+          -webkit-transition: linear 0.2s;
+          /* Safari and Chrome */
+          -o-transition: linear 0.2s;
+        img {
+          transition: linear 0.2s;
+          -moz-transition: linear 0.2s;
+          /* Firefox 4 */
+          -webkit-transition: linear 0.2s;
+          /* Safari and Chrome */
+          -o-transition: linear 0.2s;
         }
       }
     }
@@ -108,7 +175,7 @@ a {
     height: 670px;
     background: url('../assets/img/product.png')no-repeat 50%;
     display: inline-block;
-    margin-top: 90px;
+
     .product-content {
       width: 1120px; // height: 220px;
       margin: 0 auto;
@@ -172,7 +239,6 @@ a {
             &:hover {
               .code {
                 display: block;
-
               }
             }
             .code {
@@ -184,19 +250,13 @@ a {
               width: 134px;
               height: 160px;
               background: #fff;
-              transition: width 2s;
-                -moz-transition: width 2s;
-                /* Firefox 4 */
-                -webkit-transition: width 2s;
-                /* Safari 和 Chrome */
-                -o-transition: width 2s;
-                /* Opera */
             }
           }
         }
       }
     }
   }
+
   .list-title {
     font-size: 42px;
     color: #333;
@@ -217,6 +277,20 @@ a {
       width: 93px;
       background: #26C6DA;
     }
+  }
+}
+
+.bpm-footer {
+  width: 100%;
+  height: 92px;
+  background: #232F36;
+  text-align: center;
+  display: inline-block;
+  >div {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #E8E8E8;
+    line-height: 26px;
   }
 }
 
@@ -255,7 +329,7 @@ a {
           <div class="list-title">
             我们的优势
           </div>
-          <div>
+          <div class="advantage-content">
             <el-row :gutter="15">
               <el-col :span="8">
                 <div class="advantage-list">
@@ -265,7 +339,7 @@ a {
                     <div>通过数据同步与多平台协作，支持需要跨部门、 跨角色、跨权限的各类业务协作场景。</div>
                   </div>
                   <div class="advantage-list-img">
-                    <img width="100%" src="@/assets/img/cooperationImg.png">
+                    <img src="@/assets/img/cooperationImg.png">
                   </div>
                 </div>
               </el-col>
@@ -277,7 +351,7 @@ a {
                     <div>业务流程中各类指标、数据、操作记录完整沉 淀，通过大数据处理以BI形式提供商业决策支持。</div>
                   </div>
                   <div class="advantage-list-img">
-                    <img width="100%" src="@/assets/img/dataImg.png">
+                    <img src="@/assets/img/dataImg.png">
                   </div>
                 </div>
               </el-col>
@@ -289,7 +363,7 @@ a {
                     <div>针对LNG贸易业务实际场景，对贸易流程整个 生命周期进行建模，从而进行自动化处理、监 控管理和持续调优。</div>
                   </div>
                   <div class="advantage-list-img">
-                    <img width="100%" src="@/assets/img/ProcessImg.png">
+                    <img src="@/assets/img/ProcessImg.png">
                   </div>
                 </div>
               </el-col>
@@ -336,6 +410,12 @@ a {
           </div>
         </div>
       </el-main>
+      <el-footer>
+        <div class="bpm-footer">
+          <div>Copyright © 2017 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
+            <br> QQ：963819358(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
+        </div>
+      </el-footer>
     </el-container>
   </div>
 </template>
@@ -352,7 +432,7 @@ export default {
 
   },
   methods: {
-    goLink(){
+    goLink() {
       this.$router.push({ path: '/login' });
     }
   },

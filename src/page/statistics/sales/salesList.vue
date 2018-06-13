@@ -22,7 +22,7 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="离站时间:" label-width="105px">
-                <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,7 +31,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共0单，实际装车吨位0吨，采购总额0元，优惠总额0元
+            一共0单，实收吨位0吨，销售总额0元，待时后总额0元，共卸车0车
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -78,7 +78,7 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      planArriveTime: [], //计划到站时间
+      leaveTime: [], //计划到站时间
       createdAt: [], //下计划日期
       searchFilters: {
         plan_arrive_time: [],
@@ -192,19 +192,16 @@ export default {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize
       };
-      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';
-        postData.plan_arrive_time_end = this.planArriveTime[1] + ' 23:59:59';
+      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+        postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';
+        postData.leave_time_end = this.leaveTime[1] + ' 23:59:59';
       }
-      if (this.createdAt instanceof Array && this.createdAt.length > 0) {
-        postData.created_at_start = this.createdAt[0] + ' 00:00:00';
-        postData.created_at_end = this.createdAt[1] + ' 23:59:59';
-      }
+
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getPurchaseStatisticsList', postData).then((results) => {
+      this.$$http('getSalesStatisticsList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

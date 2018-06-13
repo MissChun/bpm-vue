@@ -89,6 +89,11 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注:" prop="remark">
+                    <el-input placeholder="请输入" type="textarea" resize="none" :rows="2" v-model.trim="editMsgForm.remark"></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -132,7 +137,7 @@ export default {
         discount_price: '',
         unit_sum_price: '',
         discounts_sum_price: '',
-        test:''
+        remark:''
       },
 
       rules: {
@@ -201,7 +206,8 @@ export default {
             unit_price: this.detail.unit_price,
             discount_price: this.detail.discount_price,
             unit_sum_price: this.detail.unit_sum_price,
-            discounts_sum_price: this.detail.discounts_sum_price
+            discounts_sum_price: this.detail.discounts_sum_price,
+            remark:''
           }
         }
       })
@@ -240,7 +246,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'unit_sum_price', 'discounts_sum_price'];
+      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'unit_sum_price', 'discounts_sum_price','remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

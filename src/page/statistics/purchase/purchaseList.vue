@@ -31,7 +31,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共0单，实际装车吨位0吨，采购总额0元，优惠总额0元
+            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_price?tableData.unit_sum_price:0}}元，优惠总额{{tableData.discounts_sum_price?tableData.discounts_sum_price:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -39,7 +39,7 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData.data" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'">
@@ -182,12 +182,8 @@ export default {
         page_size: this.pageData.pageSize
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';
-        postData.plan_arrive_time_end = this.planArriveTime[1] + ' 23:59:59';
-      }
-      if (this.createdAt instanceof Array && this.createdAt.length > 0) {
-        postData.created_at_start = this.createdAt[0] + ' 00:00:00';
-        postData.created_at_end = this.createdAt[1] + ' 23:59:59';
+        postData.active_time_start = this.planArriveTime[0] + ' 00:00:00';
+        postData.active_time_end = this.planArriveTime[1] + ' 23:59:59';
       }
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -197,7 +193,7 @@ export default {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.data;
+          this.tableData = results.data.data;
 
           this.pageData.totalCount = results.data.data.count;
 
