@@ -1,4 +1,4 @@
-<!-- purchaseDetail.vue -->
+<!-- waybillDetail.vue -->
 <style type="text/css"  scoped lang="less">
   .detail-main{
     border-top: 0;
@@ -8,9 +8,9 @@
 
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="采购详情" name="first">
-          <purchase-detail></purchase-detail>
-
+        <el-tab-pane label="运力详情" name="first">
+          <!-- <waybill-detail></waybill-detail> -->
+          <waybill-detail></waybill-detail>
         </el-tab-pane>
 
       </el-tabs>
@@ -18,11 +18,11 @@
 
 </template>
 <script>
-import purchaseDetail from '@/components/order/purchaseDetail';
+import waybillDetail from '@/components/consignmentCenter/waybillDetail';
 export default {
-  name: 'orderDetailTab',
+  name: 'salesWaybillDetail',
   components: {
-    purchaseDetail: purchaseDetail
+    waybillDetail: waybillDetail
   },
   computed: {
     // setpId: function() {

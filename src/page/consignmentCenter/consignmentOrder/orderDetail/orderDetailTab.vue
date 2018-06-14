@@ -4,7 +4,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运单详情" name="first">
-          <purchase-detail></purchase-detail>
+          <waybill-detail></waybill-detail>
           <!--  <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-main>
@@ -332,11 +332,11 @@
 </template>
 
 <script>
-import purchaseDetail from '@/components/order/purchaseDetail';
+import waybillDetail from '@/components/consignmentCenter/waybillDetail';
 export default {
   name: 'orderDetailTab',
   components: {
-    purchaseDetail: purchaseDetail
+    waybillDetail: waybillDetail
   },
   computed: {
     setpId: function() {

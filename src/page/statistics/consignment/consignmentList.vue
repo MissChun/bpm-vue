@@ -21,8 +21,20 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="离站时间:" label-width="105px">
+              <el-form-item label="实际装车时间:" label-width="105px">
                 <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="实际离站时间:" label-width="105px">
+                <el-date-picker v-model="activeTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否对账:">
+                <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,7 +43,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实收吨位{{tableData.actual_quanti?tableData.actual_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
+            一共{{tableData.waybill?tableData.waybill:0}}单，销售总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -49,14 +61,14 @@
               <div v-else>{{scope.row[item.param]}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="待时后总额" align="center" width="100" fixed="right">
+          <el-table-column label="运费合计" align="center" width="100" fixed="right">
             <template slot-scope="scope">
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="业务员" align="center" width="100" fixed="right">
+          <el-table-column label="是否对账" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <div>{{scope.row.sale_man}}</div>
+              <div>{{scope.row.is_reconciliation.verbose}}</div>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="100" fixed="right">
@@ -88,26 +100,24 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      leaveTime: [], //离站时间
+      leaveTime: [], //实际离站时间
+      activeTime: [], //实际装车时间
       searchFilters: {
-        plan_arrive_time: [],
-        created_at: '',
+        is_reconciliation: [],
         keyword: '',
-        field: 'business_order',
+        field: 'waybill',
       },
       selectData: {
-        isBindSelect: [
+        isReconciliationsSelect: [
           { id: '', value: '全部' },
-          { id: false, value: '未绑定' },
-          { id: true, value: '已绑定' }
+          { id: 'unfinished', value: '未对账' },
+          { id: 'finished', value: '已对账' }
         ],
         fieldSelect: [
-          { id: 'business_order', value: '业务单号' },
-          { id: 'short_name', value: '客户简称' },
+          { id: 'waybill', value: '运单号' },
+          { id: 'carrier', value: '承运商' },
           { id: 'consumer_name', value: '客户名称' },
-          { id: 'station', value: '卸货站' },
-          { id: 'plate_number', value: '车号' },
-          { id: 'sale_man', value: '业务员' },
+          { id: 'plate_number', value: '车号' }
         ]
       },
       thTableList: [{
@@ -119,12 +129,12 @@ export default {
         param: 'business_order',
         width: ''
       }, {
-        title: '客户简称',
-        param: 'short_name',
-        width: ''
+        title: '承运商',
+        param: 'carrier',
+        width: '200'
       }, {
-        title: '客户名称',
-        param: 'consumer_name',
+        title: '车号',
+        param: 'plate_number',
         width: ''
       }, {
         title: '实际液厂',
@@ -135,18 +145,22 @@ export default {
         param: 'station',
         width: ''
       }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
+        title: '计划装车时间',
+        param: 'plan_loading_time',
+        width: '180'
       }, {
-        title: '离站时间',
+        title: '实际装车时间',
+        param: 'active_time',
+        width: '180'
+      }, {
+        title: '实际离站时间',
         param: 'leave_time',
-        width: '200'
+        width: '180'
       }, {
         title: '装车吨位',
         param: 'plan_tonnage',
         width: ''
-      },{
+      }, {
         title: '实收吨位',
         param: 'actual_quantity',
         width: ''
@@ -159,16 +173,24 @@ export default {
         param: 'check_quantity',
         width: ''
       }, {
-        title: '销售单价',
-        param: 'unit_price',
+        title: '标准里程',
+        param: 'stand_mile',
+        width: ''
+      }, {
+        title: '起步价',
+        param: 'initial_price',
+        width: ''
+      }, {
+        title: '标准运费',
+        param: 'freight_value',
+        width: ''
+      }, {
+        title: '气差金额',
+        param: 'difference_value',
         width: ''
       }, {
         title: '卸车待时金额',
         param: 'waiting_price',
-        width: ''
-      }, {
-        title: '销售总额',
-        param: 'sell_rental',
         width: ''
       }],
       tableData: []
@@ -182,11 +204,9 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}` });
+        this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
-      }else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/sales/editSales/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail/`, query: { id: row.business_order_id } });
       }
     },
     startSearch() {
@@ -197,18 +217,22 @@ export default {
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        is_reconciliation:this.searchFilters.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';
         postData.leave_time_end = this.leaveTime[1] + ' 23:59:59';
       }
-
+      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+        postData.active_time_start = this.activeTime[0] + ' 00:00:00';
+        postData.active_time_end = this.activeTime[1] + ' 23:59:59';
+      }
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getSalesStatisticsList', postData).then((results) => {
+      this.$$http('getConsignmentStatisticsList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

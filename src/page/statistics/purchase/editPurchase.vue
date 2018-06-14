@@ -17,14 +17,14 @@
           <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回列表页</span></span>
           </el-col>
           <el-col :span="20">
-            <p>编辑采购统计</p>
+            <p>编辑采购数据</p>
           </el-col>
         </el-row>
       </el-header>
       <el-main v-show="!pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <div class="detail-form-title text-center">统计信息</div>
+            <div class="detail-form-title text-center">数据信息</div>
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="editMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
@@ -91,7 +91,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
-                    <el-input placeholder="请输入" type="textarea" resize="none" :rows="2" v-model.trim="editMsgForm.remark"></el-input>
+                    <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>

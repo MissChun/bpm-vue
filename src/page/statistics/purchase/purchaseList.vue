@@ -31,7 +31,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_price?tableData.unit_sum_price:0}}元，优惠总额{{tableData.discounts_sum_price?tableData.discounts_sum_price:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，优惠总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -39,12 +39,12 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'">
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.id})">{{scope.row.waybill}}</span>
+                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div>
             </template>
@@ -117,7 +117,7 @@ export default {
       }, {
         title: '供应商',
         param: 'supplier',
-        width: ''
+        width: '200'
       }, {
         title: '液厂',
         param: 'fluid',
@@ -129,7 +129,7 @@ export default {
       }, {
         title: '实际装车时间',
         param: 'active_time',
-        width: ''
+        width: '200'
       }, {
         title: '实际装车吨位（吨）',
         param: 'active_tonnage',
@@ -166,7 +166,7 @@ export default {
     },
     handleMenuClick(row){
       if(row.operator === 'check'){
-        this.$router.push({ path: `/statistics/purchase/purchaseDetail/${row.id}` });
+        this.$router.push({ path: `/statistics/purchase/waybillDetail/${row.id}` });
       }else if(row.operator === 'edit'){
         this.$router.push({ path: `/statistics/purchase/editPurchase/`, query: { id: row.id } });
       }
@@ -193,7 +193,7 @@ export default {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data;
+          this.tableData = results.data;
 
           this.pageData.totalCount = results.data.data.count;
 

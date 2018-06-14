@@ -13,9 +13,9 @@
 <template>
   <div class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;">
+      <!-- <el-header style="margin-top:15px;">
         <p>贸易单信息</p>
-      </el-header>
+      </el-header> -->
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">

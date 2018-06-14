@@ -185,6 +185,9 @@ a {
       }
       /deep/ .el-carousel__container {
         height: 220px;
+        .el-carousel__arrow i{
+          font-size: 24px;
+        }
         .el-carousel__arrow--left {
           left: 35px;
         }
