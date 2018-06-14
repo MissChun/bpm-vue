@@ -271,7 +271,7 @@
 </template>
 <script>
 export default {
-  name: 'purchaseDetail',
+  name: 'uWaybillDetail',
   computed: {
     setpId: function() {
       return this.$route.params.setpId;

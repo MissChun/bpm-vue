@@ -129,6 +129,10 @@ export default {
         param: 'change_rate',
         width: '200'
       }, {
+        title: '变动值',
+        param: 'change_rate',
+        width: ''
+      }, {
         title: '生效承运商',
         param: 'carrier_name',
         width: '200'

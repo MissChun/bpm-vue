@@ -9,6 +9,132 @@
  */
 
 const api = {
+  getIncomeStatisticsList: {
+    url: '/api/v1/income-statistic/',
+    method: 'get',
+    desc: '收入统计列表',
+    param: {
+      page: {
+        desc: '页码'
+      },
+      page_size: {
+        desc: '页码'
+      },
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
+  updateConsignmentStatistics: {
+    url: '/api/v1/logistic-statistic/:id/',
+    method: 'patch',
+    desc: '修改托运统计',
+    param: {
+      id: {
+        desc: '销售托运ID'
+      },
+      check_quantity: {
+        desc: '核算吨位'
+      },
+      stand_mile: {
+        desc: '标准里程'
+      },
+      initial_price: {
+        desc: '起步价'
+      },
+      change_rate: {
+        desc: '运输费率'
+      },
+      difference_value: {
+        desc: '气差金额'
+      },
+      freight_value: {
+        desc: '标准运费'
+      },
+      waiting_charges: {
+        desc: '运费合计'
+      },
+      waiting_price: {
+        desc: '卸车待时金额'
+      },
+      plan_loading_time: {
+        desc: 'plan_loading_time'
+      },
+      remark: {
+        desc: '备注'
+      },
+    }
+  },
+  getConsignmentStatisticsDetail: {
+    url: '/api/v1/logistic-statistic/:id/',
+    method: 'get',
+    desc: '托运数据详情',
+    param: {
+      id: {
+        desc: '销售统计ID'
+      }
+    }
+  },
+  getConsignmentStatisticsList: {
+    url: '/api/v1/logistic-statistic/',
+    method: 'get',
+    desc: '托运数据列表',
+    param: {
+      page: {
+        desc: '页码'
+      },
+      page_size: {
+        desc: '页码'
+      },
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
+  updateSalesStatistics: {
+    url: '/api/v1/sale-statistic/:id/',
+    method: 'patch',
+    desc: '修改销售统计',
+    param: {
+      id: {
+        desc: '销售统计ID'
+      },
+      leave_time: {
+        desc: '离站时间'
+      },
+      unit_price: {
+        desc: '销售单价'
+      },
+      actual_quantity: {
+        desc: '实收吨位'
+      },
+      check_quantity: {
+        desc: '核算吨位'
+      },
+      waiting_price: {
+        desc: '卸车待时金额'
+      },
+      sell_rental: {
+        desc: '销售总额'
+      },
+      waiting_charges: {
+        desc: '待时总额'
+      },
+      remark: {
+        desc: '备注'
+      },
+    }
+  },
+  getSalesStatisticsDetail: {
+    url: '/api/v1/sale-statistic/:id/',
+    method: 'get',
+    desc: '销售统计详情',
+    param: {
+      id: {
+        desc: '销售统计ID'
+      }
+    }
+  },
   getSalesStatisticsList: {
     url: '/api/v1/sale-statistic/',
     method: 'get',
