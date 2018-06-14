@@ -19,6 +19,12 @@
       float: left;
       text-align: center;
     }
+    td {
+      border-bottom: 0px solid #ebeef5;
+      .el-table th.is-leaf{
+        border-top:none;
+      }
+    }
     .colinfo {
       float: left;
       height: 30px;
@@ -41,6 +47,9 @@
     }
     .el-button {
       min-width: 70px;
+    }
+    .el-table__row td:nth-child(1) .cell {
+      padding-left: 40px;
     }
   }
 }
@@ -70,11 +79,16 @@
 .el-dialog__wrapper .el-dialog {
   -webkit-backface-visibility: hidden;
 }
-
+.whiteSpan{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
 </style>
 <template>
   <div>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg"  :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div class="listDetalis" style="width:75%;padding-left:48px;">
@@ -111,21 +125,21 @@
 
             </div>
           </div>
-          <div class="listDetalis carList" style="width:15%">
+            <div class="listDetalis carList" style="width:15%">
             <el-row class="commh carInfo">
-              <el-col>车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
+              <el-col class="whiteSpan" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
             </el-row>
-            <el-row class="commh carInfo">
-              <el-col>挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: "11"}}</span></el-col>
+            <el-row class="commh carInfo ">
+              <el-col class="whiteSpan" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
             </el-row>
-            <el-row class="commh carInfo">
-              <el-col>驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:"11"}}</span></el-col>
+            <el-row class="commh carInfo ">
+              <el-col class="whiteSpan" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
             </el-row>
-            <el-row class="commh carInfo">
-              <el-col>副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:"11"}}</span></el-col>
+            <el-row class="commh carInfo ">
+              <el-col class="whiteSpan" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
             </el-row>
-            <el-row class="commh carInfo">
-              <el-col>押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
+            <el-row class="commh carInfo " >
+              <el-col class="whiteSpan" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
@@ -141,20 +155,22 @@
       <el-table-column label="装卸地" prop="delivery_order.order_number" min-width="21.875%" type>
         <template slot-scope="props">
           <el-row justify="space-between" type="flex">
-            <el-col :span="4">订单号:{{props.row.delivery_order.order_number}}</el-col>
-            <el-col :span="4">
-              <el-button style="height:0;line-height:0;" type="text" @click="gotoDetalis(props.row)">运单号:{{props.row.waybill.waybill_number}}</el-button>
+            <el-col :span="4" :title="props.row.delivery_order.order_number" class="whiteSpan">订单号:{{props.row.delivery_order.order_number}}</el-col>
+            <el-col :span="4" :title="props.row.waybill.waybill_number" class="whiteSpan">
+              <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
-            <el-col :span="4" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
-            <el-col :span="4">托运商:{{props.row.delivery_order.trader}}</el-col>
+            <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
+            <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan">托运商:{{props.row.delivery_order.trader}}</el-col>
             <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span="3">状态:{{props.row.status.verbose}}</el-col>
+            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
           </el-row>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div>
         </template>
       </el-table-column>
       <el-table-column label="标准里程" prop="" min-width="9.375%">
@@ -205,6 +221,7 @@ export default {
     return {
       lockFalg: false,
       delayTime:500,
+      expandFalg:true,
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match'],
       buttonAll: {
         //装车
