@@ -33,27 +33,67 @@ if (currentUrl.match('xxx.91lng.cn')) {
 }
 
 
-/* http请求拦截 */
-axios.interceptors.request.use(config => {
-  return config
-}, error => {
-  console.log('request error', err);
-  return Promise.reject(error)
+let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
+let unCancelAjax = ['getTripRecords'];//设定可以重复请求的ajax请求的apiname(str)。
+let cancelToken = axios.CancelToken;
+let cancelLimitTime = 500;//设置需要cancel的间隔时限
+
+//切换路由时，cancel请求
+router.beforeEach((to, from, next) => {
+
+  if(pending.length){
+    for(let i in pending){
+      pending[i].cancel();
+    }
+  }
+  next();
+
 })
 
 
-/* http请求拦截 */
-axios.interceptors.response.use(response => {
-  // console.log('response', response);
-  return response
-}, error => {
-  console.log('response error', error, error.response);
-  return Promise.reject(error);
-})
+let removePending = (config,isCancel) => {
+
+
+}
+
+//添加请求拦截器
+axios.interceptors.request.use(config=>{
+      //console.log('axios.interceptors',config,config.url);
+     removePending(config,true); //在一个ajax发送前执行一下取消操作
+     let isNeedCancel = true;
+     if(unCancelAjax.length){
+      for(let i in unCancelAjax){
+        if(api[unCancelAjax[i]].url == config.url){
+          isNeedCancel = false;
+          break;
+        }
+      }
+     }
+     if(isNeedCancel){
+      config.cancelToken = new cancelToken((c)=>{
+          // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
+          pending.push({ u:(config.url + '&' + config.method), cancel: c ,time:new Date()});
+          //console.log('config,xxx',config,config.url,config.baseURL,config.baseURL + config.url + '&' + config.method,pending);
+      });
+     }
+     return config;
+   },error => {
+     return Promise.reject(error);
+   });
+
+//添加响应拦截器
+axios.interceptors.response.use(response=>{
+      //console.log('axios.interceptors',response,response.config);
+      removePending(response.config);  //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+      return response;
+   },error =>{
+    return error; //返回一个空对象，主要是防止控制台报错
+   });
 
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
+  console.log('error',error);
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {
@@ -77,7 +117,6 @@ const errorState = function(error) {
         break;
       case 500:
         errorMsg = '服务器错误(500)';
-        router.push({ path: "/500" });
         break;
       case 501:
         errorMsg = '服务未实现(501)';
@@ -166,7 +205,7 @@ const dealConfig = function(apiName, postData) {
   if (api.hasOwnProperty(apiName)) {
     let apiUrl = api[apiName].url ? api[apiName].url : '';
     let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
-    let token = getLocalData('token', true);
+    let token = getLocalData('token',true);
     httpConfig.method = method;
 
     if (method == 'get') {
@@ -182,8 +221,8 @@ const dealConfig = function(apiName, postData) {
       }
     }
 
-    if (!api[apiName].notNeedToken) {
-      httpConfig.headers.Authorization = 'JWT ' + token;
+    if(!api[apiName].notNeedToken){
+      httpConfig.headers.Authorization = 'jwt ' + token;
     }
 
     if (apiUrl) {
@@ -239,6 +278,8 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
         //默认使用successState
         if (defaultSuccessCallback === undefined) {
           successState(res)
+        } else if (typeof defaultSuccessCallback === 'function') {
+          defaultSuccessCallback(res);
         }
         resolve(res)
       }
@@ -248,6 +289,8 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
         //默认使用errorState
         if (defaultErrorCallback === undefined) {
           errorState(response)
+        } else if (typeof defaultErrorCallback === 'function') {
+          defaultErrorCallback(response);
         }
         reject(response)
       }

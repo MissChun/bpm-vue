@@ -63,6 +63,8 @@ export default {
       this.address.city = '';
       this.address.area = '';
       if (this.addressName) {
+        this.addressName.city = '';
+        this.addressName.area = '';
         for (let i in this.provinceList) {
           if (this.address.province === this.provinceList[i].id) {
             this.addressName.province = this.provinceList[i].area_name;
@@ -71,6 +73,8 @@ export default {
         }
       }
       if (this.addressCode) {
+        this.addressCode.city = '';
+        this.addressCode.area = '';
         for (let i in this.provinceList) {
           if (this.address.province === this.provinceList[i].id) {
             this.addressCode.province = this.provinceList[i].area_name;
@@ -84,7 +88,29 @@ export default {
     cityChange() {
       //this.getArea();
       this.address.area = '';
+
+      if (this.addressName) {
+        this.addressName.area = '';
+        for (let i in this.cityList) {
+          if (this.address.city === this.cityList[i].id) {
+            this.addressName.city = this.cityList[i].area_name;
+            break;
+          }
+        }
+      }
+      if (this.addressCode) {
+        this.addressCode.area = '';
+        for (let i in this.cityList) {
+          if (this.address.city === this.cityList[i].id) {
+            this.addressCode.city = this.cityList[i].area_name;
+            break;
+          }
+        }
+      }
+      console.log('this.addressCode', this.address);
       this.$emit('chooseCity');
+    },
+    areaChange() {
       if (this.addressName) {
         for (let i in this.areaList) {
           if (this.address.area === this.areaList[i].id) {
@@ -97,24 +123,6 @@ export default {
         for (let i in this.areaList) {
           if (this.address.area === this.areaList[i].id) {
             this.addressCode.area = this.areaList[i].area_name;
-            break;
-          }
-        }
-      }
-    },
-    areaChange() {
-      if (this.addressName) {
-        for (let i in this.cityList) {
-          if (this.address.city === this.cityList[i].id) {
-            this.addressName.city = this.cityList[i].area_name;
-            break;
-          }
-        }
-      }
-      if (this.addressCode) {
-        for (let i in this.cityList) {
-          if (this.address.city === this.cityList[i].id) {
-            this.addressCode.city = this.cityList[i].area_name;
             break;
           }
         }

@@ -18,13 +18,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.created_at)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.create_time)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>上传来源:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.mark_source && detailData.mark_source.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.source_type && detailData.source_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -41,19 +41,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.check_status && detailData.check_status.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_remark)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.audit)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.user && detailData.confirm_info.user.username)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.audit_datetime)"></div>
+                <div class="detail-form-item" v-html="detailData.confirm_info && detailData.confirm_info.operate_datetime"></div>
               </div>
             </el-col>
           </el-row>
@@ -91,8 +91,8 @@
             </el-row>
           </div>
           <div class="img-box clearfix">
-            <div class="float-left" v-for="(item,key) in detailData.images" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
-            <div v-if="detailData.images && !detailData.images.length">无图片</div>
+            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
+            <div v-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -126,10 +126,10 @@ export default {
       return this.$route.params.id;
     },
     isSucess: function() {
-      return (this.detailData.check_status && this.detailData.check_status.key) !== 'pass' ? false : true;
+      return (this.detailData.confirm_status && this.detailData.confirm_status.key !== 'SUCCESS') ? false : true;
     },
     isFailure: function() {
-      return (this.detailData.check_status.key) !== 'refuse' ? false : true;
+      return (this.detailData.confirm_status && this.detailData.confirm_status.key !== 'FAILURE') ? false : true;
     },
   },
   data() {
@@ -138,10 +138,7 @@ export default {
       pageLoading: 'pageLoading',
       dialogTableVisible: false,
       detailData: {
-        mark_source: {},
-        check_status: {},
-        check_status: {},
-        mark_type: {},
+
       },
       imgObject: {
         imgList: [],
@@ -167,8 +164,8 @@ export default {
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
             this.imgObject.imgList = [];
-            for (let i in this.detailData.images) {
-              this.imgObject.imgList.push(this.detailData.images[i]);
+            for (let i in this.detailData.position_pics) {
+              this.imgObject.imgList.push(this.detailData.position_pics[i]);
             }
             resolve(results);
           } else {
@@ -185,7 +182,7 @@ export default {
       let postData = {
         id: this.id,
       }
-      postData.check_status = isSucess ? 'pass' : 'refuse';
+      postData.confirm_status = isSucess ? 'SUCCESS' : 'FAILURE';
       this.$$http('patchLandMarkDetail', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
@@ -222,12 +219,12 @@ export default {
 
     this.getDetail().then((results) => {
 
-      if (this.detailData.coordinate && this.detailData.coordinate.latitude && this.detailData.coordinate.longitude) {
+      if (this.detailData.location && this.detailData.location.latitude && this.detailData.location.longitude) {
         /*创建点标记*/
         positionMark = new AMap.Marker({
           map: landmarkMap,
         });
-        let lnglat = [this.detailData.coordinate.longitude, this.detailData.coordinate.latitude];
+        let lnglat = [this.detailData.location.longitude, this.detailData.location.latitude];
 
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
