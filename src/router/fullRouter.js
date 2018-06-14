@@ -385,41 +385,44 @@ export default [{
           },
           component: (resolve) => require(['../page/map/carMonitor/routePlayback'], resolve),
         }]
-      }, {
-        path: 'standardMile',
-        name: 'standardMile',
-        redirect: '/mapManage/standardMile/standardMileList',
-        meta: {
-          isVerificationL: false,
-          title: '标准里程管理',
-        },
-        component: (resolve) => require(['../page/map/standardMile/standardMile'], resolve),
-        children: [{
-          path: 'standardMileList',
-          name: 'standardMileList',
-          meta: {
-            isVerificationL: false,
-            title: '标准里程列表',
-          },
-          component: (resolve) => require(['../page/map/standardMile/standardMileList'], resolve),
-        }, {
-          path: 'standardMileDetail/:id',
-          name: 'standardMileDetail',
-          meta: {
-            isVerificationL: false,
-            title: '标准里程详情',
-          },
-          component: (resolve) => require(['../page/map/standardMile/standardMileDetail'], resolve),
-        }, {
-          path: 'editStandardMile',
-          name: 'editStandardMile',
-          meta: {
-            isVerificationL: false,
-            title: '新增、编辑标准里程',
-          },
-          component: (resolve) => require(['../page/map/standardMile/editStandardMile'], resolve),
-        }]
-      }, {
+      },
+      // {
+      //   path: 'standardMile',
+      //   name: 'standardMile',
+      //   redirect: '/mapManage/standardMile/standardMileList',
+      //   meta: {
+      //     isVerificationL: false,
+      //     title: '标准里程管理',
+      //   },
+      //   component: (resolve) => require(['../page/map/standardMile/standardMile'], resolve),
+      //   children: [{
+      //     path: 'standardMileList',
+      //     name: 'standardMileList',
+      //     meta: {
+      //       isVerificationL: false,
+      //       title: '标准里程列表',
+      //     },
+      //     component: (resolve) => require(['../page/map/standardMile/standardMileList'], resolve),
+      //   }, {
+      //     path: 'standardMileDetail/:id',
+      //     name: 'standardMileDetail',
+      //     meta: {
+      //       isVerificationL: false,
+      //       title: '标准里程详情',
+      //     },
+      //     component: (resolve) => require(['../page/map/standardMile/standardMileDetail'], resolve),
+      //   }, {
+      //     path: 'editStandardMile',
+      //     name: 'editStandardMile',
+      //     meta: {
+      //       isVerificationL: false,
+      //       title: '新增、编辑标准里程',
+      //     },
+      //     component: (resolve) => require(['../page/map/standardMile/editStandardMile'], resolve),
+      //   }]
+      // },
+
+      {
         path: 'landmark',
         name: 'landmark',
         redirect: '/mapManage/landmark/landmarkList',
