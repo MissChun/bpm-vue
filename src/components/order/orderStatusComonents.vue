@@ -1,8 +1,6 @@
 <style scoped lang="less">
 .searchSection {
-  /deep/ input {
-    width: 80px;
-  }
+  
   /deep/ .el-range-editor.el-input__inner {
     width: 100%;
   }
@@ -22,14 +20,14 @@
               <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
             </el-input>
           </el-col>
-          <el-col :span="6" :offset="2" class="searchSection">
+     <!--      <el-col :span="6" :offset="2" class="searchSection">
             <el-form-item label="计划装货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.load_plan_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
-        <el-row style="margin-top:10px;" class="searchSection">
+       <!--  <el-row style="margin-top:10px;" class="searchSection">
           <el-col :span="6">
             <el-form-item label="实际装货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
@@ -45,6 +43,34 @@
           <el-col :span="6" :offset="2">
             <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.unload_active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row> -->
+          <el-row style="" class="searchSection">
+          <el-col :span="11"  class="searchSection">
+            <el-form-item align="right" label="计划装货时间:" label-width="105px">
+              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" :offset="2">
+            <el-form-item align="right" label="实际装货时间:" label-width="105px">
+              <el-date-picker :editable="editable" :picker-options="pickerOptions"  v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row style="" class="searchSection">
+          <el-col :span="11" >
+            <el-form-item align="right" label="计划卸货时间:" label-width="105px">
+              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11" :offset="2">
+            <el-form-item label="实际卸货时间:" label-width="105px">
+              <el-date-picker :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -79,6 +105,26 @@ export default {
     return {
       expandStatus: true,
       fifterName: "all",
+      editable:false,
+      pickerOptions: {
+        shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          },{
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          },]
+      },
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" },{ key: 'already_match', value: '已匹配已确认' }],

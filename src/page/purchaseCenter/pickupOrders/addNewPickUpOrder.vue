@@ -257,14 +257,14 @@ export default {
   name: 'addNewPickUpOrder',
   data() {
     var needNumVa=(rule, value, callback)=>{
-      if (!value.match(/^[0-9]\d{0,2}$/)||value=='0') {
+      if (!value.match(/^[0-9]\d{0,1}$/)||value=='0') {
         callback(new Error("只能是1-99的正整数"));
       }else{
         callback();
       }  
     };
     var planTongVa=(rule, value, callback)=>{
-      if ((!(value+"").match(/^([1-9]\d{0,2}|0)(\.\d{1,3})?$/))||value=='0') {
+      if ((!(value+"").match(/^([1-9]\d{0,1}|0)(\.\d{1,3})?$/))||value=='0'||parseInt(value)>99) {
         callback(new Error("不能大于99且最多3位小数"));
       }else{
         callback();
@@ -333,7 +333,7 @@ export default {
           { validator: discountVa, trigger: 'blur' }
         ],
         mark: [
-           { min: 0, max: 200, message: '最多200个字段', trigger: 'blur' }
+           { min: 0, max: 200, message: '最多200个字段', trigger: 'change' }
         ],
       },
       selectData: {
