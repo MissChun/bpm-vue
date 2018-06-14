@@ -12,6 +12,9 @@
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.label" :value="item.id"></el-option>
+                    </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
@@ -34,7 +37,7 @@
                 <el-col :span="4">
                   <el-form-item label="地标类型:">
                     <el-select v-model="searchFilters.position_type" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                      <el-option v-for="(item,key) in positionTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -91,19 +94,19 @@ export default {
       tableData: [],
       thTableList: [{
         title: '地标名称',
-        param: 'mark_name',
+        param: 'position_name',
         width: '250'
       }, {
         title: '地标类型',
-        param: 'mark_type.verbose',
+        param: 'position_type.verbose',
         width: ''
       }, {
         title: '联系人',
-        param: 'consignee',
+        param: 'contacts',
         width: ''
       }, {
         title: '联系电话',
-        param: 'consignee_phone',
+        param: 'tel',
         width: ''
       }, {
         title: '位置',
@@ -111,23 +114,23 @@ export default {
         width: ''
       }, {
         title: '审核状态',
-        param: 'check_status.verbose',
+        param: 'confirm_status.verbose',
         width: ''
       }, {
         title: '上传人',
-        param: 'creator',
+        param: 'upload_user.nick_name',
         width: ''
       }, {
         title: '上传时间',
-        param: 'created_at',
+        param: 'created_time',
         width: '200'
       }, {
         title: '上传来源',
-        param: 'mark_source.verbose',
+        param: 'source_type.verbose',
         width: ''
       }, {
         title: '同步',
-        param: 'xxxx',
+        param: 'async_status.verbose',
         width: ''
       }],
       searchFilters: {
@@ -136,6 +139,7 @@ export default {
         position_type: '',
         confirm_status: '',
         async_status: '',
+        field: 'position_name',
       },
       landmarkFromSelect: [{
         key: '',
@@ -154,35 +158,48 @@ export default {
         key: '',
         verbose: '全部'
       }, {
-        key: 'waiting',
+        key: 'TO_CONFIRM',
         verbose: '未审核'
       }, {
-        key: 'pass',
+        key: 'SUCCESS',
         verbose: '审核通过'
       }, {
-        key: 'refuse',
+        key: 'FAILURE',
         verbose: '审核拒绝'
       }],
-      fieldSelect: [{
+      positionTypeSelect: [{
         key: '',
         verbose: '全部'
       }, {
-        key: 'fluid',
-        verbose: '气源液厂'
+        "key": "LNG",
+        "verbose": "LNG加气站"
       }, {
-        key: 'station',
-        verbose: '卸货站'
+        "key": "DELIVER_POSITION",
+        "verbose": "卸货站"
       }, {
-        key: 'oil_station',
-        verbose: '加油站'
+        "key": "LNG_FACTORY",
+        "verbose": "气源液厂"
       }, {
-        key: 'gas_station',
-        verbose: '加气站'
+        "key": "GAS_STATION",
+        "verbose": "加油站"
       }, {
-        key: 'park',
-        verbose: '停车场'
+        "key": "REST_AREA",
+        "verbose": "食宿停"
       }],
-      isSynchronizeSelect: [],
+      isSynchronizeSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        "key": "TO_ASYNC",
+        "verbose": "未同步"
+      }, {
+        "key": "ASYNCED",
+        "verbose": "已同步"
+      }],
+      fieldSelect: [{
+        label: '地标名称',
+        id: 'position_name',
+      }]
 
     }
   },
@@ -205,25 +222,23 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        mark_source: this.searchFilters.landmarkFrom,
+        source_type: this.searchFilters.landmarkFrom,
         confirm_status: this.searchFilters.confirm_status,
-        async_status: this.searchFilters.async_status
+        async_status: this.searchFilters.async_status,
+        position_type: this.searchFilters.position_type,
       };
-
       if (this.searchFilters.keyword.length) {
-        postData.mark_type = this.searchFilters.mark_type;
-        postData.mark_name = this.searchFilters.keyword;
+        postData[this.searchFilters.field] = this.searchFilters.keyword;
       }
-
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
 
       this.$$http('getLandMarkList', postData).then((results) => {
-        console.log('results', results.data.data.results);
+
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.data;
+          this.tableData = results.data.data.results;
 
           this.pageData.totalCount = results.data.data.count;
 

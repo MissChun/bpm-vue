@@ -1274,33 +1274,67 @@ const api = {
 
     }
   },
-  getLandMarkList: {
-    url: '/api/v1/land-mark/',
+  getCompanyLandmark: {
+    url: '/api/v1/fluid-sites/',
     method: 'get',
     desc: '地标列表',
     param: {
-      mark_name: {
-        desc: '地标名称',
+      need_all: {
+        desc: '请求全部数据，不分页',
       },
-      mark_type: {
-        desc: '地标类型',
+    }
+  },
+  getLandMarkList: {
+    url: '/api/v1/fluid-sites/position-site/',
+    method: 'get',
+    desc: '地标列表',
+    param: {
+      ids: {
+        desc: '筛选id, str, 多个id组成的字符串，用“，”分隔',
       },
-      mark_source: {
-        desc: '地标来源',
+      position_name: {
+        desc: '点位名称',
       },
-      consignee: {
-        desc: '联系人',
+      position_type: {
+        desc: '点位类型, 默认为地标LAND_MARK',
       },
-      creator: {
-        desc: '上传人',
+      pagination: {
+        desc: 'bool，是否翻页',
       },
-      search: {
-        desc: '全部',
+      simplify: {
+        desc: 'bool，是否精简参数',
+      },
+      is_active: {
+        desc: '是否启用',
+      },
+      province: {
+        desc: '省',
+      },
+      city: {
+        desc: '市',
+      },
+      county: {
+        desc: '县',
+      },
+      page: {
+        desc: '页码',
+      },
+      confirm_status: {
+        desc: '审核状态',
+      },
+      async_status: {
+        desc: '同步状态',
+      },
+      source_type: {
+        desc: '数据来源',
+      },
+      page_size: {
+        desc: '每页数量',
       },
     }
   },
   getLandMarkDetail: {
-    url: '/api/v1/land-mark/:id/',
+    url: '/api/v1/fluid-sites/:id/',
     method: 'get',
     desc: '地标详情',
     param: {
@@ -1325,12 +1359,30 @@ const api = {
     }
   },
   patchLandMarkDetail: {
-    url: '/api/v1/land-mark/:id/audit/',
-    method: 'put',
+    url: '/api/v1/fluid-sites/:id/position-site/',
+    method: 'patch',
     desc: '审核地标',
     param: {
-      check_status: {
+      position_name: {
+        desc: '站点详情',
+      },
+      position_type: {
+        desc: '站点类型',
+      },
+      address: {
+        desc: '详细地址',
+      },
+      tel: {
+        desc: '联系电话',
+      },
+      contact: {
+        desc: '联系人',
+      },
+      confirm_status: {
         desc: '审核状态',
+      },
+      async_status: {
+        desc: '同步状态',
       },
     }
   },

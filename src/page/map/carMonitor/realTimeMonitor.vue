@@ -28,8 +28,6 @@
         <div class="total-data-item"><span><img src="@/assets/img/direction_1.png" class="float-left" /></span><span class="float-left">行驶中({{monitorData.driving && monitorData.driving.length}})</span></div>
         <div class="total-data-item"><span><img src="@/assets/img/direction_2.png" class="float-left" /></span><span class="float-left">停留({{monitorData.stopping && monitorData.stopping.length}})</span></div>
         <div class="total-data-item"><span><img src="@/assets/img/direction_4.png" class="float-left" /></span><span class="float-left">离线({{monitorData.offline && monitorData.offline.length}})</span></div>
-        <div class="total-data-item">空闲({{monitorData.free_count && monitorData.free_count.length}})</div>
-        <div class="total-data-item">任务中({{monitorData.tasking_count && monitorData.tasking_count.length}})</div>
       </div>
       <div id="map-container"></div>
     </div>
@@ -221,11 +219,17 @@ export default {
               let infoTitleStr = '<div>车辆信息</span>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-              return new SimpleInfoWindow({
-                infoTitle: infoTitleStr,
-                infoBody: infoBodyStr,
-                offset: new AMap.Pixel(0, -37)
-              });
+              if (recycledInfoWindow) {
+                recycledInfoWindow.setInfoTitle(infoTitleStr);
+                recycledInfoWindow.setInfoBody(infoBodyStr);
+                return recycledInfoWindow;
+              } else {
+                return new SimpleInfoWindow({
+                  infoTitle: infoTitleStr,
+                  infoBody: infoBodyStr,
+                  offset: new AMap.Pixel(0, -37)
+                });
+              }
 
             },
 
@@ -236,21 +240,38 @@ export default {
               console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
 
-              return new SimpleMarker({
-                containerClassNames: 'my-marker',
-                iconStyle: {
+              if (recycledMarker) {
+                recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                     transform: 'rotate(' + rotateDeg + ')',
                   }
-                },
-                label: {
+                });
+                recycledMarker.setLabel({
                   content: dataItem.tractor.plate_number,
                   offset: new AMap.Pixel(30, 0)
-                }
-              });
+                });
+
+                return recycledMarker
+              } else {
+                return new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('../../../assets/img/' + src),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                      transform: 'rotate(' + rotateDeg + ')',
+                    }
+                  },
+                  label: {
+                    content: dataItem.tractor.plate_number,
+                    offset: new AMap.Pixel(30, 0)
+                  }
+                });
+              }
 
             },
 
@@ -272,7 +293,7 @@ export default {
 
                 AMap.plugin('AMap.Geocoder', function() {
 
-                  let lnglat = [116.396574, 39.992706]
+                  let lnglat = [info.selected.data.location.longitude, info.selected.data.location.latitude]
                   let geocoder = new AMap.Geocoder({
                     // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
                     city: '010'

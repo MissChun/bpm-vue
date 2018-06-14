@@ -39,19 +39,19 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <!-- <el-col :span="4">
-  <el-form-item label="是否同步:">
-    <el-select v-model="searchFilters.is_synced" placeholder="请选择">
-      <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
-    </el-select>
+                <el-col :span="4">
+                  <el-form-item label="是否同步:">
+                    <el-select v-model="searchFilters.is_synced" placeholder="请选择">
+                      <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="8">
+  <el-form-item label="地标区域:" class="map-choose-address">
+    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
   </el-form-item>
 </el-col>
  -->
-                <!-- <el-col :span="8">
-                  <el-form-item label="地标区域:" class="map-choose-address">
-                    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
-                  </el-form-item>
-                </el-col> -->
               </el-row>
               <el-row>
                 <el-col :span="20">
@@ -59,7 +59,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item>
-                    <el-button type="primary" @click="startSearch" class="float-right">搜索</el-button>
+                    <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -128,7 +128,8 @@ export default {
       pageLoading: true,
       activeName: 'second',
       landmarkList: [],
-      landmarkListFilter: [],
+      companyLandmarkList: [],
+      companyLandmarkIdList: [],
       address: {
         province: '',
         city: '',
@@ -142,54 +143,17 @@ export default {
       searchFilters: {
         keyword: '',
         mark_source: '',
-        mark_type: 'oil_station',
-        check_status: 'pass',
+        mark_type: 'LNG',
+        check_status: 'SUCCESS',
         is_synced: '',
-        field: 'mark_name',
+        field: 'position_name',
       },
       fieldSelect: [{
         label: '地标名称',
-        id: 'mark_name',
-      }, {
-        label: '联系人',
-        id: 'consignee',
-      }, {
-        label: '联系电话',
-        id: 'consignee_phone',
+        id: 'position_name',
       }],
       landmarkDetail: {},
-      typeSelect: [{
-        key: '',
-        verbose: '全部'
-      }, {
-        key: 'fluid',
-        verbose: '气源液厂'
-      }, {
-        key: 'station',
-        verbose: '卸货站'
-      }, {
-        key: 'oil_station',
-        verbose: '加油站'
-      }, {
-        key: 'gas_station',
-        verbose: '加气站'
-      }, {
-        key: 'park',
-        verbose: '停车场'
-      }],
-      checkStatusSelect: [{
-        key: '',
-        verbose: '全部'
-      }, {
-        key: 'waiting',
-        verbose: '未审核'
-      }, {
-        key: 'pass',
-        verbose: '审核通过'
-      }, {
-        key: 'refuse',
-        verbose: '审核拒绝'
-      }],
+
       landmarkFromSelect: [{
         key: '',
         verbose: '全部'
@@ -202,7 +166,52 @@ export default {
       }, {
         key: 'RESIDENCE_POINT',
         verbose: '轨迹停留点'
-      }]
+      }],
+      checkStatusSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        key: 'TO_CONFIRM',
+        verbose: '未审核'
+      }, {
+        key: 'SUCCESS',
+        verbose: '审核通过'
+      }, {
+        key: 'FAILURE',
+        verbose: '审核拒绝'
+      }],
+
+      typeSelect: [{
+        "key": "LNG",
+        "verbose": "LNG加气站"
+      }, {
+        "key": "DELIVER_POSITION",
+        "verbose": "卸货站"
+      }, {
+        "key": "LNG_FACTORY",
+        "verbose": "气源液厂"
+      }, {
+        "key": "GAS_STATION",
+        "verbose": "加油站"
+      }, {
+        "key": "REST_AREA",
+        "verbose": "食宿停"
+      }],
+      isSynchronizeSelect: [{
+        key: '',
+        verbose: '全部'
+      }, {
+        "key": "TO_ASYNC",
+        "verbose": "未同步"
+      }, {
+        "key": "ASYNCED",
+        "verbose": "已同步"
+      }],
+      searchBtn: {
+        isDisabled: false,
+        isLoading: false,
+        text: '搜索'
+      }
     }
   },
   methods: {
@@ -211,22 +220,48 @@ export default {
         this.$router.push({ path: '/mapManage/landmark/landmarkList' });
       }
     },
+
+    getCompanyLandmark: function() {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          need_all: true,
+        };
+        this.$$http('getCompanyLandmark', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.companyLandmarkList = results.data.data;
+            for (let i in this.companyLandmarkList) {
+              this.companyLandmarkIdList.push(this.companyLandmarkList[i].map_position);
+            }
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+
+          this.pageLoading = false;
+          reject(err);
+        })
+
+      })
+    },
+
     getList: function() {
       return new Promise((resolve, reject) => {
         let postData = {
+          ids: this.companyLandmarkIdList,
           pagination: false,
-          mark_source: this.searchFilters.mark_source,
-          check_status: this.searchFilters.check_status,
-
-          //is_synced: this.searchFilters.is_synced,
-          mark_type: this.searchFilters.mark_type,
-          // simplify: true,
+          source_type: this.searchFilters.mark_source,
+          confirm_status: this.searchFilters.check_status,
+          async_status: this.searchFilters.is_synced,
+          position_type: this.searchFilters.mark_type,
+          simplify: true,
         };
 
         if (this.searchFilters.keyword.length) {
           postData[this.searchFilters.field] = this.searchFilters.keyword;
         }
 
+        /*
         if (this.addressName.province) {
           postData.province = this.addressName.province;
         }
@@ -235,7 +270,7 @@ export default {
         }
         if (this.addressName.area) {
           postData.county = this.addressName.area;
-        }
+        }*/
 
         postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -245,15 +280,13 @@ export default {
           console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
-            this.landmarkList = results.data.data.data;
-            this.landmarkListFilter = [];
-            for (let i in this.landmarkList) {
-              if (this.landmarkList[i].coordinate && this.landmarkList[i].coordinate.latitude) {
-                this.landmarkListFilter.push(this.landmarkList[i]);
-
-              }
+            this.landmarkList = results.data.data.results;
+            if (!this.landmarkList.length) {
+              this.$message({
+                message: '无数据',
+                type: 'success'
+              });
             }
-            console.log('this.landmarkListFilter', this.landmarkListFilter);
             resolve(results)
           } else {
             reject(results);
@@ -267,9 +300,34 @@ export default {
       })
     },
     startSearch: function() {
+      this.searchBtn.isDisabled = true;
+      this.searchBtn.loading = true;
+      this.searchBtn.text = '搜索中';
+
       this.getList().then((data) => { //展示该数据
         this.renderMarker();
+        this.searchBtn.isDisabled = false;
+        this.searchBtn.loading = false;
+        this.searchBtn.text = '搜索';
       })
+      /*
+      if (this.companyLandmarkIdList.length) {
+        this.getList().then((data) => { //展示该数据
+          this.renderMarker();
+          this.searchBtn.isDisabled = false;
+          this.searchBtn.loading = false;
+          this.searchBtn.text = '搜索';
+        })
+      } else {
+        this.getCompanyLandmark().then(() => {
+          return this.getList();
+        }).then(() => {
+          this.renderMarker();
+          this.searchBtn.isDisabled = false;
+          this.searchBtn.loading = false;
+          this.searchBtn.text = '搜索';
+        })
+      }*/
     },
     chooseProvince: function() {
       //this.getList();
@@ -311,15 +369,15 @@ export default {
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.mark_type && item.mark_type.key === 'oil_station') {
-        if (item.is_synced) {
+      if ((item.position_type && item.position_type === 'LNG') || (item.position_type && item.position_type === 'GAS_STATION')) {
+        if (item.async_status === 'ASYNCED') {
           src = 'gas_1.png';
         } else {
-          switch (item.check_status.key) {
-            case 'pass':
+          switch (item.confirm_status) {
+            case 'SUCCESS':
               src = 'gas_2.png'
               break;
-            case 'waiting':
+            case 'TO_CONFIRM':
               src = 'gas_3.png'
               break;
             default:
@@ -328,15 +386,15 @@ export default {
         }
       }
       /*卸货站*/
-      if (item.mark_type && item.mark_type.key === 'station') {
-        if (item.is_synced) {
+      if (item.position_type && item.position_type === 'DELIVER_POSITION') {
+        if (item.async_status === 'ASYNCED') {
           src = 'l_1.png';
         } else {
-          switch (item.check_status.key) {
-            case 'pass':
+          switch (item.confirm_status) {
+            case 'SUCCESS':
               src = 'l_2.png'
               break;
-            case 'waiting':
+            case 'TO_CONFIRM':
               src = 'l_3.png'
               break;
             default:
@@ -345,15 +403,15 @@ export default {
         }
       }
       /*食宿停*/
-      if (item.mark_type && item.mark_type.key === 'park') {
-        if (item.is_synced) {
+      if (item.position_type && item.position_type === 'REST_AREA') {
+        if (item.async_status === 'ASYNCED') {
           src = 'parking_1.png';
         } else {
-          switch (item.check_status.key) {
-            case 'pass':
+          switch (item.confirm_status) {
+            case 'SUCCESS':
               src = 'parking_2.png'
               break;
-            case 'waiting':
+            case 'TO_CONFIRM':
               src = 'parking_3.png'
               break;
             default:
@@ -362,15 +420,15 @@ export default {
         }
       }
       /*气源液厂*/
-      if (item.mark_type && item.mark_type.key === 'fluid') {
-        if (item.is_synced) {
+      if (item.position_type && item.position_type === 'LNG_FACTORY') {
+        if (item.async_status === 'ASYNCED') {
           src = 'lng_1.png';
         } else {
-          switch (item.check_status.key) {
-            case 'pass':
+          switch (item.confirm_status) {
+            case 'SUCCESS':
               src = 'lng_2.png'
               break;
-            case 'waiting':
+            case 'TO_CONFIRM':
               src = 'lng_3.png'
               break;
             default:
@@ -400,7 +458,7 @@ export default {
 
             //从数据中读取位置, 返回lngLat
             getPosition: function(item) {
-              return [item.coordinate.longitude, item.coordinate.latitude];
+              return [item.location.longitude, item.location.latitude];
             },
 
             //数据ID，如果不提供，默认使用数组索引，即index
@@ -409,7 +467,7 @@ export default {
             },
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.mark_name + '</span>';
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);
@@ -437,9 +495,9 @@ export default {
                   }
                 });
                 recycledMarker.setLabel({
-                  content: dataItem.mark_name,
+                  content: dataItem.position_name,
                   offset: new AMap.Pixel(30, 0)
-                });
+                })
 
                 return recycledMarker
               } else {
@@ -453,7 +511,7 @@ export default {
                     }
                   },
                   label: {
-                    content: dataItem.mark_name,
+                    content: dataItem.position_name,
                     offset: new AMap.Pixel(30, 0)
                   }
                 });
@@ -471,18 +529,16 @@ export default {
 
           _this.markerList.on('selectedChanged', function(event, info) {
             console.log('info', info);
-            let infoBodyStr = '';
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
                 console.log('detailresults', results);
-                infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
-                console.log('infoBodyStr', infoBodyStr);
+                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 
               }).catch(() => {
-                infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
+                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
                 infoWindow.setInfoBody(infoBodyStr);
               })
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
@@ -501,7 +557,7 @@ export default {
     renderMarker: function() {
       let _this = this;
       const renderAndCluster = () => {
-        _this.markerList.render(_this.landmarkListFilter);
+        _this.markerList.render(_this.landmarkList);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
           _this.allMakers = _this.markerList.getAllMarkers();
           if (_this.cluster) {
@@ -532,9 +588,17 @@ export default {
     _this.map = new AMap.Map('map-container', {
       zoom: 5
     });
+
     this.initMarkList();
-    _this.getList().then((data) => { //展示该数据
-      _this.renderMarker();
+
+    /*this.getCompanyLandmark().then(() => {
+      return this.getList();
+    }).then(() => {
+      this.renderMarker();
+    })*/
+
+    this.getList().then(() => {
+      this.renderMarker();
     })
 
   },
