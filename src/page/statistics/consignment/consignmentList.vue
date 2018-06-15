@@ -207,6 +207,8 @@ export default {
         this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'business_order') {
         this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail/`, query: { id: row.business_order_id } });
+      } else if (tpye === 'edit') {
+        this.$router.push({ path: `/statistics/consignment/editConsignment/`, query: { id: row.id } });
       }
     },
     startSearch() {
@@ -218,7 +220,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation:this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchFilters.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';
