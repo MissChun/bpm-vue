@@ -5,12 +5,7 @@
         <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
       </el-col>
       <el-col :span="12">
-        <div class="usermenu text-right" v-if="users&&users.profile&&users.profile.nick_name">欢迎您：{{users.profile.nick_name}}，
-          <router-link :to="{path: '/'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
-          <!-- <router-link :to="{path: '/'}">退出</router-link> -->
-          <a v-on:click="logout" class="cursor-pointer">退出</a>
-        </div>
-        <div class="usermenu text-right" v-else>
+        <div class="usermenu text-right">
           <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span>
           <router-link :to="{path: '/login'}">登录</router-link>
         </div>
@@ -40,39 +35,12 @@ export default {
   computed: {
     users: function() {
       // console.log('users', this.pbFunc.getLocalData('user',true));
-      return this.pbFunc.getLocalData('user',true);
+      return this.pbFunc.getLocalData('user', true);
     }
 
   },
   methods: {
-    logout: function() {
-      this.$confirm("确定退出?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.signOut();
-          this.$emit("logout");
-        })
-        .catch(() => {});
-    },
-    signOut: function() {
-      this.$$http('signOut', {}).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.$message({
-            message: '退出成功',
-            type: 'success'
-          });
-          localStorage.clear();
-          this.$store.state.common.users = {};
-          this.$router.push({ path: '/login' });
-        }
 
-      }).catch((err) => {
-        this.$message.error('退出失败');
-      })
-    }
   }
 }
 

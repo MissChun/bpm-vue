@@ -55,7 +55,7 @@
                     </div>
                   </template>
                 </el-table-column>
-               <!--  <el-table-column label="操作" align="center" width="150" fixed="right">
+                <!--  <el-table-column label="操作" align="center" width="150" fixed="right">
                   <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                   </template>
@@ -124,7 +124,7 @@ export default {
         title: '卸货',
         key: 'unloading',
         tabs: [{
-          title: '卸货地',
+          title: '前往卸货地',
           key: 'to_site',
         }, {
           title: '已卸货',
@@ -162,7 +162,7 @@ export default {
         }, {
           title: '已完成',
           key: 'finished',
-        },{
+        }, {
           title: '新增经理拒绝',
           key: 'manager_check_refused',
         }, {
@@ -201,12 +201,12 @@ export default {
       }, {
         title: '供应商',
         param: 'company',
-        param_two:'supplier',
+        param_two: 'supplier',
         width: '300'
       }, {
         title: '承运商',
         param: 'company',
-        param_two:'carrier',
+        param_two: 'carrier',
         width: '200'
       }, {
         title: '客户',
@@ -274,6 +274,7 @@ export default {
       console.log('tabs', this.statusTabList)
     },
     statusClick(tab, event) {
+      this.pageData.currentPage = 1;
       this.statusActive = tab.name;
       this.getList(this.statusActive);
     },
