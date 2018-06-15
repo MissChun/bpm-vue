@@ -42,6 +42,16 @@ a {
         display: block;
       }
     }
+    .user {
+      display: inline-block;
+      margin-left: 30px;
+      .text-blue {
+        color: #26c6da;
+      }
+      span {
+        padding: 0 10px;
+      }
+    }
   }
 }
 
@@ -103,8 +113,8 @@ a {
         margin-top: -15px;
         margin-left: -5%;
         -moz-transform: scale(1, 1);
-          -webkit-transform: scale(1, 1);
-          -o-transform: scale(1, 1);
+        -webkit-transform: scale(1, 1);
+        -o-transform: scale(1, 1);
 
         .advantage-list-msg {
           background: #fff;
@@ -154,11 +164,11 @@ a {
       }
       .advantage-list-img {
         transition: linear 0.2s;
-          -moz-transition: linear 0.2s;
-          /* Firefox 4 */
-          -webkit-transition: linear 0.2s;
-          /* Safari and Chrome */
-          -o-transition: linear 0.2s;
+        -moz-transition: linear 0.2s;
+        /* Firefox 4 */
+        -webkit-transition: linear 0.2s;
+        /* Safari and Chrome */
+        -o-transition: linear 0.2s;
         img {
           transition: linear 0.2s;
           -moz-transition: linear 0.2s;
@@ -185,7 +195,7 @@ a {
       }
       /deep/ .el-carousel__container {
         height: 220px;
-        .el-carousel__arrow i{
+        .el-carousel__arrow i {
           font-size: 24px;
         }
         .el-carousel__arrow--left {
@@ -306,12 +316,17 @@ a {
           <el-row>
             <el-col :span="12"><img src="@/assets/img/logo.png" alt=""></el-col>
             <el-col :span="12" class="text-right">
-              <a rel="nofollow" target="_blank" href="https://www.pgyer.com/driver_pro">司机端App下载</a>
+              <a rel="nofollow" target="_blank" :href="businessAppUrl">司机端App下载</a>
               <span>｜</span>
-              <a rel="nofollow" target="_blank" href="https://www.pgyer.com/business_pro">业务端App下载</a>
-              <div class="link">
+              <a rel="nofollow" target="_blank" :href="driverAppUrl">业务端App下载</a>
+              <div v-if="user&&user.profile" class="user">
+                欢迎您：{{user.profile.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
+                <span>|</span>
+                <a v-on:click="logout" class="cursor-pointer">退出</a>
+              </div>
+              <div class="link" v-else>
                 <!-- <router-link :to="{path: '/register'}" class="text-blue">注册</router-link> -->
-                <router-link :to="{path: '/login'}" class="text-blue" @click="goLink">登录</router-link>
+                <router-link :to="{path: '/login'}" @click="goLink">登录</router-link>
               </div>
             </el-col>
           </el-row>
@@ -323,7 +338,7 @@ a {
             <div class="banner-op">
               <div class="banner-font">清洁 / 高效 / 协同 / 智能</div>
               <div class="banner-btn">
-                <el-button type="primary">开始使用</el-button>
+                <el-button type="primary" v-on:click="isLogin">开始使用</el-button>
               </div>
             </div>
           </div>
@@ -428,7 +443,10 @@ export default {
   data() {
     return {
       businessCodeImg: '', //业务端下载二维码
-      driverCodeImg: '' //司机端下载二维码
+      driverCodeImg: '', //司机端下载二维码
+      businessAppUrl: '', //业务端下载链接
+      driverAppUrl: '', //司机端下载链接
+      user: this.pbFunc.getLocalData('user', true)
     };
   },
   computed: {
@@ -437,23 +455,64 @@ export default {
   methods: {
     goLink() {
       this.$router.push({ path: '/login' });
+    },
+    isLogin() {
+      if (this.user.profile) {
+        this.$router.push({ path: '/dashborad' });
+      } else {
+        this.$router.push({ path: '/login' });
+      }
+    },
+    logout: function() {
+      this.$confirm("确定退出?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          this.signOut();
+        })
+        .catch(() => {});
+    },
+    signOut: function() {
+      this.$$http('signOut', {}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.$message({
+            message: '退出成功',
+            type: 'success'
+          });
+          localStorage.clear();
+          this.user = '';
+          this.$router.push({ path: '/' });
+        }
+
+      }).catch((err) => {
+        this.$message.error('退出失败');
+      })
     }
   },
   created() {
     let currentUrl = document.location.href.toString();
-
     if (currentUrl.match('xxx.91lng.cn')) {
       this.businessCodeImg = '';
       this.driverCodeImg = '';
+      this.businessAppUrl = 'https://www.pgyer.com/business_pro';
+      this.driverAppUrl = 'https://www.pgyer.com/driver_pro';
     } else if (currentUrl.match('bpm.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
     } else if (currentUrl.match('bpm.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
     } else {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
     }
   }
 };

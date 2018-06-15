@@ -553,9 +553,9 @@ export default {
         case 'canceled': //取消审核
           return true;
           break;
-          // case 'total_price':
-          //   return '销售总价';
-          //   break;
+        case 'cancel_check':
+          return true;
+          break;
           // case 'plan_arrive_time':
           //   return '到站时间';
           //   break;
