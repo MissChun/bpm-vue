@@ -30,20 +30,13 @@
                 <el-date-picker v-model="activeTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="是否对账:">
-                <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
           </el-row>
         </el-form>
       </div>
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，采购优惠后总额XX元，销售待时后总额XX元，运费合计XX元，能源利润XX元
+            一共{{tableData.waybill?tableData.waybill:0}}单，采购优惠后总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，销售待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，运费合计{{tableData.summati?tableData.summati:0}}元，能源利润{{tableData.energy_prof?tableData.energy_prof:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -63,17 +56,17 @@
           </el-table-column>
           <el-table-column label="运费合计" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <div>{{scope.row.waiting_charges}}</div>
+              <div>{{scope.row.summation}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100" fixed="right">
+          <el-table-column label="毛利润" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
+              <div>{{scope.row.gross_profit}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="100" fixed="right">
+          <el-table-column label="能源利润" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              <div>{{scope.row.energy_profit}}</div>
             </template>
           </el-table-column>
         </el-table>
@@ -87,7 +80,7 @@
 </template>
 <script>
 export default {
-  name: 'salesList',
+  name: 'incomeList',
   computed: {
 
   },
@@ -108,16 +101,11 @@ export default {
         field: 'waybill',
       },
       selectData: {
-        isReconciliationsSelect: [
-          { id: '', value: '全部' },
-          { id: 'unfinished', value: '未对账' },
-          { id: 'finished', value: '已对账' }
-        ],
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
-          { id: 'carrier', value: '承运商' },
+          { id: 'supplier', value: '供应商' },
           { id: 'consumer_name', value: '客户名称' },
-          { id: 'plate_number', value: '车号' }
+          { id: 'carrier', value: '承运商' }
         ]
       },
       thTableList: [{
@@ -129,13 +117,17 @@ export default {
         param: 'business_order',
         width: ''
       }, {
+        title: '供应商',
+        param: 'supplier',
+        width: ''
+      }, {
+        title: '客户名称',
+        param: 'consumer_name',
+        width: ''
+      }, {
         title: '承运商',
         param: 'carrier',
         width: '200'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
       }, {
         title: '实际液厂',
         param: 'fluid',
@@ -145,10 +137,6 @@ export default {
         param: 'station',
         width: ''
       }, {
-        title: '计划装车时间',
-        param: 'plan_loading_time',
-        width: '180'
-      }, {
         title: '实际装车时间',
         param: 'active_time',
         width: '180'
@@ -157,40 +145,12 @@ export default {
         param: 'leave_time',
         width: '180'
       }, {
-        title: '装车吨位',
-        param: 'plan_tonnage',
+        title: '采购优惠后总额',
+        param: 'unit_sum_price',
         width: ''
       }, {
-        title: '实收吨位',
-        param: 'actual_quantity',
-        width: ''
-      }, {
-        title: '亏吨',
-        param: 'deficiency',
-        width: ''
-      }, {
-        title: '核算吨位',
-        param: 'check_quantity',
-        width: ''
-      }, {
-        title: '标准里程',
-        param: 'stand_mile',
-        width: ''
-      }, {
-        title: '起步价',
-        param: 'initial_price',
-        width: ''
-      }, {
-        title: '标准运费',
-        param: 'freight_value',
-        width: ''
-      }, {
-        title: '气差金额',
-        param: 'difference_value',
-        width: ''
-      }, {
-        title: '卸车待时金额',
-        param: 'waiting_price',
+        title: '销售待时后总额',
+        param: 'waiting_charges',
         width: ''
       }],
       tableData: []
@@ -204,11 +164,9 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}` });
+        this.$router.push({ path: `/statistics/income/incomeWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail/`, query: { id: row.business_order_id } });
-      } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/consignment/editConsignment/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/income/incomeBusinessDetail/`, query: { id: row.business_order_id } });
       }
     },
     startSearch() {
@@ -220,7 +178,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation:this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchFilters.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';

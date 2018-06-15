@@ -19,7 +19,7 @@
 <script>
 import tradeDetail from '@/components/businessManage/tradeDetail';
 export default {
-  name: 'salesBusinessDetail',
+  name: 'incomeBusinessDetail',
   components: {
     tradeDetail: tradeDetail
   },
