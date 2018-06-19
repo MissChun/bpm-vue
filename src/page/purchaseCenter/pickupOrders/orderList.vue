@@ -93,15 +93,6 @@ export default {
     orderFifterList: () =>
       import ("../../../components/order/orderFifterList.vue")
   },
-  computed: {
-    fifterName:function(){
-      if(this.$route.query.goTo){
-        return this.$route.query.goTo
-      }else{
-        return 'all'
-      }
-    },
-  },
   data() {
     return {
       editable:false,
@@ -137,6 +128,13 @@ export default {
         confirmed_count: '已确认',
         history_count: '历史'
       },
+      allStatusName:{
+        all_count: '全部',
+        appoint_count: '待指派',
+        determine_count: '待确认',
+        confirmed_count: '已确认',
+        history_count: '历史'
+      },
       timeParam: [],
       listFifterData: [],
       activeName: 'first',
@@ -157,6 +155,15 @@ export default {
         ]
       },
     };
+  },
+  computed: {
+    fifterName:function(){
+      if(this.$route.query.goTo){
+        return this.$route.query.goTo
+      }else{
+        return 'all'
+      }
+    },
   },
   methods: {
     clicktabs: function(targetName) {
@@ -202,39 +209,51 @@ export default {
         this.pageLoading = false;
         console.log('err', err);
       });
+      this.getCountList();
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
       //重新查询一次数据
-      this.searchList();
+      this.$router.push({ path: "/purchaseCenter/pickupOrders?goTo="+this.thisFifterName });
     },
     pageChange: function() {
       setTimeout(() => {
         this.searchStatus = true;
         this.searchList();
       });
-    }
-  },
-  created() {
-    //this.listFifterData = this.listData;
-    this.searchList();
-    this.$$http("getCount", {}).then(results => {
+    },
+    getCountList:function(){
+      var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
+        this.$$http("getCount", {}).then(results => {
       if (results.data.code == 0) {
         var dataBody = results.data.data;
         for (var i in dataBody) {
           if (dataBody[i] > 99) {
             dataBody[i] = '99+';
           }
-          this.statusName[i] += "(" + dataBody[i] + ")";
+          renderStatus[i] += "(" + dataBody[i] + ")";
         }
+        this.statusName=renderStatus;
       }
     }).catch((err) => {
       console.log('err', err);
     });
+    }
   },
-  mounted(){
-      this.thisFifterName=this.fifterName;
+  created() {
+    //this.listFifterData = this.listData;
+    if(this.thisFifterName!=this.fifterName){
+        this.thisFifterName=this.fifterName;
+     }
+    this.searchList();
+  },
+  watch: {
+  '$route' (to, from) {
+  //刷新参数放到这里里面去触发就可以刷新相同界面了
+    this.thisFifterName=this.$route.query.goTo||"all";
+    this.searchList();
   }
+}
 };
 
 </script>
