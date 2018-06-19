@@ -69,7 +69,7 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>启用状态:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active.verbose)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active?detailData.is_active.verbose:'')"></div>
                     </div>
                   </el-col>
 

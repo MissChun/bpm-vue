@@ -2,7 +2,7 @@
   <el-header>
     <el-row>
       <el-col :span="12">
-        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div></router-link>
       </el-col>
       <el-col :span="12">
         <div class="usermenu text-right">

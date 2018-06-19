@@ -22,7 +22,8 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="计划装车时间:" label-width="105px">
-                <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -108,6 +109,7 @@ export default {
           { id: 'waybill', value: '运单号' },
           { id: 'supplier', value: '供应商' },
           { id: 'plate_number', value: '车号' },
+          { id: 'fluid', value: '液厂' },
         ]
       },
       thTableList: [{
@@ -133,7 +135,7 @@ export default {
       }, {
         title: '实际装车吨位（吨）',
         param: 'active_tonnage',
-        width: ''
+        width: '150'
       }, {
         title: '采购单价（元）',
         param: 'unit_price',
@@ -182,8 +184,8 @@ export default {
         page_size: this.pageData.pageSize
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.active_time_start = this.planArriveTime[0] + ' 00:00:00';
-        postData.active_time_end = this.planArriveTime[1] + ' 23:59:59';
+        postData.active_time_start = this.planArriveTime[0];
+        postData.active_time_end = this.planArriveTime[1];
       }
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);

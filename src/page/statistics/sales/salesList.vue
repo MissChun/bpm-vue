@@ -22,7 +22,8 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="离站时间:" label-width="105px">
-                <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -31,7 +32,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实收吨位{{tableData.actual_quanti?tableData.actual_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
+            一共{{tableData.waybill?tableData.waybill:0}}单，？？？？核算吨位{{tableData.actual_quanti?tableData.actual_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -127,16 +128,16 @@ export default {
         param: 'consumer_name',
         width: ''
       }, {
+        title: '车号',
+        param: 'plate_number',
+        width: ''
+      }, {
         title: '实际液厂',
         param: 'fluid',
         width: ''
       }, {
         title: '卸货站',
         param: 'station',
-        width: ''
-      }, {
-        title: '车号',
-        param: 'plate_number',
         width: ''
       }, {
         title: '离站时间',
@@ -200,8 +201,8 @@ export default {
         page_size: this.pageData.pageSize
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';
-        postData.leave_time_end = this.leaveTime[1] + ' 23:59:59';
+        postData.leave_time_start = this.leaveTime[0];
+        postData.leave_time_end = this.leaveTime[1];
       }
 
       postData[this.searchFilters.field] = this.searchFilters.keyword;

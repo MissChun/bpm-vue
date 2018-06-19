@@ -514,8 +514,8 @@ export default {
         unloading: '已卸货',
         in_settlement: '待结算',
         finished: '已完成',
-        canceled: '取消审核',
-        canceled_end: '已取消',
+        canceled: '已取消',
+        // canceled_end: '已取消',
         modify_manager_check: '修改审核——经理审核中',
         modify_manager_check_end: '修改审核——经理审核完成',
         modify_department_check: '修改审核——部门审核中',
@@ -550,10 +550,7 @@ export default {
         case 'create_department_check': //部门审核
           return true;
           break;
-        case 'canceled': //取消审核
-          return true;
-          break;
-        case 'cancel_check':
+        case 'cancel_check': //取消审核
           return true;
           break;
           // case 'plan_arrive_time':
@@ -612,11 +609,6 @@ export default {
             if (i > 0 && this.processData[i].type === 'settlement_check') {
               if (typeof this.processData[i].to_be_modify != "object") {
                 this.processData[i].type = 'settlement_check_end'
-              }
-            }
-            if (i > 0 && this.processData[i].type === 'canceled') {
-              if (typeof this.processData[i].to_be_modify != "object") {
-                this.processData[i].type = 'canceled_end'
               }
             }
             for (let j in this.statusType) {
