@@ -9,6 +9,19 @@
  */
 
 const api = {
+  reconciliations: {
+    url: '/api/v1/batch-update-logistic/',
+    method: 'post',
+    desc: '收入统计列表',
+    param: {
+      id: {
+        desc: '支持单个多个对账'
+      },
+      batch: {
+        desc: '全部对账'
+      }
+    }
+  },
   getIncomeStatisticsList: {
     url: '/api/v1/income-statistic/',
     method: 'get',
