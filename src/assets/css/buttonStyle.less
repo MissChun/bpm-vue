@@ -35,18 +35,26 @@
     border-color: @tms-blue;
     background-color: @tms-blue;
 
-    &:hover {
-        border-color: @tms-light-blue-border;
-        background-color: @tms-light-blue;
+
+    &:active,
+    &:focus {
+        border-color: @tms-blue!important;
+        background-color: @tms-blue!important;
     }
+    &:hover {
+        border-color: @tms-light-blue-border!important;
+        background-color: @tms-light-blue!important;
+    }
+
     &.is-plain {
         color: @tms-blue;
         border-color: @tms-transparent-border-blue;
         background-color: @tms-transparent-blue;
         &:hover,
-        &:active {
-            border-color: @tms-blue;
-            background-color: @tms-blue;
+        &:active,
+        &:focus {
+            border-color: @tms-blue!important;
+            background-color: @tms-blue!important;
         }
     }
     &.is-active,

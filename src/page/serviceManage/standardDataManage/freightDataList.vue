@@ -1,23 +1,25 @@
 <style scoped lang="less">
 .el-table {
-  /deep/ td{
-    padding:0;
+  /deep/ td {
+    padding: 0;
   }
   /deep/ .cell {
     padding: 0!important;
   }
 }
+
 .fee-list {
-    ul {
-        li {
-            height: 32px;
+  ul {
+    li {
+      height: 32px;
 
-            line-height: 32px;
+      line-height: 32px;
 
-            border-bottom: 1px solid #e4e7ed;
-        }
+      border-bottom: 1px solid #e4e7ed;
     }
+  }
 }
+
 </style>
 <template>
   <div>
@@ -59,7 +61,9 @@
                     </ul>
                   </div>
                   <div v-else>
-                    <span v-if="scope.row.agreements.length&&item.param==='carrier_name'">{{scope.row.agreements[0][item.param]}}</span>
+                    <div v-if="scope.row.agreements.length&&item.param==='carrier_name'||item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                      <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
+                    </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
                     <span v-if="scope.row.agreements.length&&item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
                   </div>
@@ -108,12 +112,12 @@ export default {
       },
       selectData: {
         carrierSelect: [{
-          id:'',
-          carrier_name:'全部'
+          id: '',
+          carrier_name: '全部'
         }], //承运商
         liquidSelect: [{
-          id:'',
-          actual_fluid_name:'全部'
+          id: '',
+          actual_fluid_name: '全部'
         }] //液厂
       },
       thTableList: [{
@@ -183,6 +187,14 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
+          for (let i in this.tableData) {
+            this.tableData[i].carrierListStr = '';
+            this.tableData[i].fluidListStr = '';
+            for (let j in this.tableData[i].agreements) {
+              this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+            }
+          }
 
           this.pageData.totalCount = results.data.data.count;
 
@@ -226,7 +238,7 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id} });
+      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id } });
     },
 
     pageChange: function() {

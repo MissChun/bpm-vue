@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'process',
+      activeName: 'detail',
     }
   },
   created() {
