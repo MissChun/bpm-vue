@@ -133,6 +133,14 @@ export default {
         'fifth': [{ key: 'all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
       },
+      allStatusList:{
+        'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
+        'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
+        'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
+        'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
+        'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
+        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
+      },
       timeParam: {
         unload_active_time: [],
         unload_plan_time: [],
@@ -276,7 +284,7 @@ export default {
         this.searchList();
       });
     },
-    assemblyData: function() {
+    assemblyData: function(val) {
       var vm = this;
       var add = "";
       if (this.status == 'first') {
@@ -292,23 +300,24 @@ export default {
       } else if (this.status == 'sxith') {
         add = '_finish';
       }
-      var assemblyData = this.statusList[this.status]; //当前tabs数组
+      var assemblyData = this.statusList[this.status];//当前tabs数组
+      var renderStatus=this.pbFunc.deepcopy(this.allStatusList); 
       for (var i in assemblyData) {
-        for (var j in vm.countParam) { //传入过来的数值
+        for (var j in val) { //传入过来的数值
           if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
-            if (vm.countParam[j] > 99) {
+            if (val[j] > 99) {
               assemblyData[i].value += "(99+)";
             } else {
-              assemblyData[i].value += "(" + vm.countParam[j] + ")";
+              assemblyData[i].value += "(" + val[j] + ")";
             }
           }
-
         }
       }
+      this.statusList[this.status] = assemblyData;
     }
   },
   mounted() {
-    this.assemblyData();
+    this.assemblyData(this.countParam);
   },
   created() {
     //this.listFifterData = this.listData;
@@ -317,33 +326,8 @@ export default {
   watch: {
     countParam: {
       handler(val, oldVal) {
-        var assemblyData = this.statusList[this.status]; //当前tabs数组
-        var add = "";
-        if (this.status == 'first') {
-          add = '_driver';
-        } else if (this.status == 'second') {
-          add = '_match';
-        } else if (this.status == 'third') {
-          add = '_unload';
-        } else if (this.status == 'fourth') {
-          add = '_settlement';
-        } else if (this.status == 'fifth') {
-          add = '_change';
-        } else if (this.status == 'sxith') {
-          add = '_finish';
-        }
-        for (var i in assemblyData) {
-          for (var j in val) { //传入过来的数值
-            if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
-              if (val[j] > 99) {
-                assemblyData[i].value += "(99+)";
-              } else {
-                assemblyData[i].value += "(" + val[j] + ")";
-              }
-            }
-
-          }
-        }
+        this.searchList();
+        this.assemblyData(val);
       }
     }
   }
