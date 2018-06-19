@@ -258,7 +258,7 @@ export default {
         id: vm.id
       };
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
-        if (results.data && results.data.code == 0) {
+        if (results.data && results.data.code == 0&&results.data.data) {
           console.log("已经添加列表上面的数据", results.data);
           getDataNum++;
           vm.alreadyList = results.data.data;
