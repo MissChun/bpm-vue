@@ -1,21 +1,17 @@
 <style scoped lang="less">
-.trans-fee {
-  .table-list {
-    margin-bottom: 20px;
-  }
-}
-
-.detail-main {
-  border-top: 0;
-}
 
 </style>
 <template>
   <div class="detail-main">
     <el-container>
-      <!-- <el-header style="margin-top:15px;">
-        <p>贸易单信息</p>
-      </el-header> -->
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <div class="left-arrow-d go-return" v-on:click="$router.go(-1)"><i class="icon-down-arrow"></i>返回</div>
+          </el-col>
+          <el-col :span="18"><p>业务单信息</p></el-col>
+        </el-row>
+      </el-header>
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">

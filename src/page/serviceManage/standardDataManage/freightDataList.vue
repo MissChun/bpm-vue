@@ -53,12 +53,16 @@
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
-                  <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'">
+                  <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'||item.param==='change_number'">
                     <ul>
                       <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}</li>
                     </ul>
                   </div>
-                  <div v-else><span v-if="scope.row.agreements.length&&item.param!=='created_at'">{{scope.row.agreements[0][item.param]}}</span><span v-else>{{scope.row.created_at}}</span></div>
+                  <div v-else>
+                    <span v-if="scope.row.agreements.length&&item.param==='carrier_name'">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="140" fixed="right">
@@ -130,7 +134,7 @@ export default {
         width: '200'
       }, {
         title: '变动值',
-        param: 'change_rate',
+        param: 'change_number',
         width: ''
       }, {
         title: '生效承运商',

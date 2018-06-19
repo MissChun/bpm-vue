@@ -159,7 +159,12 @@ export default {
       }
 
     },
-
+    pageChange() {
+      setTimeout(() => {
+        console.log('currentPage', this.pageData.currentPage, this.departmentRow);
+        this.getStaffsList(this.currentDepartmentId, this.currentPositionId, this.isValid === '1' ? 'True' : 'False')
+      })
+    },
     // 获取部门列表
     getDepartmentList: function() {
       this.departmentLoading = true;
@@ -211,6 +216,7 @@ export default {
         page_size: this.pageData.pageSize,
         position: positionId
       };
+      this.pageData.currentPage = 1;
       console.log('员工', postData)
       this.staffLoading = true;
       this.$$http('getStaffs', postData).then((results) => {
@@ -231,6 +237,7 @@ export default {
         is_active: isDeletd,
         id: row.id
       }
+      this.isValid = isDeletd === 'True' ? '1' : '2';
       console.log(postData)
       this.$$http('updateStaff', postData).then((results) => {
         if (results.data && results.data.code == 0) {
