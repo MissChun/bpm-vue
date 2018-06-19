@@ -13,7 +13,7 @@
       <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
         <el-row :gutter="0">
           <el-col :span="14">
-            <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
+            <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" @keyup.native.13="searchList">
               <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                 <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
               </el-select>
@@ -62,13 +62,13 @@
           </el-col>
         </el-row>
         <el-row style="" class="searchSection">
-          <el-col :span="11" >
+          <el-col :span="11" v-if="status!='first'">
             <el-form-item align="right" label="计划卸货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="11" :offset="2">
+          <el-col :span="11" :offset="2" v-if="status!='first'&&status!='second'">
             <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
@@ -143,7 +143,7 @@ export default {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'station_name', value: '供应商' },
+          { id: 'station_name', value: '托用商' },
           { id: 'order_number', value: '订单号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
@@ -205,8 +205,8 @@ export default {
         sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
       }
       if (this.timeParam.active_time instanceof Array &&this.timeParam.active_time.length>0) {
-        sendData.active_time_start = this.timeParam.active_time[0]; //实际装车
-        sendData.active_time_end = this.timeParam.active_time[1];
+        sendData.load_active_time_start = this.timeParam.active_time[0]; //实际装车
+        sendData.load_active_time_end = this.timeParam.active_time[1];
       }
       if (this.timeParam.load_plan_time instanceof Array &&this.timeParam.load_plan_time.length>0) {
         sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车

@@ -264,7 +264,7 @@ export default {
       }  
     };
     var planTongVa=(rule, value, callback)=>{
-      if ((!(value+"").match(/^([1-9]\d{0,1}|0)(\.\d{1,3})?$/))||value=='0'||parseInt(value)>99) {
+      if ((!(value+"").match(/^([1-9]\d{0,1})(\.\d{1,3})?$/))||value=='0'||parseInt(value)>99) {
         callback(new Error("不能大于99且最多3位小数"));
       }else{
         callback();

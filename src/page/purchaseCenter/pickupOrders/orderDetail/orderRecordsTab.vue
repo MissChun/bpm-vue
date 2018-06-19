@@ -68,7 +68,7 @@
                           {{rowsData.row.msg}}
                         </template>
                       </el-table-column>
-                      <el-table-column prop="driver_no.tractor.plate_number" label="车号">
+                      <el-table-column prop="driver_no" label="车号">
                       </el-table-column>
                       <el-table-column prop="operator" label="操作人">
                       </el-table-column>

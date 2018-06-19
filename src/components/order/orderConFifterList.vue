@@ -94,7 +94,7 @@
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
              <el-row class="loadInfo commh" style="width:100%;">
-                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">
                 </el-col>
@@ -109,7 +109,7 @@
               </el-row>
 
                <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
-                <el-col :span="7" class="colinfo">卸:<span>{{props.row.business_order.station_address}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station_address}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -122,7 +122,11 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-
+               <el-row v-if="props.row.status.key=='confirm_match'" style="width:100%;margin-top:30px;">
+                <el-col :span="7" class="colinfo">
+                  已经匹配卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">查看</el-button>
+                </el-col>
+             </el-row>
             </div>
           </div>
             <div class="listDetalis carList" style="width:15%">
@@ -389,6 +393,8 @@ export default {
 .id}/${rowData.id}` });
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      }else if (type == 'sureDownOrder') {
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       }
     },
 
