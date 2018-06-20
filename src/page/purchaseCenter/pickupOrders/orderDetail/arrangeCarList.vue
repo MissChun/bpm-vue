@@ -262,7 +262,7 @@ export default {
           console.log("已经添加列表上面的数据", results.data);
           getDataNum++;
           vm.alreadyList = results.data.data;
-          vm.allChangeList = results.data.data.add_capacities.concat(results.data.data.del_capacities);
+          vm.allChangeList = results.data.data.capacities;
           if (getDataNum == 2) {
             vm.pageLoading = false;
             vm.getTrueList(true);
