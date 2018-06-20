@@ -453,53 +453,6 @@ export default {
     bottom: 0px;
     z-index: 9999;
   }
-  .icon-description {
-    padding: 10px;
-    position: absolute;
-    left: 0px;
-    bottom: 50px;
-    border-bottom: 300px;
-    height: 80px;
-    width: 140px;
-    background-color: rgba(0, 0, 0, 0.1);
-    z-index: 9999;
-
-    >div {
-      &:nth-child(2) {
-        margin-left: 1px;
-      }
-      line-height: 24px;
-      margin-bottom: 4px;
-      img {
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-      }
-      span {
-        line-height: 24px;
-        font-size: 13px;
-      }
-      i {
-        height: 18px;
-        width: 18px;
-        border-radius: 50%;
-        margin: 1px 6px 0 1px;
-        font-size: 13px;
-      }
-      .bg-1 {
-        background-color: #47d2d0;
-      }
-      .bg-2 {
-        background-color: #4a9bf8;
-      }
-      .bg-3 {
-        background-color: #f56c6c;
-      }
-      .bg-4 {
-        background-color: #7c8fa0;
-      }
-    }
-  }
 }
 
 #map-container {
