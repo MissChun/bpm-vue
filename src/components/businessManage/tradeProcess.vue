@@ -478,7 +478,7 @@
           </el-col>
           <el-col :span="3" :offset="1">
             <div v-if="isToExamine&&processData.length>1&&isShowBtn(processData)" class="process-btn">
-              <el-button type="primary" plain @click="refuse(processData[0].type)">审核拒绝</el-button>
+              <el-button type="danger" @click="refuse(processData[0].type)">审核拒绝</el-button>
               <el-button type="primary" @click="adopt(processData[0].type)">审核通过</el-button>
             </div>
             <!-- <div v-else>{{isShowBtn(processData[0].type)}}</div> -->
