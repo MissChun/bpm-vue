@@ -76,7 +76,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
-              <div v-if="scope.row.is_reconciliation.key!=='unfinished'">
+              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
                 <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
                 <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
               </div>
