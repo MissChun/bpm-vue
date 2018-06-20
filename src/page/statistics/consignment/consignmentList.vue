@@ -76,7 +76,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
-              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+              <div v-if="scope.row.is_reconciliation.key!=='unfinished'">
                 <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
                 <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
               </div>
@@ -267,7 +267,7 @@ export default {
         postData.batch = 'unfinished';
       } else {
         content = '是否确认对账？';
-        postData.id = id;
+        postData.id = id.split(',')
       }
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
