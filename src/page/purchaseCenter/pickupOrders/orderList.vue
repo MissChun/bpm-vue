@@ -2,27 +2,30 @@
 .listOrder {
   margin-top: 35px;
 }
-
-.nav-tab {
-  background: white;
+.nav-tab{
+  position: relative;
+  .add-btn{
+    position: absolute;
+    right:0;
+    top: -13px;
+    z-index: 2;
+  }
 }
-
 </style>
 <template>
   <div>
+
     <div class="nav-tab">
-      <el-row v-if="true">
-        <el-col :span="2" :offset="22">
-          <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
-        </el-col>
-      </el-row>
+      <div class="text-right add-btn">
+        <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
+      </div>
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="公有提货单" name="first">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" @keyup.native.13="searchList" class="search-filters-screen" size="medium" >
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" @keyup.native.13="searchList" class="search-filters-screen" size="medium">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
@@ -31,7 +34,7 @@
                 </el-col>
                 <el-col :span="10" :offset="2">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                     <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                    <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -95,25 +98,25 @@ export default {
   },
   data() {
     return {
-      editable:false,
+      editable: false,
       pickerOptions: {
         shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          },{
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          },]
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, ]
       },
       searchStatus: false,
       pageLoading: false,
@@ -128,7 +131,7 @@ export default {
         confirmed_count: '已确认',
         history_count: '历史'
       },
-      allStatusName:{
+      allStatusName: {
         all_count: '全部',
         appoint_count: '待指派',
         determine_count: '待确认',
@@ -157,10 +160,10 @@ export default {
     };
   },
   computed: {
-    fifterName:function(){
-      if(this.$route.query.goTo){
+    fifterName: function() {
+      if (this.$route.query.goTo) {
         return this.$route.query.goTo
-      }else{
+      } else {
         return 'all'
       }
     },
@@ -178,7 +181,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam instanceof Array&&this.timeParam.length>0) {
+      if (this.timeParam instanceof Array && this.timeParam.length > 0) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }
@@ -188,8 +191,8 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
       }
-      if(this.thisFifterName=='history'){
-        sendData.history=true;
+      if (this.thisFifterName == 'history') {
+        sendData.history = true;
         delete sendData.status;
       }
       sendData.page = this.pageData.currentPage;
@@ -214,7 +217,7 @@ export default {
     clickFifter: function(targetName) {
       var status = targetName.name;
       //重新查询一次数据
-      this.$router.push({ path: "/purchaseCenter/pickupOrders?goTo="+this.thisFifterName });
+      this.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=" + this.thisFifterName });
     },
     pageChange: function() {
       setTimeout(() => {
@@ -222,38 +225,38 @@ export default {
         this.searchList();
       });
     },
-    getCountList:function(){
-      var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
-        this.$$http("getCount", {}).then(results => {
-      if (results.data.code == 0) {
-        var dataBody = results.data.data;
-        for (var i in dataBody) {
-          if (dataBody[i] > 99) {
-            dataBody[i] = '99+';
+    getCountList: function() {
+      var renderStatus = this.pbFunc.deepcopy(this.allStatusName);
+      this.$$http("getCount", {}).then(results => {
+        if (results.data.code == 0) {
+          var dataBody = results.data.data;
+          for (var i in dataBody) {
+            if (dataBody[i] > 99) {
+              dataBody[i] = '99+';
+            }
+            renderStatus[i] += "(" + dataBody[i] + ")";
           }
-          renderStatus[i] += "(" + dataBody[i] + ")";
+          this.statusName = renderStatus;
         }
-        this.statusName=renderStatus;
-      }
-    }).catch((err) => {
-      console.log('err', err);
-    });
+      }).catch((err) => {
+        console.log('err', err);
+      });
     }
   },
   created() {
     //this.listFifterData = this.listData;
-    if(this.thisFifterName!=this.fifterName){
-        this.thisFifterName=this.fifterName;
-     }
+    if (this.thisFifterName != this.fifterName) {
+      this.thisFifterName = this.fifterName;
+    }
     this.searchList();
   },
   watch: {
-  '$route' (to, from) {
-  //刷新参数放到这里里面去触发就可以刷新相同界面了
-    this.thisFifterName=this.$route.query.goTo||"all";
-    this.searchList();
+    '$route' (to, from) {
+      //刷新参数放到这里里面去触发就可以刷新相同界面了
+      this.thisFifterName = this.$route.query.goTo || "all";
+      this.searchList();
+    }
   }
-}
 };
 
 </script>

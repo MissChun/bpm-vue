@@ -86,15 +86,15 @@ a {
     }
   }
   .advantage {
-    width: 1200px;
+    width: 1000px;
     margin: 0 auto;
-    height: 835px;
+    height: 700px;
     padding-bottom: 90px;
     .advantage-content {
-      height: 650px;
+      height: 525px;
     }
     .advantage-list {
-      height: 650px;
+      height: 525px;
       width: 100%;
       transition: linear 0.2s;
       -moz-transition: linear 0.2s;
@@ -104,7 +104,8 @@ a {
       -o-transition: linear 0.2s;
       /* Opera */
       &:hover {
-        width: 110%;
+        width: 102%;
+        height: 550px;
         position: relative;
         box-shadow: 0 0 10px #ccc;
         z-index: 9;
@@ -120,7 +121,7 @@ a {
           background: #fff;
         }
         .advantage-list-img {
-          margin-top: -30px;
+          margin-top: -10px;
           -moz-transform: scale(1, 1);
           -webkit-transform: scale(1, 1);
           -o-transform: scale(1, 1);
@@ -134,7 +135,7 @@ a {
         }
       }
       .advantage-list-msg {
-        height: 295px;
+        height: 255px;
         margin-bottom: 15px;
         background: #F7F8FA;
         text-align: center;
@@ -146,7 +147,7 @@ a {
         /* Safari and Chrome */
         -o-transition: background linear 0.3s;
         img {
-          margin: 46px 0 22px;
+          margin: 26px 0 22px;
         }
         span {
           display: block;
@@ -158,8 +159,9 @@ a {
           font-size: 16px;
           color: #50565C;
           line-height: 22px;
-          width: 345px;
+          width: 279px;
           margin: 0 auto;
+          text-align: center;
         }
       }
       .advantage-list-img {
@@ -170,6 +172,7 @@ a {
         /* Safari and Chrome */
         -o-transition: linear 0.2s;
         img {
+          width: 100%;
           transition: linear 0.2s;
           -moz-transition: linear 0.2s;
           /* Firefox 4 */
@@ -191,12 +194,16 @@ a {
       margin: 0 auto;
       .is-animating {
         // width: 920px;
-        background: #fff;
+        // background: #fff;
       }
       /deep/ .el-carousel__container {
         height: 220px;
-        .el-carousel__arrow i {
-          font-size: 24px;
+        .el-carousel__arrow {
+          background: none;
+          i {
+            font-size: 24px;
+            color:#c6c6c6;
+          }
         }
         .el-carousel__arrow--left {
           left: 35px;
@@ -205,12 +212,30 @@ a {
           right: 35px;
         }
       }
+      .product-list-content {
+        width: 920px;
+        margin: 0 auto;
+        height: 220px;
+        position: relative;
+        .product-list-bg {
+          width: 100%;
+          height: 220px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: #fff;
+          z-index: 2;
+        }
+      }
       .product-list {
         width: 820px;
-        margin: 0 auto;
         padding: 0 50px;
         color: #333;
         height: 220px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
         >span {
           font-size: 24px;
 
@@ -224,10 +249,10 @@ a {
         }
       }
       .app-one {
-        background: url('../assets/img/app1.png')no-repeat right 30px;
+        background: url('../assets/img/app1.png')no-repeat 680px 30px;
       }
       .app-two {
-        background: url('../assets/img/app2.png')no-repeat right 30px;
+        background: url('../assets/img/app2.png')no-repeat 680px 30px;
       }
       .app-code {
         ul {
@@ -263,6 +288,10 @@ a {
               width: 134px;
               height: 160px;
               background: #fff;
+              >span {
+                line-height: 22px;
+                letter-spacing: 3px;
+              }
             }
           }
         }
@@ -283,11 +312,11 @@ a {
       left: 50%;
       top: 60px;
       content: " ";
-      margin-left: -46px;
+      margin-left: -40px;
       display: block;
-      height: 5px;
+      height: 3px;
       border-radius: 3px;
-      width: 93px;
+      width: 80px;
       background: #26C6DA;
     }
   }
@@ -395,15 +424,21 @@ a {
           <div class="product-content">
             <el-carousel :interval="5000" arrow="always">
               <el-carousel-item>
-                <div class="product-list app-one">
-                  <span>业务端 APP</span>
-                  <div>与91LNG-BPM业务管理系统无缝衔接，业务员可随时随地通过手机下单、跟进装卸车信息、 进行销售单结算，并可查看每日业务汇总数据，贸易业务全流程一手掌控。</div>
+                <div class="product-list-content">
+                  <div class="product-list-bg"></div>
+                  <div class="product-list app-one">
+                    <span>业务端 APP</span>
+                    <div>与91LNG-BPM业务管理系统无缝衔接，业务员可随时随地通过手机下单、跟进装卸车信息、 进行销售单结算，并可查看每日业务汇总数据，贸易业务全流程一手掌控。</div>
+                  </div>
                 </div>
               </el-carousel-item>
               <el-carousel-item>
-                <div class="product-list app-two">
-                  <span>司机端 APP</span>
-                  <div>与91LNG-TMS运输管理系统无缝衔接，装/卸车信息同步下发至司机、磅单/铅封 及时上传审核、合理规划装卸车路径，协助打造运输环节全透明，运输数据全纪录 的承运体系。</div>
+                <div class="product-list-content">
+                  <div class="product-list-bg"></div>
+                  <div class="product-list app-two">
+                    <span>司机端 APP</span>
+                    <div>与91LNG-TMS运输管理系统无缝衔接，装/卸车信息同步下发至司机、磅单/铅封 及时上传审核、合理规划装卸车路径，协助打造运输环节全透明，运输数据全纪录 的承运体系。</div>
+                  </div>
                 </div>
               </el-carousel-item>
             </el-carousel>
@@ -457,7 +492,7 @@ export default {
       this.$router.push({ path: '/login' });
     },
     isLogin() {
-      if (this.user&&this.user.profile) {
+      if (this.user && this.user.profile) {
         this.$router.push({ path: '/dashborad' });
       } else {
         this.$router.push({ path: '/login' });
