@@ -1,15 +1,15 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
-import router from './router'
+import vuex from 'vuex'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import vuex from 'vuex'
+import router from './router'
+import axios from 'axios'
 import store from './store/indexStore'
-import axios from 'axios';
 import * as pbFunc from './assets/utils';
 import http from './api/index';
+import App from './App'
 
 Vue.prototype.pbFunc = pbFunc;
 Vue.prototype.$$http = http;
