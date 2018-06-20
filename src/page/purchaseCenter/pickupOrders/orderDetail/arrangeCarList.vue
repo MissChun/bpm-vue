@@ -38,7 +38,7 @@
                   <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
                     需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
                   </el-col>
-                  <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
+                  <el-col :span="2" v-if="delivery_list.status.key!='canceled'||delivery_list.status.key=='confirmed'">
                     <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
                   </el-col>
                 </el-row>
@@ -349,7 +349,7 @@ export default {
         
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
-        if(this.delivery_list.status.key=="canceled"){
+        if(this.delivery_list.status.key=="canceled"||this.delivery_list.status.key=='confirmed'){
         this.trueAll_list.forEach(item=>{
             item.disableChoose=true;
           });
