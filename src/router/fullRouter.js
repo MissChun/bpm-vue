@@ -12,7 +12,7 @@ export default [{
     meta: {
       isVerificationL: false,
       title: '概览',
-      iconName: 'icon-lng-dashboard'
+      iconName: 'icon-dashboard'
     },
     component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
   }, {
@@ -21,7 +21,7 @@ export default [{
     meta: {
       isVerificationL: false,
       title: '采购中心',
-      iconName: 'icon-lng-dashboard',
+      iconName: 'icon-shopping',
     },
     component: (resolve) => require(['../page/purchaseCenter/orders'], resolve),
     children: [{
@@ -113,7 +113,7 @@ export default [{
       meta: {
         isVerificationL: false,
         title: '托运中心',
-        iconName: 'icon-lng-dashboard',
+        iconName: 'icon-plane',
       },
 
       component: (resolve) => require(['../page/consignmentCenter/orders'], resolve),
@@ -230,7 +230,7 @@ export default [{
       meta: {
         isVerificationL: false,
         title: '业务中心',
-        iconName: 'icon-lng-dashboard',
+        iconName: 'icon-coin',
       },
       component: (resolve) => require(['../page/businessManage/businessManage'], resolve),
       children: [{
@@ -268,7 +268,7 @@ export default [{
       meta: {
         isVerificationL: false,
         title: '服务中心',
-        iconName: 'icon-lng-dashboard',
+        iconName: 'icon-service',
       },
       component: (resolve) => require(['../page/serviceManage/serviceManage'], resolve),
       children: [{
