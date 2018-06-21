@@ -236,7 +236,7 @@ export default {
       lockFalg: false,
       delayTime:500,
       expandFalg:true,
-      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match'],
+      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
       buttonAll: {
         //装车
         driver_pending_confirmation: [{ //司机未确认

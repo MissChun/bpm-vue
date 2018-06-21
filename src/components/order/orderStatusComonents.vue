@@ -290,6 +290,7 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
+      this.$emit("changeTab", this.status);
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
@@ -342,7 +343,6 @@ export default {
   watch: {
     countParam: {
       handler(val, oldVal) {
-        this.searchList();
         this.assemblyData(val);
       }
     }
