@@ -6,16 +6,17 @@
 <template>
   <div id="addPerson" class="detail-main">
     <el-container v-loading="pageLoading">
-      <el-header style="margin-top:15px;">
+      <el-header>
         <el-row>
-          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="returnToPage"></div>
           </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
       </el-header>
-      <el-main v-show="!pageLoading">
+      <el-main v-show="!pageLoading" class="mt-30">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
             <div class="detail-form-title text-center">标准里程信息</div>
