@@ -1,27 +1,35 @@
 <style scoped lang="less">
-.listOrder {
-  margin-top: 35px;
+/deep/ .el-table {
+  &:before {
+    height: 0;
+  }
+  th {
+    &.is-leaf {
+      border: none;
+    }
+  }
 }
-.nav-tab{
+
+.nav-tab-setting {
   position: relative;
   .add-btn{
     position: absolute;
-    right:0;
-    top: -13px;
+    right: 0;
+    top: -15px;
     z-index: 2;
   }
 }
+
 </style>
 <template>
   <div>
-
-    <div class="nav-tab">
+    <div class="nav-tab-setting">
       <div class="text-right add-btn">
         <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
       </div>
-      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+      <el-tabs v-model="activeName" @tab-click="clicktabs">
         <el-tab-pane label="公有提货单" name="first">
-          <div class="tab-screen">
+          <div class="tab-content">
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
@@ -32,7 +40,9 @@
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
-                <el-col :span="10" :offset="2">
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
                     <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
@@ -44,38 +54,38 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="listOrder nav-tab" v-loading="pageLoading">
-      <el-tabs v-model="thisFifterName" type="card" @tab-click="clickFifter">
+    <div class="nav-tab-setting mt-25" v-loading="pageLoading">
+      <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-          <div v-if="thisFifterName=='all'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.appoint_count" name="appoint">
-          <div v-if="thisFifterName=='appoint'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='appoint'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.determine_count" name="determine">
-          <div v-if="thisFifterName=='determine'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='determine'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
-          <div v-if="thisFifterName=='confirmed'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='confirmed'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.history_count" name="history">
-          <div v-if="thisFifterName=='history'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='history'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>

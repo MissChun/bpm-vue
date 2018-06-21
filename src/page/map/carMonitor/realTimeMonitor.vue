@@ -1,17 +1,15 @@
 <template>
   <div class="nav-tab">
-    <div class="tab-screen">
+    <div class="tab-screen border-top">
       <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-        <el-row :gutter="0">
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-input placeholder="请输入车牌号" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
               <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
             </el-input>
           </el-col>
-          <el-col :span="1">
-            &nbsp;
-          </el-col>
-          <el-col :span="4">
+
+          <el-col :span="6">
             <el-form-item label="任务状态:">
               <el-select v-model="searchFilters.waybillStatus" @change="startSearch" placeholder="请选择">
                 <el-option v-for="(item,key) in waybillStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
@@ -21,7 +19,7 @@
         </el-row>
       </el-form>
     </div>
-    <div class="map-out-container">
+    <div class="map-out-container mt-25">
       <div class="map-loading" v-loading="pageLoading"></div>
       <div class="total-data">
         <div class="total-data-item">全部({{monitorData.total_count}})</div>

@@ -1,9 +1,4 @@
 <style scoped lang="less">
-.detail-main {
-
-  border: none;
-}
-
 .label-list {
   margin-bottom: 0px;
 }
@@ -42,9 +37,21 @@
 <template>
   <div class="detail-main">
     <el-container v-show="!pageLoading">
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: backLink}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>贸易单进程</p>
+          </el-col>
+        </el-row>
+      </el-header>
       <el-main>
         <el-row style="">
-          <el-col :span="20" class="orderPossing">
+          <el-col :span="20" class="orderPossing mt-30">
             <el-collapse v-model="processData.length-1">
               <el-collapse-item :title="'业务单生成'">
                 <div class="detail-list detail-form" v-if="processData.length">
@@ -493,7 +500,7 @@
 import refuseDialog from '@/components/businessManage/refuseDialog';
 export default {
   name: 'tradeProcess',
-  props: ['isToExamine'],
+  props: ['isToExamine', 'backLink'],
   components: {
     refuseDialog: refuseDialog
   },

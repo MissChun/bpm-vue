@@ -12,6 +12,18 @@
         <el-tab-pane label="订单详情" name="first">
           <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/purchaseCenter/pickupOrders/ordersList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>订单详情</p>
+                  </el-col>
+                </el-row>
+              </el-header>
               <el-main>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -81,7 +93,8 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>承运商:</label>
-                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span></div>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span>
+                        </div>
                       </div>
                     </el-col>
                     <el-col :span="6">

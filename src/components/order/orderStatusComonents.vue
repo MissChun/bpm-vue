@@ -1,15 +1,25 @@
 <style scoped lang="less">
 .searchSection {
-  
+
   /deep/ .el-range-editor.el-input__inner {
     width: 100%;
+  }
+}
+/deep/ .el-table {
+  &:before {
+    height: 0;
+  }
+  th {
+    &.is-leaf {
+      border: none;
+    }
   }
 }
 
 </style>
 <template>
   <div>
-    <div class="tab-screen">
+    <div class="tab-content">
       <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
         <el-row :gutter="0">
           <el-col :span="14">
@@ -47,28 +57,28 @@
             </el-form-item>
           </el-col>
         </el-row> -->
-          <el-row style="" class="searchSection">
-          <el-col :span="11"  class="searchSection">
+          <el-row :gutter="20" class="searchSection">
+          <el-col :span="8"  class="searchSection">
             <el-form-item align="right" label="计划装货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="11" :offset="2">
+          <el-col :span="8">
             <el-form-item align="right" label="实际装货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions"  v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row style="" class="searchSection">
-          <el-col :span="11" v-if="status!='first'">
+        <el-row :gutter="20" class="searchSection">
+          <el-col :span="8" v-if="status!='first'">
             <el-form-item align="right" label="计划卸货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="11" :offset="2" v-if="status!='first'&&status!='second'">
+          <el-col :span="8" v-if="status!='first'&&status!='second'">
             <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
@@ -77,10 +87,10 @@
         </el-row>
       </el-form>
     </div>
-    <div class="listOrder nav-tab" v-loading="pageLoading" style="margin-top:40px;">
-      <el-tabs v-model="fifterName" type="card" @tab-click="clickFifter">
+    <div class="nav-tab-setting mt-25" v-loading="pageLoading" style="margin-top:40px;">
+      <el-tabs v-model="fifterName" @tab-click="clickFifter">
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
-          <div v-if="item.key==fifterName">
+          <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
               <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
             </keep-alive>
@@ -304,7 +314,7 @@ export default {
         add = '_finish';
       }
       var assemblyData = this.statusList[this.status];//当前tabs数组
-      var renderStatus=this.pbFunc.deepcopy(this.allStatusList); 
+      var renderStatus=this.pbFunc.deepcopy(this.allStatusList);
       for (var i in assemblyData) {
         for (var j in val) { //传入过来的数值
           if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {

@@ -1,5 +1,6 @@
 <style scoped lang="less">
 
+
 </style>
 <template>
   <div class="detail-main">
@@ -7,9 +8,13 @@
       <el-header>
         <el-row>
           <el-col :span="3">
-            <div class="left-arrow-d go-return" v-on:click="$router.go(-1)"><i class="icon-down-arrow"></i>返回</div>
+            <router-link :to="{path: backLink}">
+              <div class="go-return icon-back"></div>
+            </router-link>
           </el-col>
-          <el-col :span="18"><p>业务单信息</p></el-col>
+          <el-col :span="18">
+            <p>业务单信息</p>
+          </el-col>
         </el-row>
       </el-header>
       <el-main v-loading="pageLoading">
@@ -104,6 +109,14 @@
               </div>
             </el-col>
           </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>备注:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.mark)"></div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
         <div class="detail-list detail-form">
           <div class="detail-form-title">
@@ -171,7 +184,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>实际吨位:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.checked_tonnage_unload)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.weight_note&&detailData.weight_note.checked_tonnage_unload)"></div>
               </div>
             </el-col>
           </el-row>
@@ -179,7 +192,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>实际卸货时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.unload&&detailData.deliver_order.unload.active_time)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[1].active_time)"></div>
               </div>
             </el-col>
           </el-row>
@@ -226,13 +239,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>液厂:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.actual_fluid_address)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>液厂地址:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.consignee_phone)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_address)"></div>
               </div>
             </el-col>
           </el-row>
@@ -240,13 +253,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>计划装车时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.pickup&&detailData.deliver_order.pickup.plan_time)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[0].plan_time)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>实际装车时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.pickup&&detailData.deliver_order.pickup.active_time)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[0].active_time)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -331,7 +344,7 @@
 <script>
 export default {
   name: 'tradeBusinessDetail',
-
+  props: ['backLink'],
   data() {
     return {
       pageLoading: false,
@@ -361,7 +374,7 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
-          this.detailData.settlement_total_price = parseFloat(this.detailData.settlement_price ? this.detailData.settlement_price : 0) * parseFloat(this.detailData.checked_tonnage_unload ? this.detailData.checked_tonnage_unload : 0);
+          this.detailData.settlement_total_price = parseFloat(this.detailData.settlement_price ? this.detailData.settlement_price : 0) * parseFloat(this.detailData.weight_note.checked_tonnage_unload ? this.detailData.weight_note.checked_tonnage_unload : 0);
           for (let i in this.detailData.trips) {
             if (this.detailData.trips[i].section_type === 'pickup') {
               this.detailData.deliver_order.pickup = this.detailData.trips[i];

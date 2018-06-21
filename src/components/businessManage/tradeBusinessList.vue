@@ -29,7 +29,7 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
+          <div class="operation-btn text-right" v-if="false">
             <!-- <el-button type="primary" plain>导入</el-button> -->
             <!-- <el-button type="primary">导出</el-button> -->
             <!-- <el-button type="success">新增</el-button> -->
@@ -38,7 +38,7 @@
       </el-tabs>
     </div>
     <div>
-      <div class="nav-tab-setting">
+      <div class="nav-tab-setting mt-25">
         <el-tabs v-model="statusActive" @tab-click="statusClick">
           <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title" :name="tab.key">
             <div class="table-list">

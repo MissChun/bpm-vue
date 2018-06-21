@@ -10,7 +10,7 @@
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运力详情" name="first">
           <!-- <waybill-detail></waybill-detail> -->
-          <waybill-detail></waybill-detail>
+          <waybill-detail :back-link="'/statistics/income/incomeList'"></waybill-detail>
         </el-tab-pane>
 
       </el-tabs>

@@ -82,8 +82,42 @@
 }
 // 设置里的tab
 .nav-tab-setting {
+    .tab-content {
+        padding: 10px 20px;
+
+        border: 1px solid @tms-border-two-level;
+        border-top: 0;
+        background: @tms-white;
+        .search-filters-form {
+            .el-row {
+                padding: 10px 0;
+            }
+            .el-form-item {
+                margin-bottom: 0;
+            }
+            .search-filters-screen {
+                .el-select .el-input {
+                    width: 180px;
+                }
+                .el-input-group__prepend {
+                    background-color: #fff;
+                }
+            }
+            .el-input {
+                width: 100%;
+            }
+            .el-select {
+                width: 100%;
+            }
+            .el-date-editor--datetimerange {
+                &.el-input__inner {
+                    width: 100%;
+                }
+            }
+        }
+    }
     .el-tabs__header {
-        width: 90%;
+        width: 100%;
         margin-bottom: 0;
         .is-scrollable {
             padding: 0 32px;
@@ -136,6 +170,11 @@
             height: 1px;
 
             background-color: @tms-border-two-level ;
+        }
+    }
+    &.nav-tab-width {
+        .el-tabs__header {
+            width: 90%;
         }
     }
 }
