@@ -47,6 +47,27 @@
                       </div>
                     </el-col>
                   </el-row>
+                   <el-row :gutter="40">
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>供应商:</label>
+                        <div class="detail-form-item">{{detailData.supplier_name}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>采购价:</label>
+                        <div class="detail-form-item">{{detailData.unit_price}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>采购优惠:</label>
+                        <div class="detail-form-item">{{detailData.discount_price}}</div>
+                      </div>
+                    </el-col>
+                   
+                  </el-row>
                 </div>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -78,15 +99,14 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>液厂地址:</label>
-                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
+                        <div class="detail-form-item">{{detailData.fluid_address}}</div>
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row :gutter="40">
+                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>
-                          计划装货时间:</label>
+                        <label>计划装货时间:</label>
                         <div class="detail-form-item">{{detailData.plan_time}}</div>
                       </div>
                     </el-col>
@@ -96,6 +116,20 @@
                         <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
+                     <el-col :span="6">
+                      <div class="label-list">
+                        <label>实际装货时间:</label>
+                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
+                      </div>
+                    </el-col>
+                     <el-col :span="6">
+                      <div class="label-list">
+                        <label>实际装货吨位:</label>
+                        <div class="detail-form-item">{{detailData.plan_time}}</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>备注:</label>
@@ -115,40 +149,14 @@
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>计费方式:</label>
-                        <div class="detail-form-item">11111111</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>标准运价:</label>
-                        <div class="detail-form-item">2018-12-12</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>气差允许范围:</label>
-                        <div class="detail-form-item">11111111</div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row :gutter="40">
-                    <el-col :span="6">
-                      <div class="label-list">
                         <label>待时计算标准:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
                       </div>
                     </el-col>
                   </el-row>

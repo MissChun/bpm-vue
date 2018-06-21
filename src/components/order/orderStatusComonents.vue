@@ -226,11 +226,14 @@ export default {
 
       if (this.searchStatus) {
         sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
       }else{
         vm.saveSendData = sendData;
+        this.pageData.currentPage=1;
+        sendData.page = this.pageData.currentPage;
       }
       sendData.pageSize = this.pageData.pageSize;
-      sendData.page = this.pageData.currentPage;
+      
       this.pageLoading = true;
       this.$$http("searchConOrderList", sendData).then((results) => {
         vm.pageLoading = false;

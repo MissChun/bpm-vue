@@ -192,7 +192,7 @@ export default {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;
         vm.$$http("judgeIsCancle", sendData).then(judgeResults => {
-          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == 1) {
+          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == 1||judgeResults.data.code == -1) {
             var newArr = [];
             vm.upMatchList.forEach((item, index) => {
               if (item != row.id) {
