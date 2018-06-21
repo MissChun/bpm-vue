@@ -293,7 +293,7 @@
                            <el-col :span="8">
                             <div class="label-list">
                               <label>计划到站时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plan_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
@@ -389,7 +389,7 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划到站时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plate_number)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plan_arrive_time)"></div>
                             </div>
                           </el-col>
                         </el-row>
@@ -528,25 +528,26 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>操作人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operation)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
                         </el-row>
                       </div>
                       <div v-if="item.type === 'to_site'">
                         <el-row :gutter="40">
+                         <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>操作人:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>操作时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                            </div>
-                          </el-col>
+                         
                         </el-row>
                       </div>
                        <div v-if="item.type === 'already_match'">
@@ -689,7 +690,7 @@ export default {
       if (type == 'showPound') {
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
-          this.imgObject.imgList = imgList;
+          this.imgObject.imgList = [imgList];
           this.imgObject.showPreview = true;
         } else {
           if (id) {

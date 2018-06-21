@@ -190,12 +190,15 @@ export default {
       }
       if (this.searchStatus) {
         sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
+      }else{
+        sendData.page = 1;
       }
       if (this.thisFifterName == 'history') {
         sendData.history = true;
         delete sendData.status;
       }
-      sendData.page = this.pageData.currentPage;
+      
       sendData.page_size = this.pageData.pageSize;
       this.pageLoading = true;
 
