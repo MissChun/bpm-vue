@@ -232,8 +232,9 @@
               <div class="label-list">
                 <label>卸货区域:</label>
                 <div class="detail-form-item" v-if="detailData.deliver_order&&detailData.deliver_order.destination">
-                  <span v-for="item in detailData.deliver_order.destination">{{item}}、</span>
+                  <span v-for="item in detailData.deliver_order.destination">{{item}}<span v-if="item">、</span></span>
                 </div>
+                <div class="detail-form-item" v-else><span class="text-stance">无</span></div>
               </div>
             </el-col>
             <el-col :span="8">

@@ -54,7 +54,7 @@
       <el-header>
         <el-row>
           <el-col :span="3">
-            <router-link :to="{path: '/consignmentCenter/carrierManage/carrierList'}">
+            <router-link :to="{path: '/purchaseCenter/pickupOrders/ordersList'}">
               <div class="go-return icon-back"></div>
             </router-link>
           </el-col>
@@ -97,35 +97,6 @@
         </div>
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
-            <div class="tab-screen">
-              <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
-                <el-row :gutter="0">
-                  <el-col :span="12">
-                    <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                      <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                        <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                      <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
-                    </el-input>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <!-- <el-col :span="4">
-                    <el-form-item label="状态:">
-                      <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
-                        <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col> -->
-                  <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
-                    需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
-                  </el-col>
-                  <el-col :span="2" v-if="delivery_list.status.key!='canceled'&&delivery_list.status.key!='confirmed'">
-                    <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
-                  </el-col>
-                </el-row>
-              </el-form>
-            </div>
             <div class="table-list border-top-clear">
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">

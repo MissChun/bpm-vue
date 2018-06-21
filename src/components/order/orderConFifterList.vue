@@ -185,8 +185,6 @@
             </el-col>
             <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
           </el-row>
-          <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
         </template>
       </el-table-column>
       <el-table-column label="标准里程" prop="" min-width="9.375%">
