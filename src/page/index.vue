@@ -328,6 +328,7 @@ a {
   background: #232F36;
   text-align: center;
   display: inline-block;
+
   >div {
     margin-top: 20px;
     font-size: 14px;
@@ -335,7 +336,6 @@ a {
     line-height: 26px;
   }
 }
-
 </style>
 <template>
   <div>
