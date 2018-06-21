@@ -59,7 +59,7 @@
                       </div>
                     </el-col>
                   </el-row>
-                   <el-row :gutter="40">
+                  <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>供应商:</label>
@@ -78,7 +78,6 @@
                         <div class="detail-form-item">{{detailData.discount_price}}</div>
                       </div>
                     </el-col>
-                   
                   </el-row>
                 </div>
                 <div class="detail-list detail-form">
@@ -93,7 +92,7 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>承运商:</label>
-                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="detailData.carriers && index!=detailData.carriers.length-1">,</span></span>
                         </div>
                       </div>
                     </el-col>
@@ -116,7 +115,7 @@
                       </div>
                     </el-col>
                   </el-row>
-                   <el-row :gutter="40">
+                  <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>计划装货时间:</label>
@@ -129,16 +128,16 @@
                         <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
-                     <el-col :span="6">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>实际装货时间:</label>
-                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
+                        <div class="detail-form-item">{{detailData.active_time}}</div>
                       </div>
                     </el-col>
-                     <el-col :span="6">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>实际装货吨位:</label>
-                        <div class="detail-form-item">{{detailData.plan_time}}</div>
+                        <div class="detail-form-item">{{detailData.active_tonnage}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -163,13 +162,13 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计算标准:</label>
-                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
+                        <div class="detail-form-item" v-if="detailData.carriers && detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
+                        <div class="detail-form-item" v-if="detailData.carriers && detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
                       </div>
                     </el-col>
                   </el-row>

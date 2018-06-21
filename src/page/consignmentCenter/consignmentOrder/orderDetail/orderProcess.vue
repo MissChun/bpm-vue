@@ -691,7 +691,7 @@ export default {
         } else {
           if (id) {
             var sendData = {};
-            sendData.section_trip = this.setpId;
+            //sendData.section_trip = this.setpId;
             sendData.id = id;
             if (vm.poundImg[id]) {
               var imgList = vm.poundImg[id];
