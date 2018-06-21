@@ -10,23 +10,25 @@ let baseRoute = [{
   path: '/login',
   name: '登录',
   component: (resolve) => require(['../page/login.vue'], resolve)
-},{
-  path: '/register',
-  name: '注册',
-  component: (resolve) => require(['../page/register.vue'], resolve)
-},{
-  path: '/registerCompany',
-  name: '企业信息',
-  component: (resolve) => require(['../page/registerCompany.vue'], resolve)
-},{
-  path: '/registerSuccess',
-  name: '待审核',
-  component: (resolve) => require(['../page/registerSuccess.vue'], resolve)
-}, {
-  path: '/forgetPassword',
-  name: '找回密码',
-  component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
-},{
+},
+// {
+//   path: '/register',
+//   name: '注册',
+//   component: (resolve) => require(['../page/register.vue'], resolve)
+// },{
+//   path: '/registerCompany',
+//   name: '企业信息',
+//   component: (resolve) => require(['../page/registerCompany.vue'], resolve)
+// },{
+//   path: '/registerSuccess',
+//   name: '待审核',
+//   component: (resolve) => require(['../page/registerSuccess.vue'], resolve)
+// }, {
+//   path: '/forgetPassword',
+//   name: '找回密码',
+//   component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
+// },
+{
   path: '/401',
   name: '无权访问',
   component: (resolve) => require(['../page/common/401.vue'], resolve)
