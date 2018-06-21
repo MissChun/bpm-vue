@@ -15,10 +15,10 @@
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="贸易单详情" name="detail">
-        <trade-detail></trade-detail>
+        <trade-detail :back-link="'/businessManage/tradeBusiness/businessList'"></trade-detail>
       </el-tab-pane>
       <el-tab-pane label="贸易单进程" name="process">
-        <trade-process></trade-process>
+        <trade-process :back-link="'/businessManage/tradeBusiness/businessList'"></trade-process>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      activeName: 'process',
+      activeName: 'detail',
     }
   },
   created() {

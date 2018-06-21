@@ -17,29 +17,29 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
+              <el-row :gutter="20">
+                <el-col :span="6">
                   <el-form-item label="地标类型:">
                     <el-select v-model="searchFilters.mark_type" placeholder="请选择">
                       <el-option v-for="(item,key) in typeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.check_status" placeholder="请选择">
                       <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="地标来源:">
                     <el-select v-model="searchFilters.mark_source" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="是否同步:">
                     <el-select v-model="searchFilters.is_synced" placeholder="请选择">
                       <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
@@ -53,11 +53,8 @@
 </el-col>
  -->
               </el-row>
-              <el-row>
-                <el-col :span="20">
-                  &nbsp;
-                </el-col>
-                <el-col :span="4">
+              <el-row :gutter="20">
+                <el-col :span="4" :offset="20">
                   <el-form-item>
                     <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
@@ -65,7 +62,7 @@
               </el-row>
             </el-form>
           </div>
-          <div class="map-out-container">
+          <div class="map-out-container mt-25">
             <div class="map-loading" v-loading="pageLoading"></div>
             <div class="icon-description">
               <div class="clearfix">

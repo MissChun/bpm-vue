@@ -38,7 +38,7 @@
           </div>
         </el-col>
         <el-col :span="19">
-          <div class="nav-tab-setting">
+          <div class="nav-tab-setting nav-tab-width">
             <el-tabs v-model="staffsActive" @tab-click="staffClick">
               <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.position_name" :name="item.id">
                 <div class="position-list table-list">

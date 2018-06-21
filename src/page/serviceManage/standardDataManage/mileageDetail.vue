@@ -16,8 +16,17 @@
       <el-tab-pane label="标准里程详情" name="detail">
         <div class="detail-main">
           <el-container>
-            <el-header style="margin-top:15px;">
-              <p>标准里程信息</p>
+            <el-header>
+              <el-row>
+                <el-col :span="3">
+                  <router-link :to="{path: '/serviceManage/standardDataManage/mileageDataList'}">
+                    <div class="go-return icon-back"></div>
+                  </router-link>
+                </el-col>
+                <el-col :span="18">
+                  <p>标准里程信息</p>
+                </el-col>
+              </el-row>
             </el-header>
             <el-main v-loading="pageLoading">
               <div class="detail-list detail-form">

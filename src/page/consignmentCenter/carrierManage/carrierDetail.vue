@@ -18,8 +18,17 @@
       <el-tab-pane label="承运商详情" name="detail">
         <div class="detail-main">
           <el-container>
-            <el-header style="margin-top:15px;">
-              <p>承运商信息</p>
+            <el-header>
+              <el-row>
+                <el-col :span="3">
+                  <router-link :to="{path: '/logisticsManage/consignmentOrders/ordersList'}">
+                    <div class="go-return icon-back"></div>
+                  </router-link>
+                </el-col>
+                <el-col :span="18">
+                  <p>承运商信息</p>
+                </el-col>
+              </el-row>
             </el-header>
             <el-main v-loading="pageLoading">
               <div class="detail-list detail-form">

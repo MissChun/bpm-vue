@@ -20,8 +20,19 @@
         <el-tab-pane label="订单记录" name="third">
           <div class="detail-main" v-loading="pageLoading">
             <el-container>
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/purchaseCenter/pickupOrders/ordersList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>订单记录</p>
+                  </el-col>
+                </el-row>
+              </el-header>
               <el-main>
-                <h3 class="text-center record-detail-title">订单记录</h3>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
                     <el-row>

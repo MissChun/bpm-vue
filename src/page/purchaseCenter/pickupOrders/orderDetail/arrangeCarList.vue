@@ -8,11 +8,93 @@
   }
 }
 
+.detail-tab {
+  position: relative;
+  .operation-btn {
+    position: absolute;
+    width: 100%;
+    top: -25px;
+    z-index: 2;
+  }
+  .el-tabs__header {
+    .el-tabs__nav .el-tabs__item {
+      /deep/ &.is-active {
+        background: #f2f5fe;
+        &:after {
+          border: 0!important;
+          top: 33px;
+        }
+      }
+    }
+  }
+  /deep/ .el-table__fixed-right {
+    border-top: 1px solid #e4e7ed;
+  }
+}
+
+.go-return {
+  width: 32px;
+  height: 32px;
+  margin-top: 14px;
+}
+
+.el-header p {
+  height: 60px;
+
+  font-size: 26px;
+  line-height: 60px;
+
+  text-align: center;
+}
+
 </style>
 <template>
-  <div class="tab-screen">
+  <div class="nav-tab">
+    <div class="tab-screen">
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: '/consignmentCenter/carrierManage/carrierList'}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>车辆指派</p>
+          </el-col>
+        </el-row>
+      </el-header>
+      <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
+        <el-row :gutter="0">
+          <el-col :span="16" :offset="4">
+            <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+              <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+              <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+            </el-input>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
     <div>
-      <div class="nav-tab">
+      <div class="nav-tab-setting detail-tab mt-25">
+        <div class="operation-btn text-right">
+          <el-row :gutter="10">
+            <!-- <el-col :span="4">
+            <el-form-item label="状态:">
+              <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+            <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
+              需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
+            </el-col>
+            <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
+              <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
+            </el-col>
+          </el-row>
+        </div>
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
             <div class="tab-screen">
@@ -44,7 +126,7 @@
                 </el-row>
               </el-form>
             </div>
-            <div class="table-list">
+            <div class="table-list border-top-clear">
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
@@ -57,7 +139,6 @@
               </el-pagination>
             </div>
           </el-tab-pane>
-         
         </el-tabs>
       </div>
     </div>
@@ -77,7 +158,7 @@ export default {
       },
       searchFilters: {
         keyword: '',
-        field: '',
+        field: 'tractor.plate_number',
         orderStateList: '',
       },
       selectData: {
@@ -145,7 +226,7 @@ export default {
       renderPage_list: [],
 
       trueAll_list: [],
-      delivery_list: {status:{}},
+      delivery_list: { status: {} },
       tractor_semitrailers_List: [],
       now_capacities: [],
       alerySureList: [],
@@ -258,7 +339,7 @@ export default {
         id: vm.id
       };
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
-        if (results.data && results.data.code == 0&&results.data.data) {
+        if (results.data && results.data.code == 0 && results.data.data) {
           console.log("已经添加列表上面的数据", results.data);
           getDataNum++;
           vm.alreadyList = results.data.data;
@@ -346,15 +427,15 @@ export default {
           }
         }
         this.alerySureList = newArr;
-        
+
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
-        if(this.delivery_list.status.key=="canceled"||this.delivery_list.status.key=='confirmed'){
-        this.trueAll_list.forEach(item=>{
-            item.disableChoose=true;
+        if (this.delivery_list.status.key == "canceled" || this.delivery_list.status.key == 'confirmed') {
+          this.trueAll_list.forEach(item => {
+            item.disableChoose = true;
           });
-        this.renderAll_list.forEach(item=>{
-            item.disableChoose=true;
+          this.renderAll_list.forEach(item => {
+            item.disableChoose = true;
           });
         }
         this.bindChekboxFunction(0, this.renderAll_list);
@@ -362,32 +443,32 @@ export default {
 
     },
     searchThisByData: function(searchPage, type) {
-      if(this.delivery_list.status.key!="confirmed"){
+      if (this.delivery_list.status.key != "confirmed") {
 
-     
-      var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
-      var value = this.searchFilters.keyword;
-      var newArr = [];
-      if (keyArr.length == 0) {
-        newArr = this.trueAll_list;
-      } else {
-        for (let i = 0; i < this.trueAll_list.length; i++) {
-          var searchParam = this.pbFunc.deepcopy(this.trueAll_list[i]);
-          for (let j = 0; j < keyArr.length; j++) {
-            searchParam = searchParam[keyArr[j]];
-          }
-          if (searchParam.indexOf(value) > -1) {
-            newArr.push(this.trueAll_list[i]);
+
+        var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
+        var value = this.searchFilters.keyword;
+        var newArr = [];
+        if (keyArr.length == 0) {
+          newArr = this.trueAll_list;
+        } else {
+          for (let i = 0; i < this.trueAll_list.length; i++) {
+            var searchParam = this.pbFunc.deepcopy(this.trueAll_list[i]);
+            for (let j = 0; j < keyArr.length; j++) {
+              searchParam = searchParam[keyArr[j]];
+            }
+            if (searchParam.indexOf(value) > -1) {
+              newArr.push(this.trueAll_list[i]);
+            }
           }
         }
+        if (type == 'pageChange') {
+          newArr = this.lastSearch_list;
+        }
+
+        this.renderAll_list = newArr;
+        this.bindChekboxFunction(searchPage, newArr);
       }
-      if (type == 'pageChange') {
-        newArr = this.lastSearch_list;
-      }
-      
-      this.renderAll_list = newArr;
-      this.bindChekboxFunction(searchPage, newArr);
-       }
     },
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);

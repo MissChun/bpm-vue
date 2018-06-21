@@ -1,17 +1,17 @@
 <style scoped lang="less">
-.listOrder {
-  margin-top: 35px;
-}
+// .listOrder {
+//   margin-top: 35px;
+// }
 
-.nav-tab {
-  background: white;
-}
+// .nav-tab {
+//   background: white;
+// }
 
 </style>
 <template>
   <div>
-    <div class="nav-tab">
-      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs" v-if="show">
+    <div class="nav-tab-setting">
+      <el-tabs v-model="activeName" @tab-click="clicktabs" v-if="show">
         <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>
@@ -121,7 +121,7 @@ export default {
     };
   },
   computed: {
-    
+
   },
   created() {
     this.pageLoading=true;

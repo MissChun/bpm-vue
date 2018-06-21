@@ -9,7 +9,13 @@
   }
   /deep/ .el-table__body {
     .el-table__row {
-      background-color: rgb(250, 250, 250);
+      background-color: #f5f6fa;
+      &.expanded {
+        td {
+          border-top: 1px solid #e4e7ed;
+          border-bottom: 1px solid #e4e7ed;
+        }
+      }
     }
     .el-table__expanded-cell[class*=cell] {
       padding-left: 0;
@@ -179,8 +185,8 @@
             </el-col>
             <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
           </el-row>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div>
+          <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
         </template>
       </el-table-column>
       <el-table-column label="标准里程" prop="" min-width="9.375%">
@@ -385,7 +391,7 @@ export default {
               vm.$message.error("取消运单失败");
             }
           })
-          
+
         }).catch((err) => {
           console.log('errs',err);
         });

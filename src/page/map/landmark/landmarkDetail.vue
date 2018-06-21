@@ -1,8 +1,17 @@
 <template>
   <div class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;">
-        <p>地标详情</p>
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: '/mapManage/landmark/landmarkList'}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>地标详情</p>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">

@@ -10,6 +10,12 @@
   /deep/ .el-table__body {
     .el-table__row {
       background-color: #f5f6fa;
+      &.expanded {
+        td {
+          border-top: 1px solid #e4e7ed;
+          border-bottom: 1px solid #e4e7ed;
+        }
+      }
     }
     .el-table__expanded-cell[class*=cell] {
       padding-left: 0;
@@ -49,7 +55,7 @@
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
-      padding-left: 40px;
+      padding-left: 30px;
     }
     .el-table__expanded-cell[class*=cell] {
       padding: 16px 0;
@@ -143,8 +149,8 @@
             <el-col :span="4"> 状态:{{props.row.status.verbose}}
             </el-col>
           </el-row>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div>
+<!--           <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
         </div>
       </template>
     </el-table-column>
