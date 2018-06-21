@@ -270,7 +270,7 @@
                             <div class="label-list">
                               <label>站点地址:</label>
                               <div class="detail-form-item" style="height:24px">
-                                <el-tooltip class="item" effect="dark" :content="item.fluid_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                <el-tooltip class="item" effect="dark" :content="item.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                   <el-button type="text" style="height:24px;line-height:24px;padding-left:0">{{item.station_address}}</el-button>
                                 </el-tooltip>
                               </div>
@@ -417,22 +417,7 @@
                           </el-col>
                         </el-row>
                       </div>
-                       <div v-if="item.type === 'confirm_match'">
-                        <el-row :gutter="40">
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>操作人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                            </div>
-                          </el-col>
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>操作时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
+
                       
                       <div v-if="item.type === 'waiting_match'">
                         <el-row :gutter="40">
