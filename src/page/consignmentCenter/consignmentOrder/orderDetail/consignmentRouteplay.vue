@@ -783,12 +783,13 @@ export default {
 
       } else {
         if (allowTime > 0) {
-          /* 防止代码出错无限调用renderPath */
+          /* 防止代码出错无限调用renderPath
+ */
           allowTime--;
           /* 这里发现pathSimplifierIns有时还没初始化好,所以如果没有初始化好则再次执行renderPath */
           setTimeout(() => {
             console.log('xxxx');
-            _this.renderPath(data);
+            _this.renderPath();
           }, 200)
         }
 
@@ -944,7 +945,7 @@ export default {
     z-index: 999;
   }
   .time-spacing {
-    padding: 0 20px 0 0;
+    padding: 0 20px;
     line-height: 40px;
     font-size: 14px;
   }
