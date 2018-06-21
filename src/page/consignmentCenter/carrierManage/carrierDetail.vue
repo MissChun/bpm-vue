@@ -10,7 +10,6 @@
 .detail-main {
   border-top: 0;
 }
-
 </style>
 <template>
   <div class="nav-tab">
