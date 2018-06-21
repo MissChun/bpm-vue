@@ -6,8 +6,8 @@
       </el-col>
       <el-col :span="12">
         <div class="usermenu text-right">
-          <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span>
-          <router-link :to="{path: '/login'}">登录</router-link>
+          <!-- <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span> -->
+          <!-- <router-link :to="{path: '/login'}">登录</router-link> -->
         </div>
       </el-col>
     </el-row>
