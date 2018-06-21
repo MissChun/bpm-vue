@@ -26,10 +26,8 @@ if (currentUrl.match('xxx.91lng.cn')) {
 } else if (currentUrl.match('bpm.91lng.cn')) {
   domainUrl = 'http://bpm.91lng.cn';
 } else {
-  // domainUrl = 'http://39.104.71.159:8080';
-  //domainUrl = 'http://192.168.0.56:8001';
-  domainUrl = 'http://devbpm.hhtdlng.com';
-  //domainUrl = 'http://192.168.3.114:8018';
+  //domainUrl = 'http://devbpm.hhtdlng.com';
+  domainUrl = 'http://bpm.hhtdlng.com';
 }
 
 

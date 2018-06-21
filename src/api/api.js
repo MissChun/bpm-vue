@@ -1612,6 +1612,25 @@ const api = {
     param: {
 
     }
+  },
+  getOfflineAndStopRecords:{
+    url: '/api/v1/map/stopping_offline_info/',
+    method: 'get',
+    desc: "轨迹停留点，离线点",
+    param: {
+      start_time: {
+        desc: '开始时间',
+      },
+      end_time: {
+        desc: '结束时间，不填则默认当前时间',
+      },
+      page: {
+        desc: '当前页数',
+      },
+      page_size: {
+        desc: '当前每页条数，默认为1000条每页',
+      },
+    }
   }
 }
 
