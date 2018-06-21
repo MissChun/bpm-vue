@@ -299,7 +299,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>气差允许范围:</label>
-                        <div class="detail-form-item">11111111</div>
+                        <div class="detail-form-item">0</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
