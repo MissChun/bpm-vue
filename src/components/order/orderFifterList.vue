@@ -149,8 +149,6 @@
             <el-col :span="4"> 状态:{{props.row.status.verbose}}
             </el-col>
           </el-row>
-<!--           <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
         </div>
       </template>
     </el-table-column>
