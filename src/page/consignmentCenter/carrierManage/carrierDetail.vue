@@ -10,7 +10,6 @@
 .detail-main {
   border-top: 0;
 }
-
 </style>
 <template>
   <div class="nav-tab">
@@ -21,7 +20,7 @@
             <el-header>
               <el-row>
                 <el-col :span="3">
-                  <router-link :to="{path: '/logisticsManage/consignmentOrders/ordersList'}">
+                  <router-link :to="{path: '/consignmentCenter/carrierManage/carrierList'}">
                     <div class="go-return icon-back"></div>
                   </router-link>
                 </el-col>
