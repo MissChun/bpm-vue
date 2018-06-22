@@ -20,7 +20,7 @@
 <script>
 import waybillDetail from '@/components/consignmentCenter/waybillDetail';
 export default {
-  name: 'waybillDetail',
+  name: 'purchaseWaybillDetail',
   components: {
     waybillDetail: waybillDetail
   },
