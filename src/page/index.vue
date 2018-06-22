@@ -345,9 +345,9 @@ a {
           <el-row>
             <el-col :span="12"><img src="@/assets/img/logo.png" alt=""></el-col>
             <el-col :span="12" class="text-right">
-              <a rel="nofollow" target="_blank" :href="businessAppUrl">司机端App下载</a>
+              <a rel="nofollow" target="_blank" :href="driverAppUrl">司机端App下载</a>
               <span>｜</span>
-              <a rel="nofollow" target="_blank" :href="driverAppUrl">业务端App下载</a>
+              <a rel="nofollow" target="_blank" :href="businessAppUrl">业务端App下载</a>
               <div v-if="user&&user.profile" class="user">
                 欢迎您：{{user.profile.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
                 <span>|</span>
