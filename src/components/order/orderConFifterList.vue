@@ -177,7 +177,6 @@
             </el-col>
             <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan">托运商:{{props.row.delivery_order.trader}}</el-col>
-            <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
