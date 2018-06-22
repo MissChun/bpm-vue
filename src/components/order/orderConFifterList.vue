@@ -143,19 +143,19 @@
           </div>
             <div class="listDetalis carList" style="width:15%">
             <el-row class="commh carInfo">
-              <el-col class="whiteSpan" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.tractor" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.semitrailer" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.master_driver" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.vice_driver" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo " >
-              <el-col class="whiteSpan" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.escort_staff" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">

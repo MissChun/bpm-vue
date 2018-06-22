@@ -90,7 +90,7 @@
             <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
               需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
             </el-col>
-            <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
+            <el-col :span="2" v-if="delivery_list.status.key!='canceled'||this.delivery_list.status.key == 'confirmed'">
               <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
             </el-col>
           </el-row>
@@ -329,6 +329,13 @@ export default {
 
         if (results.data && results.data.code == 0) {
           console.log("当前订单数据", results.data.data);
+          var list=[];
+          results.data.data.trips.forEach((item,index)=>{
+            if(item.status!='canceled'){
+              list.push(item);
+            }
+          });
+          results.data.data.trips=list;
           vm.delivery_list = results.data.data;
         }
         if (getDataNum == 2) {
@@ -342,22 +349,20 @@ export default {
           vm.pageLoading = false;
         }
       });
-
-
     },
     getTrueList: function() {
       var vm = this;
       var newArrs = this.pbFunc.deepcopy(vm.allChangeList);
       vm.delivery_list.trips.forEach((Ditem) => {
         var addflag = true;
-        vm.allChangeList.forEach((item) => {
-          if (Ditem.capacity == item) {
-            addflag = false;
-          }
-        });
-        if (addflag) {
+        // vm.allChangeList.forEach((item) => {
+        //   if (Ditem.capacity == item) {
+        //     addflag = false;
+        //   }
+        // });
+        // if (addflag) {
           newArrs.push(Ditem.capacity);
-        }
+        // }
       });
       var getlistParam = {
         tractor_list: newArrs
@@ -380,11 +385,13 @@ export default {
 
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
-            if (operationArr[i].id == this.delivery_list.trips[j].capacity && this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
-              operationArr[i].disableChoose = true;
-              addflag = false;
-              operationArr[i].bindCheckBox = true;
-              newArr.push(operationArr[i]);
+            if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
+              if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
+                operationArr[i].disableChoose = true;
+                addflag = false;
+                operationArr[i].bindCheckBox = true;
+                newArr.push(operationArr[i]);
+              }
             }
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
