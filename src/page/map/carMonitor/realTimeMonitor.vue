@@ -8,7 +8,6 @@
               <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
             </el-input>
           </el-col>
-
           <el-col :span="6">
             <el-form-item label="任务状态:">
               <el-select v-model="searchFilters.waybillStatus" @change="startSearch" placeholder="请选择">
@@ -353,7 +352,7 @@ export default {
       operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--success el-button--mini">订单跟踪</a></div>`;
 
 
-      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</div>`;
+      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车牌号:${carMsg}</div>`;
       infoWindowDom.infoBodyStr = `<div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
