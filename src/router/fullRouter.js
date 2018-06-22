@@ -485,13 +485,13 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
         }, {
-          path: 'waybillDetail/:willId/',
+          path: 'purchaseWaybillDetail/:willId/',
           name: "waybillDetail",
           meta: {
             title: '采购数据详情',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/purchase/waybillDetail'], resolve)
+          component: (resolve) => require(['../page/statistics/purchase/purchaseWaybillDetail'], resolve)
         }, {
           path: 'editPurchase',
           name: "editPurchase",
