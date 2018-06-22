@@ -1,3 +1,16 @@
+<!-- 图片预览组件-->
+<!--
+  prop:
+    imgObject:object,必需
+    初始化：
+    imgObject{
+      imgList: [],//图片url列表,必需。
+      showPreview: false,//是否展示预览，默认false,必需
+      previewIndex: 0,//默认展示图片的index,可选
+    }
+  ex:
+    <img-review :imgObject.sync='imgObject'></img-review>
+-->
 <template>
   <div class="review-background" v-if="imgObject.showPreview">
     <div class="img-review-out-box" v-on:click.self="imgObject.showPreview = false">

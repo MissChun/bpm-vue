@@ -1,3 +1,31 @@
+<!-- 选择省市区组件 -->
+<!--
+  prop:
+    chooseProvince: Function,选择省回调，可选
+    chooseCity: Function,选择市回调，可选
+    chooseArea: Function,选择区回调，可选
+    address:Object，返回省市区id，必需
+    初始化为address{
+      provice:'',
+      city:'',
+      area:'',
+    }
+    addressName: Object, 返回省市区area_name，可选
+    初始化为addressName{
+      provice:'',
+      city:'',
+      area:'',
+    }
+    addressCode: Object, 返回省市区area_code，可选
+    初始化为addressCode{
+      provice:'',
+      city:'',
+      area:'',
+    }
+  ex:
+    <choose-address :address.sync="address"></choose-address>
+    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
+ -->
 <template>
   <div>
     <el-row :gutter="0">

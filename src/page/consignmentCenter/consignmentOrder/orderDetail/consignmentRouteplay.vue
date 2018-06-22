@@ -19,7 +19,7 @@
                     </el-col>
                     <el-col :span="10">
                       <el-form-item label="搜索时间:">
-                        {{todayStart}} - {{todayEnd}}
+                        {{startTime}} - {{endTime}}
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -784,7 +784,7 @@ export default {
       } else {
         if (allowTime > 0) {
           /* 防止代码出错无限调用renderPath
- */
+           */
           allowTime--;
           /* 这里发现pathSimplifierIns有时还没初始化好,所以如果没有初始化好则再次执行renderPath */
           setTimeout(() => {

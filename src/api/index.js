@@ -32,7 +32,7 @@ if (currentUrl.match('xxx.91lng.cn')) {
 
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
-let unCancelAjax = ['getTripRecords']; //设定可以重复请求的ajax请求的apiname(str)。
+let unCancelAjax = ['getTripRecords','getOfflineAndStopRecords'];//设定可以重复请求的ajax请求的apiname(str)。
 let cancelToken = axios.CancelToken;
 let cancelLimitTime = 500; //设置需要cancel的间隔时限
 
