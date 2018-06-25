@@ -236,10 +236,24 @@ export default {
             vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
-                transPowerInfoList.forEach((Ttiem) => {
-                  dataBody.forEach((Ditem) => {
+                dataBody.forEach((Ditem,index) => {
+                  Ditem.transPowerInfo={
+                    tractor:{},
+                    semitrailer:{},
+                    master_driver:{},
+                    vice_driver:{},
+                    escort_staff:{},
+                  };
+                  transPowerInfoList.forEach((Ttiem) => {
+                  var status=true;
                     if (Ditem.capacity == Ttiem.id) {
+                      Ttiem.tractor=Ttiem.tractor?Ttiem.tractor:{};
+                      Ttiem.semitrailer=Ttiem.semitrailer?Ttiem.semitrailer:{};
+                      Ttiem.master_driver=Ttiem.master_driver?Ttiem.master_driver:{};
+                      Ttiem.vice_driver=Ttiem.vice_driver?Ttiem.vice_driver:{};
+                      Ttiem.escort_staff=Ttiem.escort_staff?Ttiem.escort_staff:{};
                       Ditem.transPowerInfo = Ttiem;
+                      status=false;
                     }
                   });
                 });
