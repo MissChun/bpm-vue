@@ -4,12 +4,14 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    <keep-alive :include="['purchasePriceList','destinationSettingList']">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script>
 export default {
-  name: 'purchasepriceManage',
+  name: 'purchasePriceManage',
   data() {
     return {
 
