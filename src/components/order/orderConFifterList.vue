@@ -27,8 +27,8 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      .el-table th.is-leaf{
-        border-top:none;
+      .el-table th.is-leaf {
+        border-top: none;
       }
     }
     .colinfo {
@@ -85,21 +85,23 @@
 .el-dialog__wrapper .el-dialog {
   -webkit-backface-visibility: hidden;
 }
-.whiteSpan{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline-block;
+
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
 }
+
 </style>
 <template>
   <div>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg"  :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
-             <el-row class="loadInfo commh" style="width:100%;">
+              <el-row class="loadInfo commh" style="width:100%;">
                 <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">
@@ -113,8 +115,7 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.delivery_order.active_tonnage">{{props.row.delivery_order.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-
-               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
+              <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
                 <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -128,34 +129,35 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-               <el-row v-if="props.row.status.key=='confirm_match'" style="width:100%;margin-top:30px;">
+              <el-row v-if="props.row.status.key=='confirm_match'" style="width:100%;margin-top:30px;">
                 <el-col :span="7" class="colinfo">
-                  已经匹配卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往查看</el-button>
+                  已经匹配卸货单,
+                  <el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往查看</el-button>
                 </el-col>
-             </el-row>
-
+              </el-row>
               <el-row v-if="props.row.status.key=='already_match'" style="width:100%;margin-top:30px;">
                 <el-col :span="7" class="colinfo">
-                  已经确认卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往查看</el-button>
+                  已经确认卸货单,
+                  <el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往查看</el-button>
                 </el-col>
-             </el-row>
+              </el-row>
             </div>
           </div>
-            <div class="listDetalis carList" style="width:15%">
+          <div class="listDetalis carList" style="width:15%">
             <el-row class="commh carInfo">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.tractor" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.semitrailer" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.master_driver" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.vice_driver" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.vice_driver" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
             </el-row>
-            <el-row class="commh carInfo " >
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo.escort_staff" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
+            <el-row class="commh carInfo ">
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.escort_staff" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
@@ -233,9 +235,9 @@ export default {
   data() {
     return {
       lockFalg: false,
-      delayTime:500,
-      expandFalg:true,
-      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
+      delayTime: 500,
+      expandFalg: true,
+      fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
       buttonAll: {
         //装车
         driver_pending_confirmation: [{ //司机未确认
@@ -345,7 +347,7 @@ export default {
         vm.$emit("changeTabs", 'fifth');
         vm.changeSatusShow = false;
       }).catch((err) => {
-         console.log('errs',err);
+        console.log('errs', err);
       });
     },
     getRowKeys: function(row) {
@@ -371,7 +373,7 @@ export default {
       var sendData = {};
       if (type == 'cancleOrder') { //取消运单
         sendData.id = rowData.id;
-        sendData.status="canceled";
+        sendData.status = "canceled";
         this.$confirm('取消运单后,系统将通知承运商确认,并通知驾驶员?', '确认取消运单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -380,17 +382,17 @@ export default {
           vm.$$http("changeStatusSection", sendData).then((results) => {
             if (results.data.code == 0) {
               vm.$message({
-                type:"success",
-                message:"取消运单成功",
+                type: "success",
+                message: "取消运单成功",
               });
               vm.$emit("refreshList");
-            }else{
+            } else {
               vm.$message.error("取消运单失败");
             }
           })
 
         }).catch((err) => {
-          console.log('errs',err);
+          console.log('errs', err);
         });
       } else if (type == 'matchUnload') { //匹配卸货单
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
@@ -402,7 +404,7 @@ export default {
 .id}/${rowData.id}` });
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
-      }else if (type == 'sureDownOrder') {
+      } else if (type == 'sureDownOrder') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       }
     },
@@ -432,7 +434,7 @@ export default {
             console.log('carList', results);
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs',err);
+            console.log('errs', err);
           });
         }
         if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
@@ -446,7 +448,7 @@ export default {
             console.log('PerList', results);
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs',err);
+            console.log('errs', err);
           });
         }
       },
