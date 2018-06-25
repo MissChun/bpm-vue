@@ -1,10 +1,6 @@
-<style scoped lang="less">
-
-
-</style>
 <template>
   <div>
-   
+    <div id="map-container"></div>
   </div>
 </template>
 <script>
@@ -26,3 +22,10 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+#map-container {
+  width: 100%;
+  height: 700px;
+}
+
+</style>
