@@ -98,7 +98,7 @@ export default {
         plan_arrive_time: [],
         created_at: '',
         keyword: '',
-        field: 'customer_name',
+        field: 'consumer_name',
       },
       tabList: [{
         title: '新增',
@@ -184,7 +184,7 @@ export default {
           { id: true, value: '已绑定' }
         ],
         fieldSelect: [
-          { id: 'customer_name', value: '客户名称' },
+          { id: 'consumer_name', value: '客户名称' },
           { id: 'short_name', value: '客户简称' },
           { id: 'order_number', value: '业务单号' },
           { id: 'mobile_phone', value: '供应商' },
@@ -209,7 +209,7 @@ export default {
         param_two: 'carrier',
         width: '200'
       }, {
-        title: '客户',
+        title: '客户名称',
         param: 'consumer_name',
         width: ''
       }, {

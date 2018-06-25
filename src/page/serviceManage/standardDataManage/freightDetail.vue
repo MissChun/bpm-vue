@@ -50,7 +50,10 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>对应液厂:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')"></div>
+                        <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')" -->
+                        <div class="detail-form-item">
+                          <span v-for="(row,index) in detailData.agreements" v-if="index<5">{{row.fluid_name}}<span v-if="index!=4&&index!=detailData.agreements.length-1">，</span></span>
+                        </div>
                       </div>
                     </el-col>
                     <el-col :span="8">
@@ -70,7 +73,10 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>生效承运商:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')"></div>
+                         <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')" -->
+                        <div class="detail-form-item">
+                          <span v-for="(row,index) in detailData.agreements" v-if="index<5">{{row.carrier_name}}<span v-if="index!=4&&index!=detailData.agreements.length-1">，</span></span>
+                        </div>
                       </div>
                     </el-col>
                   </el-row>
