@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="计划装车时间:" label-width="105px">
+              <el-form-item label="实际装车时间:" label-width="105px">
                 <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
@@ -32,7 +32,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，优惠总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -121,7 +121,7 @@ export default {
         param: 'supplier',
         width: '200'
       }, {
-        title: '液厂',
+        title: '液厂名称',
         param: 'fluid',
         width: ''
       }, {

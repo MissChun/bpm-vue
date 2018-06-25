@@ -8,7 +8,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="业务单详情" name="first">
-          <trade-detail></trade-detail>
+          <trade-detail :back-link="'/statistics/sales/salesList'"></trade-detail>
 
         </el-tab-pane>
 

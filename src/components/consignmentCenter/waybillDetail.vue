@@ -82,7 +82,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>承运方:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.carrier&&transPowerData.tractor.carrier.name)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -110,19 +110,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>计划装车时间:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr[0].plan_time)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].plan_time)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>计划装车吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr[0].plan_tonnage)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].plan_tonnage)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际装车时间:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr[0].active_time)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].active_time)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -130,7 +130,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际装车吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr[0].active_tonnage)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].active_tonnage)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -251,7 +251,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶员:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.master_driver.name)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
