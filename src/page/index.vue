@@ -534,10 +534,10 @@ export default {
       this.businessAppUrl = 'https://www.pgyer.com/business_pro';
       this.driverAppUrl = 'https://www.pgyer.com/driver_pro';
     } else if (currentUrl.match('bpm.hhtdlng.com')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
+      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
+      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
     } else if (currentUrl.match('bpm.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';

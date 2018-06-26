@@ -141,6 +141,10 @@ export default {
         param: 'unit_price',
         width: ''
       }, {
+        title: '卸货站',
+        param: 'station',
+        width: ''
+      }, {
         title: '业务优惠（元）',
         param: 'business_price',
         width: ''

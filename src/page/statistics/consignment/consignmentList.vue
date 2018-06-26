@@ -22,13 +22,13 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="实际装车时间:" label-width="105px">
-                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="实际离站时间:" label-width="105px">
-                <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                 <!-- <el-date-picker v-model="activeTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -45,7 +45,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="15" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，销售总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -123,7 +123,7 @@ export default {
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
           { id: 'carrier', value: '承运商' },
-          { id: 'consumer_name', value: '客户名称' },
+          // { id: 'consumer_name', value: '客户名称' },
           { id: 'plate_number', value: '车号' }
         ]
       },
@@ -262,34 +262,43 @@ export default {
       let postData = {
         is_reconciliation: this.searchFilters.is_reconciliation
       };
-      if (isAll) {
-        content = '未对账共有' + row.waybill + '单，运费合计' + row.waiting_charg + '元，是否要对所选运单进行批量对账？';
-        postData.batch = 'unfinished';
+      if (row.waybill) {
+        if (isAll) {
+          content = '未对账共有' + row.waybill + '单，运费合计' + row.waiting_charg + '元，是否要对所选运单进行批量对账？';
+          postData.batch = 'unfinished';
+        } else {
+          content = '是否确认对账？';
+        }
+        if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+          postData.leave_time_start = this.leaveTime[0];
+          postData.leave_time_end = this.leaveTime[1];
+        }
+        if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+          postData.active_time_start = this.activeTime[0];
+          postData.active_time_end = this.activeTime[1];
+        }
+        postData.id = id.split(',');
+        postData[this.searchFilters.field] = this.searchFilters.keyword;
+        postData = this.pbFunc.fifterObjIsNull(postData);
+        console.log('id', id, postData);
+
+        this.$confirm(content, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$$http('reconciliations', postData).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.getList();
+            }
+          })
+        }).catch(() => {});
       } else {
-        content = '是否确认对账？';
-        postData.id = id.split(',')
+        this.$message({
+          message: '没有未对账数据',
+          type: 'warning'
+        });
       }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.$confirm(content, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$$http('reconciliations', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
-            this.getList();
-          }
-        })
-      }).catch(() => {});
     },
     getList() {
       let postData = {
