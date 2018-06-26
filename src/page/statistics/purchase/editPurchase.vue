@@ -69,17 +69,22 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="业务优惠:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
+                  <el-form-item label="卸货站:" prop="station">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.station"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="业务优惠:" prop="business_price">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.business_price"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="优惠单价:" prop="discount_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="采购总额:" prop="unit_sum_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_sum_price"></el-input>
@@ -90,6 +95,8 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -138,7 +145,8 @@ export default {
         discount_price: '',
         unit_sum_price: '',
         discounts_sum_price: '',
-        remark:''
+        station: '',
+        remark: ''
       },
 
       rules: {
@@ -157,7 +165,9 @@ export default {
         discounts_sum_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-
+        business_price: [
+          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -181,13 +191,13 @@ export default {
   },
   methods: {
     activeTime() {
-      console.log('装车时间',this.editMsgForm.active_time);
+      console.log('装车时间', this.editMsgForm.active_time);
     },
     returnToPage: function() {
       // if (this.$route.query.id) {
       //   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
       // } else {
-        this.$router.push({ path: "/statistics/purchase/purchaseList" });
+      this.$router.push({ path: "/statistics/purchase/purchaseList" });
       // }
     },
     getDetail: function() {
@@ -208,7 +218,8 @@ export default {
             discount_price: this.detail.discount_price,
             unit_sum_price: this.detail.unit_sum_price,
             discounts_sum_price: this.detail.discounts_sum_price,
-            remark:''
+            station: this.detail.station,
+            remark: ''
           }
         }
       })
@@ -247,8 +258,8 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'unit_sum_price', 'discounts_sum_price','remark'];
-      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
+      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'unit_sum_price', 'discounts_sum_price','business_price', 'remark'];
+      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

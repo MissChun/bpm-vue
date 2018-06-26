@@ -45,7 +45,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="15" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，销售总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -123,7 +123,7 @@ export default {
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
           { id: 'carrier', value: '承运商' },
-          { id: 'consumer_name', value: '客户名称' },
+          // { id: 'consumer_name', value: '客户名称' },
           { id: 'plate_number', value: '车号' }
         ]
       },

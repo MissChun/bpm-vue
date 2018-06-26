@@ -132,6 +132,10 @@ export default {
         param: 'plate_number',
         width: ''
       }, {
+        title: '实际装车时间',
+        param: '',
+        width: '200'
+      }, {
         title: '实际液厂',
         param: 'fluid',
         width: ''
@@ -140,7 +144,7 @@ export default {
         param: 'station',
         width: ''
       }, {
-        title: '离站时间',
+        title: '实际离站时间',
         param: 'leave_time',
         width: '200'
       }, {
@@ -160,8 +164,20 @@ export default {
         param: 'check_quantity',
         width: ''
       }, {
+        title: '采购单价',
+        param: 'business_price',
+        width: ''
+      }, {
+        title: '业务优惠',
+        param: 'discount_price',
+        width: ''
+      }, {
         title: '销售单价',
         param: 'unit_price',
+        width: ''
+      },{
+        title: '卸车数',
+        param: 'unload_nums',
         width: ''
       }, {
         title: '卸车待时金额',

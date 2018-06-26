@@ -583,11 +583,17 @@ export const fifterObjIsNull = function(Obj) {
   return object;
 };
 
-export const fifterbyArr = function(Obj, fifterArr) {
+export const fifterbyArr = function(Obj, fifterArr,isNull) {
   var object = deepcopy(Obj);
   var newObj = {};
-  for (let i = 0; i < fifterArr.length; i++) {
-    newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
+  if(isNull){
+    for (let i = 0; i < fifterArr.length; i++) {
+      newObj[fifterArr[i]] = object[fifterArr[i]];
+    }
+  }else{
+    for (let i = 0; i < fifterArr.length; i++) {
+      newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
+    }
   }
   return newObj;
 }
