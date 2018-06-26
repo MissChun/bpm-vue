@@ -263,6 +263,7 @@ export default {
       })
     },
     handleClick: function(tab, event) {
+      this.pageData.currentPage = 1;
       console.log('tabhandleClick', tab);
       for (let i in this.tabList) {
         if (this.tabList[i].key === tab.name) {
