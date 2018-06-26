@@ -19,7 +19,13 @@
     z-index: 2;
   }
 }
-   
+.searchButton{
+  border-bottom:1px solid lightgrey;
+  cursor:pointer;
+}
+.searchButton:hover{
+  background-color:#ecf5ff;
+}
 </style>
 <template>
   <div>
@@ -84,7 +90,21 @@
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.history_count" name="history">
+       <el-tab-pane  name="history">
+        <span slot="label">
+        <el-popover 
+          placement="right-start"
+          width="100"
+          trigger="hover"
+          v-model="seachExtend">
+          <el-row>
+            <el-col class="searchButton" @click.native="changeF('history')"><el-button type="text" style="color:black" >{{statusName.history_count}}</el-button></el-col>
+            <el-col class="searchButton" @click.native="changeF('loaded')"><el-button type="text" style="color:black" >{{statusName.loaded_count}}</el-button></el-col>
+            <el-col class="searchButton" @click.native="changeF('canceled')" style="border-bottom:none"><el-button type="text" style="color:black" >{{statusName.canceled_count}}</el-button></el-col>
+          </el-row>
+          <el-button slot="reference" type="text" style="color:black">{{statusName.history_count}}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
+        </el-popover>
+        </span>
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='history'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
@@ -109,6 +129,8 @@ export default {
   data() {
     return {
       editable: false,
+      seachExtend:false,
+      historyStatus:"",
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -139,6 +161,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
+        loaded_count:'已完成',
+        canceled_count:'已取消',
         history_count: '历史'
       },
       allStatusName: {
@@ -146,6 +170,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
+        loaded_count:'已完成',
+        canceled_count:'已取消',
         history_count: '历史'
       },
       timeParam: [],
@@ -161,7 +187,7 @@ export default {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'trader_name', value: '托运商' },
+          { id: 'trader_name', value: '承运商' },
           { id: 'order_number', value: '订单号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
@@ -185,6 +211,16 @@ export default {
     goAddNewOder: function() {
       this.$router.push({ path: "/purchaseCenter/pickupOrders/addNewPickUpOrder" });
     },
+    changeF:function(type){
+      this.pageData.currentPage = 1;
+      this.seachExtend=false;
+      this.thisFifterName='history';
+      if(type!='history'){
+        this.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList?goTo=" + this.thisFifterName +"&st="+type});
+      }else{
+        this.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList?goTo=" + this.thisFifterName });
+      }
+    },
     searchList: function() {
       var sendData = {};
       var vm = this;
@@ -205,8 +241,12 @@ export default {
         sendData.page = 1;
       }
       if (this.thisFifterName == 'history') {
-        sendData.history = true;
-        delete sendData.status;
+        if(this.historyStatus=='history'||this.historyStatus==''){
+          sendData.history = true;
+          delete sendData.status;
+        }else{
+          sendData.status = this.historyStatus;
+        }
       }
 
       sendData.page_size = this.pageData.pageSize;
@@ -230,6 +270,7 @@ export default {
     clickFifter: function(targetName) {
       var status = targetName.name;
       //重新查询一次数据
+      this.historyStatus="";
       this.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=" + this.thisFifterName });
     },
     pageChange: function() {
@@ -267,7 +308,8 @@ export default {
     '$route' (to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.thisFifterName = this.$route.query.goTo || "all";
-      this.searchList();
+      this.historyStatus=this.$route.query.st || "";
+      this.searchList();    
     }
   }
 };
