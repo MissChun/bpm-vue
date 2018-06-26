@@ -181,6 +181,14 @@
                               </div>
                             </el-col>
                           </el-row>
+                          <el-row :gutter="40">
+                            <el-col :span="16">
+                              <div class="label-list">
+                                <label>铅封号:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.car_seal)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
                         </div>
                         <div v-if="(item.type === 'waiting_seal'||item.type=='loading_waiting_audit')&&item.operation!='上传装车铅封'">
                           <el-row :gutter="40">
@@ -352,6 +360,12 @@
                             </el-col>
                           </el-row>
                           <el-row :gutter="40">
+                           <el-col :span="8">
+                              <div class="label-list">
+                                <label>离站时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.leave_time)"></div>
+                              </div>
+                            </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>卸车磅单审核:</label>

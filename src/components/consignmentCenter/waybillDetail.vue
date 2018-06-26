@@ -95,7 +95,7 @@
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>液厂:</label>
+                  <label>实际液厂:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.fluid_name)"></div>
                 </div>
               </el-col>
@@ -316,13 +316,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>待时计算标准:</label>
-                <div class="detail-form-item">{{item.free_hour}}</div>
+                <div class="detail-form-item">
+                  <span v-if="item.free_hour">{{item.free_hour}}小时</span>
+                  <span v-else v-html="pbFunc.dealNullData('')"></span>
+                </div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>待时计费标准:</label>
-                <div class="detail-form-item">{{item.overtime_price}}</div>
+                <div class="detail-form-item">
+                  <span v-if="item.overtime_price">{{item.overtime_price}}/小时</span>
+                  <span v-else v-html="pbFunc.dealNullData('')"></span>
+                </div>
               </div>
             </el-col>
           </el-row>
