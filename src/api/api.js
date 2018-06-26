@@ -1613,7 +1613,7 @@ const api = {
 
     }
   },
-  getOfflineAndStopRecords:{
+  getOfflineAndStopRecords: {
     url: '/api/v1/map/stopping_offline_info/',
     method: 'get',
     desc: "轨迹停留点，离线点",
@@ -1630,6 +1630,46 @@ const api = {
       page_size: {
         desc: '当前每页条数，默认为1000条每页',
       },
+    }
+  },
+  searchCustomerList: {
+    url: '/api/v1/consumer/',
+    method: 'get',
+    desc: '获取客户列表',
+    param: {
+
+    }
+  },
+  getCustomerDetlis: {
+    url: '/api/v1/consumer/:id',
+    method: 'get',
+    desc: '获取客户详情',
+    param: {
+
+    }
+  },
+  getSaleManList: {
+    url: '/api/v1/users/',
+    method: 'get',
+    desc: '获取业务员列表',
+    param: {
+
+    }
+  },
+  upadtecustomerFrom: {
+    url: '/api/v1/consumer/:id',
+    method: 'patch',
+    desc: '更新客户',
+    param: {
+
+    }
+  },
+  creatCustomerFrom: {
+    url: '/api/v1/consumer',
+    method: 'post',
+    desc: '添加客户',
+    param: {
+
     }
   }
 }

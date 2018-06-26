@@ -1,10 +1,160 @@
-<style scoped lang="less">
-
-
-</style>
 <template>
-  <div>
-    
+  <div id="addeditTailCarPage" class="detail-main">
+    <el-container>
+      <el-header class="mt-5">
+        <el-row>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="goDetalis"></div>
+          </el-col>
+          <el-col :span="20">
+            <p>{{titleType}}</p>
+          </el-col>
+        </el-row>
+      </el-header>
+      <el-row>
+        <el-col class="stepTitle mt-25">
+          {{stepTitle}}
+        </el-col>
+      </el-row>
+      <el-main v-loading="pageLoading">
+        <transition name="el-fade-in-linear">
+          <div v-if="activeStep==0">
+            <el-form class="addTailcarform" label-width="150px" ref="addEditFormSetp1" :rules="rules" :model="customerFrom" status-icon :label-position="'left'">
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="客户名称:" prop="consumer_name">
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="customerFrom.consumer_name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="客户简称:" prop="short_name">
+                    <el-input  placeholder="请输入" type="text" v-model="customerFrom.short_name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="客户等级:" prop="consumer_level">
+                     <el-select v-model="customerFrom.consumer_level" placeholder="请选择客户类型">
+                      <el-option v-for="(item,key) in selectData.customerType" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="联系人:" prop="contact_person" >
+                    <el-input placeholder="请输入" type="text" v-model="customerFrom.contact_person" ></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="联系电话:" prop="contact_phone">
+                    <el-input  placeholder="请输入" type="text" v-model="customerFrom.contact_phone"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="分属业务员:" prop="sale_man_id" v-loading="saleManPading">
+                    <el-select v-model="customerFrom.saleMan" placeholder="请选择客户类型">
+                      <el-option v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="社会统一信用代码:" prop="social_credit_code">
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.social_credit_code"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="地址:" prop="volume">
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.volume"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </transition>
+        <transition name="el-fade-in-linear">
+          <div v-if="activeStep==1">
+            <el-form class="addTailcarform" label-width="100px" ref="addEditFormSetp2" :rules="rules" :model="customerFrom" status-icon :label-position="'left'">
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="卸车免费等待时长:" prop="free_hour">
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.free_hour"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="超时计算单价:" prop="waiting_price" >
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.waiting_price"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item  label="亏吨标准:" prop="kui_tons_standard" >
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.kui_tons_standard"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="结算方式:" prop="settlement_cycle">
+                    <el-select v-model="customerFrom.settlement_cycle" placeholder="请选择客户类型">
+                      <el-option v-for="(item,key) in selectData.settlementType" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </transition>
+        <transition name="el-fade-in-linear">
+          <div v-if="activeStep==2">
+            <el-form class="addTailcarform" label-width="160px" ref="addEditFormSetp3" :rules="rules" :model="customerFrom" status-icon :label-position="'left'">
+              <el-row :gutter="82">
+                <el-col :span="12">
+                  <el-form-item label="合同编号:" prop="contract_no">
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.contract_no"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="合同起始日期:" prop="contract_start_date">
+                    <el-date-picker  value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="customerFrom.contract_start_date" style="width: 100%;"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="80">
+                <el-col :span="12">
+                  <el-form-item label="合同截止日期:" prop="contract_end_date">
+                    <el-date-picker  value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="customerFrom.contract_end_date" style="width: 100%;"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp4')">保存并且退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </transition>
+      </el-main>
+    </el-container>
   </div>
 </template>
 <script>
@@ -12,20 +162,284 @@ export default {
   name: 'customerManageEditAdd',
   data() {
     return {
-
-    };
-  },
-  computed: {
-
-  },
-  methods: {
-
+      editStatus: false,
+      titleType: "新增客户",
+      editable: false,
+      pageLoading: false,
+      saleManPading:false,
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man_id', 'social_credit_code','consumer_address'],
+      customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
+      customerFrom3Arr: ['contract_no', 'contract_start_date','contract_end_date'],
+      customerFrom: {
+        
+      },
+      rules: {
+        //1
+        consumer_name:[],
+        short_name:[],
+        consumer_level:[],
+        contact_person:[],
+        contact_phone:[],
+        sale_man_id:[],
+        social_credit_code:[],
+        consumer_address:[],
+        //2
+        free_hour:[],
+        waiting_price:[],
+        kui_tons_standard:[],
+        settlement_cycle:[],
+        //3
+        contract_no:[],
+        contract_start_date:[],
+        contract_end_date:[]
+      }
+    }
   },
   created() {
+    if (this.$route.query.customerId) {
+      this.customerId = this.$route.query.customerId;
+      this.getTailDetalis(this.$route.query.tailId);
+      this.titleType = "编辑客户";
+      this.editStatus = true;
+    }
+    this.getSaleMan();
+  },
+  computed: {
+    selectData: function() {
+      return {
+        customerType: [{verbose:"一类客户",key:"a"},{verbose:"二类客户",key:"b"},{verbose:"三类客户",key:"c"}],
+        //saleMan: this.$store.state.common.selectData.saleMan,
+        settlementType: [{verbose:"预付",key:"0"},{verbose:"现结",key:"1"},{verbose:"周结",key:"2"},{verbose:"月结",key:"3"},{verbose:"见磅单付款",key:"4"}],
+      }
+    },
+    returnPage: function() {
+      return (this.$route.query.operate === 'edit') ? '详情页' : '列表页';
+    },
+    stepTitle: function() {
+      let stepTitle = '';
+      let activeStep = this.$route.query.activeStep ? Number(this.$route.query.activeStep) : 0;
+      switch (activeStep) {
+        case 1:
+          stepTitle = "业务约定";
+          break;
+        case 2:
+          stepTitle = "合同信息";
+          break;
+        default:
+          stepTitle = "基本资料填写";
+      }
 
+      return stepTitle;
+    },
+    activeStep: function() {
+      return this.$route.query.activeStep ? Number(this.$route.query.activeStep) : 0;
+    }
+  },
+  methods: {
+    goOtherSetp: function(stepInfo, operation, formName) {
+      if (stepInfo == "add" && !this.customerId) {
+        this.createFrom(operation, formName);
+      } else if ((stepInfo == "update" && this.activeStep >= 1) || this.customerId) {
+        this.updateFrom(operation, formName);
+      }
+    },
+    goDetalis: function() {
+      if (this.$route.query.operate === 'edit') {
+        this.$router.push({
+          path: `/businessManage/customerManage/customerManageAll/customerManageDetalis?customerId=${ this.customerId }`
+        });
+      } else {
+        this.$router.push({ path: "/businessManage/customerManage/customerManageAll" });
+      }
+    },
+    getSaleMan:function(){
+      var sendData={
+        department_identity:'business'
+      };
+      var vm=this;
+      this.saleManPading=true;
+      this.$$http("getSaleManList",sendData).then((result)=>{
+        if(result.data.code==0||result.data.data.code){
+          vm.selectData.saleMan=result.data.data.data;
+        }
+        vm.saleManPading=false;
+      }).catch(()=>{
+        vm.saleManPading=false;
+      });
+    },
+    updateFrom: function(operation, formName) {
+      var vm = this;
+      this.validatorFrom(formName, (result) => {
+        if (result == 'true') {
+          var sendData = this.pbFunc.deepcopy(vm.customerFrom);
+          sendData = vm.pbFunc.fifterObjIsNull(sendData);
+          sendData = vm.pbFunc.fifterbyArr(sendData, vm['customerFrom' + (parseInt(vm.activeStep) + 1) + 'Arr']);
+          vm.pageLoading = true;
+          sendData.id = vm.customerId;
+          this.$$http('upadtecustomerFrom', sendData).then((result) => {
+            if (result.data.code == 0) {
+              vm.$message({
+                message: '成功',
+                type: 'success'
+              });
+              if (operation == 'out') {
+                //跳转详情
+                //vm.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+                vm.goDetalis();
+              } else {
+                let nextStep = Number(vm.activeStep) + 1;
+                vm.pageLoading = false;
+                vm.$router.push({
+                  path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd",
+                  query: {
+                    customerId: vm.customerId,
+                    activeStep: nextStep,
+                    operate: vm.$route.query.operate
+                  }
+                });
+              }
+            } else {
+              vm.pageLoading = false;
+            }
+          }).catch(() => {
+            vm.pageLoading = false;
+          });
+        }
+      });
+
+    },
+    getCustomerDetlis: function(customerId) {
+      this.pageLoading = true;
+      var vm = this;
+      var sendData = {
+        id: customerId
+      }
+      this.$$http('getCustomerDetlis', sendData).then((result) => {
+        if (result.data.code == 0) {
+          this.customerFrom = result.data.data;
+          this.pageLoading = false;
+        } else {
+          this.pageLoading = false;
+        }
+      })
+    },
+    validatorFrom: function(formName, callback) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          callback('true');
+        } else {
+          callback('fasle');
+          return false;
+        }
+      });
+    },
+    createFrom: function(operation, formName) {
+      var vm = this;
+      this.validatorFrom(formName, (result) => {
+        if (result == 'true') {
+          this.pageLoading = true;
+          var sendData = this.pbFunc.deepcopy(this.customerFrom);
+
+          sendData = this.pbFunc.fifterObjIsNull(sendData);
+          sendData = this.pbFunc.fifterbyArr(sendData, this.customerFrom1Arr);
+          
+          this.$$http('creatCustomerFrom', sendData).then((result) => {
+            this.pageLoading = false;
+            if (result.data.code == 0) {
+              this.customerFrom.id = result.data.data.id;
+              this.customerId = result.data.data.id;
+              if (operation == 'out') {
+                this.goDetalis();
+                //this.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+              } else {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                let nextStep = Number(this.activeStep) + 1;
+                this.$router.push({
+                  path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd",
+                  query: {
+                    customerId: this.customerId,
+                    activeStep: nextStep,
+                    operate: this.$route.query.operate
+                  }
+                });
+              }
+            } else if (result.data.code == 400) {
+              Message.error(result.data.msg);
+            };
+          }).catch(() => {
+            this.pageLoading = false;
+          });
+        } else {
+          this.$message({
+            showClose: true,
+            message: '请验证表单',
+            type: 'error'
+          });
+        }
+      });
+    },
   }
-};
+}
 
 </script>
+<style scoped lang="less">
+.el-header p {
+  font-size: 25px;
+  text-align: center;
+  height: 80px;
+  line-height: 80px;
+  margin: 0 0;
+}
 
+.addTailcarform {
+  margin: 30px 5%;
+  .el-input {
+    width: 100%;
+  }
+  .el-select {
+    width: 100%;
+  }
+}
 
+#addeditTailCarPage {
+  border: 1px solid rgb(222, 222, 222);
+}
+
+.alone-insurance-form {
+  border: 1px solid rgb(222, 222, 222);
+  border-top: none;
+  padding: 30px 30px 0 20px;
+}
+
+.insurance-form-head {
+  background-color: #f1f1f1;
+  height: 41px;
+  line-height: 41px;
+}
+
+#addeditTailCarPage {
+  background-color: white;
+}
+
+.stepTitle {
+  background-color: rgb(235, 238, 245);
+  height: 46px;
+  text-align: center; // font-size: 18px;
+  line-height: 46px;
+}
+
+.detail-main .go-return {
+  margin-top: 22px;
+}
+
+.right-arrow-d {
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  pointer: cursor;
+}
+
+</style>
