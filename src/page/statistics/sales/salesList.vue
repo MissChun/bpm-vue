@@ -133,7 +133,7 @@ export default {
         width: ''
       }, {
         title: '实际装车时间',
-        param: '',
+        param: 'active_time',
         width: '200'
       }, {
         title: '实际液厂',

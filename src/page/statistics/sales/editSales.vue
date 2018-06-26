@@ -57,7 +57,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实际装车时间:">
-                    <el-date-picker v-model="editMsgForm.leave_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.active_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -207,6 +207,7 @@ export default {
         sell_rental: '', //销售总额
         waiting_charges: '', //待时总额
         sale_man: '', //业务员
+        active_time:'',//实际装车时间
         remark: '' //备注
       },
 
@@ -298,6 +299,7 @@ export default {
             sell_rental: this.detail.sell_rental, //销售总额
             waiting_charges: this.detail.waiting_charges, //待时总额
             sale_man: this.detail.sale_man, //业务员
+            active_time:this.detail.active_time,//实际装车时间
             remark: ''
           }
           console.log('this.editMsgForm', this.detail, this.editMsgForm)
