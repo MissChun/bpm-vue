@@ -185,7 +185,7 @@
                             <el-col :span="16">
                               <div class="label-list">
                                 <label>铅封号:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.car_seal)"></div>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.seal_no)"></div>
                               </div>
                             </el-col>
                           </el-row>
