@@ -9,6 +9,22 @@
  */
 
 const api = {
+  getPurchasePriceList: {
+    url: '/api/v1/supplier-quotes/',
+    method: 'get',
+    desc: '价格管理列表',
+    param: {
+
+    }
+  },
+  getPriceDateList: {
+    url: '/api/v1/supplier-quotes/title/',
+    method: 'get',
+    desc: '价格管理日期title',
+    param: {
+
+    }
+  },
   reconciliations: {
     url: '/api/v1/batch-update-logistic/',
     method: 'post',
