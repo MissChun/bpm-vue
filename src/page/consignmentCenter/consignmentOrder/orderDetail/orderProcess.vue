@@ -59,8 +59,7 @@
         <el-tab-pane label="运单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
-          <waybill-process :show-img="showImg" :img-object="imgObject" :pound-img="poundImg" :is-examine="true"></waybill-process>
-          <!-- <div class="detail-main border-top-clear">
+           <div class="detail-main border-top-clear">
             <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
