@@ -669,7 +669,7 @@ export default [{
             name: 'landmarkList',
             meta: {
               isVerificationL: false,
-              title: '标准里程列表',
+              title: '地标列表',
             },
             component: (resolve) => require(['../page/map/landmark/landmarkList'], resolve),
           }, {
@@ -677,7 +677,7 @@ export default [{
             name: 'landmarkDetail',
             meta: {
               isVerificationL: false,
-              title: '标准里程详情',
+              title: '地标详情',
             },
             component: (resolve) => require(['../page/map/landmark/landmarkDetail'], resolve),
           }, {
@@ -689,11 +689,11 @@ export default [{
             },
             component: (resolve) => require(['../page/map/landmark/landmarkMap'], resolve),
           }, {
-            path: 'landmarkMapAdd',
-            name: 'landmarkMapAdd',
+            path: 'editLandmark',
+            name: 'editLandmark',
             meta: {
               isVerificationL: false,
-              title: '地标新增',
+              title: '新增/编辑地标',
             },
             component: (resolve) => require(['../page/map/landmark/landmarkMapAdd'], resolve),
           }]

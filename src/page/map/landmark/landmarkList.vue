@@ -254,7 +254,7 @@ export default {
       }
     },
     addLandmark: function() {
-      this.$router.push({ path: '/mapManage/landMark/landmarkMapAdd' });
+      this.$router.push({ path: '/mapManage/landMark/editLandmark' });
     }
   },
   created: function() {
