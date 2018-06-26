@@ -59,8 +59,8 @@
         <el-tab-pane label="运单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
-          <waybill-process :show-img="showImg" :img-object="imgObject" :pound-img="poundImg" :is-examine="true"></waybill-process>
-          <!-- <div class="detail-main border-top-clear">
+          <!-- <waybill-process :show-img="showImg" :img-object="imgObject" :pound-img="poundImg" :is-examine="true"></waybill-process> -->
+          <div class="detail-main border-top-clear">
             <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
@@ -624,7 +624,7 @@
                 </el-row>
               </el-main>
             </el-container>
-          </div> -->
+          </div>
         </el-tab-pane>
         <el-tab-pane label="轨迹地图" name="third">
         </el-tab-pane>
@@ -635,7 +635,7 @@
 </template>
 <script>
 import imgReview from '@/components/common/imgReview';
-import waybillProcess from '@/components/consignmentCenter/waybillProcess';
+// import waybillProcess from '@/components/consignmentCenter/waybillProcess';
 export default {
   name: 'orderProcess',
   computed: {
@@ -648,7 +648,7 @@ export default {
   },
   components: {
     imgReview: imgReview,
-    waybillProcess:waybillProcess
+    // waybillProcess:waybillProcess
   },
   data() {
     return {
