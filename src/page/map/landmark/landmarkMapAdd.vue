@@ -76,7 +76,7 @@
 export default {
   name: 'landmarkMapAdd',
   computed: {
-    landmarkId: function() {
+    id: function() {
       return this.$route.query.id || '';
     },
     pageTitle: function() {
@@ -311,15 +311,39 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
+            this.formData.position_type = (this.detailData.position_type && this.detailData.position_type.key) ? this.detailData.position_type.key : '';
+            this.formData.position_name = this.detailData.position_name ? this.detailData.position_name : '';
+            this.formData.gasType = (this.detailData.gas_type && this.detailData.gas_type.key) ? this.detailData.gas_type.key : '';
+            this.formData.contacts = this.detailData.contacts ? this.detailData.contacts : '';
+            this.formData.tel = this.detailData.tel ? this.detailData.tel : '';
+            this.formData.address = this.detailData.address ? this.detailData.address : '';
 
-            console.log('this.detailData', this.detailData);
+            this.addressDetail = {
+              address: this.detailData.address,
+              longitude: this.detailData.location && this.detailData.location.longitude ? this.detailData.location.longitude : '',
+              latitude: this.detailData.location && this.detailData.location.latitude ? this.detailData.location.latitude : '',
+              province: this.detailData.province && this.detailData.province.area_name ? this.detailData.province.area_name : '',
+              city: this.detailData.city && this.detailData.city.area_name ? this.detailData.city.area_name : '',
+              county: this.detailData.county && this.detailData.county.area_name ? this.detailData.county.area_name : '',
+            }
+
+            setTimeout(() => {
+              this.setMapZoom();
+              this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+
+              this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+              this.oldMarker.show();
+
+            }, 500)
+
+
             resolve(results);
           } else {
             reject(results);
           }
         }).catch((err) => {
           this.pageLoading = false;
-          reject(results);
+          reject(err);
         })
       })
     },

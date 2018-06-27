@@ -10,6 +10,8 @@
           </el-col>
           <el-col :span="18">
             <p>地标详情</p>
+            <el-button type="primary" @click="editLandmark
+()" size="mini">编辑</el-button>
           </el-col>
         </el-row>
       </el-header>
@@ -213,6 +215,14 @@ export default {
       }).then(() => {
         this.passCheckAjax(isSucess);
       }).catch(() => {});
+    },
+    editLandmark: function() {
+      this.$router.push({
+        path: '/mapManage/landMark/editLandmark',
+        query: {
+          id: this.id
+        }
+      });
     }
   },
   created: function() {
