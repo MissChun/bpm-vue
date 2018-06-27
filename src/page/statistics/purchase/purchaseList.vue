@@ -79,7 +79,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 2,
+        pageSize: 10,
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
