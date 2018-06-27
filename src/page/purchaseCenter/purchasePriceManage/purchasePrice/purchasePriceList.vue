@@ -1,5 +1,7 @@
 <style scoped lang="less">
-
+.el-form-item {
+  margin-bottom: 0;
+}
 
 </style>
 <template>
@@ -35,26 +37,31 @@
             <!-- <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                <template slot-scope="scope">
-                  <div v-if="item.param === 'fluid_name'">{{scope.row[item.param]}}</div>
-                  <div v-if="item.param === 'area'">
-                    <ul>
-                      <li v-for="(area,index) in scope.row.business_areas">{{area.area}}</li>
-                    </ul>
-                  </div>
-                  <div v-if="item.param === 'date'">
-                    <div v-for="(area,index) in scope.row.business_areas">
+            <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+                <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
+                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                  <template slot-scope="scope">
+                    <div v-if="item.param === 'fluid_name'">{{scope.row[item.param]}}</div>
+                    <div v-if="item.param === 'area'">
                       <ul>
-                        <li v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title">{{quotes.today_unit_price}}</li>
+                        <li v-for="(area,index) in scope.row.business_areas">{{area.area}}</li>
                       </ul>
                     </div>
-                  </div>
-                </template>
-              </el-table-column>
-            </el-table>
+                    <div v-if="item.param === 'date'">
+                      <div v-for="(area,index) in scope.row.business_areas">
+                        <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true)">
+                          <el-form-item prop="price" v-if="quotes.isShow">
+                            <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" size="mini" @blur="isShowPrice(quotes,false,'priceForm')" placeholder="请输入内容"></el-input>
+                          </el-form-item>
+                          <span v-if="!quotes.isShow">{{quotes.today_unit_price}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-form>
           </div>
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -76,6 +83,15 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      priceForm: {
+        price: ''
+      },
+      rules: {
+        price: [
+          { required: true, message: '请输入价格', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        ],
       },
       dateTime: [], //日期
       thTableList: [{
@@ -114,7 +130,75 @@ export default {
       // this.getList();
     },
     pageChange() {
-      this.getList();
+      setTimeout(() => {
+        this.getList();
+      });
+    },
+    isShowPrice(row, isShow, formName) {
+      console.log('价格', row)
+      const tableData = () => {
+        for (let i in this.tableData) {
+          for (let j in this.tableData[i].business_areas) {
+            for (let z in this.tableData[i].business_areas[j].quotes) {
+              if (this.tableData[i].business_areas[j].quotes[z].id === row.id) {
+                this.$set(this.tableData[i].business_areas[j].quotes, z, {
+                  id: row.id,
+                  isShow: isShow,
+                  price_date: row.price_date,
+                  today_unit_price: row.today_unit_price
+                })
+              } else {
+                this.$set(this.tableData[i].business_areas[j].quotes, z, {
+                  id: this.tableData[i].business_areas[j].quotes[z].id,
+                  isShow: false,
+                  price_date: this.tableData[i].business_areas[j].quotes[z].price_date,
+                  today_unit_price: this.tableData[i].business_areas[j].quotes[z].today_unit_price
+                })
+              }
+            }
+          }
+        }
+      }
+      if (isShow) {
+        this.priceForm.price = row.today_unit_price;
+        tableData();
+      } else {
+
+        let postData = {
+          id: row.id,
+          today_unit_price: this.priceForm.price
+        }
+        console.log('postData', postData, this.priceForm)
+        setTimeout(() => {
+          this.$refs['priceForm'].validate((valid) => {
+            if (valid) {
+              this.$$http('updatePurchasePrice', postData).then((results) => {
+                console.log('修改价格', results.data.data);
+                if (results.data && results.data.code == 0) {
+                  tableData();
+                  this.priceForm.price = '';
+                  this.getList();
+                  this.$message({
+                    message: '价格更新成功',
+                    type: 'success'
+                  });
+                } else {
+                  if (results.data.msg) {
+                    this.$message.error(results.data.msg);
+                  } else {
+                    this.$message.error('价格更新失败');
+                  }
+
+                }
+              }).catch((err) => {
+                this.$message.error('价格更新失败');
+              })
+            }
+          });
+        })
+
+      }
+      console.log('this.tableData', this.tableData)
     },
     getDateTitle() {
       this.$$http('getPriceDateList', {}).then((results) => {
@@ -144,6 +228,13 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
+          for (let i in this.tableData) {
+            for (let j in this.tableData[i].business_areas) {
+              for (let z in this.tableData[i].business_areas[j].quotes) {
+                this.tableData[i].business_areas[j].quotes[z].isShow = false;
+              }
+            }
+          }
           this.pageData.totalCount = results.data.data.count;
 
           console.log('this.tableData', this.tableData, this.pageData.totalCount);
@@ -162,6 +253,18 @@ export default {
       this.activeName = 'purchasePrice'
     },
   },
+  watch: {
+    tableData: {
+      handler(val, oldVal) {　　
+        // for (let i = 0; i < val.length; i++) {　　　　　　　　
+        //   if (oldVal[i] != val[i]) {　　　　　　　　　　
+        console.log('更新检测', val)　　　　　　　　
+        //   }　　　　　　
+        // }
+      },
+      　　　　deep: true
+    }
+  }
 
 };
 

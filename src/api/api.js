@@ -9,6 +9,19 @@
  */
 
 const api = {
+  updatePurchasePrice: {
+    url: '/api/v1/supplier-quotes/:id/',
+    method: 'patch',
+    desc: '价格管理修改',
+    param: {
+      id: {
+        desc: '价格ID'
+      },
+      today_unit_price: {
+        desc: '价格'
+      }
+    }
+  },
   getPurchasePriceList: {
     url: '/api/v1/supplier-quotes/',
     method: 'get',
