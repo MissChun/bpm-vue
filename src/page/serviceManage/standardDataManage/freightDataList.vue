@@ -52,7 +52,7 @@
             <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
           <div class="table-list mt-25">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" height="600" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
                   <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'||item.param==='change_number'">

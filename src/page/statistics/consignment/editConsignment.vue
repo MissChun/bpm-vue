@@ -124,12 +124,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="卸车待时金额:" prop="waiting_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
+                  <el-form-item label="分卸费:" prop="lcl_cost">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.lcl_cost"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="卸车待时金额:" prop="waiting_price">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="8">
                   <el-form-item label="运费合计:" prop="waiting_charges">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
@@ -140,6 +145,8 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation.verbose"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -193,6 +200,7 @@ export default {
         change_rate: '', //运输费率
         difference_value: '', //气差金额
         freight_value: '', //标准运费
+        lcl_cost:'',//分卸费
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
         unit_price: '', //采购单价
@@ -226,6 +234,9 @@ export default {
         ],
         waiting_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        ],
+        lcl_cost: [
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         waiting_charges: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
@@ -263,8 +274,6 @@ export default {
       this.$$http('getConsignmentStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
-
           this.editMsgForm = {
             fluid: this.detail.fluid, //实际液厂
             carrier: this.detail.carrier, //承运商
@@ -281,6 +290,7 @@ export default {
             change_rate: this.detail.change_rate, //运输费率
             difference_value: this.detail.difference_value, //气差金额
             freight_value: this.detail.freight_value, //标准运费
+            lcl_cost:this.detail.lcl_cost,//分卸费
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
             unit_price: this.detail.unit_price, //采购单价

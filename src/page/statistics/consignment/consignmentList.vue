@@ -197,6 +197,10 @@ export default {
         param: 'difference_value',
         width: ''
       }, {
+        title: '分卸费',
+        param: 'lcl_cost',
+        width: ''
+      }, {
         title: '卸车待时金额',
         param: 'waiting_price',
         width: ''
