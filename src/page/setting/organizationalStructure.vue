@@ -62,7 +62,7 @@
                 </el-table-column>
               </el-table>
               <div class="page-list text-center">
-                <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" @size-change="pageChange" v-if="!positionLoading && pageData.totalCount>10">
+                <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" @size-change="pageChange" v-if="!positionLoading && pageData.totalCount>pageData.pageSize">
                 </el-pagination>
               </div>
             </div>
@@ -205,6 +205,7 @@ export default {
     },
     // 获取职位列表
     getPositionList: function(departmentInfo, index) {
+      this.departmentRow = departmentInfo;
       if (index != this.active) {
         this.pageData.currentPage = 1;
       }

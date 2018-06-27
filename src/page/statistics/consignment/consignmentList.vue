@@ -7,7 +7,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <div class="tab-screen">
+      <div class="tab-screen border-top">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
             <el-col :span="12">
@@ -85,7 +85,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
         </el-pagination>
       </div>
     </div>
@@ -109,6 +109,7 @@ export default {
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
       selectMenus: [], //批量勾选
+      searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -226,12 +227,13 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
 
     },
     getUnReconciliations() {
       let postData = {
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -242,7 +244,7 @@ export default {
         postData.active_time_end = this.activeTime[1];
       }
       postData.batch = 'unfinished';
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.reconciliationsBtn.isDisabled = true;
       this.reconciliationsBtn.isLoading = true;
@@ -260,51 +262,52 @@ export default {
     reconciliations(isAll, id, row) {
       let content = '';
       let postData = {
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
-      if (row.waybill) {
-        if (isAll) {
+      if (isAll) {
+        if (row.waybill) {
           content = '未对账共有' + row.waybill + '单，运费合计' + row.waiting_charg + '元，是否要对所选运单进行批量对账？';
           postData.batch = 'unfinished';
         } else {
-          content = '是否确认对账？';
+          this.$message({
+            message: '没有未对账数据',
+            type: 'warning'
+          });
         }
-        if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-          postData.leave_time_start = this.leaveTime[0];
-          postData.leave_time_end = this.leaveTime[1];
-        }
-        if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-          postData.active_time_start = this.activeTime[0];
-          postData.active_time_end = this.activeTime[1];
-        }
-        postData.id = id.split(',');
-        postData[this.searchFilters.field] = this.searchFilters.keyword;
-        postData = this.pbFunc.fifterObjIsNull(postData);
-        console.log('id', id, postData);
-
-        this.$confirm(content, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.$$http('reconciliations', postData).then((results) => {
-            if (results.data && results.data.code == 0) {
-              this.getList();
-            }
-          })
-        }).catch(() => {});
       } else {
-        this.$message({
-          message: '没有未对账数据',
-          type: 'warning'
-        });
+        content = '是否确认对账？';
       }
+      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+        postData.leave_time_start = this.leaveTime[0];
+        postData.leave_time_end = this.leaveTime[1];
+      }
+      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }
+      postData.id = id.split(',');
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      console.log('id', id, postData);
+
+      this.$confirm(content, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$$http('reconciliations', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.getList();
+          }
+        })
+      }).catch(() => {});
+
     },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -314,7 +317,7 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 

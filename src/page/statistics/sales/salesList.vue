@@ -7,7 +7,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <div class="tab-screen">
+      <div class="tab-screen border-top">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
             <el-col :span="12">
@@ -22,7 +22,7 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="离站时间:" label-width="105px">
-                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -68,7 +68,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
         </el-pagination>
       </div>
     </div>
@@ -90,6 +90,7 @@ export default {
         pageSize: 10,
       },
       leaveTime: [], //离站时间
+      searchPostData: {}, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
         created_at: '',
@@ -151,7 +152,7 @@ export default {
         title: '装车吨位',
         param: 'plan_tonnage',
         width: ''
-      },{
+      }, {
         title: '实收吨位',
         param: 'actual_quantity',
         width: ''
@@ -175,7 +176,7 @@ export default {
         title: '销售单价',
         param: 'unit_price',
         width: ''
-      },{
+      }, {
         title: '卸车数',
         param: 'unload_nums',
         width: ''
@@ -202,12 +203,13 @@ export default {
         this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'business_order') {
         this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
-      }else if (tpye === 'edit') {
+      } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/sales/editSales/`, query: { id: row.id } });
       }
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
 
     },
@@ -221,7 +223,7 @@ export default {
         postData.leave_time_end = this.leaveTime[1];
       }
 
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 

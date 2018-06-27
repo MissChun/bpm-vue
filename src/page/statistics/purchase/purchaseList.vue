@@ -7,7 +7,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <div class="tab-screen">
+      <div class="tab-screen border-top">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
             <el-col :span="12">
@@ -22,7 +22,7 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="实际装车时间:" label-width="105px">
-                <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -32,7 +32,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonnage?tableData.active_tonnage:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -58,7 +58,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
         </el-pagination>
       </div>
     </div>
@@ -79,19 +79,19 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 2,
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
       planArriveTime: [], //计划到站时间
       createdAt: [], //下计划日期
+      searchPostData: {}, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
         created_at: '',
         keyword: '',
         field: 'waybill',
       },
-
       statusTabList: [{
         title: '经理审批中',
         key: 'create_manager_check',
@@ -170,16 +170,18 @@ export default {
         this.getList();
       })
     },
-    handleMenuClick(row){
-      if(row.operator === 'check'){
+    handleMenuClick(row) {
+      if (row.operator === 'check') {
         this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
-      }else if(row.operator === 'edit'){
+      } else if (row.operator === 'edit') {
         this.$router.push({ path: `/statistics/purchase/editPurchase/`, query: { id: row.id } });
       }
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
+
 
     },
     getList() {
@@ -191,7 +193,7 @@ export default {
         postData.active_time_start = this.planArriveTime[0];
         postData.active_time_end = this.planArriveTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 

@@ -7,7 +7,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <div class="tab-screen">
+      <div class="tab-screen border-top">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
             <el-col :span="12">
@@ -95,6 +95,7 @@ export default {
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
+      searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -171,6 +172,7 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
 
     },
@@ -178,7 +180,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0] + ' 00:00:00';
@@ -188,7 +190,7 @@ export default {
         postData.active_time_start = this.activeTime[0] + ' 00:00:00';
         postData.active_time_end = this.activeTime[1] + ' 23:59:59';
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
