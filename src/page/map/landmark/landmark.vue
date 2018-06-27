@@ -4,9 +4,7 @@
 </style>
 <template>
   <div>
-    <keep-alive :include="['landMarkList', 'landmarkMap']">
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>

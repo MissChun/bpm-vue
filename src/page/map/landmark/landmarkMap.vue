@@ -483,6 +483,7 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               src = _this.getIconSrc(dataItem);
+              console.log('src', src);
               if (recycledMarker) {
                 recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),

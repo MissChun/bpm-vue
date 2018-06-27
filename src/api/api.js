@@ -1392,27 +1392,36 @@ const api = {
     method: 'patch',
     desc: '审核地标',
     param: {
-      position_name: {
-        desc: '站点详情',
-      },
-      position_type: {
-        desc: '站点类型',
-      },
-      address: {
-        desc: '详细地址',
-      },
-      tel: {
-        desc: '联系电话',
-      },
-      contact: {
-        desc: '联系人',
-      },
-      confirm_status: {
-        desc: '审核状态',
-      },
-      async_status: {
-        desc: '同步状态',
-      },
+      position_name :{
+        desc:'站点名称'
+      }  ,
+      position_type :{
+        desc:'站点类型'
+      }  ,
+      longitude :{
+        desc:'经度'
+      } ,
+      latitude :{
+        desc:'纬度'
+      } ,
+      address :{
+        desc:'详细地址'
+      } ,
+      contacts  :{
+        desc:'联系人'
+      } ,
+      tel :{
+        desc:'联系人电话'
+      } ,
+      province :{
+        desc:'省级—省的全程，如四川省'
+      } ,
+      city  :{
+        desc:'市级—市的全程，如成都市'
+      } ,
+      county :{
+        desc:'县级—县级全程，如高新区'
+      } ,
     }
   },
   surePickOrder: {

@@ -693,7 +693,7 @@ export default [{
             name: 'editLandmark',
             meta: {
               isVerificationL: false,
-              title: '新增/编辑地标',
+              title: '新增、编辑地标',
             },
             component: (resolve) => require(['../page/map/landmark/landmarkMapAdd'], resolve),
           }]
