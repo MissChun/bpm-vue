@@ -63,7 +63,7 @@
               </el-table>
             </div>
             <div class="page-list text-center">
-              <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+              <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
               </el-pagination>
             </div>
           </el-tab-pane>
@@ -94,6 +94,12 @@ export default {
       statusActive: 'create_manager_check',
       planArriveTime: [], //计划到站时间
       createdAt: [], //下计划日期
+      searchPostData: {
+        plan_arrive_time: [],
+        created_at: '',
+        keyword: '',
+        field: 'consumer_name',
+      }, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
         created_at: '',
@@ -281,11 +287,13 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
     },
     getList(status) {
       let postData = {
         page: this.pageData.currentPage,
+        page_size: this.pageData.pageSize,
         status: status
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
@@ -296,7 +304,7 @@ export default {
         postData.created_at_start = this.createdAt[0] + ' 00:00:00';
         postData.created_at_end = this.createdAt[1] + ' 23:59:59';
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
 
       this.pageLoading = true;
 

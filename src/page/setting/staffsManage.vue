@@ -43,8 +43,8 @@
               <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.position_name" :name="item.id">
                 <div class="position-list table-list">
                   <div class="staff-radio">
-                    <el-radio v-model="isValid" label="1" @change="getStaffsList(currentDepartmentId,currentPositionId,'True')">有效</el-radio>
-                    <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,'False')">已注销</el-radio>
+                    <el-radio v-model="isValid" label="1" @change="getStaffsList(currentDepartmentId,currentPositionId,'True',true)">有效</el-radio>
+                    <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,'False',true)">已注销</el-radio>
                   </div>
                   <el-table :data="staffsTableData" stripe style="width: 100%" size="mini" v-loading="staffLoading">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
@@ -62,7 +62,7 @@
                     </el-table-column>
                   </el-table>
                   <div class="page-list text-center">
-                    <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+                    <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
                     </el-pagination>
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export default {
           if (this.positionTableData.length) {
             this.staffsActive = this.positionTableData[0].id;
             this.currentPositionId = this.positionTableData[0].id;
-            this.getStaffsList(departmentId, this.currentPositionId, 'True');
+            this.getStaffsList(departmentId, this.currentPositionId, 'True', true);
           }
         }
       }).catch((err) => {
@@ -208,7 +208,10 @@ export default {
       })
     },
     // 获取员工列表
-    getStaffsList: function(departmentId, positionId, isDeletd) {
+    getStaffsList: function(departmentId, positionId, isDeletd, isReset) {
+      if (isReset) {
+        this.pageData.currentPage = 1;
+      }
       let postData = {
         department: departmentId,
         is_active: isDeletd,
@@ -216,7 +219,8 @@ export default {
         page_size: this.pageData.pageSize,
         position: positionId
       };
-      this.pageData.currentPage = 1;
+
+
       console.log('员工', postData)
       this.staffLoading = true;
       this.$$http('getStaffs', postData).then((results) => {
@@ -289,8 +293,8 @@ export default {
     staffClick: function(tab, event) {
       console.log('职位', tab, event);
       this.currentPositionId = tab.name;
-      this.isValid = '1',
-        this.getStaffsList(this.currentDepartmentId, tab.name, 'True')
+      this.isValid = '1';
+      this.getStaffsList(this.currentDepartmentId, tab.name, 'True', true)
     },
 
 
