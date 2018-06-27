@@ -14,7 +14,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="地标类型:" prop="position_type">
-                <el-select v-model="formData.position_type" placeholder="请选择">
+                <el-select v-model="formData.position_type" :disabled="!!id" placeholder="请选择">
                   <el-option v-for="(item,key) in positionTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -29,8 +29,8 @@
           </el-row>
           <el-row v-if="formData.position_type === 'LNG_FACTORY'">
             <el-col :span="20">
-              <el-form-item label="气种:" prop="gasType">
-                <el-select v-model="formData.gasType" placeholder="请选择">
+              <el-form-item label="气种:" prop="gas_type">
+                <el-select v-model="formData.gas_type" :disabled="!!id" placeholder="请选择">
                   <el-option v-for="(item,key) in gasTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -95,13 +95,13 @@ export default {
       placeSearch: '',
       geocoder: '',
       keyword: '',
-      zoomBoundary: 12,
+      zoomBoundary: 16,
       mapMessage: '',
       dialogVisible: false,
       formData: {
         position_type: '',
         position_name: '',
-        gasType: '',
+        gas_type: '',
         contacts: '',
         tel: '',
         address: '',
@@ -119,11 +119,11 @@ export default {
         "verbose": "气源液厂"
       }],
       gasTypeSelect: [{
-        "key": "海气",
+        "key": "SEA_GAS",
         "verbose": "海气"
       }, {
-        "key": "天然气",
-        "verbose": "天然气"
+        "key": "NORTHWEST",
+        "verbose": "西北气"
       }],
       rules: {
         position_type: [
@@ -133,7 +133,7 @@ export default {
           { required: true, message: '请输入地标名称', trigger: 'blur' },
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{0,20})$/gi, message: '地标名称为1～20个字符', trigger: 'blur' },
         ],
-        gasType: [
+        gas_type: [
           { required: true, message: '请选择气种', trigger: 'change' },
         ],
         contacts: [
@@ -292,7 +292,7 @@ export default {
       this.$refs['addLandmarkForm'].validate((valid) => {
         if (valid) {
 
-          let apiName = this.id ? 'addLandmark' : 'addLandmark';
+          let apiName = this.id ? 'patchLandMarkDetail' : 'addLandmark';
 
           this.addEditLandmarkAjax(apiName);
 
@@ -311,12 +311,15 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
-            this.formData.position_type = (this.detailData.position_type && this.detailData.position_type.key) ? this.detailData.position_type.key : '';
-            this.formData.position_name = this.detailData.position_name ? this.detailData.position_name : '';
-            this.formData.gasType = (this.detailData.gas_type && this.detailData.gas_type.key) ? this.detailData.gas_type.key : '';
-            this.formData.contacts = this.detailData.contacts ? this.detailData.contacts : '';
-            this.formData.tel = this.detailData.tel ? this.detailData.tel : '';
-            this.formData.address = this.detailData.address ? this.detailData.address : '';
+
+            this.formData = {
+              position_type: (this.detailData.position_type && this.detailData.position_type.key) ? this.detailData.position_type.key : '',
+              position_name: this.detailData.position_name ? this.detailData.position_name : '',
+              gas_type: (this.detailData.gas_type && this.detailData.gas_type.key) ? this.detailData.gas_type.key : '',
+              contacts: this.detailData.contacts ? this.detailData.contacts : '',
+              tel: this.detailData.tel ? this.detailData.tel : '',
+              address: this.detailData.address ? this.detailData.address : '',
+            }
 
             this.addressDetail = {
               address: this.detailData.address,
@@ -362,6 +365,16 @@ export default {
           city: this.addressDetail.city,
           county: this.addressDetail.county,
         };
+
+        if (apiName === 'addLandmark' && this.formData.position_type === 'LNG_FACTORY') {
+          postData.gas_type = this.formData.gas_type;
+        }
+
+        if (apiName === 'patchLandMarkDetail') {
+          postData.id = this.id;
+          delete postData.source_type;
+          delete postData.position_type;
+        }
 
         this.submitBtn.btnText = '提交中';
         this.submitBtn.isLoading = true;

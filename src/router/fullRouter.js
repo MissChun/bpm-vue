@@ -464,11 +464,11 @@ export default [{
             isVerificationL: false,
             title: '客户站点',
           },
-          redirect: '/businessManage/customerManage/stationManageAll/customerManageList',
+          redirect: '/businessManage/customerManage/stationManageAll/stationManageList',
           component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll'], resolve),
           children: [{
-            path: 'customerManageList',
-            name: 'customerManageList',
+            path: 'stationManageList',
+            name: 'stationManageList',
             meta: {
               isVerificationL: false,
               title: '站点列表',
@@ -479,7 +479,7 @@ export default [{
             name: 'stationManageEditAdd',
             meta: {
               isVerificationL: false,
-              title: '站点编辑新增',
+              title: '编辑、新增站点',
             },
             component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageEditAdd'], resolve),
           }, {
