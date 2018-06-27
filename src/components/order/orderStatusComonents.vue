@@ -163,8 +163,8 @@ export default {
     countParam: Object
   },
   methods: {
-    changeTabs: function(name) {
-      this.$emit("changeTab", name);
+    changeTabs: function(tabsObj) {
+      this.$emit("changeTab", tabsObj);
     },
     searchList: function(targetName) {
       //

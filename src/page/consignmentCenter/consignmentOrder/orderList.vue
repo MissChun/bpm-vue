@@ -15,42 +15,42 @@
         <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_driver_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs" :countParam="allcounts['all_driver_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_match_count" name="second">
           <div v-if="activeName=='second'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_match_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs" :countParam="allcounts['all_match_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_unload_count" name="third">
           <div v-if="activeName=='third'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_unload_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs" :countParam="allcounts['all_unload_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_settlement_count" name="fourth">
           <div v-if="activeName=='fourth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs " :countParam="allcounts['all_settlement_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs " :countParam="allcounts['all_settlement_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_change_count" name="fifth">
           <div v-if="activeName=='fifth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_change_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs" :countParam="allcounts['all_change_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_finish_count" name="sxith">
           <div v-if="activeName=='sxith'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_finish_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="childchangeTabs" :countParam="allcounts['all_finish_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -175,6 +175,10 @@ export default {
     },
     changeTabs: function(fifterName) {
       this.activeName = fifterName;
+      this.reshCount();
+    },
+    childchangeTabs:function(tabsObj){
+      this.activeName = tabsObj.first;
       this.reshCount();
     },
     goAddNewOder: function() {

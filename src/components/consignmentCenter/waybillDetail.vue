@@ -56,6 +56,32 @@
               </div>
             </el-col>
           </el-row>
+          <el-row :gutter="40">
+            <el-col :span="6">
+              <div class="label-list">
+                <label>供应商:</label>
+                <div class="detail-form-item">{{detailData.delivery_order.supplier_name}}</div>
+            </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="label-list">
+                 <label>采购价:</label>
+                 <div class="detail-form-item">{{detailData.delivery_order.unit_price}}</div>
+              </div>
+            </el-col>
+             <el-col :span="6">
+              <div class="label-list">
+                 <label>采购优惠:</label>
+                 <div class="detail-form-item">{{detailData.delivery_order.discount_price}}</div>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="label-list">
+                 <label>液厂名称:</label>
+                 <div class="detail-form-item">{{detailData.delivery_order.fluid_name}}</div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
         <div class="detail-list detail-form">
           <div class="detail-form-title">
@@ -251,7 +277,10 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶员:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></div>
+                <div class="detail-form-item" >
+                  <span v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></span>
+                  <span style="margin-left:15px;" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.mobile_phone)"></span>
+                </div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -265,15 +294,21 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>副驾驶:</label>
-                <div class="detail-form-item" v-if="transPowerData.vice_driver" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></div>
-                <div v-else>无</div>
+                <div class="detail-form-item"  >
+                  <span v-if="transPowerData.vice_driver&&transPowerData.vice_driver.name" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></span>
+                  <span style="margin-left:15px;" v-if="transPowerData.vice_driver&&transPowerData.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.vice_driver.mobile_phone)"></span>
+                  <span v-else v-html="pbFunc.dealNullData('')"></span>
+                </div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>押运员:</label>
-                <div class="detail-form-item" v-if="transPowerData.escort_staff" v-html="pbFunc.dealNullData(transPowerData.escort_staff.name)"></div>
-                <div v-else>无</div>
+                <div class="detail-form-item" v-if="transPowerData.escort_staff">
+                  <span v-if="transPowerData.escort_staff&&transPowerData.escort_staff.name" v-html="pbFunc.dealNullData(transPowerData.escort_staff.name)"></span>
+                  <span style="margin-left:15px;" v-if="transPowerData.escort_staff&&transPowerData.escort_staff.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.escort_staff.mobile_phone)"></span>
+                  <span v-else v-html="pbFunc.dealNullData('')"></span>
+                </div>
               </div>
             </el-col>
           </el-row>

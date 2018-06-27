@@ -112,7 +112,7 @@
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.delivery_order.plan_tonnage}}
                 </el-col>
-                <el-col :span="3" class="colinfo"><span v-if="props.row.delivery_order.active_tonnage">{{props.row.delivery_order.active_tonnage}}</span><span v-else>无</span>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
@@ -386,7 +386,7 @@ export default {
                 type: "success",
                 message: "取消运单成功",
               });
-              vm.$emit("refreshList");
+              vm.$emit("changeTabs",{first:'sxith',second:"all"});
             } else {
               vm.$message.error("取消运单失败");
             }

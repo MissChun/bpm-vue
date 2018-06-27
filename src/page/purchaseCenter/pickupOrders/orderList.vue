@@ -183,6 +183,7 @@ export default {
         totalPage: 1,
         pageSize: 10,
       },
+      timeParam:[],
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -202,13 +203,7 @@ export default {
       } else {
         return 'all'
       }
-    },
-    timeParam:function(){
-      var myDate = new Date();
-      var myDate1=myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()+" 00:00:00";
-      var myDate2=myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()+" 23:59:59";
-      return [myDate1,myDate2];
-    } 
+    }
   },
   methods: {
     clicktabs: function(targetName) {
@@ -244,7 +239,8 @@ export default {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
       }else{
-        sendData.page = 1;
+        this.pageData.currentPage=1;
+        sendData.page = this.pageData.currentPage;
       }
       if (this.thisFifterName == 'history') {
         if(this.historyStatus=='history'||this.historyStatus==''){
@@ -308,6 +304,9 @@ export default {
     if (this.thisFifterName != this.fifterName) {
       this.thisFifterName = this.fifterName;
     }
+    var defaultStart=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00"
+    var defaultEnd=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
+    this.timeParam=[defaultStart,defaultEnd];
     this.searchList();
   },
   watch: {
