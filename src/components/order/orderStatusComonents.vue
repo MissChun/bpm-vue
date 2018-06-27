@@ -139,6 +139,7 @@ export default {
         fieldSelect: [
           { id: 'station_name', value: '承运商' },
           { id: 'order_number', value: '订单号' },
+          { id: 'truck_no', value: '车号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
         ]

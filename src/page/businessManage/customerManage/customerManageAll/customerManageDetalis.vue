@@ -213,7 +213,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.headId });
+      this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.customerId });
     },
 
   }

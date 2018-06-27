@@ -1405,36 +1405,36 @@ const api = {
     method: 'patch',
     desc: '审核地标',
     param: {
-      position_name :{
-        desc:'站点名称'
-      }  ,
-      position_type :{
-        desc:'站点类型'
-      }  ,
-      longitude :{
-        desc:'经度'
-      } ,
-      latitude :{
-        desc:'纬度'
-      } ,
-      address :{
-        desc:'详细地址'
-      } ,
-      contacts  :{
-        desc:'联系人'
-      } ,
-      tel :{
-        desc:'联系人电话'
-      } ,
-      province :{
-        desc:'省级—省的全程，如四川省'
-      } ,
-      city  :{
-        desc:'市级—市的全程，如成都市'
-      } ,
-      county :{
-        desc:'县级—县级全程，如高新区'
-      } ,
+      position_name: {
+        desc: '站点名称'
+      },
+      position_type: {
+        desc: '站点类型'
+      },
+      longitude: {
+        desc: '经度'
+      },
+      latitude: {
+        desc: '纬度'
+      },
+      address: {
+        desc: '详细地址'
+      },
+      contacts: {
+        desc: '联系人'
+      },
+      tel: {
+        desc: '联系人电话'
+      },
+      province: {
+        desc: '省级—省的全程，如四川省'
+      },
+      city: {
+        desc: '市级—市的全程，如成都市'
+      },
+      county: {
+        desc: '县级—县级全程，如高新区'
+      },
     }
   },
   surePickOrder: {
@@ -1679,7 +1679,7 @@ const api = {
     }
   },
   getCustomerDetlis: {
-    url: '/api/v1/consumer/:id',
+    url: '/api/v1/consumer/:id/',
     method: 'get',
     desc: '获取客户详情',
     param: {
@@ -1695,7 +1695,7 @@ const api = {
     }
   },
   upadtecustomerFrom: {
-    url: '/api/v1/consumer/:id',
+    url: '/api/v1/consumer/:id/',
     method: 'patch',
     desc: '更新客户',
     param: {
@@ -1703,59 +1703,92 @@ const api = {
     }
   },
   creatCustomerFrom: {
-    url: '/api/v1/consumer',
+    url: '/api/v1/consumer/',
     method: 'post',
     desc: '添加客户',
     param: {
 
     }
   },
-  addLandmark:{
+  addLandmark: {
     url: '/api/v1/fluid-sites/',
     method: 'post',
     desc: "站点信息上传",
     param: {
-      position_name :{
-        desc:'站点名称'
-      }  ,
-      position_type :{
-        desc:'站点类型'
-      }  ,
-      longitude :{
-        desc:'经度'
-      } ,
-      latitude :{
-        desc:'纬度'
-      } ,
-      address :{
-        desc:'详细地址'
-      } ,
-      contacts  :{
-        desc:'联系人'
-      } ,
-      tel :{
-        desc:'联系人电话'
-      } ,
-      source_type :{
-        desc:'上传类型'
+      position_name: {
+        desc: '站点名称'
       },
-      province :{
-        desc:'省级—省的全程，如四川省'
-      } ,
-      city  :{
-        desc:'市级—市的全程，如成都市'
-      } ,
-      county :{
-        desc:'县级—县级全程，如高新区'
-      } ,
-      upload_user :{
-        desc:'上传用户，司机端上传时该参数必填'
-      } ,
-      position_pics :{
-        desc:'站点图片'
+      position_type: {
+        desc: '站点类型'
+      },
+      longitude: {
+        desc: '经度'
+      },
+      latitude: {
+        desc: '纬度'
+      },
+      address: {
+        desc: '详细地址'
+      },
+      contacts: {
+        desc: '联系人'
+      },
+      tel: {
+        desc: '联系人电话'
+      },
+      source_type: {
+        desc: '上传类型'
+      },
+      province: {
+        desc: '省级—省的全程，如四川省'
+      },
+      city: {
+        desc: '市级—市的全程，如成都市'
+      },
+      county: {
+        desc: '县级—县级全程，如高新区'
+      },
+      upload_user: {
+        desc: '上传用户，司机端上传时该参数必填'
+      },
+      position_pics: {
+        desc: '站点图片'
       }
     }
   },
+  searchSupplierList: {
+    url: '/api/v1/suppliers/',
+    method: 'get',
+    desc: '查询供应商列表',
+    param: {
+
+    }
+  },
+  creatSupplierFrom: {
+    url: '/api/v1/suppliers/',
+    method: 'POST',
+    desc: '新增供应商',
+    param: {
+
+    }
+  },
+
+  getSupplierDetlis: {
+    url: '/api/v1/suppliers/:id/',
+    method: 'get',
+    desc: '获取供应商详情',
+    param: {
+
+    }
+  },
+  upadteSupplierFrom: {
+    url: '/api/v1/suppliers/:id/',
+    method: 'PUT',
+    desc: '修改供应商',
+    param: {
+
+    }
+  }
 }
 
 

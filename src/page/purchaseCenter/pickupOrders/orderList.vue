@@ -174,7 +174,7 @@ export default {
         canceled_count:'已取消',
         history_count: '历史'
       },
-      timeParam: [],
+      //timeParam: [],
       listFifterData: [],
       activeName: 'first',
       thisFifterName: 'all',
@@ -203,6 +203,12 @@ export default {
         return 'all'
       }
     },
+    timeParam:function(){
+      var myDate = new Date();
+      var myDate1=myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()+" 00:00:00";
+      var myDate2=myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate()+" 23:59:59";
+      return [myDate1,myDate2];
+    } 
   },
   methods: {
     clicktabs: function(targetName) {

@@ -421,7 +421,7 @@ export default {
       });
     },
     getSupplier: function() {
-      var sendData = {};
+      var sendData = {need_all:'true'};
 
       this.loadingArr.supplierLoading = true;
       this.$$http("getSupplier", sendData).then((results) => {
@@ -444,6 +444,7 @@ export default {
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
           this.selectData.carriersOwnList = dataBody;
+          this.carriersParam.ownCarriers=this.pbFunc.deepcopy(dataBody[0].id);
         }
       }).catch(() => {
         this.loadingArr.carriersLoading = false;

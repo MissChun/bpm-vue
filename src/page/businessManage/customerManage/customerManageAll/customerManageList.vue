@@ -94,8 +94,8 @@ export default {
       seachListParam:{
         consumer_name:"",
         short_name_id:"",
-        brand:"",
-        brands:""
+        contact_phone:"",
+        sale_man_name:""
       },
       pageLoading: true,
       pageData: {
