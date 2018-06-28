@@ -28,12 +28,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="客户简称:" prop="short_name">
-                    <el-input  placeholder="请输入客户简称" type="text" v-model="customerFrom.short_name"></el-input>
+                    <el-input placeholder="请输入客户简称" type="text" v-model="customerFrom.short_name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="客户等级:" prop="consumer_level">
-                     <el-select v-model="customerFrom.consumer_level" placeholder="请选择客户等级">
+                    <el-select v-model="customerFrom.consumer_level" placeholder="请选择客户等级">
                       <el-option v-for="(item,key) in selectData.customerType" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -41,18 +41,18 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="联系人:" prop="contact_person" >
-                    <el-input placeholder="请输入联系人" type="text" v-model="customerFrom.contact_person" ></el-input>
+                  <el-form-item label="联系人:" prop="contact_person">
+                    <el-input placeholder="请输入联系人" type="text" v-model="customerFrom.contact_person"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="联系电话:" prop="contact_phone">
-                    <el-input  placeholder="请输入联系电话" type="text" v-model="customerFrom.contact_phone"></el-input>
+                    <el-input placeholder="请输入联系电话" type="text" v-model="customerFrom.contact_phone"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="分属业务员:" prop="sale_man_id" v-loading="saleManPading">
-                    <el-select v-model="customerFrom.sale_man_id" placeholder="请选择">
+                    <el-select v-model="customerFrom.sale_man_id" filterable placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -91,12 +91,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="超时计算单价:" prop="waiting_price" >
+                  <el-form-item label="超时计算单价:" prop="waiting_price">
                     <el-input placeholder="请输入超时计算单价" type="num" v-model.trim="customerFrom.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item  label="亏吨标准:" prop="kui_tons_standard" >
+                  <el-form-item label="亏吨标准:" prop="kui_tons_standard">
                     <el-input placeholder="请输入亏吨标准" type="num" v-model.trim="customerFrom.kui_tons_standard"></el-input>
                   </el-form-item>
                 </el-col>
@@ -131,15 +131,15 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="合同起始日期:" prop="contract_start_date" :editable="editable" >
-                    <el-date-picker  @blur="VaDate" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="请选择" v-model="customerFrom.contract_start_date" style="width: 100%;"></el-date-picker>
+                  <el-form-item label="合同起始日期:" prop="contract_start_date" :editable="editable">
+                    <el-date-picker @blur="VaDate" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="请选择" v-model="customerFrom.contract_start_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="12">
                   <el-form-item label="合同截止日期:" prop="contract_end_date" :editable="editable">
-                    <el-date-picker  @blur="VaDate" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="请选择" v-model="customerFrom.contract_end_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker @blur="VaDate" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="请选择" v-model="customerFrom.contract_end_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -162,14 +162,14 @@ export default {
   name: 'customerManageEditAdd',
   data() {
     var phoneVa = (rule, value, callback) => {
-      if (value.match(/^\d{3,4}-?\d{7,8}$/)||value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
+      if (value.match(/^\d{3,4}-?\d{7,8}$/) || value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
         callback();
       } else {
         callback(new Error("应为11位手机号或12位座机号"));
       }
     };
     var numVa = (rule, value, callback) => {
-      if (value.match(/^([1-9]\d*|0)(\.\d{1,2})?$/)||value=="") {
+      if (value.match(/^([1-9]\d*|0)(\.\d{1,2})?$/) || value == "") {
         callback();
       } else {
         callback(new Error("应为最多两位小数的有效数值"));
@@ -177,10 +177,10 @@ export default {
     };
     var startVa = (rule, value, callback) => {
 
-      if ((this.customerFrom.contract_end_date!=""&&this.customerFrom.contract_end_date!='undefined')) {
-        if(((new Date(value))-(new Date(this.customerFrom.contract_end_date))<0)||value==""){
+      if ((this.customerFrom.contract_end_date != "" && this.customerFrom.contract_end_date != 'undefined')) {
+        if (((new Date(value)) - (new Date(this.customerFrom.contract_end_date)) < 0) || value == "") {
           callback();
-        }else{
+        } else {
           callback(new Error("合同起始日期需小于合同截止日期"));
         }
       } else {
@@ -188,10 +188,10 @@ export default {
       }
     };
     var endVa = (rule, value, callback) => {
-      if ((this.customerFrom.contract_start_date!=""&&this.customerFrom.contract_start_date!='undefined')) {
-        if(((new Date(this.customerFrom.contract_start_date))-(new Date(value))<0)||value==""){
+      if ((this.customerFrom.contract_start_date != "" && this.customerFrom.contract_start_date != 'undefined')) {
+        if (((new Date(this.customerFrom.contract_start_date)) - (new Date(value)) < 0) || value == "") {
           callback();
-        }else{
+        } else {
           callback(new Error("合同截止日期需大于合同起始日期"));
         }
       } else {
@@ -199,70 +199,70 @@ export default {
       }
     };
     var social_credit_codeVa = (rule, value, callback) => {
-      if(value.match(/^([A-Z0-9]{18})$/)||value==""){
+      if (value.match(/^([A-Z0-9]{18})$/) || value == "") {
         callback();
-      }else{
+      } else {
         callback(new Error("由18位数字和大写字母组成"));
       }
     }
-    
+
     return {
-      editable:false,
+      editable: false,
       editStatus: false,
       titleType: "新增客户",
       editable: false,
       pageLoading: false,
-      saleManPading:false,
-      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man_id', 'social_credit_code','consumer_address'],
+      saleManPading: false,
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man_id', 'social_credit_code', 'consumer_address'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
-      customerFrom3Arr: ['contract_no', 'contract_start_date','contract_end_date'],
+      customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
-        
+
       },
-      
+
       rules: {
         //1
-        consumer_name:[
+        consumer_name: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
           { min: 1, max: 20, message: '客户名称为1~20个字符', trigger: 'blur' }
         ],
-        short_name:[
+        short_name: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
           { min: 1, max: 20, message: '客户简称为1~20个字符', trigger: 'blur' }
         ],
-        consumer_level:[
+        consumer_level: [
           { required: true, message: '该项为必填项', trigger: 'blur' }
         ],
-        contact_person:[
+        contact_person: [
           { min: 0, max: 20, message: '客户简称为1~20个字符', trigger: 'blur' }
         ],
-        contact_phone:[
+        contact_phone: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
-          { validator:phoneVa , trigger: 'blur' },
+          { validator: phoneVa, trigger: 'blur' },
         ],
-        sale_man_id:[
+        sale_man_id: [
           { required: true, message: '该项为必填项', trigger: 'blur' }
         ],
-        social_credit_code:[{ validator:social_credit_codeVa , trigger: 'blur' }],
-        consumer_address:[],
+        social_credit_code: [{ validator: social_credit_codeVa, trigger: 'blur' }],
+        consumer_address: [],
         //2
-        free_hour:[
-          { validator:numVa , trigger: 'blur' },
+        free_hour: [
+          { validator: numVa, trigger: 'blur' },
         ],
-        waiting_price:[
-          { validator:numVa , trigger: 'blur' },
+        waiting_price: [
+          { validator: numVa, trigger: 'blur' },
         ],
-        kui_tons_standard:[
-          { validator:numVa , trigger: 'blur' },
+        kui_tons_standard: [
+          { validator: numVa, trigger: 'blur' },
         ],
-        settlement_cycle:[],
+        settlement_cycle: [],
         //3
-        contract_no:[],
-        contract_start_date:[
-          { validator:startVa , trigger: 'blur' },
+        contract_no: [],
+        contract_start_date: [
+          { validator: startVa, trigger: 'blur' },
         ],
-        contract_end_date:[
-          { validator:endVa , trigger: 'blur' },
+        contract_end_date: [
+          { validator: endVa, trigger: 'blur' },
         ]
       }
     }
@@ -279,9 +279,9 @@ export default {
   computed: {
     selectData: function() {
       return {
-        customerType: [{verbose:"一类客户",key:"a"},{verbose:"二类客户",key:"b"},{verbose:"三类客户",key:"c"}],
+        customerType: [{ verbose: "一类客户", key: "a" }, { verbose: "二类客户", key: "b" }, { verbose: "三类客户", key: "c" }],
         //saleMan: this.$store.state.common.selectData.saleMan,
-        settlementType: [{verbose:"预付",key:"0"},{verbose:"现结",key:"1"},{verbose:"周结",key:"2"},{verbose:"月结",key:"3"},{verbose:"见磅单付款",key:"4"}],
+        settlementType: [{ verbose: "预付", key: "0" }, { verbose: "现结", key: "1" }, { verbose: "周结", key: "2" }, { verbose: "月结", key: "3" }, { verbose: "见磅单付款", key: "4" }],
       }
     },
     returnPage: function() {
@@ -308,7 +308,7 @@ export default {
     }
   },
   methods: {
-    VaDate:function(){
+    VaDate: function() {
       this.validatorFrom('addEditFormSetp3');
     },
     goOtherSetp: function(stepInfo, operation, formName) {
@@ -327,19 +327,19 @@ export default {
         this.$router.push({ path: "/businessManage/customerManage/customerManageAll" });
       }
     },
-    getSaleMan:function(){
-      var sendData={
-        department_identity:'business'
+    getSaleMan: function() {
+      var sendData = {
+        department_identity: 'business'
       };
-      var vm=this;
-      this.saleManPading=true;
-      this.$$http("getSaleManList",sendData).then((result)=>{
-        if(result.data.code==0||result.data.data.code){
-          vm.selectData.saleMan=result.data.data.data;
+      var vm = this;
+      this.saleManPading = true;
+      this.$$http("getSaleManList", sendData).then((result) => {
+        if (result.data.code == 0 || result.data.data.code) {
+          vm.selectData.saleMan = result.data.data.data;
         }
-        vm.saleManPading=false;
-      }).catch(()=>{
-        vm.saleManPading=false;
+        vm.saleManPading = false;
+      }).catch(() => {
+        vm.saleManPading = false;
       });
     },
     updateFrom: function(operation, formName) {
@@ -417,7 +417,7 @@ export default {
 
           sendData = this.pbFunc.fifterObjIsNull(sendData);
           sendData = this.pbFunc.fifterbyArr(sendData, this.customerFrom1Arr);
-          
+
           this.$$http('creatCustomerFrom', sendData).then((result) => {
             vm.pageLoading = false;
             if (result.data.code == 0) {
