@@ -183,8 +183,8 @@ export default [{
           }]
         }]
       }, {
-        path: 'purchasePriceList',
-        name: 'purchasePriceList',
+        path: 'purchasePriceManage',
+        name: 'purchasePriceManage',
         meta: {
           isVerificationL: false,
           title: '采购价管理',
@@ -224,6 +224,14 @@ export default [{
               title: '目的地设置列表',
             },
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList'], resolve),
+          },{
+            path: 'editDestination',
+            name: 'editDestination',
+            meta: {
+              isVerificationL: false,
+              title: '目的地编辑',
+            },
+            component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/editDestination'], resolve),
           }]
         }]
         // children: [{

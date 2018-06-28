@@ -9,6 +9,58 @@
  */
 
 const api = {
+  updateDestinationTime: {
+    url: '/api/v1/fluid-business-areas/set-effect-time/',
+    method: 'patch',
+    desc: '设置生效时间',
+    param: {
+      effect_time:{
+        desc: '生效时间 %H:%M'
+      },
+      relations:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
+  updateDestinationAreas: {
+    url: '/api/v1/fluid-business-areas/',
+    method: 'post',
+    desc: '目的地设置更新',
+    param: {
+      fluid_id:{
+        desc: '液厂ID'
+      },
+      area_ids:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
+  getDestinationDetail: {
+    url: '/api/v1/fluid-areas/:id/',
+    method: 'get',
+    desc: '目的地设置详情',
+    param: {
+      id:{
+        desc: '目的地ID'
+      }
+    }
+  },
+  getDestinationList: {
+    url: '/api/v1/fluid-areas/',
+    method: 'get',
+    desc: '目的地设置列表',
+    param: {
+
+    }
+  },
+  getBusinessAreasList: {
+    url: '/api/v1/business_areas/',
+    method: 'get',
+    desc: '业务区域列表',
+    param: {
+
+    }
+  },
   updatePurchasePrice: {
     url: '/api/v1/supplier-quotes/:id/',
     method: 'patch',

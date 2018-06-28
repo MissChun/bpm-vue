@@ -47,7 +47,7 @@ export const deepcopy = ARROBJ.deepcopy
 export const fifterObjIsNull = ARROBJ.fifterObjIsNull
 export const fifterbyArr = ARROBJ.fifterbyArr
 export const dealNullData = ARROBJ.dealNullData
-
+export const format = ARROBJ.format
 /* 字符串相关 */
 export const paddingZero = STR.paddingZero
 export const trimStr = STR.trimStr

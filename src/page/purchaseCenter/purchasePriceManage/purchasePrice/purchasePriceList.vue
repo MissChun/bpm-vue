@@ -3,6 +3,50 @@
   margin-bottom: 0;
 }
 
+.el-table {
+  /deep/ td {
+    padding: 0;
+  }
+  /deep/ .cell {
+    padding: 0!important;
+  }
+}
+
+.table-list {
+  ul {
+    li {
+      height: 31px;
+
+      line-height: 31px;
+
+      border-bottom: 1px solid #e4e7ed;
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}
+
+.price {
+  height: 32px;
+
+  line-height: 32px;
+
+  border-bottom: 1px solid #e4e7ed;
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+// .table-list{
+//   ul{
+//     li{
+//       height: 36px;
+//       border-bottom: 1px solid #e4e7ed;
+//     }
+//   }
+// }
+
 </style>
 <template>
   <div>
@@ -38,7 +82,7 @@
           </div>
           <div class="table-list">
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
-              <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading">
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                   <template slot-scope="scope">
@@ -50,7 +94,7 @@
                     </div>
                     <div v-if="item.param === 'date'">
                       <div v-for="(area,index) in scope.row.business_areas">
-                        <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true)">
+                        <div class="price" v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true)">
                           <el-form-item prop="price" v-if="quotes.isShow">
                             <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" size="mini" @blur="isShowPrice(quotes,false,'priceForm')" placeholder="请输入内容"></el-input>
                           </el-form-item>
@@ -105,6 +149,7 @@ export default {
       }],
       tableData: [],
       activeName: 'purchasePrice',
+      searachPostData:{},//搜索参数
       searchFilters: {
         keyword: '',
         field: 'fluid',
@@ -127,7 +172,8 @@ export default {
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
-      // this.getList();
+      this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
+      this.getList();
     },
     pageChange() {
       setTimeout(() => {
@@ -221,7 +267,7 @@ export default {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.$$http('getPurchasePriceList', postData).then((results) => {
         console.log('results', results.data.data.results);
