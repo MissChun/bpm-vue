@@ -7,12 +7,11 @@
         <el-tab-pane label="客户站点" name="stationManage">
           <div class="tab-screen">
             <div class="nav-tab-setting">
-              <el-tabs v-model="childActiveName" type="card" @tab-click="clicktabs">
+              <el-tabs v-model="childActiveName" type="card" @tab-click="clickChildtabs">
                 <el-tab-pane label="列表" name="statationList">
                   列表
                 </el-tab-pane>
                 <el-tab-pane label="地图" name="statationMap">
-                  地图
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -25,6 +24,9 @@
 <script>
 export default {
   name: 'stationManageList',
+  components: {
+
+  },
   data() {
 
     return {
@@ -37,6 +39,9 @@ export default {
   },
   methods: {
     clicktabs: function() {
+
+    },
+    clickChildtabs: function() {
 
     }
   },
