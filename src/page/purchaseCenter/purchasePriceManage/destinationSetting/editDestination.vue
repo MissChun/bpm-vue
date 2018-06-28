@@ -180,7 +180,7 @@ export default {
       })
     },
     returnToPage: function() {
-      this.$router.push({ path: "/purchaseCenter/purchasePriceList/destinationSetting/destinationSettingList" });
+      this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -213,14 +213,15 @@ export default {
           console.log('form555', this.detail);
           this.titleType = this.detail.fluid_name;
           for (let i in this.detail.areas) {
-            this.selectMenus.push(this.detail.areas[i].id);
+            this.selectMenus.push(this.detail.areas[i].area_id);
           }
           let timeArr = this.detail.areas.length ? (this.detail.areas[0].effect_time).split(':') : [];
           if (timeArr.length) {
             this.editMsgForm.effect_time = new Date(dateArr[0], dateArr[1], dateArr[2], timeArr[0], timeArr[1]);
           }
 
-          console.log('有效时间', timeArr, this.editMsgForm.effect_time, new Date(2016, 9, 10, 18, 40))
+
+          console.log('有效时间', this.detail.areas,this.selectMenus)
 
         }
       })
@@ -250,14 +251,14 @@ export default {
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
             console.log('results', results);
-            if (results.data && results.data.code == 0 && results.data.data) {
+            if (results.data && results.data.code == 0) {
               this.$message({
                 message: '提交成功',
                 type: 'success'
               });
-              if (isReview) {
+              // if (isReview) {
                 this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
-              }
+              // }
             }
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;
@@ -277,7 +278,7 @@ export default {
       // let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       let postData = {
         fluid_id: this.id,
-        ares_ids: this.selectMenus
+        area_ids: this.selectMenus
       }
       console.log('postDataNew', postData);
       if (btnType === 'out') {
@@ -306,6 +307,18 @@ export default {
     //   postData.area = this.userForm.address.area || this.userForm.address.city || '';
     //   this.editAjax(postData, formName, btnObject, null, true);
     // },
+  },
+  watch: {
+    // selectMenus: {
+    //   handler(val, oldVal) {　　
+    //     // for (let i = 0; i < val.length; i++) {　　　　　　　　
+    //     //   if (oldVal[i] != val[i]) {　　　　　　　　　　
+    //     console.log('更新检测', val)　　　　　　　　
+    //     //   }　　　　　　
+    //     // }
+    //   },
+    //   　　　　deep: true
+    // }
   }
 }
 

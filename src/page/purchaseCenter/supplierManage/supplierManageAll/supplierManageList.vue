@@ -5,10 +5,10 @@
 <template>
   <div>
     <div class="nav-tab">
-    <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="供应商管理" name="supplierManage">
           <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" >
+            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" @keyup.native.13="pageChange">
@@ -25,7 +25,7 @@
         <el-tab-pane label="供应商液厂" name="supplierFluids">
         </el-tab-pane>
       </el-tabs>
-       <div class="operation-btn text-right">
+      <div class="operation-btn text-right">
         <el-button type="primary" @click="exportList">导出</el-button>
         <el-button type="success" @click="addSupplierManage">新增</el-button>
       </div>
@@ -52,8 +52,8 @@ export default {
   name: 'supplierManageList',
   data() {
     return {
-      activeName:"supplierManage",
-       fifterParam: {
+      activeName: "supplierManage",
+      fifterParam: {
         keyword: "",
         field: "supplier_name",
       },
@@ -81,14 +81,14 @@ export default {
         title: '所在地区',
         param: 'address',
         width: ''
-      },{
+      }, {
         title: '添加时间',
         param: 'created_at',
         width: ''
       }],
       pageStatus: false,
-      seachListParam:{
-        
+      seachListParam: {
+
       },
       pageLoading: true,
       pageData: {
@@ -104,7 +104,7 @@ export default {
         ]
       },
       tableData: [],
-      saveSendData:{}
+      saveSendData: {}
     }
   },
   computed: {
@@ -114,24 +114,24 @@ export default {
     addSupplierManage: function() {
       this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd" });
     },
-    clicktabs:function(targetName){
+    clicktabs: function(targetName) {
       if (targetName.name == 'supplierFluids') {
         this.$router.push({ path: "/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList" });
       }
     },
-    searchList:function(){
+    searchList: function() {
       var vm = this;
       var sendData = this.pbFunc.deepcopy(this.seachListParam);
       sendData[this.fifterParam.field] = this.fifterParam.keyword;
       vm.pageLoading = true;
       if (vm.pageStatus) {
-        sendData=this.saveSendData;
+        sendData = this.saveSendData;
         sendData.page = vm.pageData.currentPage;
-      }else{
-        this.saveSendData=sendData;
-        sendData.page=1;
+      } else {
+        this.saveSendData = sendData;
+        sendData.page = 1;
       }
-      sendData.pageSize=10;
+      sendData.pageSize = 10;
       this.$$http('searchSupplierList', sendData).then(function(result) {
         var resultData;
         vm.pageStatus = false;
@@ -144,7 +144,7 @@ export default {
         vm.pageLoading = false;
       });
     },
-    exportList:function(){
+    exportList: function() {
 
     },
     jumpPage: function(scope) {
@@ -173,5 +173,3 @@ export default {
 };
 
 </script>
-
-

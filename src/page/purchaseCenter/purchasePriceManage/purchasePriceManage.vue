@@ -4,9 +4,9 @@
 </style>
 <template>
   <div>
-    <keep-alive :include="['purchasePriceList','destinationSettingList']">
+    <!-- <keep-alive :include="['purchasePriceList','destinationSettingList']"> -->
       <router-view></router-view>
-    </keep-alive>
+    <!-- </keep-alive> -->
   </div>
 </template>
 <script>

@@ -1,6 +1,7 @@
 <style scoped lang="less">
 .el-form-item {
   margin-bottom: 0;
+  margin-top: -6px;
 }
 
 .el-table {
@@ -15,26 +16,15 @@
 .table-list {
   ul {
     li {
-      height: 31px;
+      height: 36px;
 
-      line-height: 31px;
+      line-height: 36px;
 
       border-bottom: 1px solid #e4e7ed;
       &:last-child {
         border-bottom: 0;
       }
     }
-  }
-}
-
-.price {
-  height: 32px;
-
-  line-height: 32px;
-
-  border-bottom: 1px solid #e4e7ed;
-  &:last-child {
-    border-bottom: 0;
   }
 }
 
@@ -93,14 +83,16 @@
                       </ul>
                     </div>
                     <div v-if="item.param === 'date'">
-                      <div v-for="(area,index) in scope.row.business_areas">
-                        <div class="price" v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true)">
-                          <el-form-item prop="price" v-if="quotes.isShow">
-                            <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" size="mini" @blur="isShowPrice(quotes,false,'priceForm')" placeholder="请输入内容"></el-input>
-                          </el-form-item>
-                          <span v-if="!quotes.isShow">{{quotes.today_unit_price}}</span>
-                        </div>
-                      </div>
+                      <ul>
+                        <li v-for="(area,index) in scope.row.business_areas">
+                          <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true,true)">
+                            <el-form-item prop="price" v-if="quotes.isShow">
+                              <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
+                            </el-form-item>
+                            <span v-if="!quotes.isShow">{{quotes.today_unit_price}}</span>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </template>
                 </el-table-column>
@@ -149,15 +141,15 @@ export default {
       }],
       tableData: [],
       activeName: 'purchasePrice',
-      searachPostData:{},//搜索参数
+      searachPostData: {}, //搜索参数
       searchFilters: {
         keyword: '',
-        field: 'fluid',
+        field: 'fluid_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid', value: '液厂名称' },
-          { id: 'suppliers', value: '供应商' },
+          { id: 'fluid_name', value: '液厂名称' },
+          { id: 'supplier_name', value: '供应商' },
         ]
       },
     };
@@ -180,34 +172,41 @@ export default {
         this.getList();
       });
     },
-    isShowPrice(row, isShow, formName) {
-      console.log('价格', row)
-      const tableData = () => {
-        for (let i in this.tableData) {
-          for (let j in this.tableData[i].business_areas) {
-            for (let z in this.tableData[i].business_areas[j].quotes) {
-              if (this.tableData[i].business_areas[j].quotes[z].id === row.id) {
-                this.$set(this.tableData[i].business_areas[j].quotes, z, {
-                  id: row.id,
-                  isShow: isShow,
-                  price_date: row.price_date,
-                  today_unit_price: row.today_unit_price
-                })
-              } else {
-                this.$set(this.tableData[i].business_areas[j].quotes, z, {
-                  id: this.tableData[i].business_areas[j].quotes[z].id,
-                  isShow: false,
-                  price_date: this.tableData[i].business_areas[j].quotes[z].price_date,
-                  today_unit_price: this.tableData[i].business_areas[j].quotes[z].today_unit_price
-                })
-              }
+    hidePrice(row) {
+      this.priceForm.price = '';
+      this.updateTableData(row, false);
+    },
+    updateTableData(row, isShow) {
+      for (let i in this.tableData) {
+        for (let j in this.tableData[i].business_areas) {
+          for (let z in this.tableData[i].business_areas[j].quotes) {
+            if (this.tableData[i].business_areas[j].quotes[z].id === row.id) {
+              this.$set(this.tableData[i].business_areas[j].quotes, z, {
+                id: row.id,
+                isShow: isShow,
+                price_date: row.price_date,
+                today_unit_price: row.today_unit_price
+              })
+            } else {
+              this.$set(this.tableData[i].business_areas[j].quotes, z, {
+                id: this.tableData[i].business_areas[j].quotes[z].id,
+                isShow: false,
+                price_date: this.tableData[i].business_areas[j].quotes[z].price_date,
+                today_unit_price: this.tableData[i].business_areas[j].quotes[z].today_unit_price
+              })
             }
           }
         }
       }
+    },
+    isShowPrice(row, isShow) {
+      console.log('价格', row)
+      const tableData = () => {
+
+      }
       if (isShow) {
+        this.updateTableData(row, isShow);
         this.priceForm.price = row.today_unit_price;
-        tableData();
       } else {
 
         let postData = {
@@ -221,7 +220,7 @@ export default {
               this.$$http('updatePurchasePrice', postData).then((results) => {
                 console.log('修改价格', results.data.data);
                 if (results.data && results.data.code == 0) {
-                  tableData();
+                  // this.updateTableData(row,isShow);
                   this.priceForm.price = '';
                   this.getList();
                   this.$message({

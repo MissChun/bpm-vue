@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getFluidsList: {
+    url: '/api/v1/supplier-fluids/',
+    method: 'get',
+    desc: '供应商液厂列表',
+    param: {
+
+    }
+  },
   updateDestinationTime: {
     url: '/api/v1/fluid-business-areas/set-effect-time/',
     method: 'patch',

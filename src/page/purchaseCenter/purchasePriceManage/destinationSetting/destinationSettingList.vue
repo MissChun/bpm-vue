@@ -97,12 +97,12 @@ export default {
       searachPostData: {}, //搜索参数
       searchFilters: {
         keyword: '',
-        field: 'fluid',
+        field: 'fluid_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid', value: '液厂名称' },
-          { id: 'suppliers', value: '供应商' },
+          { id: 'fluid_name', value: '液厂名称' },
+          { id: 'supplier_name', value: '供应商' },
         ]
       },
     };
