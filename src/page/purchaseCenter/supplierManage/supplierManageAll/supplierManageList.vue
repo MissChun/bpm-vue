@@ -79,7 +79,7 @@ export default {
         width: '250'
       }, {
         title: '所在地区',
-        param: 'contract_address',
+        param: 'address',
         width: ''
       },{
         title: '添加时间',
@@ -88,9 +88,7 @@ export default {
       }],
       pageStatus: false,
       seachListParam:{
-        supplier_name:"",
-        supplier_short_name:"",
-        contact_phone:"",
+        
       },
       pageLoading: true,
       pageData: {
@@ -116,7 +114,7 @@ export default {
     addSupplierManage: function() {
       this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd" });
     },
-    clicktabs:function(){
+    clicktabs:function(targetName){
       if (targetName.name == 'supplierFluids') {
         this.$router.push({ path: "/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList" });
       }

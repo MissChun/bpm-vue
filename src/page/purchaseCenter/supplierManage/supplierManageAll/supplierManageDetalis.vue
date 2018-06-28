@@ -94,7 +94,7 @@
                 </el-col>
                  <el-col :span="8">
                   <el-form-item label="合同类型:" prop="qualification_certificate_number">
-                    <div class="detail-form-item" v-if="supplierData.supplier_type&&supplierData.supplier_type.key">{{supplierData.supplier_type.key}}</div>
+                    <div class="detail-form-item" v-if="supplierData.supplier_type&&supplierData.supplier_type.verbose">{{supplierData.supplier_type.verbose}}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">

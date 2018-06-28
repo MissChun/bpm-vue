@@ -1783,7 +1783,7 @@ const api = {
   },
   upadteSupplierFrom: {
     url: '/api/v1/suppliers/:id/',
-    method: 'PUT',
+    method: 'PATCH',
     desc: '修改供应商',
     param: {
 

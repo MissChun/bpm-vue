@@ -122,7 +122,7 @@ export default {
     addCustomerManage: function() {
       this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd" });
     },
-    clicktabs:function(){
+    clicktabs:function(targetName){
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
       }
