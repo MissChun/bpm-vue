@@ -5,10 +5,10 @@
 <template>
   <div>
     <div class="nav-tab">
-    <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="客户管理" name="customerManage">
           <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" >
+            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" @keyup.native.13="pageChange">
@@ -25,7 +25,7 @@
         <el-tab-pane label="客户站点" name="customerStation">
         </el-tab-pane>
       </el-tabs>
-       <div class="operation-btn text-right">
+      <div class="operation-btn text-right">
         <el-button type="primary" @click="exportList">导出</el-button>
         <el-button type="success" @click="addCustomerManage">新增</el-button>
       </div>
@@ -52,8 +52,8 @@ export default {
   name: 'customerManageList',
   data() {
     return {
-      activeName:"customerManage",
-       fifterParam: {
+      activeName: "customerManage",
+      fifterParam: {
         keyword: "",
         field: "consumer_name",
       },
@@ -81,9 +81,9 @@ export default {
         title: '客户等级',
         param: 'consumer_level',
         width: ''
-      },{
+      }, {
         title: '分属业务员',
-        param: 'sale_man',
+        param: 'sale_man_name',
         width: '250'
       }, {
         title: '添加时间',
@@ -91,11 +91,11 @@ export default {
         width: ''
       }],
       pageStatus: false,
-      seachListParam:{
-        consumer_name:"",
-        short_name_id:"",
-        contact_phone:"",
-        sale_man_name:""
+      seachListParam: {
+        consumer_name: "",
+        short_name_id: "",
+        contact_phone: "",
+        sale_man_name: ""
       },
       pageLoading: true,
       pageData: {
@@ -112,7 +112,7 @@ export default {
         ]
       },
       tableData: [],
-      saveSendData:{}
+      saveSendData: {}
     }
   },
   computed: {
@@ -122,22 +122,22 @@ export default {
     addCustomerManage: function() {
       this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd" });
     },
-    clicktabs:function(targetName){
+    clicktabs: function(targetName) {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
       }
     },
-    searchList:function(){
+    searchList: function() {
       var vm = this;
       var sendData = this.pbFunc.deepcopy(this.seachListParam);
       sendData[this.fifterParam.field] = this.fifterParam.keyword;
       vm.pageLoading = true;
       if (vm.pageStatus) {
-        sendData=this.saveSendData;
+        sendData = this.saveSendData;
         sendData.page = vm.pageData.currentPage;
-      }else{
-        this.saveSendData=sendData;
-        sendData.page=1;
+      } else {
+        this.saveSendData = sendData;
+        sendData.page = 1;
       }
       this.$$http('searchCustomerList', sendData).then(function(result) {
         var resultData;
@@ -151,7 +151,7 @@ export default {
         vm.pageLoading = false;
       });
     },
-    exportList:function(){
+    exportList: function() {
 
     },
     jumpPage: function(scope) {
@@ -180,5 +180,3 @@ export default {
 };
 
 </script>
-
-
