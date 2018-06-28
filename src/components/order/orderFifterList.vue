@@ -140,7 +140,6 @@
               <el-button type="text" style="height:0px;line-height:0px;" @click="gotoOrderDetalis(props.row)">订单号:{{props.row.order_number}}</el-button>
             </el-col>
             <el-col :span="5" v-if="props.row.carriers&&props.row.carriers[0]">承运方:{{props.row.carriers[0].carrier_name}}</el-col>
-            <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
             <el-col :span="5">
               <el-tooltip :content="props.row.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>

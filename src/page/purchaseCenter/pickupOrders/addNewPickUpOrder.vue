@@ -94,7 +94,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="计划时间:" prop="plan_time">
-                    <el-date-picker v-model="pickOrderParam.plan_time" type="datetime" placeholder="选择日期时间" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss">
+                    <el-date-picker v-model="pickOrderParam.plan_time" type="datetime" placeholder="选择日期时间" default-time="00:00:00" value-format="yyyy-MM-dd HH:mm:ss">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>

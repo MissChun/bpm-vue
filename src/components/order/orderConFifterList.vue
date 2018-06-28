@@ -345,7 +345,7 @@ export default {
       sendData.sectiontrip = this.changeStatusParam.sectiontrip;
       this.$$http("upStatus", sendData).then((results) => {
         console.log('results', results)
-        vm.$emit("changeTabs", 'fifth');
+        //vm.$emit("changeTabs", 'fifth');
         vm.changeSatusShow = false;
       }).catch((err) => {
         console.log('errs', err);
@@ -386,7 +386,7 @@ export default {
                 type: "success",
                 message: "取消运单成功",
               });
-              vm.$emit("changeTabs",{first:'sxith',second:"all"});
+              vm.$emit("chiledchangeTabs",{first:'sxith',second:"all"});
             } else {
               vm.$message.error("取消运单失败");
             }

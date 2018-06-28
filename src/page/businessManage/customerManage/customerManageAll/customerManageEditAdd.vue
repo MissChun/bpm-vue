@@ -51,9 +51,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="分属业务员:" prop="sale_man_id" v-loading="saleManPading">
-                    <el-select v-model="customerFrom.sale_man_id" filterable placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
+                  <el-form-item label="分属业务员:" prop="sale_man_id" v-loading="saleManPading" >
+                    <el-select v-model="customerFrom.sale_man_id" filterable placeholder="请选择" >
+                      <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>

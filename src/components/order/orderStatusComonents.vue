@@ -35,13 +35,13 @@
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
             <el-form-item align="right" label="计划装货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item align="right" label="实际装货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -49,13 +49,13 @@
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" v-if="status!='first'">
             <el-form-item align="right" label="计划卸货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="status!='first'&&status!='second'">
             <el-form-item label="实际卸货时间:" label-width="105px">
-              <el-date-picker :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -67,7 +67,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :status="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -163,8 +163,11 @@ export default {
     countParam: Object
   },
   methods: {
-    changeTabs: function(tabsObj) {
-      this.$emit("changeTab", tabsObj);
+    chiledchangeTabs: function(tabsObj) {
+      this.$emit("chiledchangeTabs", tabsObj);
+    },
+    changeTabs:function(name){
+      this.$emit("changeTab", name);
     },
     searchList: function(targetName) {
       //

@@ -50,7 +50,7 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                    <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                    <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" @change="searchList">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
