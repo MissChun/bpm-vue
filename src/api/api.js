@@ -1848,7 +1848,53 @@ const api = {
     param: {
 
     }
-  }
+  },
+  addStationOfCustomer: {
+    url: '/api/v1/deliver_point/',
+    method: 'post',
+    desc: '新增客户站点接口',
+    param: {
+      address :{
+        desc:'详细地址',
+      },
+      area  :{
+        desc:'区',
+      },
+      city :{
+        desc:'市',
+      },
+      consignee :{
+        desc:'联系人',
+      },
+      consignee_phone :{
+        desc:'联系电话',
+      },
+      map_position :{
+        desc:'基础地标id',
+      },
+      province :{
+        desc:'省',
+      },
+      short_name_id :{
+        desc:'客户简称id',
+      },
+      station_type  :{
+        desc:'站点类型',
+      },
+      station_name :{
+        desc:'站点名称',
+      },
+      longitude :{
+        desc:'经度',
+      },
+      latitude  :{
+        desc:'纬度',
+      },
+    }
+  },
+
+
+
 }
 
 
