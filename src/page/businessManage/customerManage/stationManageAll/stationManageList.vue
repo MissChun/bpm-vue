@@ -21,11 +21,18 @@
                           </el-input>
                         </el-col>
                       </el-row>
-                      <el-row :gutter="10">
+                      <el-row :gutter="20">
                         <el-col :span="6">
                           <el-form-item label="客户名称:">
-                            <el-select v-model="searchFilters.consumer_name" multiple filterable remote reserve-keyword @change="startSearch" placeholder="请输入选择" :remote-method="customerSearch" :loading="loading">
-                              <el-option v-for="(item,key) in customerSearchList" :key="item.id" :label="item.consumer_name" :value="item.id"></el-option>
+                            <el-select v-model="searchFilters.consumer_id" filterable remote clearable @change="startSearch" placeholder="请输入选择" :remote-method="customerList" :loading="loading">
+                              <el-option v-for="(item,key) in customerSearchList" :key="key" :label="item.consumer_name" :value="item.id"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="状态:">
+                            <el-select v-model="searchFilters.is_active" @change="startSearch" placeholder="请输入选择">
+                              <el-option v-for="(item,key) in selectData.isActiveSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                             </el-select>
                           </el-form-item>
                         </el-col>
@@ -37,7 +44,7 @@
                           <template slot-scope="scope">
                             <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
                             <div v-if="item.param==='addresss'">{{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.address}}</div>
-                            <div  v-if="item.param!=='addresss'&&item.param!=='is_active'">{{scope.row[item.param]}}</div>
+                            <div v-if="item.param!=='addresss'&&item.param!=='is_active'">{{scope.row[item.param]}}</div>
                           </template>
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -84,7 +91,8 @@ export default {
       },
       searachPostData: {}, //搜索参数
       searchFilters: {
-        consumer_name: '',
+        consumer_id: '',
+        is_active: '',
         keyword: '',
         field: 'station_name',
       },
@@ -92,7 +100,11 @@ export default {
         fieldSelect: [
           { id: 'station_name', value: '站点名称' }
         ],
-        consumerSelect: []
+        isActiveSelect: [
+          { id: '', value: '全部' },
+          { id: 'True', value: '已启用' },
+          { id: 'False', value: '未启用' },
+        ]
       },
       thTableList: [{
         title: '站点名称',
@@ -151,45 +163,54 @@ export default {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll/stationManageMap" });
       }
     },
-    customerSearch(query) {
-      if (query !== '') {
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-          this.customerSearchList = this.selectData.consumerSelect.filter(item => {
-            console.log('item', item)
-            return item.consumer_name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-          });
-        }, 200);
-      } else {
-        this.customerSearchList = [];
+    customerList(query) {
+      // if (query !== '') {
+      //   this.loading = true;
+      //   setTimeout(() => {
+      //     this.loading = false;
+      //     this.customerSearchList = this.selectData.consumerSelect.filter(item => {
+      //       console.log('item', item)
+      //       return item.consumer_name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+      //     });
+      //   }, 200);
+      // } else {
+      //   this.customerSearchList = [];
+      // }
+      let postData = {
+        page_size: 100,
+        page: 1,
       }
+      if (query) {
+        postData.consumer_name = query;
+      }
+      this.loading = true;
+      this.$$http('searchCustomerList', postData).then((result) => {
+        this.loading = false;
+        if (result.data.code == 0) {
+          this.customerSearchList = result.data.data.data;
+        }
+      }).catch((error) => {
+        this.loading = false;
+      });
     },
     startSearch() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
-    customerList: function() {
-      let postData = {
-        page: 1,
-        page_size: 100,
-        consumer_name: ''
-      }
-      this.$$http('searchCustomerList', postData).then(function(result) {
-        if (result.data && result.data.code == 0) {
-          selectData.consumerSelect = result.data.data.data;
-        }
-      }).catch(function(error) {});
-    },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        consumer_id: this.searachPostData.consumer_id,
+        is_active: this.searachPostData.is_active
       };
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
+      // if (this.searachPostData.is_active === true || this.searachPostData.is_active === false) {
+      //   postData.is_active = this.searachPostData.is_active;
+      // }
 
       this.$$http('getStationList', postData).then((results) => {
         console.log('results', results.data.data.results);

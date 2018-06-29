@@ -16,6 +16,15 @@
           </el-input>
         </el-col>
       </el-row>
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-form-item label="供应商名称:"  label-width="105px">
+            <el-select v-model="searchFilters.supplier" clearable filterable remote :loading="getSupplierLoading" @change="startSearch" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
+              <el-option v-for="(item,key) in supplierList" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div class="table-list mt-25" v-loading="pageLoading">
       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
@@ -40,6 +49,7 @@ export default {
   name: 'fluidsList',
   data() {
     return {
+      getSupplierLoading:false,
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -48,14 +58,13 @@ export default {
       },
       searachPostData: {}, //搜索参数
       searchFilters: {
-        carrier_type: '',
+        supplier: '',
         keyword: '',
-        field: 'supplier_name',
+        field: 'fluid_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'supplier_name', value: '供应商名称' },
-          { id: 'supplier_short_name', value: '液厂名称' }
+          { id: 'fluid_name', value: '液厂名称' }
         ]
       },
       thTableList: [{
@@ -80,6 +89,7 @@ export default {
         width: '250'
       }],
       tableData: [],
+      supplierList:[]
     };
   },
   computed: {
@@ -96,10 +106,30 @@ export default {
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
+    searchSupplierList: function(query) {
+      console.log('this.searchFilters.supplier', this.searchFilters.supplier);
+      let postData = {
+        page_size: 100,
+        page: 1,
+      }
+      if (query) {
+        postData.supplier_name = query;
+      }
+      this.getSupplierLoading = true;
+      this.$$http('searchSupplierList', postData).then((result) => {
+        this.getSupplierLoading = false;
+        if (result.data.code == 0) {
+          this.supplierList = result.data.data.data;
+        }
+      }).catch((error) => {
+        this.getSupplierLoading = false;
+      });
+    },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        supplier:this.searachPostData.supplier
       };
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -123,6 +153,7 @@ export default {
   },
   created() {
     this.getList();
+    this.searchSupplierList();
   },
 
 };
