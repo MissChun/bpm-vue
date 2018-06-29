@@ -54,7 +54,9 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading">
+          <el-table-column type="selection" width="55">
+          </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
@@ -208,13 +210,19 @@ export default {
       tableData: [],
          
       reconciliationsBtn: {
-        text: '全部对账',
+        text: '批量对账',
         isDisabled: false,
         isLoading: false
-      }     
+      },
+       
+      multipleSelection: []   
     }
   },
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      console.log('全选',this.multipleSelection)
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
