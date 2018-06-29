@@ -34,6 +34,11 @@
                     <div class="table-list mt-25" v-loading="pageLoading">
                       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
                         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+                          <template slot-scope="scope">
+                            <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
+                            <div v-if="item.param==='addresss'">{{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.address}}</div>
+                            <div  v-if="item.param!=='addresss'&&item.param!=='is_active'">{{scope.row[item.param]}}</div>
+                          </template>
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="150" fixed="right">
                           <template slot-scope="scope">
@@ -95,15 +100,15 @@ export default {
         width: ''
       }, {
         title: '实际站点名称',
-        param: 'supplier_name',
+        param: 'map_station_name',
         width: ''
       }, {
         title: '站点类型',
-        param: 'actual_fluid_name',
+        param: 'station_type_display',
         width: ''
       }, {
         title: '所属客户',
-        param: 'consumer_name',
+        param: 'short_name',
         width: ''
       }, {
         title: '联系人',
@@ -111,15 +116,15 @@ export default {
         width: ''
       }, {
         title: '联系电话',
-        param: 'created_timestamp',
+        param: 'consignee_phone',
         width: ''
       }, {
         title: '地址',
-        param: 'address',
+        param: 'addresss',
         width: '250'
       }, {
         title: '状态',
-        param: 'coordinate',
+        param: 'is_active',
         width: ''
       }],
       tableData: [],

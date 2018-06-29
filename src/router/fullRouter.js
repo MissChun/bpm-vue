@@ -737,7 +737,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
         }, {
-          path: 'purchaseWaybillDetail/:willId/',
+          path: 'purchaseWaybillDetail/:willId',
           name: "waybillDetail",
           meta: {
             title: '采购数据详情',
@@ -771,7 +771,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/sales/salesList'], resolve)
         }, {
-          path: 'salesWaybillDetail/:willId/',
+          path: 'salesWaybillDetail/:willId/:orderId/',
           name: "salesWaybillDetail",
           meta: {
             title: '运力单详情',
@@ -813,7 +813,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/consignment/consignmentList'], resolve)
         }, {
-          path: 'consignmentWaybillDetail/:willId/',
+          path: 'consignmentWaybillDetail/:willId/:orderId/',
           name: "consignmentWaybillDetail",
           meta: {
             title: '运力单详情',
@@ -855,7 +855,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
         }, {
-          path: 'incomeWaybillDetail/:willId/',
+          path: 'incomeWaybillDetail/:willId/:orderId/',
           name: "incomeWaybillDetail",
           meta: {
             title: '运力单详情',

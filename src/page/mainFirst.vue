@@ -97,6 +97,7 @@
 .log-img {
   line-height: 55px;
   vertical-align: middle;
+  margin-top: -2px;
 }
 
 .color-26c6da {

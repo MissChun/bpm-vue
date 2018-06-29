@@ -379,9 +379,17 @@
           <el-row :gutter="40">
             <el-col :span="8">
               <div class="label-list">
-                <label>榜单信息:</label>
+                <label>装车榜单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(detailData.weight_note_id)">点击查看榜单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看榜单</span>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="8" v-if="orderId">
+              <div class="label-list">
+                <label>卸车榜单:</label>
+                <div class="detail-form-item">
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看榜单</span>
                 </div>
               </div>
             </el-col>
@@ -391,7 +399,6 @@
     </el-container>
     <img-review :imgObject.sync='imgObject'></img-review>
   </div>
-
 </template>
 <script>
 import imgReview from '@/components/common/imgReview';
@@ -407,6 +414,9 @@ export default {
     },
     willId: function() {
       return this.$route.params.willId;
+    },
+    orderId: function() {
+      return this.$route.params.orderId ? this.$route.params.orderId : '';
     },
   },
   data() {
@@ -429,6 +439,8 @@ export default {
         showPreview: false,
         previewIndex: 0,
       },
+      loadingInfo: {}, //装车榜单
+      unloadInfo: {}, //卸车榜单
     }
   },
   methods: {
@@ -478,8 +490,12 @@ export default {
           for (var i = 0; i < vm.detailData.trips.length; i++) {
             if (vm.detailData.trips[i].section_type.key == 'unload') {
               unloadArr.push(vm.detailData.trips[i]);
+              if (vm.detailData.trips[i].business_order.id === this.orderId) {
+                this.unloadInfo = this.detailData.trips[i];
+              }
             } else {
               loadArr.push(this.detailData.trips[i]);
+              this.loadingInfo = this.detailData.trips[i];
             }
           }
           vm.unloadArr = unloadArr;
