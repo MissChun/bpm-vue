@@ -21,10 +21,19 @@
                           </el-input>
                         </el-col>
                       </el-row>
+                      <el-row :gutter="10">
+                        <el-col :span="6">
+                          <el-form-item label="客户名称:">
+                            <el-select v-model="searchFilters.consumer_name" multiple filterable remote reserve-keyword @change="startSearch" placeholder="请输入选择" :remote-method="customerSearch" :loading="loading">
+                              <el-option v-for="(item,key) in customerSearchList" :key="item.id" :label="item.consumer_name" :value="item.id"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
                     </el-form>
                     <div class="table-list mt-25" v-loading="pageLoading">
                       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="150" fixed="right">
                           <template slot-scope="scope">
@@ -35,7 +44,7 @@
                       </el-table>
                     </div>
                     <div class="page-list text-center">
-                      <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+                      <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
                       </el-pagination>
                     </div>
                   </div>
@@ -61,6 +70,7 @@ export default {
     return {
       activeName: 'stationManage',
       childActiveName: 'statationList',
+      loading:false,
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -69,19 +79,19 @@ export default {
       },
       searachPostData: {}, //搜索参数
       searchFilters: {
-        carrier_type: '',
+        consumer_name: '',
         keyword: '',
-        field: 'supplier_name',
+        field: 'station_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'supplier_name', value: '供应商名称' },
-          { id: 'supplier_short_name', value: '液厂名称' }
-        ]
+          { id: 'station_name', value: '站点名称' }
+        ],
+        consumerSelect: []
       },
       thTableList: [{
         title: '站点名称',
-        param: 'fluid_name',
+        param: 'station_name',
         width: ''
       }, {
         title: '实际站点名称',
@@ -93,42 +103,74 @@ export default {
         width: ''
       }, {
         title: '所属客户',
-        param: 'fluid_type',
+        param: 'consumer_name',
         width: ''
       }, {
         title: '联系人',
         param: 'coordinate',
-        width: '250'
+        width: ''
       }, {
         title: '联系电话',
-        param: 'coordinate',
-        width: '250'
+        param: 'created_timestamp',
+        width: ''
       }, {
         title: '地址',
-        param: 'coordinate',
+        param: 'address',
         width: '250'
       }, {
         title: '状态',
         param: 'coordinate',
-        width: '250'
+        width: ''
       }],
       tableData: [],
+      customerSearchList:[]
     };
   },
   computed: {
 
   },
   methods: {
+    pageChange() {
+      setTimeout(() => {
+        this.getList();
+      });
+    },
     clicktabs: function() {
 
     },
     clickChildtabs: function() {
 
     },
+    customerSearch(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.customerSearchList = this.selectData.consumerSelect.filter(item => {
+            console.log('item',item)
+            return item.consumer_name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+          });
+        }, 200);
+      } else {
+        this.customerSearchList = [];
+      }
+    },
     startSearch() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
+    },
+    customerList: function() {
+      let postData = {
+        page: 1,
+        page_size: 100,
+        consumer_name: ''
+      }
+      this.$$http('searchCustomerList', postData).then(function(result) {
+        if (result.data && result.data.code == 0) {
+          selectData.consumerSelect = result.data.data.data;
+        }
+      }).catch(function(error) {});
     },
     getList() {
       let postData = {
@@ -139,7 +181,7 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getFluidsList', postData).then((results) => {
+      this.$$http('getStationList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -157,6 +199,7 @@ export default {
   },
   created() {
     this.getList();
+    this.customerList();
   }
 };
 

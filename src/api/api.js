@@ -9,6 +9,19 @@
  */
 
 const api = {
+  getStationList: {
+    url: '/api/v1/delivery_point/',
+    method: 'get',
+    desc: '客户站点列表',
+    param: {
+      consumer_id:{
+        desc: '客户id'
+      },
+      relations:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
   getFluidsList: {
     url: '/api/v1/supplier-fluids/',
     method: 'get',

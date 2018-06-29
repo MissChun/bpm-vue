@@ -61,24 +61,24 @@
               <div class="label-list">
                 <label>供应商:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.supplier_name}}</div>
-            </div>
-            </el-col>
-            <el-col :span="6">
-              <div class="label-list">
-                 <label>采购价:</label>
-                 <div class="detail-form-item">{{detailData.delivery_order.unit_price}}</div>
-              </div>
-            </el-col>
-             <el-col :span="6">
-              <div class="label-list">
-                 <label>采购优惠:</label>
-                 <div class="detail-form-item">{{detailData.delivery_order.discount_price}}</div>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="label-list">
-                 <label>液厂名称:</label>
-                 <div class="detail-form-item">{{detailData.delivery_order.fluid_name}}</div>
+                <label>采购价:</label>
+                <div class="detail-form-item">{{detailData.delivery_order.unit_price}}</div>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="label-list">
+                <label>采购优惠:</label>
+                <div class="detail-form-item">{{detailData.delivery_order.discount_price}}</div>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="label-list">
+                <label>液厂名称:</label>
+                <div class="detail-form-item">{{detailData.delivery_order.fluid_name}}</div>
               </div>
             </el-col>
           </el-row>
@@ -277,7 +277,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶员:</label>
-                <div class="detail-form-item" >
+                <div class="detail-form-item">
                   <span v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></span>
                   <span style="margin-left:15px;" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.mobile_phone)"></span>
                 </div>
@@ -294,7 +294,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>副驾驶:</label>
-                <div class="detail-form-item"  >
+                <div class="detail-form-item">
                   <span v-if="transPowerData.vice_driver&&transPowerData.vice_driver.name" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></span>
                   <span style="margin-left:15px;" v-if="transPowerData.vice_driver&&transPowerData.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.vice_driver.mobile_phone)"></span>
                   <span v-else v-html="pbFunc.dealNullData('')"></span>
@@ -379,44 +379,9 @@
           <el-row :gutter="40">
             <el-col :span="8">
               <div class="label-list">
-                <label>车牌号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.plate_number)"></div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="label-list">
-                <label>驾驶员:</label>
-                <div class="detail-form-item" >
-                  <span v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></span>
-                  <span style="margin-left:15px;" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.mobile_phone)"></span>
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="label-list">
-                <label>挂车号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.semitrailer&&transPowerData.semitrailer.plate_number)"></div>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row :gutter="40">
-            <el-col :span="8">
-              <div class="label-list">
-                <label>副驾驶:</label>
-                <div class="detail-form-item"  >
-                  <span v-if="transPowerData.vice_driver&&transPowerData.vice_driver.name" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></span>
-                  <span style="margin-left:15px;" v-if="transPowerData.vice_driver&&transPowerData.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.vice_driver.mobile_phone)"></span>
-                  <span v-else v-html="pbFunc.dealNullData('')"></span>
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="label-list">
-                <label>押运员:</label>
-                <div class="detail-form-item" v-if="transPowerData.escort_staff">
-                  <span v-if="transPowerData.escort_staff&&transPowerData.escort_staff.name" v-html="pbFunc.dealNullData(transPowerData.escort_staff.name)"></span>
-                  <span style="margin-left:15px;" v-if="transPowerData.escort_staff&&transPowerData.escort_staff.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.escort_staff.mobile_phone)"></span>
-                  <span v-else v-html="pbFunc.dealNullData('')"></span>
+                <label>榜单信息:</label>
+                <div class="detail-form-item">
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(detailData.weight_note_id)">点击查看榜单</span>
                 </div>
               </div>
             </el-col>
@@ -424,12 +389,18 @@
         </div>
       </el-main>
     </el-container>
+    <img-review :imgObject.sync='imgObject'></img-review>
   </div>
+
 </template>
 <script>
+import imgReview from '@/components/common/imgReview';
 export default {
   name: 'uWaybillDetail',
-  props:['backLink'],
+  props: ['backLink'],
+  components: {
+    imgReview: imgReview
+  },
   computed: {
     setpId: function() {
       return this.$route.params.setpId;
@@ -451,10 +422,44 @@ export default {
         }
       },
       loadArr: [{}],
-      unloadArr: []
+      unloadArr: [],
+      poundImg: [],
+      imgObject: {
+        imgList: [],
+        showPreview: false,
+        previewIndex: 0,
+      },
     }
   },
   methods: {
+    showImg: function(id) {
+      var vm = this;
+      if (vm.poundImg[id]) {
+        var imgList = vm.poundImg[id];
+        this.imgObject.imgList = [imgList];
+        this.imgObject.showPreview = true;
+      } else {
+        if (id) {
+          var sendData = {};
+          //sendData.section_trip = this.setpId;
+          sendData.id = id;
+          if (vm.poundImg[id]) {
+            var imgList = vm.poundImg[id];
+            this.imgObject.imgList = imgList;
+            this.imgObject.showPreview = true;
+          } else {
+            this.$$http("getPundList", sendData).then(results => {
+              if (results.data.code == 0) {
+                vm.poundImg[results.data.data.data[0].id] = results.data.data.data[0].image_url;
+                var imgList = [results.data.data.data[0].image_url];
+                vm.imgObject.imgList = imgList;
+                vm.imgObject.showPreview = true;
+              }
+            });
+          }
+        }
+      }
+    },
     getOrderDetail: function() {
       this.pageLoading = true;
       var vm = this;
