@@ -161,7 +161,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd?activeStep=" + number + "&supplierId=" + this.supplierId });
+      this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd?activeStep=" + number + "&supplierId=" + this.supplierId+"&operate=edit"});
     },
 
   }

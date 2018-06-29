@@ -51,8 +51,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="分属业务员:" prop="sale_man_id" v-loading="saleManPading" >
-                    <el-select v-model="customerFrom.sale_man_id" filterable placeholder="请选择" >
+                  <el-form-item label="分属业务员:" prop="sale_man" v-loading="saleManPading" >
+                    <el-select v-model="customerFrom.sale_man" filterable placeholder="请选择" >
                       <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -86,18 +86,18 @@
             <el-form class="addTailcarform" label-width="150px" ref="addEditFormSetp2" :rules="rules" :model="customerFrom" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="卸车免费等待时长:" prop="free_hour">
-                    <el-input placeholder="请输入卸车免费等待时长" type="num" v-model.trim="customerFrom.free_hour"></el-input>
+                  <el-form-item label="卸车免费等待时长(小时):" prop="free_hour" label-width="200px">
+                    <el-input placeholder="请输入卸车免费等待时长:" type="num" v-model.trim="customerFrom.free_hour"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="超时计算单价:" prop="waiting_price">
-                    <el-input placeholder="请输入超时计算单价" type="num" v-model.trim="customerFrom.waiting_price"></el-input>
+                  <el-form-item label="超时计算单价(元/小时):" prop="free_hour" label-width="200px">
+                    <el-input placeholder="请输入超时计算单价:" type="num" v-model.trim="customerFrom.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="亏吨标准:" prop="kui_tons_standard">
-                    <el-input placeholder="请输入亏吨标准" type="num" v-model.trim="customerFrom.kui_tons_standard"></el-input>
+                  <el-form-item label="亏吨标准(kg):" prop="kui_tons_standard" label-width="150px">
+                    <el-input placeholder="请输入亏吨标准:" type="num" v-model.trim="customerFrom.kui_tons_standard"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -162,14 +162,14 @@ export default {
   name: 'customerManageEditAdd',
   data() {
     var phoneVa = (rule, value, callback) => {
-      if (value.match(/^\d{3,4}-?\d{7,8}$/) || value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
+      if ((value+"").match(/^\d{3,4}-?\d{7,8}$/) || value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
         callback();
       } else {
         callback(new Error("应为11位手机号或12位座机号"));
       }
     };
     var numVa = (rule, value, callback) => {
-      if (value.match(/^([1-9]\d*|0)(\.\d{1,2})?$/) || value == "") {
+      if ((value+"").match(/^([1-9]\d*|0)(\.\d{1,2})?$/) || value == "") {
         callback();
       } else {
         callback(new Error("应为最多两位小数的有效数值"));
@@ -217,7 +217,9 @@ export default {
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
-
+        free_hour:"200",
+        waiting_price:"24",
+        waiting_price:"50",
       },
 
       rules: {
@@ -231,7 +233,7 @@ export default {
           { min: 1, max: 20, message: '客户简称为1~20个字符', trigger: 'blur' }
         ],
         consumer_level: [
-          { required: true, message: '该项为必填项', trigger: 'blur' }
+          { required: true, message: '该项为必填项', trigger: 'change' }
         ],
         contact_person: [
           { min: 0, max: 20, message: '客户简称为1~20个字符', trigger: 'blur' }
@@ -240,8 +242,8 @@ export default {
           { required: true, message: '该项为必填项', trigger: 'blur' },
           { validator: phoneVa, trigger: 'blur' },
         ],
-        sale_man_id: [
-          { required: true, message: '该项为必填项', trigger: 'blur' }
+        sale_man: [
+          { required: true, message: '该项为必填项', trigger: 'change' }
         ],
         social_credit_code: [{ validator: social_credit_codeVa, trigger: 'blur' }],
         consumer_address: [],
@@ -329,13 +331,14 @@ export default {
     },
     getSaleMan: function() {
       var sendData = {
-        department_identity: 'business'
+        department_identity: 'business',
+        need_all:true
       };
       var vm = this;
       this.saleManPading = true;
       this.$$http("getSaleManList", sendData).then((result) => {
-        if (result.data.code == 0 || result.data.data.code) {
-          vm.selectData.saleMan = result.data.data.data;
+        if (result.data.code == 0) {
+          vm.selectData.saleMan = result.data.data;
         }
         vm.saleManPading = false;
       }).catch(() => {

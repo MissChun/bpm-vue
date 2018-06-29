@@ -272,16 +272,16 @@ export default {
           methods_type: "changeUnload",
         }],
         //卸车
-        to_site: [{ //前往卸货地
-          text: "变更卸货单",
-          type: "primary",
-          methods_type: "changeUnload",
-        }],
-        reach_site: [{ //已到卸货地
-          text: "变更卸货单",
-          type: "primary",
-          methods_type: "changeUnload",
-        }],
+        // to_site: [{ //前往卸货地
+        //   text: "变更卸货单",
+        //   type: "primary",
+        //   methods_type: "changeUnload",
+        // }],
+        // reach_site: [{ //已到卸货地
+        //   text: "变更卸货单",
+        //   type: "primary",
+        //   methods_type: "changeUnload",
+        // }],
         //历史
         finished: [{ //已完成
           text: "查看详情",

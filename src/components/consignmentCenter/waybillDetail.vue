@@ -55,27 +55,27 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.require_car_number)"></div>
               </div>
             </el-col>
-          </el-row>
-          <el-row :gutter="40">
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="label-list">
                 <label>供应商:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.supplier_name}}</div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="label-list">
                 <label>采购价:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.unit_price}}</div>
               </div>
             </el-col>
-            <el-col :span="6">
+          </el-row>
+          <el-row>
+             <el-col :span="8">
               <div class="label-list">
                 <label>采购优惠:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.discount_price}}</div>
               </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="label-list">
                 <label>液厂名称:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.fluid_name}}</div>
@@ -313,7 +313,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form" v-for="(item,index) in unloadArr" :key="index">
+        <div class="detail-list detail-form" v-for="(item,index) in unloadArr" :key="item.id">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -502,10 +502,10 @@ export default {
         tractor_list: [id]
       }
       this.$$http('getTransPowerInfo', postData).then((results) => {
-        console.log('getTransPowerInfo', results);
+        //console.log('getTransPowerInfo', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.transPowerData = results.data.data.results[0];
-          console.log('this.transPowerData', this.transPowerData);
+          //console.log('this.transPowerData', this.transPowerData);
         } else {
           this.$message({
             message: results.data.msg,

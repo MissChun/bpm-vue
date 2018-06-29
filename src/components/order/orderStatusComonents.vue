@@ -137,7 +137,7 @@ export default {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'station_name', value: '承运商' },
+          { id: 'carrier_name', value: '承运商' },
           { id: 'order_number', value: '订单号' },
           { id: 'truck_no', value: '车号' },
           { id: 'fluid_name', value: '液厂名' },
@@ -154,7 +154,7 @@ export default {
       saveSendData: {},
       fifterParam: {
         keyword: "",
-        field: "station_name",
+        field: "carrier_name",
       },
     };
   },

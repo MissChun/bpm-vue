@@ -62,8 +62,7 @@
               </el-pagination>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="轨迹地图" name="second">
-          </el-tab-pane>
+        
         </el-tabs>
       </div>
     </div>

@@ -73,7 +73,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="分属业务员:">
-                  <div class="detail-form-item">{{customerData.sale_man}}</div>
+                  <div class="detail-form-item">{{customerData.sale_man_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -213,7 +213,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.customerId });
+      this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.customerId +"&operate=edit"});
     },
 
   }

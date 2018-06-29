@@ -120,25 +120,33 @@ export default {
       }
     };
     var startVa = (rule, value, callback) => {
-      if ((this.supplierFrom.contract_life!=""&&this.supplierFrom.contract_life!='undefined')) {
-        if(((new Date(value))-(new Date(this.supplierFrom.contract_life))<0)||value==""){
-          callback();
-        }else{
-          callback(new Error("合同起始日期需小于合同截止日期"));
-        }
-      } else {
+      if(value==""){
         callback();
+      }else{
+        if ((this.supplierFrom.contract_life!=""&&this.supplierFrom.contract_life!='undefined')) {
+          if(((new Date(value))-(new Date(this.supplierFrom.contract_life))<0)||value==""){
+            callback();
+          }else{
+            callback(new Error("合同起始日期需小于合同截止日期"));
+          }
+        } else {
+          callback();
+        }
       }
     };
     var endVa = (rule, value, callback) => {
-      if ((this.supplierFrom.contract_date!=""&&this.supplierFrom.contract_date!='undefined')) {
-        if(((new Date(this.supplierFrom.contract_date))-(new Date(value))<0)||value==""){
-          callback();
-        }else{
-          callback(new Error("合同截止日期需大于合同起始日期"));
-        }
-      } else {
+      if(value==""){
         callback();
+      }else{
+        if ((this.supplierFrom.contract_date!=""&&this.supplierFrom.contract_date!='undefined')) {
+          if(((new Date(this.supplierFrom.contract_date))-(new Date(value))<0)){
+            callback();
+          }else{
+            callback(new Error("合同截止日期需大于合同起始日期"));
+          }
+        } else {
+          callback();
+        }
       }
     };
     return {
@@ -171,12 +179,12 @@ export default {
           { required: true, message: '该项为必填项', trigger: 'blur' },
           { validator:phoneVa , trigger: 'blur' },
         ],
-        supplier_type:[],
-        address:[],
-        //2
-        contract_address:[],
-        supplier_type:[],
-        contract_no:[],
+        // supplier_type:[],
+        // address:[],
+        // //2
+        // contract_address:[],
+        // supplier_type:[],
+        // contract_no:[],
         contract_date:[
           { validator:startVa , trigger: 'blur' },
         ],
