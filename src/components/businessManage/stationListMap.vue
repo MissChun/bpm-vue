@@ -122,10 +122,12 @@ export default {
     getAllSiteList: function() {
       return new Promise((resolve, reject) => {
         let postData = {
-          pagination: false,
+          //pagination: false,
           confirm_status: 'SUCCESS',
           position_type: 'DELIVER_POSITION',
           simplify: true,
+          page_size: 100,
+          page: 1,
         };
 
         if (this.searchFilters.stationName.length) {
@@ -429,11 +431,6 @@ export default {
 
 
   },
-  activated: function() {
-    this.activeName = 'second';
-  },
-
-
 }
 
 </script>

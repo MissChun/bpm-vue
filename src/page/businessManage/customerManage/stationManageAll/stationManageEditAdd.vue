@@ -73,6 +73,13 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="启用状态:">
+                <el-switch v-model="formData.is_active"></el-switch>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <div class="dialog-footer text-center">
           <el-button type="primary" @click="editStation" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
@@ -136,6 +143,7 @@ export default {
         customer: '',
         consignee: '',
         consignee_phone: '',
+        is_active: true,
       },
       addressDetail: {},
       submitBtn: {
@@ -165,7 +173,7 @@ export default {
           { required: true, message: '请选择实际液厂', trigger: 'blur' },
         ],
         customer: [
-          { required: true, message: '请选择实际液厂', trigger: 'blur' },
+          { required: true, message: '请选择客户', trigger: 'blur' },
         ],
         gas_type: [
           { required: true, message: '请选择气种', trigger: 'change' },
@@ -190,10 +198,12 @@ export default {
     getAllSiteList: function() {
       return new Promise((resolve, reject) => {
         let postData = {
-          pagination: false,
+          //pagination: false,
           confirm_status: 'SUCCESS',
           position_type: 'DELIVER_POSITION',
           simplify: true,
+          page_size: 100,
+          page: 1,
         };
 
         if (this.searchFilters.keyword.length) {

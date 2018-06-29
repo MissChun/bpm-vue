@@ -44,8 +44,10 @@ export default {
 
   },
   methods: {
-    clickChildtabs() {
-
+    clickChildtabs(targetName) {
+      if (targetName.name == 'fluidsMap') {
+        this.$router.push({ path: "/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsMap" });
+      }
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'supplierManage') {
