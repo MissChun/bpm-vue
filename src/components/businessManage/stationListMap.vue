@@ -411,13 +411,13 @@ export default {
         }, 200)
       }
 
-      _this.map.setFitView(_this.allMakers);
+      this.map.setFitView(this.allMakers);
 
     }
   },
   mounted: function() {
-    let _this = this;
-    _this.map = new AMap.Map('map-container', {
+
+    this.map = new AMap.Map('map-container', {
       zoom: 5
     });
 

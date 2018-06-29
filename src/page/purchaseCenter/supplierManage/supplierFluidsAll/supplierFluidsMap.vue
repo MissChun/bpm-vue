@@ -17,7 +17,7 @@
                         <el-row :gutter="20">
                           <el-col :span="6">
                             <el-form-item label="供应商:">
-                              <el-select v-model="searchFilters.supplier" filterable remote :loading="getSupplierLoading" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
+                              <el-select v-model="searchFilters.supplier" clearable filterable remote :loading="getSupplierLoading" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
                                 <el-option v-for="(item,key) in supplierList" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
                               </el-select>
                             </el-form-item>
@@ -70,10 +70,12 @@ export default {
 
       supplierList: [],
       getSupplierLoading: true,
+      chosedSupplierName: '',
 
 
 
-      siteList: [],
+
+      fluidList: [],
 
       searchBtn: {
         isDisabled: false,
@@ -87,22 +89,26 @@ export default {
   },
   methods: {
     clicktabs: function(targetName) {
-      if (targetName.name == 'fluidsMap') {
-        this.$router.push({ path: "/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList" });
-      }
-    },
-    clickChildtabs: function(targetName) {
       if (targetName.name == 'supplierManage') {
         this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageList" });
       }
     },
 
-    searchSupplierList: function() {
+    clickChildtabs: function(targetName) {
+
+      if (targetName.name == 'fluidsList') {
+        this.$router.push({ path: "/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList" });
+      }
+    },
+
+    searchSupplierList: function(query) {
       console.log('this.searchFilters.supplier', this.searchFilters.supplier);
       let postData = {
         page_size: 100,
         page: 1,
-        supplier_name: this.searchFilters.supplier
+      }
+      if (query) {
+        postData.supplier_name = query;
       }
       this.getSupplierLoading = true;
       this.$$http('searchSupplierList', postData).then((result) => {
@@ -116,33 +122,42 @@ export default {
     },
 
     getList() {
-      let postData = {
-        need_all: true
-      };
 
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.pageLoading = true;
+      return new Promise((resolve, reject) => {
 
-      this.$$http('getFluidsList', postData).then((results) => {
-        console.log('results', results.data.data.results);
-        this.pageLoading = false;
-        if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.data;
+        let postData = {
+          need_all: true,
+          map: true,
+          supplier: this.searchFilters.supplier,
+          fluid_name: this.searchFilters.stationName
+        };
 
-          this.pageData.totalCount = results.data.data.count;
+        postData = this.pbFunc.fifterObjIsNull(postData);
+        this.pageLoading = true;
 
-          if (!this.tableData.length) {
-            this.$message({
-              message: '无数据',
-              type: 'success'
-            });
+        this.$$http('getFluidsList', postData).then((results) => {
+          console.log('results', results.data.data.results);
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.fluidList = results.data.data;
+
+            if (!this.fluidList.length) {
+              this.$message({
+                message: '无数据',
+                type: 'success'
+              });
+            }
+            resolve()
+          } else {
+            reject()
           }
+        }).catch((err) => {
+          this.pageLoading = false;
+          reject()
+        })
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
-        }
-      }).catch((err) => {
-        this.pageLoading = false;
       })
+
 
     },
 
@@ -158,20 +173,6 @@ export default {
         this.searchBtn.text = '搜索';
       })
 
-    },
-    getInfoWindowDom: function(data) {
-      let mark_type = (data.mark_type && data.mark_type.verbose) ? data.mark_type.verbose : '无';
-      let check_status = (data.check_status && data.check_status.verbose) ? data.check_status.verbose : '无';
-      let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
-      let is_synced = data.is_synced ? '已同步' : '未同步';
-      let infoBodyStr = '<div class="fs-13">地标类型：' + mark_type +
-        '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + check_status +
-        '</div><div class="fs-13">上传来源：' + mark_source +
-        '</div><div class="fs-13">是否同步：' + is_synced +
-        '</div></div>';
-
-      return infoBodyStr;
     },
     initMarkList: function() {
 
@@ -192,7 +193,7 @@ export default {
 
             //从数据中读取位置, 返回lngLat
             getPosition: function(item) {
-              return [item.location.longitude, item.location.latitude];
+              return [item.coordinate.longitude, item.coordinate.latitude];
             },
 
             //数据ID，如果不提供，默认使用数组索引，即index
@@ -201,8 +202,8 @@ export default {
             },
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
-              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
+              let infoTitleStr = '<div class="marker-info-window fs-13">液厂名称：<span class="fs-13">' + data.fluid_name + '</span>';
+              let infoBodyStr = '<div class="fs-13">所属供应商：' + data.supplier_name + '</div><div class="fs-13">实际液厂：' + data.actual_fluid + '</div><br><div class="text-right "><a href="/#/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);
                 recycledInfoWindow.setInfoBody(infoBodyStr);
@@ -259,36 +260,13 @@ export default {
 
           });
 
-          _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
-            if (info.selected) {
-              let infoWindow = _this.markerList.getInfoWindow();
-              let id = info.selected.data.id;
-              _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
-                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
-                infoWindow.setInfoBody(infoBodyStr);
 
-              }).catch(() => {
-                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
-                infoWindow.setInfoBody(infoBodyStr);
-              })
-              //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
-              if (!info.sourceEventInfo.isListElementEvent) {
-
-                if (info.selected.listElement) {
-                  scrollListElementIntoView($(info.selected.listElement));
-                }
-
-              }
-            }
-          });
 
         });
     },
     renderMarker: function() {
       const renderAndCluster = () => {
-        this.markerList.render(this.siteList);
+        this.markerList.render(this.fluidList);
         this.map.plugin(["AMap.MarkerClusterer"], () => {
           this.allMakers = this.markerList.getAllMarkers();
           if (this.cluster) {
@@ -310,7 +288,7 @@ export default {
         }, 200)
       }
 
-      _this.map.setFitView(_this.allMakers);
+      this.map.setFitView(this.allMakers);
 
     }
   },
@@ -325,14 +303,11 @@ export default {
       zoom: 5
     });
 
-
-
-
     this.initMarkList();
 
-    // this.getList().then(() => { // this.renderMarker(); // })
-
-
+    this.getList().then(() => {
+      this.renderMarker();
+    })
 
   },
 };

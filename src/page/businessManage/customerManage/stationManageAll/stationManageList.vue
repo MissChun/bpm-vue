@@ -70,7 +70,7 @@ export default {
     return {
       activeName: 'stationManage',
       childActiveName: 'statationList',
-      loading:false,
+      loading: false,
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -123,7 +123,7 @@ export default {
         width: ''
       }],
       tableData: [],
-      customerSearchList:[]
+      customerSearchList: []
     };
   },
   computed: {
@@ -135,11 +135,16 @@ export default {
         this.getList();
       });
     },
-    clicktabs: function() {
 
+    clicktabs: function(targetName) {
+      if (targetName.name == 'customerManage') {
+        this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageList" });
+      }
     },
-    clickChildtabs: function() {
-
+    clickChildtabs: function(targetName) {
+      if (targetName.name == 'statationMap') {
+        this.$router.push({ path: "/businessManage/customerManage/stationManageAll/stationManageMap" });
+      }
     },
     customerSearch(query) {
       if (query !== '') {
@@ -147,7 +152,7 @@ export default {
         setTimeout(() => {
           this.loading = false;
           this.customerSearchList = this.selectData.consumerSelect.filter(item => {
-            console.log('item',item)
+            console.log('item', item)
             return item.consumer_name.toLowerCase().indexOf(query.toLowerCase()) > -1;
           });
         }, 200);

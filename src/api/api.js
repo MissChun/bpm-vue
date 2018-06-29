@@ -1905,6 +1905,47 @@ const api = {
       },
     }
   },
+  addFluids: {
+    url: '/api/v1/supplier-fluids/',
+    method: 'post',
+    desc: '新增供应商液厂',
+    param: {
+      fluid_name  :{
+        desc:'液厂名称',
+      },
+      supplier  :{
+        desc:'供应商id',
+      },
+      actual_fluid  :{
+        desc:'实际液厂id',
+      },
+    }
+  },
+  fixFluids: {
+    url: '/api/v1/supplier-fluids/',
+    method: 'PUT',
+    desc: '修改供应商液厂',
+    param: {
+      fluid_name  :{
+        desc:'液厂名称',
+      },
+      supplier  :{
+        desc:'供应商id',
+      },
+      actual_fluid  :{
+        desc:'实际液厂id',
+      },
+    }
+  },
+
+  getFluidDetail: {
+    url: '/api/v1/supplier-fluids/:id/',
+    method: 'get',
+    desc: '获取供应商液厂详情',
+    param: {
+
+    }
+  },
 
 
 

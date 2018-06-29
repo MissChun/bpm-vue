@@ -39,12 +39,16 @@ export default {
 
   },
   methods: {
-    clicktabs: function() {
-
+    clicktabs: function(targetName) {
+      if (targetName.name == 'customerManage') {
+        this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageList" });
+      }
     },
-    clickChildtabs: function() {
-
-    }
+    clickChildtabs: function(targetName) {
+      if (targetName.name == 'statationList') {
+        this.$router.push({ path: "/businessManage/customerManage/stationManageAll/stationManageList" });
+      }
+    },
   },
   created() {
 
