@@ -176,30 +176,37 @@ export default {
       }
     };
     var startVa = (rule, value, callback) => {
-
-      if ((this.customerFrom.contract_end_date != "" && this.customerFrom.contract_end_date != 'undefined')) {
-        if (((new Date(value)) - (new Date(this.customerFrom.contract_end_date)) < 0) || value == "") {
-          callback();
-        } else {
-          callback(new Error("合同起始日期需小于合同截止日期"));
-        }
-      } else {
+      if(!value){
         callback();
+      }else{
+        if ((this.customerFrom.contract_end_date != "" && this.customerFrom.contract_end_date != 'undefined')) {
+          if (((new Date(value)) - (new Date(this.customerFrom.contract_end_date)) < 0) || value == "") {
+            callback();
+          } else {
+            callback(new Error("合同起始日期需小于合同截止日期"));
+          }
+        } else {
+          callback();
+        }
       }
     };
     var endVa = (rule, value, callback) => {
-      if ((this.customerFrom.contract_start_date != "" && this.customerFrom.contract_start_date != 'undefined')) {
-        if (((new Date(this.customerFrom.contract_start_date)) - (new Date(value)) < 0) || value == "") {
-          callback();
-        } else {
-          callback(new Error("合同截止日期需大于合同起始日期"));
-        }
-      } else {
+      if(!value){
         callback();
-      }
+      }else{
+        if ((this.customerFrom.contract_start_date != "" && this.customerFrom.contract_start_date != 'undefined')) {
+          if (((new Date(this.customerFrom.contract_start_date)) - (new Date(value)) < 0) || value == "") {
+            callback();
+          } else {
+            callback(new Error("合同截止日期需大于合同起始日期"));
+          }
+        } else {
+          callback();
+        }
+      } 
     };
     var social_credit_codeVa = (rule, value, callback) => {
-      if (value.match(/^([A-Z0-9]{18})$/) || value == "") {
+      if ((value+"").match(/^([A-Z0-9]{18})$/) || value == "") {
         callback();
       } else {
         callback(new Error("由18位数字和大写字母组成"));
@@ -213,13 +220,15 @@ export default {
       editable: false,
       pageLoading: false,
       saleManPading: false,
-      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man_id', 'social_credit_code', 'consumer_address'],
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
         free_hour:"200",
         waiting_price:"24",
         waiting_price:"50",
+        contract_start_date:"",
+        contract_end_date:""
       },
 
       rules: {

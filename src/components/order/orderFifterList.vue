@@ -74,15 +74,22 @@
   margin-top: 5px;
   height: 28px;
 }
-
+.el-icon-location{
+  cursor:pointer;
+}
+#map-container {
+  height: 400px;
+  width: 100%;
+}
 </style>
 <template>
+  <div>
   <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="medium" height="550">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
           <el-row class="loadInfo commh" style="width:100%;">
-            <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.fluid_name}}</span><i class="el-icon-location primary"></i>
+            <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
             </el-col>
             <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
             </el-col>
@@ -97,7 +104,7 @@
           </el-row>
           <el-row class="loadInfo commh" style="width:100%;" v-for="(item,key) in props.row.destination">
             <el-col :span="7" class="colinfo">
-              卸:<span>{{item}}</span><i class="el-icon-location primary"></i>
+              卸货区域:<span>{{item}}</span>
             </el-col>
           </el-row>
         </div>
@@ -176,16 +183,25 @@
     <el-table-column label="操作" prop="" min-width="13%">
     </el-table-column>
   </el-table>
+   <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
+      <div id="map-container" v-if="showMap"></div>
+    </el-dialog>
+</div>
 </template>
 <script>
+let landmarkMap;
+let positionMark;
 export default {
   name: 'orderFifterList',
   data() {
     return {
+      showMap:false,
       delayTime:500,
       expandStatus: true,
       pageLoading: false,
-      expandFalg: true
+      expandFalg: true,
+      lockFalg:false,
+      loadPosition:{},
     };
   },
   props: {
@@ -220,6 +236,42 @@ export default {
         type = 'edit';
       }
       this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+    },
+    showMapDetalis:function(type,id){
+     var vm=this;
+     if(type=="load"){
+        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
+          if(results.data.code==0){
+            vm.showMap=true;
+            var pointObj=results.data.data;
+            vm.loadPosition.longitude=pointObj.coordinate.longitude;
+            vm.loadPosition.latitude=pointObj.coordinate.latitude;
+            vm.loadPosition.position=pointObj.coordinate.address;
+            //vm.openDigo(pointObj.coordinate);
+          }
+        }).catch(()=>{
+
+        });
+      }
+    },
+    openDigo:function(obj){
+      var vm=this;
+      setTimeout(()=>{
+        landmarkMap = new AMap.Map('map-container', {
+          zoom: 10,
+        });
+      // /*创建点标记*/
+        positionMark = new AMap.Marker({
+            map:landmarkMap,
+          });
+         positionMark.setLabel({
+            content: vm.loadPosition.position,
+            offset: new AMap.Pixel(30, 0)
+         });
+        let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
+        landmarkMap.setCenter(lnglat);
+        positionMark.setPosition(lnglat);
+      },100);  
     },
     operation: function(type, rowData) {
       var vm = this;

@@ -120,7 +120,7 @@ export default {
       }
     };
     var startVa = (rule, value, callback) => {
-      if(value==""){
+      if(!value){
         callback();
       }else{
         if ((this.supplierFrom.contract_life!=""&&this.supplierFrom.contract_life!='undefined')) {
@@ -135,7 +135,7 @@ export default {
       }
     };
     var endVa = (rule, value, callback) => {
-      if(value==""){
+      if(!value){
         callback();
       }else{
         if ((this.supplierFrom.contract_date!=""&&this.supplierFrom.contract_date!='undefined')) {
@@ -159,7 +159,8 @@ export default {
       supplierFrom1Arr: ['supplier_name', 'supplier_short_name', 'contact', 'contact_phone', 'address'],
       supplierFrom2Arr: ['contract_no', 'contract_date', 'contract_life', 'contract_address','supplier_type'],
       supplierFrom: {
-        
+        contract_date:"",
+        contract_life:""
       },
       
       rules: {

@@ -261,12 +261,16 @@ export default {
       }
     };
     var discountVa = (rule, value, callback) => {
-      if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
-        callback(new Error("不能大于采购价"));
-      } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
-        callback(new Error("只能输入数字"));
-      } else {
-        callback();
+      if(value==""){
+       callback();
+      }else{
+       if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
+          callback(new Error("不能大于采购价"));
+        } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
+          callback(new Error("只能输入数字"));
+        } else {
+          callback();
+        }
       }
     }
     return {

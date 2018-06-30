@@ -56,7 +56,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="客户等级:">
-                  <div class="detail-form-item">{{customerData.consumer_level}}</div>
+                  <div class="detail-form-item">{{customerData.consumer_level_display}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -133,7 +133,7 @@
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="结算方式:">
-                  <div class="detail-form-item">{{customerData.settlement_cycle}}</div>
+                  <div class="detail-form-item">{{customerData.settlement_cycle_display}}</div>
                 </el-form-item>
               </el-col>
             </el-row>

@@ -63,7 +63,7 @@ export default {
         width: ''
       }, {
         title: '客户简称',
-        param: 'short_name',
+        param: 'short_name_display',
         width: ''
       }, {
         title: '联系人',
@@ -79,7 +79,7 @@ export default {
         width: '250'
       }, {
         title: '客户等级',
-        param: 'consumer_level',
+        param: 'consumer_level_display',
         width: ''
       }, {
         title: '分属业务员',
