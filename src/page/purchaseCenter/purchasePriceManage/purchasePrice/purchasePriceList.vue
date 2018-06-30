@@ -76,7 +76,11 @@
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                   <template slot-scope="scope">
-                    <div v-if="item.param === 'fluid_name'">{{scope.row[item.param]}}</div>
+                    <div v-if="item.param === 'fluid_name'">
+                      <ul>
+                        <li>{{scope.row[item.param]}}</li>
+                      </ul>
+                    </div>
                     <div v-if="item.param === 'area'">
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">{{area.area}}</li>
@@ -87,7 +91,7 @@
                         <li v-for="(area,index) in scope.row.business_areas">
                           <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true,true)">
                             <el-form-item prop="price" v-if="quotes.isShow">
-                              <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
+                              <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" @keyup.native.13="isShowPrice" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
                             </el-form-item>
                             <span v-if="!quotes.isShow">{{quotes.today_unit_price}}</span>
                           </div>

@@ -368,7 +368,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-if="isCheck">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -404,7 +404,7 @@
 import imgReview from '@/components/common/imgReview';
 export default {
   name: 'uWaybillDetail',
-  props: ['backLink'],
+  props: ['backLink','isCheck'],
   components: {
     imgReview: imgReview
   },

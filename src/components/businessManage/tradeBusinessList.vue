@@ -55,11 +55,12 @@
                     </div>
                   </template>
                 </el-table-column>
-                <!--  <el-table-column label="操作" align="center" width="150" fixed="right">
+                <el-table-column label="操作" align="center" width="150" fixed="right" v-if="statusActive==='create_department_check'">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                    <el-button type="danger" plain size="mini" @click="refuse('create_department_check',scope.row.id)">拒绝</el-button>
+                    <el-button type="primary" size="mini" @click="adopt('create_department_check',scope.row.id)">通过</el-button>
                   </template>
-                </el-table-column> -->
+                </el-table-column>
               </el-table>
             </div>
             <div class="page-list text-center">
@@ -70,9 +71,11 @@
         </el-tabs>
       </div>
     </div>
+    <refuse-dialog :refuse-dialog="refuseDialog" v-on:closeDialogBtn="closeDialog" :title="refuseTitle"></refuse-dialog>
   </div>
 </template>
 <script>
+import refuseDialog from '@/components/businessManage/refuseDialog';
 export default {
   name: 'tradeBusinessList',
   props: ['detailLink'],
@@ -81,9 +84,16 @@ export default {
     //   return this.tabList[0].tabs;
     // }
   },
-
+  components: {
+    refuseDialog: refuseDialog
+  },
   data() {
     return {
+      refuseTitle: '',
+      refuseDialog: {
+        isShow: false,
+        id: ''
+      },
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -267,6 +277,70 @@ export default {
       setTimeout(() => {
         this.getList(this.statusActive);
       })
+    },
+    refuse(status, id) {
+      this.refuseDialog.isShow = true;
+      this.refuseDialog.id = id;
+      if (status == 'create_department_check') {
+        this.refuseTitle = '业务单审核拒绝'
+      } else if (status == 'modify_department_check') {
+        this.refuseTitle = '业务单修改审核拒绝'
+      } else if (status == 'cancel_check') {
+        this.refuseTitle = '业务单取消审核拒绝'
+      }
+
+    },
+    adopt(status, id) {
+      let title = '';
+      let desc = '';
+      if (status === 'create_department_check') {
+        title = '业务单审核通过';
+        desc = '请确认业务单信息无误，审核通过后将等待匹配车辆';
+      } else if (status === 'modify_department_check') {
+        title = '业务单修改审核通过';
+        desc = '请确认，修改被拒绝后，业务单将回置为修改前状态';
+      } else if (status === 'canceled') {
+        title = '业务单取消审核通过';
+        desc = '通过后，业务单将被取消，卸货计划将被自动取消';
+      }
+      this.$confirm(desc, title, {
+          confirmButtonText: "确定通过",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          this.$$http('toExamineBusiness', {
+            order_id: id,
+            action: 'pass'
+          }).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.$message({
+                message: '通过审核成功',
+                type: 'success'
+              });
+              this.getList(this.statusActive);
+            }
+
+          }).catch((err) => {
+            this.$message.error('通过审核失败');
+          })
+
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消通过审核'
+          });
+        });
+    },
+    closeDialog: function(isSave) {
+      console.log('测试拒绝', isSave)
+      this.refuseDialog.isShow = false;
+      if (isSave) {
+        this.getList(this.statusActive);
+        // this.getProcess();
+      }
+
     },
     handleClick: function(tab, event) {
       this.pageData.currentPage = 1;

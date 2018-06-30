@@ -637,6 +637,10 @@ export default {
       this.refuseDialog.isShow = true;
       if (status == 'create_department_check') {
         this.refuseTitle = '业务单审核拒绝'
+      } else if (status == 'modify_department_check') {
+        this.refuseTitle = '业务单修改审核拒绝'
+      } else if (status == 'cancel_check') {
+        this.refuseTitle = '业务单取消审核拒绝'
       }
 
     },

@@ -837,41 +837,43 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/consignment/editConsignment'], resolve)
         }]
-      }, {
-        path: 'income',
-        name: "income",
-        redirect: '/statistics/income/incomeList',
-        meta: {
-          title: '收入统计',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/income/income'], resolve),
-        children: [{
-          path: 'incomeList',
-          name: "incomeList",
-          meta: {
-            title: '收入统计列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
-        }, {
-          path: 'incomeWaybillDetail/:willId/:orderId/',
-          name: "incomeWaybillDetail",
-          meta: {
-            title: '运力单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeWaybillDetail'], resolve)
-        }, {
-          path: 'incomeBusinessDetail',
-          name: "incomeBusinessDetail",
-          meta: {
-            title: '业务单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeBusinessDetail'], resolve)
-        }]
-      }]
+      },
+      //  {
+      //   path: 'income',
+      //   name: "income",
+      //   redirect: '/statistics/income/incomeList',
+      //   meta: {
+      //     title: '收入统计',
+      //     isVerificationL: false
+      //   },
+      //   component: (resolve) => require(['../page/statistics/income/income'], resolve),
+      //   children: [{
+      //     path: 'incomeList',
+      //     name: "incomeList",
+      //     meta: {
+      //       title: '收入统计列表',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
+      //   }, {
+      //     path: 'incomeWaybillDetail/:willId/:orderId/',
+      //     name: "incomeWaybillDetail",
+      //     meta: {
+      //       title: '运力单详情',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/income/incomeWaybillDetail'], resolve)
+      //   }, {
+      //     path: 'incomeBusinessDetail',
+      //     name: "incomeBusinessDetail",
+      //     meta: {
+      //       title: '业务单详情',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/income/incomeBusinessDetail'], resolve)
+      //   }]
+      // }
+      ]
     },
     {
       path: 'setting',

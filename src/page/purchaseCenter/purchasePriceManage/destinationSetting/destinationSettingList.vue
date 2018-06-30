@@ -120,7 +120,7 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
-      // this.getList();
+      this.getList();
     },
     pageChange() {
       setTimeout(() => {

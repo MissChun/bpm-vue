@@ -80,7 +80,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="生效价格时间:" prop="effect_time">
-                    <el-time-picker v-model="editMsgForm.effect_time" arrow-control :picker-options="{selectableRange: '00:00:00 - 23:59:59'}" placeholder="请选择">
+                    <el-time-picker v-model="editMsgForm.effect_time" :picker-options="{selectableRange: '00:00:00 - 23:59:59'}" placeholder="请选择">
                     </el-time-picker>
                     <!-- <el-time-picker v-model="test" arrow-control format="HH:MM" :picker-options="{selectableRange: '00:00:00 - 23:59:59'}" placeholder="请选择"> -->
                     </el-time-picker>
