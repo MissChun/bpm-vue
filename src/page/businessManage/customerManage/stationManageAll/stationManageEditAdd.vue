@@ -45,9 +45,9 @@
           </el-row>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="客户简称:" prop="customer">
-                <el-select v-model="formData.station_type" placeholder="请选择">
-                  <el-option v-for="(item,key) in stationTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+              <el-form-item label="客户简称:" prop="short_name">
+                <el-select v-model="formData.short_name" placeholder="请选择">
+                  <el-option v-for="(item,key) in customerList" :key="key" :label="item.short_name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -140,7 +140,7 @@ export default {
         position_name: '',
         map_position: '',
         station_type: '',
-        customer: '',
+        short_name: '',
         consignee: '',
         consignee_phone: '',
         is_active: true,
@@ -172,7 +172,7 @@ export default {
         map_position: [
           { required: true, message: '请选择实际液厂', trigger: 'blur' },
         ],
-        customer: [
+        short_name: [
           { required: true, message: '请选择客户', trigger: 'blur' },
         ],
         gas_type: [
@@ -195,48 +195,6 @@ export default {
       }
     },
 
-    getAllSiteList: function() {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          //pagination: false,
-          confirm_status: 'SUCCESS',
-          position_type: 'DELIVER_POSITION',
-          simplify: true,
-          page_size: 100,
-          page: 1,
-        };
-
-        if (this.searchFilters.keyword.length) {
-          postData.position_name = this.searchFilters.keyword;
-        }
-
-        this.pageLoading = true;
-
-        this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
-          this.pageLoading = false;
-          if (results.data && results.data.code == 0) {
-            this.siteList = results.data.data.results;
-            if (!this.siteList.length) {
-              this.$message({
-                message: '无数据',
-                type: 'success'
-              });
-            }
-            resolve(results)
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-
-          this.pageLoading = false;
-          reject(err);
-        })
-
-      })
-    },
-
-
     startSearch: function() {
       this.searchBtn.isDisabled = true;
       this.searchBtn.loading = true;
@@ -251,6 +209,26 @@ export default {
       })
 
 
+    },
+    getCustomerList: function() {
+
+      return new Promise((resolve, reject) => {
+        let postData = {
+          need_all: true,
+        };
+
+        this.$$http('getShortName', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.customerList = results.data.data.data;
+            resolve(results);
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(results);
+        })
+
+      })
     },
     getInfoWindowDom: function(data) {
       let mark_type = (data.mark_type && data.mark_type.verbose) ? data.mark_type.verbose : '无';
@@ -410,7 +388,7 @@ export default {
       this.$refs['stationForm'].validate((valid) => {
         if (valid) {
 
-          let apiName = this.id ? 'patchLandMarkDetail' : 'addLandmark';
+          let apiName = this.id ? 'patchLandMarkDetail' : 'addStationOfCustomer';
 
           this.addEditStationAjax(apiName);
 
@@ -490,9 +468,11 @@ export default {
 
     this.initMarkList();
 
-    this.getAllSiteList().then(() => {
-      this.renderMarker();
-    })
+    this.getCustomerList();
+
+    // this.getAllSiteList().then(() => {
+    //   this.renderMarker();
+    // })
 
 
   },

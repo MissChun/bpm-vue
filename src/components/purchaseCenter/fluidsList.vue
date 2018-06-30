@@ -18,7 +18,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="6">
-          <el-form-item label="供应商名称:"  label-width="105px">
+          <el-form-item label="供应商名称:" label-width="105px">
             <el-select v-model="searchFilters.supplier" clearable filterable remote :loading="getSupplierLoading" @change="startSearch" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
               <el-option v-for="(item,key) in supplierList" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
             </el-select>
@@ -49,7 +49,7 @@ export default {
   name: 'fluidsList',
   data() {
     return {
-      getSupplierLoading:false,
+      getSupplierLoading: false,
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -89,7 +89,7 @@ export default {
         width: '250'
       }],
       tableData: [],
-      supplierList:[]
+      supplierList: []
     };
   },
   computed: {
@@ -129,7 +129,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        supplier:this.searachPostData.supplier
+        supplier: this.searachPostData.supplier
       };
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -150,6 +150,16 @@ export default {
       })
 
     },
+    jumpPage(row) {
+      console.log('row', row);
+
+      this.$router.push({
+        path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
+        query: {
+          id: row.rowData.id,
+        }
+      })
+    }
   },
   created() {
     this.getList();

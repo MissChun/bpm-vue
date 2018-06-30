@@ -1922,7 +1922,7 @@ const api = {
     }
   },
   fixFluids: {
-    url: '/api/v1/supplier-fluids/',
+    url: '/api/v1/supplier-fluids/:id/',
     method: 'PUT',
     desc: '修改供应商液厂',
     param: {
@@ -1942,6 +1942,14 @@ const api = {
     url: '/api/v1/supplier-fluids/:id/',
     method: 'get',
     desc: '获取供应商液厂详情',
+    param: {
+
+    }
+  },
+  getShortName: {
+    url: '/api/v1/short_name/',
+    method: 'get',
+    desc: '获取客户简称列表',
     param: {
 
     }

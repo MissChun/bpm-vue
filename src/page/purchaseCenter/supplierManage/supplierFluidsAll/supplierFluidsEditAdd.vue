@@ -19,13 +19,16 @@
     <transition name="fade">
       <div class="landmark-dialog" v-show="showLeftWindow">
         <h4>{{pageTitle}}</h4>
-        <el-form class="addheaduserform detail-form" label-width="120px" ref="stationForm" :rules="rules" :model="formData" status-icon>
+        <el-form class="addheaduserform detail-form" label-width="100px" ref="stationForm" :rules="rules" :model="formData" status-icon>
           <el-row>
             <el-col :span="20">
               <el-form-item label="所属供应商:" prop="supplier">
-                <el-select v-model="formData.supplier" clearable filterable remote :loading="getSupplierLoading" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
+                <el-select v-model="formData.supplier" clearable filterable :loading="getSupplierLoading" placeholder="请输入选择供应商">
                   <el-option v-for="(item,key) in supplierList" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
                 </el-select>
+                <!-- <el-select v-model="formData.supplier" clearable filterable remote :loading="getSupplierLoading" placeholder="请输入选择供应商" :remote-method="searchSupplierList">
+                  <el-option v-for="(item,key) in supplierList" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+                </el-select> -->
               </el-form-item>
             </el-col>
           </el-row>
@@ -95,6 +98,7 @@ export default {
       searchFilters: {
         keyword: '',
         field: 'position_name',
+        actual_fluid: '',
       },
       landmarkDetail: {},
 
@@ -374,7 +378,10 @@ export default {
         }, 200)
       }
 
-      this.map.setFitView(this.allMakers);
+      if (!this.id) {
+        this.map.setFitView(this.allMakers);
+      }
+
 
     },
     editFluid: function() {
@@ -438,8 +445,7 @@ export default {
     searchSupplierList: function(query) {
       console.log('this.searchFilters.supplier', this.searchFilters.supplier);
       let postData = {
-        page_size: 100,
-        page: 1,
+        need_all: true,
       }
       if (query) {
         postData.supplier_name = query;
@@ -448,7 +454,7 @@ export default {
       this.$$http('searchSupplierList', postData).then((result) => {
         this.getSupplierLoading = false;
         if (result.data.code == 0) {
-          this.supplierList = result.data.data.data;
+          this.supplierList = result.data.data;
         }
       }).catch((error) => {
         this.getSupplierLoading = false;
@@ -462,7 +468,14 @@ export default {
         };
         this.$$http('getFluidDetail', postData).then((results) => {
           if (results.data && results.data.code == 0) {
+
             this.fluidDetail = results.data.data;
+            console.log(' this.fluidDetail', this.fluidDetail);
+            this.formData.supplier = this.fluidDetail.supplier;
+            this.formData.fluid_name = this.fluidDetail.fluid_name;
+
+
+
             resolve(results);
           } else {
             reject(results);
@@ -491,11 +504,22 @@ export default {
 
     this.getActualFluidList().then(() => {
       this.renderMarker();
+      console.log('xxxxxx')
+      if (this.id) {
+        this.getFluidsDetail().then(() => {
+          return this.getLandmarkDetail(this.fluidDetail.map_position);
+        }).then(() => {
+          this.choosedActualFluid = this.landmarkDetail;
+          this.formData.actual_fluid = this.choosedActualFluid.id;
+          console.log('this.landmarkDetail', this.landmarkDetail);
+          this.map.setZoom(15);
+          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+          //this.map.setZoomAndCenter(15, );
+        });
+      }
     })
 
-    if (this.id) {
-      this.getFluidsDetail();
-    }
+
 
 
   },
