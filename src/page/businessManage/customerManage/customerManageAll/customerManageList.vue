@@ -63,7 +63,7 @@ export default {
         width: ''
       }, {
         title: '客户简称',
-        param: 'short_name_display',
+        param: 'short_name',
         width: ''
       }, {
         title: '联系人',

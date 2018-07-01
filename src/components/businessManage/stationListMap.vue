@@ -120,53 +120,12 @@ export default {
       })
     },
 
-    getAllSiteList: function() {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          //pagination: false,
-          confirm_status: 'SUCCESS',
-          position_type: 'DELIVER_POSITION',
-          simplify: true,
-          page_size: 100,
-          page: 1,
-        };
-
-        if (this.searchFilters.stationName.length) {
-          postData.position_name = this.searchFilters.stationName;
-        }
-
-        this.pageLoading = true;
-
-        this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
-          this.pageLoading = false;
-          if (results.data && results.data.code == 0) {
-            this.siteList = results.data.data.results;
-            if (!this.siteList.length) {
-              this.$message({
-                message: '无数据',
-                type: 'success'
-              });
-            }
-            resolve(results)
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-
-          this.pageLoading = false;
-          reject(err);
-        })
-
-      })
-    },
-
     startSearch: function() {
       this.searchBtn.isDisabled = true;
       this.searchBtn.loading = true;
       this.searchBtn.text = '搜索中';
 
-      this.getSiteList().then((data) => { //展示该数据
+      this.getCustomerSiteList().then((data) => { //展示该数据
         this.renderMarker();
         this.searchBtn.isDisabled = false;
         this.searchBtn.loading = false;

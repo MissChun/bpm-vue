@@ -54,7 +54,7 @@
           </el-row>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="联系电话:" prop="consignee">
+              <el-form-item label="联系人:" prop="consignee">
                 <el-input placeholder="请输入" type="text" v-model="formData.consignee"></el-input>
               </el-form-item>
             </el-col>
@@ -69,7 +69,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="地址:">
-                <span>{{addressDetail.address}}</span>
+                <span>{{formData.address}}</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -144,12 +144,16 @@ export default {
         consignee: '',
         consignee_phone: '',
         is_active: true,
+        address: '',
       },
       addressDetail: {},
       submitBtn: {
         isLoading: false,
         isDisabled: false,
         btnText: '保存并退出',
+      },
+      choosedActualSite: {
+
       },
       stationTypeSelect: [{
           key: 'trade',
@@ -201,7 +205,7 @@ export default {
       this.searchBtn.text = '搜索中';
 
 
-      this.getAllSiteList().then((data) => { //展示该数据
+      this.getActualSiteList().then((data) => { //展示该数据
         this.renderMarker();
         this.searchBtn.isDisabled = false;
         this.searchBtn.loading = false;
@@ -209,6 +213,44 @@ export default {
       })
 
 
+    },
+    getActualSiteList: function() {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          pagination: false,
+          confirm_status: 'SUCCESS',
+          position_type: 'DELIVER_POSITION',
+          simplify: true,
+        };
+
+        if (this.searchFilters.keyword.length) {
+          postData.position_name = this.searchFilters.keyword;
+        }
+
+        this.pageLoading = true;
+
+        this.$$http('getLandMarkList', postData).then((results) => {
+          console.log('this.pageLoading', this.pageLoading);
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.siteList = results.data.data.results;
+            if (!this.siteList.length) {
+              this.$message({
+                message: '无数据',
+                type: 'success'
+              });
+            }
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+
+          this.pageLoading = false;
+          reject(err);
+        })
+
+      })
     },
     getCustomerList: function() {
 
@@ -231,19 +273,35 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let mark_type = (data.mark_type && data.mark_type.verbose) ? data.mark_type.verbose : '无';
-      let check_status = (data.check_status && data.check_status.verbose) ? data.check_status.verbose : '无';
       let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
-      let is_synced = data.is_synced ? '已同步' : '未同步';
-      let infoBodyStr = '<div class="fs-13">地标类型：' + mark_type +
-        '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + check_status +
+      let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
         '</div><div class="fs-13">上传来源：' + mark_source +
-        '</div><div class="fs-13">是否同步：' + is_synced +
-        '</div></div>';
+        '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
 
       return infoBodyStr;
     },
+
+    getLandmarkDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+        this.$$http('getLandMarkDetail', postData).then((results) => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkDetail = results.data.data;
+            console.log('deviceDetail', this.landmarkDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+
     initMarkList: function() {
 
       let _this = this;
@@ -339,7 +397,15 @@ export default {
                 console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
+                jQuery('#choose-Actual-fluid').on('click', function() {
+                  _this.choosedActualSite = results.data.data;
+                  _this.formData.map_position = _this.choosedActualSite.position_name;
 
+                  _this.formData.consignee = _this.choosedActualSite.contacts;
+                  _this.formData.consignee_phone = _this.choosedActualSite.tel;
+                  _this.formData.address = _this.choosedActualSite.address;
+
+                })
               }).catch(() => {
                 let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
                 infoWindow.setInfoBody(infoBodyStr);
@@ -381,14 +447,16 @@ export default {
         }, 200)
       }
 
-      this.map.setFitView(this.allMakers);
+      if (!this.id) {
+        this.map.setFitView(this.allMakers);
+      }
 
     },
     editStation: function() {
       this.$refs['stationForm'].validate((valid) => {
         if (valid) {
 
-          let apiName = this.id ? 'patchLandMarkDetail' : 'addStationOfCustomer';
+          let apiName = this.id ? 'fixStationOfCustomer' : 'addStationOfCustomer';
 
           this.addEditStationAjax(apiName);
 
@@ -399,28 +467,34 @@ export default {
     },
     addEditStationAjax: function(apiName) {
       return new Promise((resolve, reject) => {
+
+        let area = this.choosedActualSite.county && this.choosedActualSite.county.area_name ? this.choosedActualSite.county.area_name : '';
+        let city = this.choosedActualSite.city && this.choosedActualSite.city.area_name ? this.choosedActualSite.city.area_name : '';
+
+        let province = this.choosedActualSite.province && this.choosedActualSite.province.area_name ? this.choosedActualSite.province.area_name : '';
+
         let postData = {
-          position_name: this.formData.position_name,
-          position_type: this.formData.position_type,
-          longitude: this.addressDetail.longitude,
-          latitude: this.addressDetail.latitude,
-          address: this.addressDetail.address,
-          contacts: this.formData.contacts,
-          tel: this.formData.tel,
-          source_type: 'PLATFORM',
-          province: this.addressDetail.province,
-          city: this.addressDetail.city,
-          county: this.addressDetail.county,
+
+          address: this.choosedActualSite.address,
+          area: area,
+          city: city,
+          consignee: this.formData.consignee,
+          consignee_phone: this.formData.consignee_phone,
+          map_position: this.choosedActualSite.id,
+          province: province,
+          short_name_id: this.formData.short_name,
+          station_type: this.formData.station_type,
+          station_name: this.formData.position_name,
+
+          longitude: this.choosedActualSite.location.longitude,
+          latitude: this.choosedActualSite.location.latitude,
+          map_station_name: this.choosedActualSite.position_name,
+          is_active: this.formData.is_active,
+
         };
 
-        if (apiName === 'addLandmark' && this.formData.position_type === 'LNG_FACTORY') {
-          postData.gas_type = this.formData.gas_type;
-        }
-
-        if (apiName === 'patchLandMarkDetail') {
+        if (apiName === 'fixStationOfCustomer') {
           postData.id = this.id;
-          delete postData.source_type;
-          delete postData.position_type;
         }
 
         this.submitBtn.btnText = '提交中';
@@ -433,11 +507,7 @@ export default {
               type: 'success'
             });
 
-            if (apiName === 'addLandmark') {
-              this.$router.push({ path: '/mapManage/landmark/landmarkList' });
-            } else {
-              this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${this.id}` });
-            }
+            this.$router.push({ path: '/businessManage/customerManage/stationManageAll/stationManageList' });
 
             resolve(results);
           } else {
@@ -455,6 +525,40 @@ export default {
 
       })
     },
+    getSiteOfCustomerDetail: function() {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: this.id,
+        };
+
+        this.$$http('getSiteOfCustomerDetail', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+
+            this.siteOfCusmerDetail = results.data.data;
+
+            this.formData.map_position = this.siteOfCusmerDetail.map_station_name;
+
+            this.formData.consignee = this.siteOfCusmerDetail.consignee;
+            this.formData.consignee_phone = this.siteOfCusmerDetail.consignee_phone;
+            this.formData.short_name = this.siteOfCusmerDetail.owner;
+
+            this.formData.station_type = this.siteOfCusmerDetail.station_type;
+
+            this.formData.position_name = this.siteOfCusmerDetail.station_name;
+
+            this.formData.address = this.siteOfCusmerDetail.address;
+
+            resolve(results);
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+
+    }
 
   },
 
@@ -470,9 +574,21 @@ export default {
 
     this.getCustomerList();
 
-    // this.getAllSiteList().then(() => {
-    //   this.renderMarker();
-    // })
+    this.getActualSiteList().then(() => {
+      this.renderMarker();
+      console.log('xxxxxx')
+      if (this.id) {
+        this.getSiteOfCustomerDetail().then(() => {
+          return this.getLandmarkDetail(this.siteOfCusmerDetail.map_position);
+        }).then(() => {
+          this.choosedActualSite = this.landmarkDetail;
+
+          this.map.setZoom(15);
+          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+
+        });
+      }
+    })
 
 
   },

@@ -26,6 +26,9 @@
         </el-col>
       </el-row>
     </el-form>
+    <div class="operation-btn text-right">
+      <el-button type="success" @click="addFluids">新增</el-button>
+    </div>
     <div class="table-list mt-25" v-loading="pageLoading">
       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
@@ -33,7 +36,6 @@
         <el-table-column label="操作" align="center" width="150" fixed="right">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" plain @click="jumpPage({operator:'show',rowData:scope.row})">编辑</el-button>
-            <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -158,6 +160,11 @@ export default {
         query: {
           id: row.rowData.id,
         }
+      })
+    },
+    addFluids() {
+      this.$router.push({
+        path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
       })
     }
   },

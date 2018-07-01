@@ -19,11 +19,11 @@ let timeout = 15000;
 let domainUrl = '';
 let currentUrl = document.location.href.toString();
 
-if (currentUrl.match('xxx.91lng.cn')) {
-  domainUrl = 'http://91lng.cn';
+if (currentUrl.match('pbpm.91lng.cn')) {
+  domainUrl = 'http://pbpm.91lng.cn';
 } else if (currentUrl.match('bpm.hhtdlng.com') && !currentUrl.match('devbpm.hhtdlng.com')) {
   domainUrl = 'http://bpm.hhtdlng.com';
-} else if (currentUrl.match('bpm.91lng.cn')) {
+} else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
   domainUrl = 'http://bpm.91lng.cn';
 } else {
   domainUrl = 'http://devbpm.hhtdlng.com';

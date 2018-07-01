@@ -197,7 +197,7 @@ export default {
     getLandmarkDetail: function(id) {
       return new Promise((resolve, reject) => {
         let postData = {
-          id: id
+          id: this.id
         };
         this.$$http('getLandMarkDetail', postData).then((results) => {
           this.pageLoading = false;
@@ -466,6 +466,7 @@ export default {
         let postData = {
           id: this.id,
         };
+        console.log('this.id', this.id);
         this.$$http('getFluidDetail', postData).then((results) => {
           if (results.data && results.data.code == 0) {
 
