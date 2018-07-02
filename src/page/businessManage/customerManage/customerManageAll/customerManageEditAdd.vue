@@ -206,7 +206,7 @@ export default {
       } 
     };
     var social_credit_codeVa = (rule, value, callback) => {
-      if ((value+"").match(/^([A-Z0-9]{18})$/) || value == "") {
+      if ((value+"").match(/^([A-Z0-9]{18})$/) || !value) {
         callback();
       } else {
         callback(new Error("由18位数字和大写字母组成"));
@@ -228,7 +228,8 @@ export default {
         waiting_price:"24",
         waiting_price:"50",
         contract_start_date:"",
-        contract_end_date:""
+        contract_end_date:"",
+        social_credit_codeVa:""
       },
 
       rules: {

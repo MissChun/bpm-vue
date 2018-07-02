@@ -148,7 +148,14 @@ export default {
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
             picker.$emit('pick', [start, end]);
           }
-        }, ]
+        }, {
+          text: '今天',
+          onClick(picker) {
+            const end = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
+            const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
+            picker.$emit('pick', [start, end]);
+          }
+        }]
       },
       searchStatus: false,
       pageLoading: false,
@@ -304,9 +311,9 @@ export default {
     if (this.thisFifterName != this.fifterName) {
       this.thisFifterName = this.fifterName;
     }
-    var defaultStart=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00"
-    var defaultEnd=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
-    this.timeParam=[defaultStart,defaultEnd];
+    // var defaultStart=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00"
+    // var defaultEnd=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
+    // this.timeParam=[defaultStart,defaultEnd];
     this.searchList();
   },
   watch: {

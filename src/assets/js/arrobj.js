@@ -564,7 +564,7 @@ export const fifterObjIsNull = function(Obj) {
           delete object[i];
           continue;
         }
-      }else {
+      } else {
         for (let j = 0; j < value.length; j++) {
           value[j] = fifterObjIsNull(value[j]);
         }
@@ -582,28 +582,28 @@ export const fifterObjIsNull = function(Obj) {
   return object;
 };
 
-export const fifterbyArr = function(Obj, fifterArr,isNull) {
+export const fifterbyArr = function(Obj, fifterArr, isNull) {
   var object = deepcopy(Obj);
   var newObj = {};
-  if(isNull){
+  if (isNull) {
     for (let i = 0; i < fifterArr.length; i++) {
       newObj[fifterArr[i]] = object[fifterArr[i]];
     }
-  }else{
+  } else {
     for (let i = 0; i < fifterArr.length; i++) {
-      newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
+      newObj[fifterArr[i]] = (object[fifterArr[i]] || object[fifterArr[i]] == '0') ? object[fifterArr[i]] : null;
     }
   }
   return newObj;
 }
 export const dealNullData = function(data) {
-  if(data === null || data === undefined || data === ''){
+  if (data === null || data === undefined || data === '') {
     return '<span class="text-stance">无</span>'
-  }else{
+  } else {
     return data
   }
 }
-export const format = function(){
+export const format = function() {
   Date.prototype.Format = function(fmt) { //author: meizz
     var o = {
       "M+": this.getMonth() + 1, //月份

@@ -72,7 +72,7 @@
              <el-col :span="8">
               <div class="label-list">
                 <label>采购优惠:</label>
-                <div class="detail-form-item">{{detailData.delivery_order.discount_price}}</div>
+                <div class="detail-form-item">{{detailData.delivery_order.business_price}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -122,7 +122,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际液厂:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.fluid_name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.actual_fluid_name)"></div>
                 </div>
               </el-col>
               <el-col :span="8">

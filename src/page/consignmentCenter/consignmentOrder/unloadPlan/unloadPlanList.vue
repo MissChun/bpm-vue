@@ -228,7 +228,6 @@ export default {
             cancel_order_list.push(item);
           }
         });
-
         vm.upMatchList.forEach(Uitem => {
           var addFalg = true;
           vm.hasList.forEach(item => {
@@ -262,9 +261,11 @@ export default {
       sendData.waybill_id = this.id;
       this.$$http("getBusinessList", sendData).then((results) => {
         needNum++;
-        if (results.data.code == 0) {
-          vm.trueAllList = results.data.data.data
-          console.log(results.data.data);
+        if (results.data.code == 0) {    
+          if(results.data.data&&results.data.data.data&&results.data.data.data.length>0){
+            vm.trueAllList = results.data.data.data
+            vm.pageData.totalPage=Math.ceil(results.data.data.data.length/vm.pageData.pageSize);
+          }
           if (needNum == 2) {
             vm.sortParam(true);
           }
