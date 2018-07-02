@@ -78,6 +78,12 @@
                         <div class="detail-form-item">{{detailData.discount_price}}</div>
                       </div>
                     </el-col>
+                      <el-col :span="6">
+                      <div class="label-list">
+                        <label>液厂名称:</label>
+                        <div class="detail-form-item">{{detailData.fluid_name}}</div>
+                      </div>
+                    </el-col>
                   </el-row>
                 </div>
                 <div class="detail-list detail-form">
@@ -104,8 +110,8 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>液厂:</label>
-                        <div class="detail-form-item">{{detailData.fluid_name}}</div>
+                        <label>实际液厂:</label>
+                        <div class="detail-form-item">{{detailData.actual_fluid_address}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">

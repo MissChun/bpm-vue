@@ -21,8 +21,8 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="离站时间:" label-width="105px">
-                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              <el-form-item label="实际离站时间:" label-width="105px">
+                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -35,7 +35,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
           </el-col>
           <el-col :span="4" class="text-right">
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary">导出</el-button> -->
           </el-col>
         </el-row>
       </div>
@@ -166,11 +166,11 @@ export default {
         width: ''
       }, {
         title: '采购单价',
-        param: 'business_price',
+        param: 'discount_price',
         width: ''
       }, {
         title: '业务优惠',
-        param: 'discount_price',
+        param: 'business_price',
         width: ''
       }, {
         title: '销售单价',
@@ -200,11 +200,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}` });
+        this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
       } else if (tpye === 'business_order') {
         this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/sales/editSales/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
       }
     },
     startSearch() {

@@ -136,8 +136,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运费合计:" prop="waiting_charges">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
+                  <el-form-item label="运费合计:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -200,7 +200,7 @@ export default {
         change_rate: '', //运输费率
         difference_value: '', //气差金额
         freight_value: '', //标准运费
-        lcl_cost:'',//分卸费
+        lcl_cost: '', //分卸费
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
         unit_price: '', //采购单价
@@ -238,9 +238,9 @@ export default {
         lcl_cost: [
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        waiting_charges: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
+        // waiting_charges: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -290,7 +290,7 @@ export default {
             change_rate: this.detail.change_rate, //运输费率
             difference_value: this.detail.difference_value, //气差金额
             freight_value: this.detail.freight_value, //标准运费
-            lcl_cost:this.detail.lcl_cost,//分卸费
+            lcl_cost: this.detail.lcl_cost, //分卸费
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
             unit_price: this.detail.unit_price, //采购单价
@@ -340,8 +340,8 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'waiting_price', 'waiting_charges', 'remark'];
-      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
+      let keyArray = ['check_quantity', 'stand_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'waiting_price', 'remark'];
+      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

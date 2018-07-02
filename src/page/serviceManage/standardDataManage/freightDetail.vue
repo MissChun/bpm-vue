@@ -1,5 +1,3 @@
-<!-- freightDetail.vue -->
-<!-- clientDetail.vue -->
 <style scoped lang="less">
 .trans-fee {
   .table-list {
@@ -52,7 +50,7 @@
                         <label>对应液厂:</label>
                         <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')" -->
                         <div class="detail-form-item">
-                          <span v-for="(row,index) in detailData.agreements">{{row.fluid_name}}<span v-if="index!=4&&index!=detailData.agreements.length-1">，</span></span>
+                          <span v-for="(row,index) in detailData.agreements">{{row.fluid_name}}<span v-if="index!=detailData.agreements.length-1">，</span></span>
                         </div>
                       </div>
                     </el-col>
@@ -120,6 +118,10 @@ export default {
       }, {
         title: '变动费率（元/吨/公里）',
         param: 'change_rate',
+        width: ''
+      }, {
+        title: '变动值',
+        param: 'change_number',
         width: ''
       }],
     }

@@ -22,13 +22,13 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="实际装车时间:" label-width="105px">
-                <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="实际离站时间:" label-width="105px">
-                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="activeTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -48,13 +48,15 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
-            <el-button type="primary">导出</el-button>
-            <el-button type="primary" plain @click="getUnReconciliations" :disabled="reconciliationsBtn.isDisabled" :loading="reconciliationsBtn.isLoading">{{reconciliationsBtn.text}}</el-button>
+            <!-- <el-button type="primary">导出</el-button> -->
+            <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading">
+          <el-table-column type="selection" width="55">
+          </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
@@ -104,7 +106,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 30,
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
@@ -208,13 +210,20 @@ export default {
       tableData: [],
          
       reconciliationsBtn: {
-        text: '全部对账',
+        text: '批量对账',
         isDisabled: false,
         isLoading: false
-      }     
+      },
+       
+      multipleSelection: [], //所选数据   
+      reconciliationList: [], //
     }
   },
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      // console.log('全选',this.multipleSelection)
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
@@ -222,11 +231,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}` });
+        this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail/`, query: { id: row.business_order_id } });
+        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/consignment/editConsignment/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
       }
     },
     startSearch() {
@@ -263,23 +272,37 @@ export default {
         this.reconciliationsBtn.isLoading = false;
       })
     },
-    reconciliations(isAll, id, row) {
+    batchReconciliation() {
+      let ids = [];
+      let price = 0;
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].waiting_charges);
+        }
+      }
+      this.reconciliations(true, ids, price);
+      console.log('合计', ids, price);
+    },
+    reconciliations(isAll, ids, price) {
       let content = '';
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (isAll) {
-        if (row.waybill) {
-          content = '未对账共有' + row.waybill + '单，运费合计' + row.waiting_charg + '元，是否要对所选运单进行批量对账？';
-          postData.batch = 'unfinished';
+        if (ids.length) {
+          content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
+          postData.id = ids;
+          // postData.batch = 'unfinished';
         } else {
           this.$message({
-            message: '没有未对账数据',
+            message: '没有勾选未对账数据',
             type: 'warning'
           });
         }
       } else {
         content = '是否确认对账？';
+        postData.id = ids.split(',');
       }
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -289,22 +312,23 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData.id = id.split(',');
+
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      console.log('id', id, postData);
+      if (postData.id.length) {
+        this.$confirm(content, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$$http('reconciliations', postData).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.getList();
+            }
+          })
+        }).catch(() => {});
+      }
 
-      this.$confirm(content, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(() => {
-        this.$$http('reconciliations', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
-            this.getList();
-          }
-        })
-      }).catch(() => {});
 
     },
     getList() {

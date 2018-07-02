@@ -131,13 +131,13 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="销售总额:" prop="sell_rental">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.sell_rental"></el-input>
+                  <el-form-item label="销售总额:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sell_rental"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="待时后总额:" prop="waiting_charges">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
+                  <el-form-item label="待时后总额:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -233,12 +233,12 @@ export default {
         waiting_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-        sell_rental: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
-        waiting_charges: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
+        // sell_rental: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
+        // waiting_charges: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
 
       },
       saveBasicAndReviewBtn: {
@@ -340,7 +340,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'deficiency', 'check_quantity', 'unit_price', 'waiting_price', 'sell_rental', 'waiting_charges', 'remark'];
+      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'deficiency', 'check_quantity', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

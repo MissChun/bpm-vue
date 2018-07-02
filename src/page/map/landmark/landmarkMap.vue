@@ -46,14 +46,13 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <!-- <el-col :span="8">
-  <el-form-item label="地标区域:" class="map-choose-address">
-    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
-  </el-form-item>
-</el-col>
- -->
               </el-row>
               <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="地标区域:" class="map-choose-address">
+                    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="4" :offset="20">
                   <el-form-item>
                     <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled" class="float-right">{{searchBtn.text}}</el-button>
@@ -148,6 +147,12 @@ export default {
       fieldSelect: [{
         label: '地标名称',
         id: 'position_name',
+      }, {
+        label: '联系人',
+        id: 'contacts',
+      }, {
+        label: '联系电话',
+        id: 'tel',
       }],
       landmarkDetail: {},
 
@@ -258,7 +263,7 @@ export default {
           postData[this.searchFilters.field] = this.searchFilters.keyword;
         }
 
-        /*
+
         if (this.addressName.province) {
           postData.province = this.addressName.province;
         }
@@ -267,7 +272,7 @@ export default {
         }
         if (this.addressName.area) {
           postData.county = this.addressName.area;
-        }*/
+        }
 
         postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -359,7 +364,7 @@ export default {
         '</div><div class="fs-13">审核状态：' + check_status +
         '</div><div class="fs-13">上传来源：' + mark_source +
         '</div><div class="fs-13">是否同步：' + is_synced +
-        '</div></div>';
+        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary " href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
 
       return infoBodyStr;
     },
@@ -483,6 +488,7 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               src = _this.getIconSrc(dataItem);
+              console.log('src', src);
               if (recycledMarker) {
                 recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),

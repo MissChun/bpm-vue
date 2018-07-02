@@ -19,12 +19,13 @@
                     </el-col>
                     <el-col :span="10">
                       <el-form-item label="搜索时间:">
-                        {{startTime}} - {{endTime}}
+                        <span v-if="startTime">{{startTime}} - {{endTime}}</span>
+                        <span v-if="!startTime">无</span>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item>
-                        {{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟
+                        <span v-if="timeSpacing.day">{{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟</span>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -282,10 +283,11 @@ export default {
             console.log('getConOrderDetalis results', results);
             let resultsData = results.data.data;
             this.choosedDeviceId = resultsData.device_id;
-            this.startTime = resultsData.waybill.start_time ? resultsData.waybill.start_time : this.todayStart;
-            this.endTime = resultsData.waybill.stop_time ? resultsData.waybill.stop_time : this.todayEnd;
+            this.startTime = (resultsData.waybill && resultsData.waybill.start_time) ? resultsData.waybill.start_time : '';
+            this.endTime = (resultsData.waybill && resultsData.waybill.stop_time) ? resultsData.waybill.stop_time : this.todayEnd;
             this.carNumber = resultsData.driver_no;
             this.timeSpacing = this.calculateTimeSpacing();
+            this.masterDriver = resultsData.master_driver_name;
             console.log('this.startTime', this.startTime, this.endTime);
             resolve(results)
           } else {
@@ -584,6 +586,7 @@ export default {
 
           },
           offset: new AMap.Pixel(-9, -24),
+          visible: false,
         });
         //初始化终点icon
         _this.endMarker = new SimpleMarker({
@@ -596,6 +599,7 @@ export default {
             }
           },
           offset: new AMap.Pixel(-10, -26),
+          visible: false,
         });
         //初始化轨迹
         _this.pathSimplifierIns = new PathSimplifier({
@@ -667,10 +671,11 @@ export default {
               if (status === 'complete' && data.info === 'OK') {
                 let pointMsgStr = '';
                 let addressDetail = data.regeocode.formattedAddress;
+                let speed = _this.totalDataResult[info.pointIndex].speed ? _this.totalDataResult[info.pointIndex].speed : '0';
                 pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
                   '</div><div class="fs-13">车牌号：' + _this.carNumber +
                   '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
-                  '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
+                  '</div><div class="fs-13">行驶速度：' + speed +
                   'km/h</div><div class="fs-13">定位地址：' + addressDetail +
                   '</div>';
 
@@ -696,10 +701,11 @@ export default {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
         let latitude = _this.totalDataResult[cursor.idx].location.latitude;
+        let speed = _this.totalDataResult[cursor.idx].speed ? _this.totalDataResult[cursor.idx].speed : '0';
         pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
           '</div><div class="fs-13">车牌号：' + _this.carNumber +
           '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
-          '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
+          '</div><div class="fs-13">行驶速度：' + speed +
           'km/h</div>';
 
         _this.infoWindow.setInfoBody(pointMsgStr);
@@ -757,6 +763,7 @@ export default {
           return;
         }
 
+        _this.startMarker.show();
         _this.startMarker.setPosition(_this.resultPath[0]);
 
         /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
@@ -772,6 +779,7 @@ export default {
           _this.speed = Math.floor(_this.distanceMile / _this.driveringTime * 3600);
           /*设置终点marker*/
           let endMarkerIndex = _this.resultPath.length - 1;
+          _this.endMarker.show();
           _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
           /*监测巡航move事件（调用moveByDistance（动画过程会调用该方法）， moveToPoint 时触发），实时展示轨迹点信息。
            **这里有个问题是，moveByDistance，moveToPoint才出发move事件，导致轨迹点信息展示只能在导航到达点时才获取信息。没有实时跟着导航移动，需要优化。
@@ -826,10 +834,11 @@ export default {
           if (status === 'complete' && data.info === 'OK') {
             let pointMsgStr = '';
             let addressDetail = data.regeocode.formattedAddress;
+            let speed = row.row.speed ? row.row.speed : '0';
             pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
               '</div><div class="fs-13">车牌号：' + _this.carNumber +
               '</div><div class="fs-13">定位时间：' + row.row.create_time +
-              '</div><div class="fs-13">行驶速度：' + row.row.speed +
+              '</div><div class="fs-13">行驶速度：' + speed +
               'km/h</div><div class="fs-13">定位地址：' + addressDetail +
               '</div>';
 
@@ -893,7 +902,14 @@ export default {
     });
     this.initPath();
     this.getConOrderDetalis().then((results) => {
-      this.searchAndRender();
+      if (this.startTime) {
+        this.searchAndRender();
+      } else {
+        this.$message({
+          message: '无轨迹信息',
+          type: 'success'
+        });
+      }
     })
   },
   beforeDestroy() {

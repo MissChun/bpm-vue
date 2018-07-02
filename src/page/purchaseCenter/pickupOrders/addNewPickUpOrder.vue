@@ -94,7 +94,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="计划时间:" prop="plan_time">
-                    <el-date-picker v-model="pickOrderParam.plan_time" type="datetime" placeholder="选择日期时间" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss">
+                    <el-date-picker v-model="pickOrderParam.plan_time" type="datetime" placeholder="选择日期时间" default-time="00:00:00" value-format="yyyy-MM-dd HH:mm:ss">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -261,12 +261,16 @@ export default {
       }
     };
     var discountVa = (rule, value, callback) => {
-      if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
-        callback(new Error("不能大于采购价"));
-      } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
-        callback(new Error("只能输入数字"));
-      } else {
-        callback();
+      if(value==""){
+       callback();
+      }else{
+       if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
+          callback(new Error("不能大于采购价"));
+        } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
+          callback(new Error("只能输入数字"));
+        } else {
+          callback();
+        }
       }
     }
     return {
@@ -287,7 +291,7 @@ export default {
         trader: '',
         consignment_type: 'own',
         plan_tonnage: '',
-        discount_price: '',
+        discount_price: '0',
         unit_price: '',
         mark: '',
         unload_area: ''
@@ -421,7 +425,7 @@ export default {
       });
     },
     getSupplier: function() {
-      var sendData = {};
+      var sendData = {need_all:'true'};
 
       this.loadingArr.supplierLoading = true;
       this.$$http("getSupplier", sendData).then((results) => {
@@ -444,6 +448,10 @@ export default {
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
           this.selectData.carriersOwnList = dataBody;
+          if(dataBody&&dataBody.length>0){
+            this.carriersParam.ownCarriers=dataBody[0].id;
+            this.bindText.carriersName = dataBody[0].carrier_name;
+          }
         }
       }).catch(() => {
         this.loadingArr.carriersLoading = false;

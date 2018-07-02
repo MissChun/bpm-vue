@@ -81,8 +81,6 @@ export default {
         keyword: '',
         field: 'carrier_name',
       },
-
-
       selectData: {
         carrierTypeSelect: [
           { id: '', value: '全部' },
@@ -139,7 +137,7 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
-      this.getList(this.statusActive);
+      this.getList();
     },
     getList() {
       let postData = {

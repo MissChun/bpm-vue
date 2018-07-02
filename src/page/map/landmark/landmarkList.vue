@@ -1,5 +1,9 @@
 <style scoped lang="less">
-
+.map-choose-address {
+  /deep/ .el-row {
+    padding: 0 !important;
+  }
+}
 
 </style>
 <template>
@@ -22,39 +26,51 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="审核状态:">
-                    <el-select v-model="searchFilters.confirm_status" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.confirm_status" placeholder="请选择">
                       <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="地标来源:">
-                    <el-select v-model="searchFilters.landmarkFrom" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.landmarkFrom" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="地标类型:">
-                    <el-select v-model="searchFilters.position_type" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.position_type" placeholder="请选择">
                       <el-option v-for="(item,key) in positionTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="是否同步:">
-                    <el-select v-model="searchFilters.async_status" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.async_status" placeholder="请选择">
                       <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <el-form-item label="地标区域:" class="map-choose-address">
+                    <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4" :offset="20">
+                  <el-form-item>
+                    <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain>导入</el-button>
-            <el-button type="primary">导出</el-button>
-            <el-button type="success">新增</el-button>
+            <!-- <el-button type="primary" plain>导入</el-button>
+            <el-button type="primary">导出</el-button> -->
+            <el-button type="success" @click="addLandmark">新增</el-button>
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
@@ -79,11 +95,30 @@
   </div>
 </template>
 <script>
+import chooseAddress from '@/components/chooseAddress';
 export default {
   name: 'landMarkList',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {},
   data() {
     return {
+      searchBtn: {
+        isDisabled: false,
+        isLoading: false,
+        text: '搜索'
+      },
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
+      addressName: {
+        province: '',
+        city: '',
+        area: '',
+      },
       pageData: {
         currentPage: 1,
         totalCount: '',
@@ -199,6 +234,12 @@ export default {
       fieldSelect: [{
         label: '地标名称',
         id: 'position_name',
+      }, {
+        label: '联系人',
+        id: 'contacts',
+      }, {
+        label: '联系电话',
+        id: 'tel',
       }]
 
     }
@@ -230,13 +271,27 @@ export default {
       if (this.searchFilters.keyword.length) {
         postData[this.searchFilters.field] = this.searchFilters.keyword;
       }
+      if (this.addressName.province) {
+        postData.province = this.addressName.province;
+      }
+      if (this.addressName.city) {
+        postData.city = this.addressName.city;
+      }
+      if (this.addressName.area) {
+        postData.county = this.addressName.area;
+      }
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
-
+      this.searchBtn.isDisabled = true;
+      this.searchBtn.loading = true;
+      this.searchBtn.text = '搜索中';
       this.$$http('getLandMarkList', postData).then((results) => {
 
         this.pageLoading = false;
+        this.searchBtn.isDisabled = false;
+        this.searchBtn.loading = false;
+        this.searchBtn.text = '搜索';
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
@@ -252,6 +307,9 @@ export default {
       if (command.operator === 'check') {
         this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
       }
+    },
+    addLandmark: function() {
+      this.$router.push({ path: '/mapManage/landMark/editLandmark' });
     }
   },
   created: function() {

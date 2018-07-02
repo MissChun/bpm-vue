@@ -22,7 +22,7 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <el-form-item label="实际装车时间:" label-width="105px">
-                <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
@@ -35,7 +35,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary">导出</el-button> -->
           </el-col>
         </el-row>
       </div>
@@ -174,7 +174,7 @@ export default {
       if (row.operator === 'check') {
         this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
       } else if (row.operator === 'edit') {
-        this.$router.push({ path: `/statistics/purchase/editPurchase/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/purchase/editPurchase`, query: { id: row.id } });
       }
     },
     startSearch() {

@@ -9,6 +9,108 @@
  */
 
 const api = {
+  getStationList: {
+    url: '/api/v1/delivery_point/',
+    method: 'get',
+    desc: '客户站点列表',
+    param: {
+      consumer_id:{
+        desc: '客户id'
+      },
+      relations:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
+  getFluidsList: {
+    url: '/api/v1/supplier-fluids/',
+    method: 'get',
+    desc: '供应商液厂列表',
+    param: {
+
+    }
+  },
+  updateDestinationTime: {
+    url: '/api/v1/fluid-business-areas/set-effect-time/',
+    method: 'patch',
+    desc: '设置生效时间',
+    param: {
+      effect_time:{
+        desc: '生效时间 %H:%M'
+      },
+      relations:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
+  updateDestinationAreas: {
+    url: '/api/v1/fluid-business-areas/',
+    method: 'post',
+    desc: '目的地设置更新',
+    param: {
+      fluid_id:{
+        desc: '液厂ID'
+      },
+      area_ids:{
+        desc: '业务区域ID列表'
+      }
+    }
+  },
+  getDestinationDetail: {
+    url: '/api/v1/fluid-areas/:id/',
+    method: 'get',
+    desc: '目的地设置详情',
+    param: {
+      id:{
+        desc: '目的地ID'
+      }
+    }
+  },
+  getDestinationList: {
+    url: '/api/v1/fluid-areas/',
+    method: 'get',
+    desc: '目的地设置列表',
+    param: {
+
+    }
+  },
+  getBusinessAreasList: {
+    url: '/api/v1/business_areas/',
+    method: 'get',
+    desc: '业务区域列表',
+    param: {
+
+    }
+  },
+  updatePurchasePrice: {
+    url: '/api/v1/supplier-quotes/:id/',
+    method: 'patch',
+    desc: '价格管理修改',
+    param: {
+      id: {
+        desc: '价格ID'
+      },
+      today_unit_price: {
+        desc: '价格'
+      }
+    }
+  },
+  getPurchasePriceList: {
+    url: '/api/v1/supplier-quotes/',
+    method: 'get',
+    desc: '价格管理列表',
+    param: {
+
+    }
+  },
+  getPriceDateList: {
+    url: '/api/v1/supplier-quotes/title/',
+    method: 'get',
+    desc: '价格管理日期title',
+    param: {
+
+    }
+  },
   reconciliations: {
     url: '/api/v1/batch-update-logistic/',
     method: 'post',
@@ -1040,7 +1142,7 @@ const api = {
     }
   },
   getProvince: {
-    url: '/common/area/provinces/',
+    url: '/api/v1/area/provinces/',
     method: 'get',
     notNeedToken: true,
     desc: '获取省列表',
@@ -1049,7 +1151,7 @@ const api = {
     }
   },
   getCity: {
-    url: '/common/area/provinces/:province_id/',
+    url: '/api/v1/area/:id/cities/',
     method: 'get',
     notNeedToken: true,
     desc: '获取市列表',
@@ -1058,7 +1160,7 @@ const api = {
     }
   },
   getArea: {
-    url: '/common/area/cities/:city_id/',
+    url: '/api/v1/area/:id/county/',
     method: 'get',
     notNeedToken: true,
     desc: '获取区域列表',
@@ -1377,25 +1479,34 @@ const api = {
     desc: '审核地标',
     param: {
       position_name: {
-        desc: '站点详情',
+        desc: '站点名称'
       },
       position_type: {
-        desc: '站点类型',
+        desc: '站点类型'
+      },
+      longitude: {
+        desc: '经度'
+      },
+      latitude: {
+        desc: '纬度'
       },
       address: {
-        desc: '详细地址',
+        desc: '详细地址'
+      },
+      contacts: {
+        desc: '联系人'
       },
       tel: {
-        desc: '联系电话',
+        desc: '联系人电话'
       },
-      contact: {
-        desc: '联系人',
+      province: {
+        desc: '省级—省的全程，如四川省'
       },
-      confirm_status: {
-        desc: '审核状态',
+      city: {
+        desc: '市级—市的全程，如成都市'
       },
-      async_status: {
-        desc: '同步状态',
+      county: {
+        desc: '县级—县级全程，如高新区'
       },
     }
   },
@@ -1613,7 +1724,7 @@ const api = {
 
     }
   },
-  getOfflineAndStopRecords:{
+  getOfflineAndStopRecords: {
     url: '/api/v1/map/stopping_offline_info/',
     method: 'get',
     desc: "轨迹停留点，离线点",
@@ -1631,7 +1742,273 @@ const api = {
         desc: '当前每页条数，默认为1000条每页',
       },
     }
-  }
+  },
+  searchCustomerList: {
+    url: '/api/v1/consumer/',
+    method: 'get',
+    desc: '获取客户列表',
+    param: {
+
+    }
+  },
+  getCustomerDetlis: {
+    url: '/api/v1/consumer/:id/',
+    method: 'get',
+    desc: '获取客户详情',
+    param: {
+
+    }
+  },
+  getSaleManList: {
+    url: '/api/v1/users/',
+    method: 'get',
+    desc: '获取业务员列表',
+    param: {
+
+    }
+  },
+  upadtecustomerFrom: {
+    url: '/api/v1/consumer/:id/',
+    method: 'patch',
+    desc: '更新客户',
+    param: {
+
+    }
+  },
+  creatCustomerFrom: {
+    url: '/api/v1/consumer/',
+    method: 'post',
+    desc: '添加客户',
+    param: {
+
+    }
+  },
+  addLandmark: {
+    url: '/api/v1/fluid-sites/',
+    method: 'post',
+    desc: "站点信息上传",
+    param: {
+      position_name: {
+        desc: '站点名称'
+      },
+      position_type: {
+        desc: '站点类型'
+      },
+      longitude: {
+        desc: '经度'
+      },
+      latitude: {
+        desc: '纬度'
+      },
+      address: {
+        desc: '详细地址'
+      },
+      contacts: {
+        desc: '联系人'
+      },
+      tel: {
+        desc: '联系人电话'
+      },
+      source_type: {
+        desc: '上传类型'
+      },
+      province: {
+        desc: '省级—省的全程，如四川省'
+      },
+      city: {
+        desc: '市级—市的全程，如成都市'
+      },
+      county: {
+        desc: '县级—县级全程，如高新区'
+      },
+      upload_user: {
+        desc: '上传用户，司机端上传时该参数必填'
+      },
+      position_pics: {
+        desc: '站点图片'
+      }
+    }
+  },
+  searchSupplierList: {
+    url: '/api/v1/suppliers/',
+    method: 'get',
+    desc: '查询供应商列表',
+    param: {
+
+    }
+  },
+  creatSupplierFrom: {
+    url: '/api/v1/suppliers/',
+    method: 'POST',
+    desc: '新增供应商',
+    param: {
+
+    }
+  },
+
+  getSupplierDetlis: {
+    url: '/api/v1/suppliers/:id/',
+    method: 'get',
+    desc: '获取供应商详情',
+    param: {
+
+    }
+  },
+  upadteSupplierFrom: {
+    url: '/api/v1/suppliers/:id/',
+    method: 'PATCH',
+    desc: '修改供应商',
+    param: {
+
+    }
+  },
+  getSiteOfCustomerDetail:{
+    url: '/api/v1/delivery_point/:id/',
+    method: 'get',
+    desc: '新增客户站点详情',
+    param:{
+
+    }
+  },
+  addStationOfCustomer: {
+    url: '/api/v1/delivery_point/',
+    method: 'post',
+    desc: '新增客户站点接口',
+    param: {
+      address :{
+        desc:'详细地址',
+      },
+      area  :{
+        desc:'区',
+      },
+      city :{
+        desc:'市',
+      },
+      consignee :{
+        desc:'联系人',
+      },
+      consignee_phone :{
+        desc:'联系电话',
+      },
+      map_position :{
+        desc:'基础地标id',
+      },
+      province :{
+        desc:'省',
+      },
+      short_name_id :{
+        desc:'客户简称id',
+      },
+      station_type  :{
+        desc:'站点类型',
+      },
+      station_name :{
+        desc:'站点名称',
+      },
+      longitude :{
+        desc:'经度',
+      },
+      latitude  :{
+        desc:'纬度',
+      },
+    }
+  },
+
+  fixStationOfCustomer: {
+    url: '/api/v1/delivery_point/:id/',
+    method: 'put',
+    desc: '新增客户站点接口',
+    param: {
+      address :{
+        desc:'详细地址',
+      },
+      area  :{
+        desc:'区',
+      },
+      city :{
+        desc:'市',
+      },
+      consignee :{
+        desc:'联系人',
+      },
+      consignee_phone :{
+        desc:'联系电话',
+      },
+      map_position :{
+        desc:'基础地标id',
+      },
+      province :{
+        desc:'省',
+      },
+      short_name_id :{
+        desc:'客户简称id',
+      },
+      station_type  :{
+        desc:'站点类型',
+      },
+      station_name :{
+        desc:'站点名称',
+      },
+      longitude :{
+        desc:'经度',
+      },
+      latitude  :{
+        desc:'纬度',
+      },
+    }
+  },
+  addFluids: {
+    url: '/api/v1/supplier-fluids/',
+    method: 'post',
+    desc: '新增供应商液厂',
+    param: {
+      fluid_name  :{
+        desc:'液厂名称',
+      },
+      supplier  :{
+        desc:'供应商id',
+      },
+      actual_fluid  :{
+        desc:'实际液厂id',
+      },
+    }
+  },
+  fixFluids: {
+    url: '/api/v1/supplier-fluids/:id/',
+    method: 'PUT',
+    desc: '修改供应商液厂',
+    param: {
+      fluid_name  :{
+        desc:'液厂名称',
+      },
+      supplier  :{
+        desc:'供应商id',
+      },
+      actual_fluid  :{
+        desc:'实际液厂id',
+      },
+    }
+  },
+
+  getFluidDetail: {
+    url: '/api/v1/supplier-fluids/:id/',
+    method: 'get',
+    desc: '获取供应商液厂详情',
+    param: {
+
+    }
+  },
+  getShortName: {
+    url: '/api/v1/short_name/',
+    method: 'get',
+    desc: '获取客户简称列表',
+    param: {
+
+    }
+  },
+
+
+
 }
 
 

@@ -68,7 +68,7 @@ export default {
     },
     getCity() {
       this.$$http('getCity', {
-        province_id: this.address.province,
+        id: this.address.province,
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           this.cityList = results.data.data.cities;
@@ -78,7 +78,7 @@ export default {
     },
     getArea() {
       this.$$http('getArea', {
-        city_id: this.address.city,
+        id: this.address.city,
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           this.areaList = results.data.data.counties;

@@ -564,7 +564,7 @@ export const fifterObjIsNull = function(Obj) {
           delete object[i];
           continue;
         }
-      }else {
+      } else {
         for (let j = 0; j < value.length; j++) {
           value[j] = fifterObjIsNull(value[j]);
         }
@@ -582,24 +582,52 @@ export const fifterObjIsNull = function(Obj) {
   return object;
 };
 
-export const fifterbyArr = function(Obj, fifterArr,isNull) {
+export const fifterbyArr = function(Obj, fifterArr, isNull) {
   var object = deepcopy(Obj);
   var newObj = {};
-  if(isNull){
+  if (isNull) {
     for (let i = 0; i < fifterArr.length; i++) {
       newObj[fifterArr[i]] = object[fifterArr[i]];
     }
-  }else{
+  } else {
     for (let i = 0; i < fifterArr.length; i++) {
-      newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
+      newObj[fifterArr[i]] = (object[fifterArr[i]] || object[fifterArr[i]] == '0') ? object[fifterArr[i]] : null;
     }
   }
   return newObj;
 }
 export const dealNullData = function(data) {
-  if(data === null || data === undefined || data === ''){
+  if (data === null || data === undefined || data === '') {
     return '<span class="text-stance">无</span>'
-  }else{
+  } else {
     return data
   }
+}
+export const format = function() {
+  Date.prototype.Format = function(fmt) { //author: meizz
+    var o = {
+      "M+": this.getMonth() + 1, //月份
+      "d+": this.getDate(), //日
+      "h+": this.getHours(), //小时
+      "m+": this.getMinutes(), //分
+      "s+": this.getSeconds(), //秒
+      "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+      "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+      if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+  }
+}
+export const formatDate = function(date,isDate) {
+  let  time = new Date(date);
+  let month = '' + (time.getMonth() + 1),
+    day = '' + time.getDate()-1,
+    year = time.getFullYear();
+
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
 }

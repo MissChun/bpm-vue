@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'conOrders',
+  name: 'supplierFluidsAll',
   data() {
     return {
 
