@@ -202,7 +202,7 @@ a {
           background: none;
           i {
             font-size: 24px;
-            color:#c6c6c6;
+            color: #c6c6c6;
           }
         }
         .el-carousel__arrow--left {
@@ -336,6 +336,7 @@ a {
     line-height: 26px;
   }
 }
+
 </style>
 <template>
   <div>
@@ -528,11 +529,11 @@ export default {
   },
   created() {
     let currentUrl = document.location.href.toString();
-    if (currentUrl.match('xxx.91lng.cn')) {
-      this.businessCodeImg = '';
-      this.driverCodeImg = '';
-      this.businessAppUrl = 'https://www.pgyer.com/business_pro';
-      this.driverAppUrl = 'https://www.pgyer.com/driver_pro';
+    if (currentUrl.match('pbpm.91lng.cn')) {
+      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
+      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
     } else if (currentUrl.match('bpm.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';

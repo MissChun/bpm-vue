@@ -65,12 +65,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
+          <div class="operation-btn text-right" v-if="false">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
             <el-button type="primary">导出</el-button>
             <!-- <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
-          <div class="table-list">
+          <div class="table-list mt-25">
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
               <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading">
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
@@ -89,11 +89,11 @@
                     <div v-if="item.param === 'date'">
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">
-                          <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true,true)">
-                            <el-form-item prop="price" v-if="quotes.isShow">
-                              <el-input v-model.trim="priceForm.price" :autofocus="quotes.isShow" @keyup.native.13="isShowPrice" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
+                          <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true,$event)">
+                            <div v-show="!quotes.isShow">{{quotes.today_unit_price}}</div>
+                            <el-form-item prop="price" v-show="quotes.isShow">
+                              <el-input v-model.trim="priceForm.price" @keyup.native.13="editPrice" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
                             </el-form-item>
-                            <span v-if="!quotes.isShow">{{quotes.today_unit_price}}</span>
                           </div>
                         </li>
                       </ul>
@@ -156,6 +156,7 @@ export default {
           { id: 'supplier_name', value: '供应商' },
         ]
       },
+      editPriceInfo: '', //编辑价格信息
     };
   },
   computed: {
@@ -171,14 +172,21 @@ export default {
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
+    isPrevent(event) {
+      event.stopPropagation();
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
       });
     },
     hidePrice(row) {
-      this.priceForm.price = '';
+
       this.updateTableData(row, false);
+    },
+    editPrice() {
+      this.hidePrice(this.editPriceInfo);
+      // this.isShowPrice(this.editPriceInfo, false);
     },
     updateTableData(row, isShow) {
       for (let i in this.tableData) {
@@ -191,6 +199,7 @@ export default {
                 price_date: row.price_date,
                 today_unit_price: row.today_unit_price
               })
+              this.editPriceInfo = row;
             } else {
               this.$set(this.tableData[i].business_areas[j].quotes, z, {
                 id: this.tableData[i].business_areas[j].quotes[z].id,
@@ -203,14 +212,15 @@ export default {
         }
       }
     },
-    isShowPrice(row, isShow) {
-      console.log('价格', row)
-      const tableData = () => {
+    isShowPrice(row, isShow, event) {
 
-      }
       if (isShow) {
         this.updateTableData(row, isShow);
         this.priceForm.price = row.today_unit_price;
+        console.log('event', event);
+        this.$nextTick(function() {
+          event.target.parentNode.lastChild.lastChild.firstChild.childNodes[1].focus();
+        })
       } else {
 
         let postData = {
@@ -225,7 +235,11 @@ export default {
                 console.log('修改价格', results.data.data);
                 if (results.data && results.data.code == 0) {
                   // this.updateTableData(row,isShow);
-                  this.priceForm.price = '';
+
+                  setTimeout(() => {
+                    this.priceForm.price = '';
+                    this.$refs['priceForm'].clearValidate();　
+                  }, 1000)
                   this.getList();
                   this.$message({
                     message: '价格更新成功',

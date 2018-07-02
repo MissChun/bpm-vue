@@ -1,7 +1,7 @@
 <!-- tradeBusiness.vue -->
 <template>
   <div>
-    <trade-business-list :detail-link="'/serviceManage/businessToExamine/businessDetail'"></trade-business-list>
+    <trade-business-list :detail-link="'/serviceManage/businessToExamine/businessDetail'" :is-to-examine="true"></trade-business-list>
   </div>
 </template>
 <script>

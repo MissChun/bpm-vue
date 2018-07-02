@@ -176,18 +176,25 @@
     -o-transform: rotate(45deg);
   }
 }
+/deep/ .el-breadcrumb__item{
+  &:last-child{
+    .el-breadcrumb__inner{
+      color:#26c6da;
+    }
 
+  }
+}
 </style>
 <template>
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
         <router-link :to="{path: '/'}">
-          <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+          <div href="" title="业务管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
         </router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
-            <el-breadcrumb separator="/" class="bread" id="mybread">
+            <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
               <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
                 {{ item.meta.title || "" }}
               </el-breadcrumb-item>

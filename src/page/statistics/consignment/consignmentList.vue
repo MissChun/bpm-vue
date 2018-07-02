@@ -48,7 +48,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary">导出</el-button> -->
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
           </el-col>
         </el-row>
@@ -233,9 +233,9 @@ export default {
       if (tpye === 'waybill') {
         this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail/`, query: { id: row.business_order_id } });
+        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/consignment/editConsignment/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
       }
     },
     startSearch() {

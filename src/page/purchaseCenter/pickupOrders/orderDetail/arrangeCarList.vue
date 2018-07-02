@@ -98,8 +98,11 @@
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
             <div class="table-list border-top-clear">
+
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
-                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+                <el-table-column prop="tractor.plate_number" align="center" label="车号" :width="140" fixed="left">
+                </el-table-column>
+                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
                 </el-table-column>
                 <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
                 </el-table-column>
@@ -148,7 +151,13 @@ export default {
           id: '1',
         }]
       },
-      thTableList: [{
+      thTableList: [
+      // {
+      //   title: '车号',
+      //   param: 'tractor.plate_number',
+      //   width: ''
+      // },
+      {
         title: '变更',
         param: 'waybill.waybill_change_status_display',
         width: ''
@@ -159,10 +168,6 @@ export default {
       }, {
         title: '运单号',
         param: 'waybill.waybill',
-        width: ''
-      }, {
-        title: '车号',
-        param: 'tractor.plate_number',
         width: ''
       }, {
         title: '挂车',

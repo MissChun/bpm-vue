@@ -50,7 +50,7 @@
                       <div v-if="item.param === 'first_area'">{{scope.row[item.param].area_name}}</div>
                       <div v-if="item.param === 'second_areas'">
                         <el-checkbox-group v-model="selectMenus">
-                          <el-checkbox v-for="(area,index) in scope.row[item.param]" :label="area.id">{{area.area_name}}</el-checkbox>
+                          <el-checkbox v-for="(area,index) in scope.row[item.param]" :label="area.id" :disabled="area.area_name==='中国'?true:false">{{area.area_name}}</el-checkbox>
                         </el-checkbox-group>
                       </div>
                     </template>

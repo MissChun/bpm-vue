@@ -86,13 +86,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="采购总额:" prop="unit_sum_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_sum_price"></el-input>
+                  <el-form-item label="采购总额:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.unit_sum_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="优惠后总额:" prop="discounts_sum_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
+                  <el-form-item label="优惠后总额:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -159,12 +159,12 @@ export default {
         discount_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-        unit_sum_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
-        discounts_sum_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
+        // unit_sum_price: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
+        // discounts_sum_price: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
         business_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
@@ -258,7 +258,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'unit_sum_price', 'discounts_sum_price','business_price', 'remark'];
+      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

@@ -55,7 +55,7 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" width="150" fixed="right" v-if="statusActive==='create_department_check'">
+                <el-table-column label="操作" align="center" width="150" fixed="right" v-if="statusActive==='create_department_check'&&isToExamine">
                   <template slot-scope="scope">
                     <el-button type="danger" plain size="mini" @click="refuse('create_department_check',scope.row.id)">拒绝</el-button>
                     <el-button type="primary" size="mini" @click="adopt('create_department_check',scope.row.id)">通过</el-button>
@@ -78,7 +78,7 @@
 import refuseDialog from '@/components/businessManage/refuseDialog';
 export default {
   name: 'tradeBusinessList',
-  props: ['detailLink'],
+  props: ['detailLink', 'isToExamine'],
   computed: {
     // statusTabList(){
     //   return this.tabList[0].tabs;
@@ -203,7 +203,7 @@ export default {
           { id: 'consumer_name', value: '客户名称' },
           { id: 'short_name', value: '客户简称' },
           { id: 'order_number', value: '业务单号' },
-          { id: 'mobile_phone', value: '供应商' },
+          { id: 'supplier', value: '供应商' },
         ]
       },
       thTableList: [{
@@ -299,39 +299,80 @@ export default {
       } else if (status === 'modify_department_check') {
         title = '业务单修改审核通过';
         desc = '请确认，修改被拒绝后，业务单将回置为修改前状态';
-      } else if (status === 'canceled') {
+      } else if (status === 'cancel_check') {
         title = '业务单取消审核通过';
         desc = '通过后，业务单将被取消，卸货计划将被自动取消';
       }
-      this.$confirm(desc, title, {
-          confirmButtonText: "确定通过",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.$$http('toExamineBusiness', {
-            order_id: id,
-            action: 'pass'
-          }).then((results) => {
-            if (results.data && results.data.code == 0) {
-              this.$message({
-                message: '通过审核成功',
-                type: 'success'
-              });
-              this.getList(this.statusActive);
-            }
+      this.$msgbox({
+        title: title,
+        message: desc,
+        confirmButtonText: "确定通过",
+        cancelButtonText: "取消",
+        showCancelButton: true,
+        type: "warning",
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = '提交中...';
+            this.$$http('toExamineBusiness', {
+              order_id: id,
+              action: 'pass'
+            }).then((results) => {
+              if (results.data && results.data.code == 0) {
+                this.$message({
+                  message: '通过审核成功',
+                  type: 'success'
+                });
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+                this.getList(this.statusActive);
+              }
 
-          }).catch((err) => {
-            this.$message.error('通过审核失败');
-          })
+            }).catch((err) => {
+              this.$message.error('通过审核失败');
+            })
 
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消通过审核'
-          });
+          } else {
+            done();
+          }
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消通过审核'
         });
+      });
+      // this.$confirm(desc, title, {
+      //     confirmButtonText: "确定通过",
+      //     cancelButtonText: "取消",
+      //     type: "warning"
+      //   })
+      //   .then(() => {
+      //     this.$$http('toExamineBusiness', {
+      //       order_id: id,
+      //       action: 'pass'
+      //     }).then((results) => {
+      //       if (results.data && results.data.code == 0) {
+      //         this.$message({
+      //           message: '通过审核成功',
+      //           type: 'success'
+      //         });
+      //         this.getList(this.statusActive);
+      //       }
+
+      //     }).catch((err) => {
+      //       this.$message.error('通过审核失败');
+      //     })
+
+      //   })
+      //   .catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '取消通过审核'
+      //     });
+      //   });
     },
     closeDialog: function(isSave) {
       console.log('测试拒绝', isSave)

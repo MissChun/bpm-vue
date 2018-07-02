@@ -52,8 +52,8 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain>导入</el-button>
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary" plain>导入</el-button>
+            <el-button type="primary">导出</el-button> -->
             <el-button type="success" @click="addLandmark">新增</el-button>
           </div>
           <div class="table-list">

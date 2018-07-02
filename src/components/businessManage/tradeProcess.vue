@@ -168,6 +168,24 @@
                     </el-row>
                   </div>
                 </div>
+                <div class="detail-list detail-form" v-if="item.type === 'related_canceling'">
+                  <div class="process-content">
+                    <el-row :gutter="10">
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>取消时间:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.related_time)"></div>
+                        </div>
+                      </el-col>
+                      <el-col :span="8">
+                        <div class="label-list">
+                          <label>操作人:</label>
+                          <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </div>
+                </div>
                 <div class="detail-list detail-form" v-if="item.type === 'to_site'">
                   <div class="process-content">
                     <el-row :gutter="10">
@@ -485,8 +503,8 @@
           </el-col>
           <el-col :span="3" :offset="1">
             <div v-if="isToExamine&&processData.length>1&&isShowBtn(processData)" class="process-btn">
-              <el-button type="danger" @click="refuse(processData[0].type)">审核拒绝</el-button>
-              <el-button type="primary" @click="adopt(processData[0].type)">审核通过</el-button>
+              <el-button type="danger" @click="refuse(processData[0].type)" :disabled="refuseBtn.isDisabled" :loading="refuseBtn.isLoading">{{refuseBtn.text}}</el-button>
+              <el-button type="primary" @click="adopt(processData[0].type)" :disabled="adoptBtn.isDisabled" :loading="adoptBtn.isLoading">{{adoptBtn.text}}</el-button>
             </div>
             <!-- <div v-else>{{isShowBtn(processData[0].type)}}</div> -->
           </el-col>
@@ -516,6 +534,7 @@ export default {
         create_manager_check: '新增经理审核',
         create_department_check: '新增部门审核',
         waiting_related: '待关联',
+        related_canceling: '关联取消中',
         waiting_confirm: '关联后待确认',
         to_site: '前往卸货地',
         unloading: '已卸货',
@@ -533,7 +552,17 @@ export default {
         cancel_check_end: '取消审核——部门审核完成',
       },
       processData: {},
-      refuseTitle: ''
+      refuseTitle: '',
+      adoptBtn: {
+        isDisabled: false,
+        isLoading: false,
+        text: '审核通过'
+      },
+      refuseBtn: {
+        isDisabled: false,
+        isLoading: false,
+        text: '审核拒绝'
+      }
     }
   },
   created() {
@@ -653,39 +682,80 @@ export default {
       } else if (status === 'modify_department_check') {
         title = '业务单修改审核通过';
         desc = '请确认，修改被拒绝后，业务单将回置为修改前状态';
-      } else if (status === 'canceled') {
+      } else if (status === 'cancel_check') {
         title = '业务单取消审核通过';
         desc = '通过后，业务单将被取消，卸货计划将被自动取消';
       }
-      this.$confirm(desc, title, {
-          confirmButtonText: "确定通过",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.$$http('toExamineBusiness', {
-            order_id: this.id,
-            action: 'pass'
-          }).then((results) => {
-            if (results.data && results.data.code == 0) {
-              this.$message({
-                message: '通过审核成功',
-                type: 'success'
-              });
-              this.getProcess();
-            }
+      this.$msgbox({
+        title: title,
+        message: desc,
+        confirmButtonText: "确定通过",
+        cancelButtonText: "取消",
+        showCancelButton: true,
+        type: "warning",
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = '提交中...';
+            this.$$http('toExamineBusiness', {
+              order_id: this.id,
+              action: 'pass'
+            }).then((results) => {
+              if (results.data && results.data.code == 0) {
+                this.$message({
+                  message: '通过审核成功',
+                  type: 'success'
+                });
+                done();
+                setTimeout(() => {
+                  instance.confirmButtonLoading = false;
+                }, 300);
+                this.getProcess();
+              }
 
-          }).catch((err) => {
-            this.$message.error('通过审核失败');
-          })
+            }).catch((err) => {
+              this.$message.error('通过审核失败');
+            })
 
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消通过审核'
-          });
+          } else {
+            done();
+          }
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消通过审核'
         });
+      });
+      // this.$confirm(desc, title, {
+      //     confirmButtonText: "确定通过",
+      //     cancelButtonText: "取消",
+      //     type: "warning"
+      //   })
+      //   .then(() => {
+      //     this.$$http('toExamineBusiness', {
+      //       order_id: this.id,
+      //       action: 'pass'
+      //     }).then((results) => {
+      //       if (results.data && results.data.code == 0) {
+      //         this.$message({
+      //           message: '通过审核成功',
+      //           type: 'success'
+      //         });
+      //         this.getProcess();
+      //       }
+
+      //     }).catch((err) => {
+      //       this.$message.error('通过审核失败');
+      //     })
+
+      //   })
+      //   .catch(() => {
+      //     this.$message({
+      //       type: 'info',
+      //       message: '取消通过审核'
+      //     });
+      //   });
     },
   }
 }

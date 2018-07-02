@@ -35,7 +35,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
           </el-col>
           <el-col :span="4" class="text-right">
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary">导出</el-button> -->
           </el-col>
         </el-row>
       </div>
@@ -204,7 +204,7 @@ export default {
       } else if (tpye === 'business_order') {
         this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/sales/editSales/`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
       }
     },
     startSearch() {

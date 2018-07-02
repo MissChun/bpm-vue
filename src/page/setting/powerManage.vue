@@ -1,4 +1,19 @@
 <!-- powerManage.vue -->
+<style scoped lang="less">
+.setting {
+  .setting-content {
+    .nav-tab-setting {
+      .department-list {
+        padding-bottom: 0;
+        .el-menu{
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+</style>
 <template>
   <div class="setting">
     <div class="nav-tab" v-if="false">
@@ -319,7 +334,3 @@ export default {
 }
 
 </script>
-<style scoped lang="less">
-
-
-</style>
