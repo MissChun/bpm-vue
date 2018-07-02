@@ -291,7 +291,7 @@ export default {
         trader: '',
         consignment_type: 'own',
         plan_tonnage: '',
-        discount_price: '',
+        discount_price: '0',
         unit_price: '',
         mark: '',
         unload_area: ''

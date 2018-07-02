@@ -245,7 +245,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.check_quantity)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_tonnage)"></div>
                 </div>
               </el-col>
             </el-row>

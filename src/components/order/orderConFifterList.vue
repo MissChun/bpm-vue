@@ -191,7 +191,10 @@
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
-            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
+            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:
+            <span v-if="props.row.interrupt_status.key!='canceling'||props.row.interrupt_status.key!='modifying'||props.row.interrupt_status.key!='abnormal'">{{props.row.interrupt_status.verbose}}</span>
+            <span v-else>{{props.row.status.verbose}}</span>
+          </el-col>
           </el-row>
         </template>
       </el-table-column>
