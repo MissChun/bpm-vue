@@ -10,8 +10,10 @@
           </el-col>
           <el-col :span="18">
             <p>地标详情</p>
-            <el-button type="primary" @click="editLandmark
-()" size="mini">编辑</el-button>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="18">
           </el-col>
         </el-row>
       </el-header>
@@ -21,6 +23,9 @@
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
                 审核操作
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
               </el-col>
             </el-row>
           </div>
@@ -38,7 +43,7 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.source_type && detailData.source_type.verbose)"></div>
               </div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" v-if="!isSucess">
               <div class="label-list">
                 <label>审核操作:</label>
                 <div class="detail-form-item check-button">
@@ -52,13 +57,14 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_remark)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_status && detailData.confirm_status.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.user && detailData.confirm_info.user.username)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator
+.username)"></div>
               </div>
             </el-col>
             <el-col :span="8">

@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       pageLoading: false,
-      showLeftWindow: true,
+      showLeftWindow: false,
       addressDetail: {},
       detailData: '',
       map: '',
@@ -250,6 +250,7 @@ export default {
     setMapPosition: function(lnglat) {
 
       this.addMark.setPosition(lnglat);
+      this.showLeftWindow = true;
       this.addMark.show();
 
       this.map.setCenter(lnglat);

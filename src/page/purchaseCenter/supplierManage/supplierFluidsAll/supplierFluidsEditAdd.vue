@@ -118,7 +118,7 @@ export default {
           verbose: '地址',
         },
       ],
-      showLeftWindow: true,
+      showLeftWindow: false,
       formData: {
         supplier: '',
         fluid_name: '',
@@ -197,7 +197,7 @@ export default {
     getLandmarkDetail: function(id) {
       return new Promise((resolve, reject) => {
         let postData = {
-          id: this.id
+          id: id
         };
         this.$$http('getLandMarkDetail', postData).then((results) => {
           this.pageLoading = false;
@@ -335,6 +335,7 @@ export default {
                 jQuery('#choose-Actual-fluid').on('click', function() {
                   _this.choosedActualFluid = results.data.data;
                   _this.formData.actual_fluid = _this.choosedActualFluid.id;
+                  _this.showLeftWindow = true;
                 })
 
               }).catch(() => {

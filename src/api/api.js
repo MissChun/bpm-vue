@@ -1142,7 +1142,7 @@ const api = {
     }
   },
   getProvince: {
-    url: '/common/area/provinces/',
+    url: '/api/v1/area/provinces/',
     method: 'get',
     notNeedToken: true,
     desc: '获取省列表',
@@ -1151,7 +1151,7 @@ const api = {
     }
   },
   getCity: {
-    url: '/common/area/provinces/:province_id/',
+    url: '/api/v1/area/:id/cities/',
     method: 'get',
     notNeedToken: true,
     desc: '获取市列表',
@@ -1160,7 +1160,7 @@ const api = {
     }
   },
   getArea: {
-    url: '/common/area/cities/:city_id/',
+    url: '/api/v1/area/:id/county/',
     method: 'get',
     notNeedToken: true,
     desc: '获取区域列表',

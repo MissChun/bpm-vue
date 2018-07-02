@@ -135,7 +135,7 @@ export default {
           verbose: '地址',
         },
       ],
-      showLeftWindow: true,
+      showLeftWindow: false,
       formData: {
         position_name: '',
         map_position: '',
@@ -404,6 +404,7 @@ export default {
                   _this.formData.consignee = _this.choosedActualSite.contacts;
                   _this.formData.consignee_phone = _this.choosedActualSite.tel;
                   _this.formData.address = _this.choosedActualSite.address;
+                  _this.showLeftWindow = true;
 
                 })
               }).catch(() => {
@@ -576,7 +577,6 @@ export default {
 
     this.getActualSiteList().then(() => {
       this.renderMarker();
-      console.log('xxxxxx')
       if (this.id) {
         this.getSiteOfCustomerDetail().then(() => {
           return this.getLandmarkDetail(this.siteOfCusmerDetail.map_position);

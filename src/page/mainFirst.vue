@@ -101,6 +101,7 @@
 }
 
 .color-26c6da {
+  color: #26c6da;
   &:before {
     color: #26c6da;
   }
@@ -227,7 +228,7 @@
                 <template slot="title">
                   <div class="menu-title-cloumn" :class="[{ 'choosed-cloumn' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }]">
                     <i :class="[{ 'color-26c6da' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }, route.meta.iconName]"></i>
-                    <span>{{route.meta.title||"无名字"}}</span>
+                    <span :class="{ 'color-26c6da' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }">{{route.meta.title||"无名字"}}</span>
                   </div>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute" class="children-menu">
