@@ -55,11 +55,11 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="0">
+              <el-row :gutter="0" v-if="false">
                 <el-col :span="6">
                   <el-form-item label="日期筛选:" label-width="105px">
-                    <!-- <el-date-picker v-model="dateTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
-                    <el-date-picker v-model="dateTime" :picker-options="pickerOptions" type="week" format="yyyy 第 WW 周" @change="startSearch" placeholder="选择周">
+                    <!-- <el-date-picker v-model="dateTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"  value-format="yyyy-MM-dd HH:mm:ss" ></el-date-picker> -->
+                    <el-date-picker v-model="dateTime" type="week" format="yyyy 第 WW 周" :picker-options="pickerOptions" @change="startSearch" placeholder="选择周">
                     </el-date-picker>
                     <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
                   </el-form-item>
@@ -159,9 +159,11 @@ export default {
         ]
       },
       editPriceInfo: '', //编辑价格信息
-      pickerOptions:{
+      pickerOptions: {
         firstDayOfWeek: 1
-      }
+      },
+      startData: '',
+      endData: ''
     };
   },
   computed: {
@@ -176,8 +178,17 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
-      console.log('dateTime', this.dateTime, this.pbFunc.formatDate(this.dateTime));
+      this.startData = this.pbFunc.formatDate(this.dateTime);
+      this.endData = this.weekDate(5);
+      console.log('一周', this.startData, this.endData);
       this.getList();
+    },
+    weekDate(number) {
+      let time = new Date(this.dateTime);
+      console.log(this.dateTime, time)
+      time.setDate(time.getDate() + number);
+      let week = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
+      return week;
     },
     isPrevent(event) {
       event.stopPropagation();

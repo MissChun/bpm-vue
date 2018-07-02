@@ -620,11 +620,11 @@ export const format = function() {
     return fmt;
   }
 }
-export const formatDate = function(date) {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
+export const formatDate = function(date,isDate) {
+  let  time = new Date(date);
+  let month = '' + (time.getMonth() + 1),
+    day = '' + time.getDate()-1,
+    year = time.getFullYear();
 
   if (month.length < 2) month = '0' + month;
   if (day.length < 2) day = '0' + day;
