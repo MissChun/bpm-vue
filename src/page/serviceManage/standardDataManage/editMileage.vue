@@ -24,7 +24,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="液厂名称:" prop="fluid">
-                    <el-select :loading="searchFluidLoading" v-model="userForm.fluid" placeholder="请输入搜索" @change="chooseFluid">
+                    <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" placeholder="请输入选择" @change="chooseFluid">
                       <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -39,7 +39,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="站点名称:" prop="station">
-                    <el-select filterable :loading="searchSiteLoading" v-model="userForm.station" placeholder="请选择" @change="chooseSite">
+                    <el-select filterable :loading="searchSiteLoading" v-model="userForm.station" placeholder="请输入选择" @change="chooseSite">
                       <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.station_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>

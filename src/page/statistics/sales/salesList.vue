@@ -166,11 +166,11 @@ export default {
         width: ''
       }, {
         title: '采购单价',
-        param: 'business_price',
+        param: 'discount_price',
         width: ''
       }, {
         title: '业务优惠',
-        param: 'discount_price',
+        param: 'business_price',
         width: ''
       }, {
         title: '销售单价',

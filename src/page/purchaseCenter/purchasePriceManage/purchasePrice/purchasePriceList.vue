@@ -56,9 +56,11 @@
                 </el-col>
               </el-row>
               <el-row :gutter="0">
-                <el-col :span="8">
+                <el-col :span="6">
                   <el-form-item label="日期筛选:" label-width="105px">
-                    <el-date-picker v-model="dateTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                    <!-- <el-date-picker v-model="dateTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
+                    <el-date-picker v-model="dateTime" :picker-options="pickerOptions" type="week" format="yyyy 第 WW 周" @change="startSearch" placeholder="选择周">
+                    </el-date-picker>
                     <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
                   </el-form-item>
                 </el-col>
@@ -133,7 +135,7 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
       },
-      dateTime: [], //日期
+      dateTime: '', //日期
       thTableList: [{
         title: '液厂名称',
         param: 'fluid_name',
@@ -157,6 +159,9 @@ export default {
         ]
       },
       editPriceInfo: '', //编辑价格信息
+      pickerOptions:{
+        firstDayOfWeek: 1
+      }
     };
   },
   computed: {
@@ -165,11 +170,13 @@ export default {
   created() {
     this.getDateTitle();
     this.getList();
+    this.pbFunc.format();
   },
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
+      console.log('dateTime', this.dateTime, this.pbFunc.formatDate(this.dateTime));
       this.getList();
     },
     isPrevent(event) {
@@ -286,6 +293,7 @@ export default {
       }
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
+
       this.$$http('getPurchasePriceList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;

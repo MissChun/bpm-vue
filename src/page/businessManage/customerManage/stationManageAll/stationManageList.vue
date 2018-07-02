@@ -43,7 +43,7 @@
                     </div>
                     <div class="table-list mt-25" v-loading="pageLoading">
                       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
                           <template slot-scope="scope">
                             <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
                             <div v-if="item.param==='addresss'">{{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.address}}</div>
@@ -126,7 +126,7 @@ export default {
         width: ''
       }, {
         title: '联系人',
-        param: 'coordinate',
+        param: 'consignee',
         width: ''
       }, {
         title: '联系电话',
