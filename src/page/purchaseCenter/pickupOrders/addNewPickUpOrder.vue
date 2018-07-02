@@ -448,7 +448,10 @@ export default {
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
           this.selectData.carriersOwnList = dataBody;
-          this.carriersParam.ownCarriers=this.pbFunc.deepcopy(dataBody[0].id);
+          if(dataBody&&dataBody.length>0){
+            this.carriersParam.ownCarriers=dataBody[0].id;
+            this.bindText.carriersName = dataBody[0].carrier_name;
+          }
         }
       }).catch(() => {
         this.loadingArr.carriersLoading = false;

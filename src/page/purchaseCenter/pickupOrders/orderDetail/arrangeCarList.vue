@@ -390,13 +390,14 @@ export default {
                 operationArr[i].disableChoose = true;
                 addflag = false;
                 operationArr[i].bindCheckBox = true;
+                operationArr[i].waybill = this.delivery_list.trips[j];
                 newArr.push(operationArr[i]);
                 break;
               }
             }
-            if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              operationArr[i].waybill = this.delivery_list.trips[j];
-            }
+            // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
+              
+            // }
           }
           if (addflag) {
             operationArr[i].bindCheckBox = true;
