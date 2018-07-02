@@ -46,7 +46,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="客户简称:" prop="short_name">
-                <el-select v-model="formData.short_name" placeholder="请选择">
+                <el-select v-model="formData.short_name" filterable placeholder="请选择">
                   <el-option v-for="(item,key) in customerList" :key="key" :label="item.short_name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>

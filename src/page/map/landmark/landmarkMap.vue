@@ -147,6 +147,12 @@ export default {
       fieldSelect: [{
         label: '地标名称',
         id: 'position_name',
+      }, {
+        label: '联系人',
+        id: 'contacts',
+      }, {
+        label: '联系电话',
+        id: 'tel',
       }],
       landmarkDetail: {},
 

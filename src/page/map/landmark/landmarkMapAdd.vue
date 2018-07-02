@@ -2,7 +2,7 @@
   <div class="out-wraper">
     <div id="map-container" v-loading="pageLoading"></div>
     <div class='map-panel'>
-      <el-input placeholder="请输入" v-model="keyword" @keyup.native.13="inputChangeFun" class="search-filters-screen" id="map-search-input">
+      <el-input placeholder="请输入地址" v-model="keyword" @keyup.native.13="inputChangeFun" class="search-filters-screen" id="map-search-input">
         <el-button slot="append" icon="el-icon-search" @click="inputChangeFun"></el-button>
       </el-input>
       <div class="map-message">{{mapMessage}}</div>

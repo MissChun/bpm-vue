@@ -886,7 +886,7 @@ export default [{
       component: (resolve) => require(['../page/setting/setting'], resolve),
       children: [{
           path: 'organizationalStructure',
-          name: "组织架构",
+          name: "organizationalStructure",
           meta: {
             title: '组织架构',
             isVerificationL: true
@@ -895,7 +895,7 @@ export default [{
         },
         {
           path: 'staffsManage',
-          name: "员工管理",
+          name: "staffsManage",
           meta: {
             title: '员工管理',
             isVerificationL: true
@@ -904,7 +904,7 @@ export default [{
         },
         {
           path: 'powerManage',
-          name: "权限管理",
+          name: "powerManage",
           meta: {
             title: '权限管理',
             isVerificationL: true

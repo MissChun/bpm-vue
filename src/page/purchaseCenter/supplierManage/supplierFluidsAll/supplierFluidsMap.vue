@@ -23,8 +23,8 @@
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
-                            <el-form-item label="站点名称:">
-                              <el-input placeholder="请输入" v-model="searchFilters.stationName" class="search-filters-screen">
+                            <el-form-item label="液厂名称:">
+                              <el-input placeholder="请输入" @keyup.native.13="startSearch" v-model="searchFilters.stationName" class="search-filters-screen">
                               </el-input>
                             </el-form-item>
                           </el-col>
@@ -228,7 +228,7 @@ export default {
                   }
                 });
                 recycledMarker.setLabel({
-                  content: dataItem.position_name,
+                  content: dataItem.fluid_name,
                   offset: new AMap.Pixel(30, 0)
                 })
 
@@ -244,7 +244,7 @@ export default {
                     }
                   },
                   label: {
-                    content: dataItem.position_name,
+                    content: dataItem.fluid_name,
                     offset: new AMap.Pixel(30, 0)
                   }
                 });
