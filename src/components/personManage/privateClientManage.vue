@@ -3,8 +3,8 @@
     <div class="search-box">
     </div>
     <div>
-      <el-button type="primary" @click="importList">导入1</el-button>
-      <el-button type="primary" @click="exportList">导出</el-button>
+      <!-- <el-button type="primary" @click="importList">导入1</el-button> -->
+      <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
       <el-button type="primary" @click="addList">新增</el-button>
     </div>
     <el-table :data="tableData" v-loading="pageLoading" style="width: 100%">
