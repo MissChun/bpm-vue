@@ -101,7 +101,7 @@ export default {
         pageSize: 10,
       },
       activeName: 'add',
-      statusActive: 'create_manager_check',
+      statusActive: 'create_department_check',
       planArriveTime: [], //计划到站时间
       createdAt: [], //下计划日期
       searchPostData: {
@@ -120,11 +120,11 @@ export default {
         title: '新增',
         key: 'add',
         tabs: [{
-          title: '新增经理审批中',
-          key: 'create_manager_check',
-        }, {
-          title: '新增部门审批中',
+          title: '部门审批中',
           key: 'create_department_check',
+        }, {
+          title: '经理审批中',
+          key: 'create_manager_check',
         }]
       }, {
         title: '关联',
@@ -187,11 +187,11 @@ export default {
         }]
       }],
       statusTabList: [{
-        title: '经理审批中',
-        key: 'create_manager_check',
-      }, {
         title: '部门审批中',
         key: 'create_department_check',
+      }, {
+        title: '经理审批中',
+        key: 'create_manager_check',
       }],
       selectData: {
         isBindSelect: [
