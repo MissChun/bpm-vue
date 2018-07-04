@@ -164,6 +164,7 @@ export default {
         param: 'second_areas',
         width: ''
       }],
+      editTimeIds: [] //生效时间的区域ID
     }
   },
   created() {
@@ -214,6 +215,7 @@ export default {
           this.titleType = this.detail.fluid_name;
           for (let i in this.detail.areas) {
             this.selectMenus.push(this.detail.areas[i].area_id);
+            this.editTimeIds.push(this.detail.areas[i].id);
           }
           let timeArr = this.detail.areas.length ? (this.detail.areas[0].effect_time).split(':') : [];
           if (timeArr.length) {
@@ -221,7 +223,7 @@ export default {
           }
 
 
-          console.log('有效时间', this.detail.areas,this.selectMenus)
+          console.log('有效时间', this.detail.areas, this.selectMenus)
 
         }
       })
@@ -257,7 +259,7 @@ export default {
                 type: 'success'
               });
               // if (isReview) {
-                this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
+              this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
               // }
             }
           }).catch((err) => {
@@ -292,7 +294,7 @@ export default {
       let btnObject = btn;
       // let keyArray = ['effect_time'];
       let postData = {
-        relations: this.selectMenus
+        relations: this.editTimeIds
       };
       let timeArr = this.editMsgForm.effect_time.Format("hh:mm:ss").split(':');
       postData.effect_time = timeArr.length ? timeArr[0] + ':' + timeArr[1] : '';
