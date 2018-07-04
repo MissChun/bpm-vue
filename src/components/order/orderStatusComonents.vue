@@ -171,10 +171,10 @@ export default {
   },
   methods: {
     chiledchangeTabs: function(tabsObj) {
-      this.$emit("chiledchangeTabs", tabsObj);
+      this.$emit("childchangeTabs", tabsObj);
     },
     changeTabs:function(name){
-      this.$emit("changeTab", name);
+      this.$emit("changeTabs", name);
     },
     searchList: function(targetName) {
       //
@@ -291,7 +291,7 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
-      this.$emit("changeTab", this.status);
+      this.$emit("changeTabs", this.status);
     },
     fifterData: function(listData) {
       this.listFifterData = listData;

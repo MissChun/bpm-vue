@@ -362,7 +362,7 @@ export default {
       this.$$http("upStatus", sendData).then((results) => {
         console.log('results', results)
         //vm.$emit("changeTabs", 'fifth');
-        vm.changeSatusShow = false;
+        //vm.changeSatusShow = false;
       }).catch((err) => {
         console.log('errs', err);
       });
@@ -451,7 +451,8 @@ export default {
                 type: "success",
                 message: "取消运单成功",
               });
-              vm.$emit("chiledchangeTabs",{first:'sxith',second:"all"});
+              vm.$emit("chiledchangeTabs",{first:'first',second:"all"});
+              vm.$emit('searchList');
             } else {
               vm.$message.error("取消运单失败");
             }

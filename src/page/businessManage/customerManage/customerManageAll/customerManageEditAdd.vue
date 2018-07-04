@@ -380,7 +380,7 @@ export default {
                 vm.$router.push({
                   path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd",
                   query: {
-                    customerId: vm.customerId,
+                    customerId: vm.customerId, 
                     activeStep: nextStep,
                     operate: vm.$route.query.operate
                   }
@@ -430,7 +430,7 @@ export default {
 
           sendData = this.pbFunc.fifterObjIsNull(sendData);
           sendData = this.pbFunc.fifterbyArr(sendData, this.customerFrom1Arr);
-
+          sendData.is_confirmed=1;
           this.$$http('creatCustomerFrom', sendData).then((result) => {
             vm.pageLoading = false;
             if (result.data.code == 0) {
