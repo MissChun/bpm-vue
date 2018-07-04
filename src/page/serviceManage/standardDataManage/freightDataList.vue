@@ -57,7 +57,7 @@
                 <template slot-scope="scope">
                   <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'||item.param==='change_number'">
                     <ul>
-                      <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}</li>
+                      <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}<span v-if="item.param==='start_mileage'">（不含）</span><span v-if="item.param==='end_mileage'">（含）</span></li>
                     </ul>
                   </div>
                   <div v-else>
@@ -121,11 +121,11 @@ export default {
         }] //液厂
       },
       thTableList: [{
-        title: '起点里程',
+        title: '起点里程（公里）',
         param: 'start_mileage',
         width: ''
       }, {
-        title: '终点里程',
+        title: '终点里程（公里）',
         param: 'end_mileage',
         width: ''
       }, {
