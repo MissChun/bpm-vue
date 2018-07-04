@@ -153,7 +153,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="16">
-                  <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading" prop="carriers">
+                  <el-form-item label="承运商:" v-loading="loadingArr.carriersLoading" prop="carriers">
                     <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                       <el-form-item label="自有:" label-width="60px">
                         <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">

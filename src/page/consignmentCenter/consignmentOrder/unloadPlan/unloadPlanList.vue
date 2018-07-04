@@ -10,7 +10,19 @@
     text-align: center;
   }
 }
+.go-return {
+  width: 32px;
+  height: 32px;
+  margin-top: 14px;
+}
+.el-header p {
+  height: 60px;
 
+  font-size: 26px;
+  line-height: 60px;
+
+  text-align: center;
+}
 </style>
 <template>
   <div class="tab-screen">
@@ -19,6 +31,18 @@
         <el-tabs v-model="activeName" type="card">
           <el-tab-pane label="列表" name="first">
             <div class="tab-screen">
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/consignmentCenter/consignmentOrders/ordersList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>匹配卸车</p>
+                  </el-col>
+                </el-row>
+              </el-header>
               <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
                 <el-row :gutter="0">
                   <el-col :span="12">
@@ -29,22 +53,20 @@
                       <el-button slot="append" icon="el-icon-search" @click="getSearchLIst"></el-button>
                     </el-input>
                   </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="10">
+                   <el-col :span="10" :offset="2">
                     <el-form-item label="计划到站时间:" label-width="105px">
-                      <el-date-picker v-model="searchTimeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                      <el-date-picker v-model="searchTimeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" @change="getSearchLIst">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
-                <el-row :gutter="10">
+              </el-form>
+            </div>
+            <el-row :gutter="10" style="margin:10px 0;">
                   <el-col :span="2" :offset="22">
                     <el-button type="primary" @click="operation('upMatchList')">提交卸货单</el-button>
                   </el-col>
-                </el-row>
-              </el-form>
-            </div>
+            </el-row>
             <div class="table-list">
               <el-table :data="renderList" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">

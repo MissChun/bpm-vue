@@ -114,11 +114,11 @@
                 </el-col>
                 <el-col :span="4" class="colinfo">{{props.row.delivery_order.plan_time.split(" ")[0]}}</br>{{props.row.delivery_order.plan_time.split(" ")[1]}}
                 </el-col>
-                <el-col :span="4" class="colinfo"><span v-if="props.row.delivery_order.active_time">{{props.row.delivery_order.active_time.split(" ")[0]}}</br>{{props.row.delivery_order.active_time.split(" ")[1]}}</span><span v-else>无</span>
+                <el-col :span="4" class="colinfo"><span v-if="props.row.pick_active_time">{{props.row.pick_active_time.split(" ")[0]}}</br>{{props.row.pick_active_time.split(" ")[1]}}</span><span v-else>无</span>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.delivery_order.plan_tonnage}}
                 </el-col>
-                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
