@@ -52,6 +52,9 @@
       text-align: center
     }
     .el-table__row {
+      td {
+        text-align: center
+      } 
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {

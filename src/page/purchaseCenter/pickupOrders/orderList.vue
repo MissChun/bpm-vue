@@ -96,7 +96,7 @@
           placement="right-start"
           width="100"
           trigger="hover"
-          v-model="seachExtend">
+          v-model="seachExtend" popper-class="styleSetP">
           <el-row>
             <el-col class="searchButton" @click.native="changeF('history')"><el-button type="text" style="color:black" >{{statusName.history_count}}</el-button></el-col>
             <el-col class="searchButton" @click.native="changeF('loaded')"><el-button type="text" style="color:black" >{{statusName.loaded_count}}</el-button></el-col>

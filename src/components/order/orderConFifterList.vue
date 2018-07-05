@@ -187,7 +187,7 @@
              <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
             <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">
-              <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
+              <el-tooltip :content="props.row.delivery_order.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
