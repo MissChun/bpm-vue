@@ -336,9 +336,7 @@ export default {
           console.log("当前订单数据", results.data.data);
           var list=[];
           results.data.data.trips.forEach((item,index)=>{
-            if(item.status!='canceled'){
               list.push(item);
-            }
           });
           results.data.data.trips=list;
           vm.delivery_list = results.data.data;
@@ -391,13 +389,17 @@ export default {
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
+              if(this.delivery_list.trips[j].status=='canceled'){
+                operationArr[i].waybill = this.delivery_list.trips[j];
+              }else{
+                operationArr[i].waybill = this.delivery_list.trips[j];
+                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
                 operationArr[i].disableChoose = true;
                 addflag = false;
                 operationArr[i].bindCheckBox = true;
-                operationArr[i].waybill = this.delivery_list.trips[j];
                 newArr.push(operationArr[i]);
                 break;
+                }
               }
             }
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {

@@ -151,7 +151,7 @@
             </el-col>
             <el-col :span="5" v-if="props.row.carriers&&props.row.carriers[0]">承运方:{{props.row.carriers[0].carrier_name}}</el-col>
             <el-col :span="5">
-              <el-tooltip :content="props.row.mark" placement="top" effect="light" :open-delay="delayTime">
+              <el-tooltip :content="props.row.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>

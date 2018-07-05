@@ -50,7 +50,7 @@
         <el-tab-pane :label="statusName.all_finish_count" name="sxith">
           <div v-if="activeName=='sxith'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" countParam="allcounts['all_finish_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_finish_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
