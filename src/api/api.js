@@ -9,6 +9,83 @@
  */
 
 const api = {
+  businessDistribution: {
+    url: '/api/v1/business_order/assign/',
+    method: 'put',
+    desc: '业务单分配',
+    param: {
+      order_ids:{
+        desc: '业务单id'
+      },
+      order_assign:{
+        desc: '业务单分配'
+      }
+    }
+  },
+  exportIncomeData: {
+    url: '/export/income/',
+    method: 'post',
+    desc: '收入统计数据',
+    param: {
+      filename:{
+        desc: '文件名'
+      },
+      page_arg:{
+        desc: '类型 income'
+      },
+      ids:{
+        desc: 'id'
+      }
+    }
+  },
+  exportLogisticData: {
+    url: '/export/logistic/',
+    method: 'post',
+    desc: '托运数据',
+    param: {
+      filename:{
+        desc: '文件名'
+      },
+      page_arg:{
+        desc: '类型 logistic'
+      },
+      ids:{
+        desc: 'id'
+      }
+    }
+  },
+  exportSaleData: {
+    url: '/export/sale/',
+    method: 'post',
+    desc: '导出销售数据',
+    param: {
+      filename:{
+        desc: '文件名'
+      },
+      page_arg:{
+        desc: '类型 sale'
+      },
+      ids:{
+        desc: 'id'
+      }
+    }
+  },
+  exportPurchaseData: {
+    url: '/export/procument/',
+    method: 'post',
+    desc: '导出采购数据',
+    param: {
+      filename:{
+        desc: '文件名'
+      },
+      page_arg:{
+        desc: '类型 例：procurement'
+      },
+      ids:{
+        desc: 'id'
+      }
+    }
+  },
   getStationList: {
     url: '/api/v1/delivery_point/',
     method: 'get',

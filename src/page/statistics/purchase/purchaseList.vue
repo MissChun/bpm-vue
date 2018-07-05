@@ -35,7 +35,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
-            <!-- <el-button type="primary">导出</el-button> -->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -91,6 +91,11 @@ export default {
         created_at: '',
         keyword: '',
         field: 'waybill',
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       statusTabList: [{
         title: '经理审批中',
@@ -181,8 +186,45 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
+    },
+    exportData() {
+      let postData = {
+        filename: '采购数据',
+        page_arg: 'procurement',
+        ids: []
+      };
+       for (let i = 1; i <= 12; i++) {
+        postData.ids.push(i.toString());
+      }
+      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
+        postData.active_time_start = this.planArriveTime[0];
+        postData.active_time_end = this.planArriveTime[1];
+      }
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
 
-
+      this.$$http('exportPurchaseData', postData).then((results) => {
+        console.log('results', results.data.data.results);
+        this.exportBtn = {
+            text: '导出',
+            isLoading: false,
+            isDisabled: false,
+          }
+          if (results.data && results.data.code == 0) {
+            window.open(results.data.data.filename);
+          }
+      }).catch((err) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     getList() {
       let postData = {

@@ -106,10 +106,10 @@ export default {
             postData = {
               position_name: this.positionRules.position_name,
               id: this.positionRow.id,
-              leader: this.positionRow.leader
+              leader: this.positionRules.leader
             }
           }
-
+           console.log('修改领导leader', postData);
           this.$$http(apiName, postData).then((results) => {
             console.log('部门', results.data);
             // this.pageLoading = false;
