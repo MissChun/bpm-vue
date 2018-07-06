@@ -157,7 +157,7 @@ export default {
         width: ''
       }, {
         title: '上传时间',
-        param: 'created_time',
+        param: 'create_time',
         width: '200'
       }, {
         title: '上传来源',

@@ -111,7 +111,7 @@ export default {
       },
       fieldSelect: [{
           key: 'position_name',
-          verbose: '实际站点',
+          verbose: '实际液厂',
         },
         {
           key: 'address',

@@ -17,6 +17,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="启用状态:">
+              <el-select v-model="searchFilters.is_active">
+                <el-option v-for="(item,key) in activeList" :key="key" :label="item.verbose" :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
           </el-col>
         </el-row>
@@ -45,6 +52,7 @@ export default {
       searchFilters: {
         choosedCustomer: '',
         stationName: '',
+        is_active: '',
       },
       landmarkDetail: {},
       customerList: [],
@@ -53,7 +61,17 @@ export default {
         isDisabled: false,
         isLoading: false,
         text: '搜索'
-      }
+      },
+      activeList: [{
+        verbose: '全部',
+        key: ''
+      }, {
+        verbose: '已启用',
+        key: 'True'
+      }, {
+        verbose: '未启用',
+        key: 'False'
+      }]
     }
   },
   methods: {
@@ -95,7 +113,8 @@ export default {
         let postData = {
           need_all: true,
           consumer_id: this.searchFilters.choosedCustomer,
-          station_name: this.searchFilters.station_name,
+          station_name: this.searchFilters.stationName,
+          is_active: this.searchFilters.is_active,
         };
         postData = this.pbFunc.fifterObjIsNull(postData);
         this.$$http('getSiteList', postData).then((results) => {

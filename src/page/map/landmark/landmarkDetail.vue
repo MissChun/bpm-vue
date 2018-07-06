@@ -24,7 +24,7 @@
               <el-col :span="12" :offset="6" class="text-center">
                 审核操作
               </el-col>
-              <el-col :span="6" class="text-right">
+              <el-col :span="6" class="text-right" v-if="detailData.source_type && detailData.source_type.key !== 'DRIVER_UPLOAD'">
                 <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
               </el-col>
             </el-row>
@@ -63,14 +63,15 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator
-.username)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.username)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key ==='PLATFORM'" v-html="pbFunc.dealNullData( detailData.upload_user && detailData.upload_user.nick_name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item" v-html="detailData.confirm_info && detailData.confirm_info.operate_datetime"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_datetime)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key ==='PLATFORM'" v-html="pbFunc.dealNullData(detailData.create_time)"></div>
               </div>
             </el-col>
           </el-row>
@@ -129,6 +130,12 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
+            <el-col :span="8" v-if="detailData.position_type && detailData.position_type.key ==='LNG_FACTORY'">
+              <div class="label-list">
+                <label>气种:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.gas_type && detailData.gas_type.verbose)"></div>
+              </div>
+            </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>联系电话:</label>

@@ -14,7 +14,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="地标类型:" prop="position_type">
-                <el-select v-model="formData.position_type" :disabled="!!id" placeholder="请选择">
+                <el-select v-model="formData.position_type" placeholder="请选择">
                   <el-option v-for="(item,key) in positionTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -30,7 +30,7 @@
           <el-row v-if="formData.position_type === 'LNG_FACTORY'">
             <el-col :span="20">
               <el-form-item label="气种:" prop="gas_type">
-                <el-select v-model="formData.gas_type" :disabled="!!id" placeholder="请选择">
+                <el-select v-model="formData.gas_type" placeholder="请选择">
                   <el-option v-for="(item,key) in gasTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -122,7 +122,7 @@ export default {
         "key": "SEA_GAS",
         "verbose": "海气"
       }, {
-        "key": "NORTHWEST",
+        "key": "NORTHWEST_GAS",
         "verbose": "西北气"
       }],
       rules: {
@@ -331,14 +331,7 @@ export default {
               county: this.detailData.county && this.detailData.county.area_name ? this.detailData.county.area_name : '',
             }
 
-            setTimeout(() => {
-              this.setMapZoom();
-              this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
 
-              this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
-              this.oldMarker.show();
-
-            }, 500)
 
 
             resolve(results);
@@ -367,14 +360,13 @@ export default {
           county: this.addressDetail.county,
         };
 
-        if (apiName === 'addLandmark' && this.formData.position_type === 'LNG_FACTORY') {
+        if (this.formData.position_type === 'LNG_FACTORY') {
           postData.gas_type = this.formData.gas_type;
         }
 
         if (apiName === 'patchLandMarkDetail') {
           postData.id = this.id;
           delete postData.source_type;
-          delete postData.position_type;
         }
 
         this.submitBtn.btnText = '提交中';
@@ -409,15 +401,31 @@ export default {
 
       })
     },
+    setCenter: function() {
+      if (this.map && this.oldMarker) {
+        this.setMapZoom();
+        this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+
+        this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+        this.oldMarker.show();
+      } else {
+        setTimeout(() => {
+          this.setCenter();
+        }, 500)
+      }
+    },
 
   },
+
   created: function() {
 
   },
   mounted: function() {
     this.initMap();
     if (this.id) {
-      this.getLandmarkDetail();
+      this.getLandmarkDetail().then(() => {
+        this.setCenter();
+      });
     }
   }
 

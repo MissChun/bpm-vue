@@ -355,21 +355,21 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let mark_type = (data.mark_type && data.mark_type.verbose) ? data.mark_type.verbose : '无';
-      let check_status = (data.check_status && data.check_status.verbose) ? data.check_status.verbose : '无';
-      let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
-      let is_synced = data.is_synced ? '已同步' : '未同步';
-      let infoBodyStr = '<div class="fs-13">地标类型：' + mark_type +
+      let position_type = (data.position_type && data.position_type.verbose) ? data.position_type.verbose : '无';
+      let confirm_status = (data.confirm_status && data.confirm_status.verbose) ? data.confirm_status.verbose : '无';
+      let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
+      let async_status = data.async_status ? '已同步' : '未同步';
+      let infoBodyStr = '<div class="fs-13">地标类型：' + position_type +
         '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + check_status +
-        '</div><div class="fs-13">上传来源：' + mark_source +
-        '</div><div class="fs-13">是否同步：' + is_synced +
+        '</div><div class="fs-13">审核状态：' + confirm_status +
+        '</div><div class="fs-13">上传来源：' + source_type +
+        '</div><div class="fs-13">是否同步：' + async_status +
         '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary " href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
 
       return infoBodyStr;
     },
     getIconSrc: function(item) {
-      let src = ''
+      let src = '';
       /*lng加气站*/
       if ((item.position_type && item.position_type === 'LNG') || (item.position_type && item.position_type === 'GAS_STATION')) {
         if (item.async_status === 'ASYNCED') {
