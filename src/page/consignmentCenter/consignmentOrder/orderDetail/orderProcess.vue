@@ -610,13 +610,59 @@
                             </el-col>
                           </el-row>
                         </div>
+                        <div v-if="item.type === 'modifying'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更类型:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.msg)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更前:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.after_truck_no)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更后:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.before_truck_no)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更提交时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
+                         <div v-if="item.type === 'normal'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
                       </el-collapse-item>
                     </el-collapse>
                   </el-col>
                   <el-col :span="2" :offset="1">
                     <div v-if="detailData.length>1">
                       <div v-for="(item,key) in allButton[detailData[detailData.length-1].type]">
-                        <el-button style="margin-top:20px;width:100%" :type="item.type" @click="orderOperation(item.methods)">{{item.text}}</el-button>
+                        <el-button style="margin-top:20px;width:100%" :type="item.type" @click="orderOperation(item.methods,detailData[detailData.length-1])">{{item.text}}</el-button>
                       </div>
                     </div>
                   </el-col>
@@ -669,7 +715,9 @@ export default {
         waiting_settlement: '待提交结算',
         in_settlement: '结算中',
         finished: '已完成',
-        canceled: '已取消'
+        canceled: '已取消',
+        modifying:'运力变更申请',
+        normal:'运力已变更'
       },
       lockFalg: false,
       activeName: 'second',
@@ -691,7 +739,11 @@ export default {
       poundImg: {},
       suerId: "",
       allButton: {
-
+        'modifying': [{
+          text: "确认变更",
+          type: "success",
+          methods: "sureChangeCar"
+        }]
       }
     }
   },
@@ -746,6 +798,25 @@ export default {
         }
       }
     },
+
+    sureChangeCar:function(rowData){
+      var sendData={};
+      this.pageLoading=true;
+      sendData.id=rowData.interrupt_record_id;
+      sendData.status='success';
+      this.$$http('sureChangeCar',sendData).then(results=>{
+        this.pageLoading=false;
+        this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList" });
+        if(results.data.code==0){
+          vm.$message({
+            type: "success",
+            message: "确认变更成功"
+          })
+        }
+      }).catch(()=>{
+        vm.$message.error("确认变更失败");
+      });
+    },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${this.setpId}/${this.willId}` });
@@ -754,9 +825,10 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${this.setpId}/${this.willId}` });
       }
     },
-    orderOperation: function(type) {
-
-
+    orderOperation: function(type,rowData) {
+      if(type=='sureChangeCar'){
+        this.sureChangeCar(rowData);
+      }
     },
     getData: function() {
       var sendData = {};

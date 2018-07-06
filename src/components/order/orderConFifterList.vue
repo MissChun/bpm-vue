@@ -167,11 +167,16 @@
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]">
-              <el-col>
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
+              <el-col >
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
+            <el-row  v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
+              <el-col >
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+           </el-row>
           </div>
           <div style="clear:both"></div>
         </template>
@@ -255,6 +260,16 @@ export default {
       showMap:false,
       loadPosition:{},
       fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
+      buttonModyfiyAll:{
+         canceling: [],
+        abnormal: [],
+        modifying: [{
+          text: "确认变更",
+          type: "primary",
+          attrPlan: true,
+          methods_type: "sureChangeCar",
+        }]
+      },
       buttonAll: {
         //装车
         driver_pending_confirmation: [{ //司机未确认
@@ -472,6 +487,8 @@ export default {
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'sureDownOrder') {
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+      }else if(type=='sureChangeCar'){
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       }
     },

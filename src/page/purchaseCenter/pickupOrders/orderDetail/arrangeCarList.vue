@@ -331,12 +331,13 @@ export default {
       };
       vm.$$http('getPickOrderDetail', postData1).then((results) => {
         getDataNum++;
-
         if (results.data && results.data.code == 0) {
           console.log("当前订单数据", results.data.data);
           var list=[];
           results.data.data.trips.forEach((item,index)=>{
+            if(item.status!='canceled'){
               list.push(item);
+            }
           });
           results.data.data.trips=list;
           vm.delivery_list = results.data.data;
@@ -403,7 +404,6 @@ export default {
               }
             }
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              
             // }
           }
           if (addflag) {

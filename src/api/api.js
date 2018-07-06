@@ -14,10 +14,10 @@ const api = {
     method: 'put',
     desc: '业务单分配',
     param: {
-      order_ids:{
+      order_ids: {
         desc: '业务单id'
       },
-      order_assign:{
+      order_assign: {
         desc: '业务单分配'
       }
     }
@@ -27,13 +27,13 @@ const api = {
     method: 'post',
     desc: '收入统计数据',
     param: {
-      filename:{
+      filename: {
         desc: '文件名'
       },
-      page_arg:{
+      page_arg: {
         desc: '类型 income'
       },
-      ids:{
+      ids: {
         desc: 'id'
       }
     }
@@ -43,13 +43,13 @@ const api = {
     method: 'post',
     desc: '托运数据',
     param: {
-      filename:{
+      filename: {
         desc: '文件名'
       },
-      page_arg:{
+      page_arg: {
         desc: '类型 logistic'
       },
-      ids:{
+      ids: {
         desc: 'id'
       }
     }
@@ -59,13 +59,13 @@ const api = {
     method: 'post',
     desc: '导出销售数据',
     param: {
-      filename:{
+      filename: {
         desc: '文件名'
       },
-      page_arg:{
+      page_arg: {
         desc: '类型 sale'
       },
-      ids:{
+      ids: {
         desc: 'id'
       }
     }
@@ -75,13 +75,13 @@ const api = {
     method: 'post',
     desc: '导出采购数据',
     param: {
-      filename:{
+      filename: {
         desc: '文件名'
       },
-      page_arg:{
+      page_arg: {
         desc: '类型 例：procurement'
       },
-      ids:{
+      ids: {
         desc: 'id'
       }
     }
@@ -91,10 +91,10 @@ const api = {
     method: 'get',
     desc: '客户站点列表',
     param: {
-      consumer_id:{
+      consumer_id: {
         desc: '客户id'
       },
-      relations:{
+      relations: {
         desc: '业务区域ID列表'
       }
     }
@@ -112,10 +112,10 @@ const api = {
     method: 'patch',
     desc: '设置生效时间',
     param: {
-      effect_time:{
+      effect_time: {
         desc: '生效时间 %H:%M'
       },
-      relations:{
+      relations: {
         desc: '业务区域ID列表'
       }
     }
@@ -125,10 +125,10 @@ const api = {
     method: 'post',
     desc: '目的地设置更新',
     param: {
-      fluid_id:{
+      fluid_id: {
         desc: '液厂ID'
       },
-      area_ids:{
+      area_ids: {
         desc: '业务区域ID列表'
       }
     }
@@ -138,7 +138,7 @@ const api = {
     method: 'get',
     desc: '目的地设置详情',
     param: {
-      id:{
+      id: {
         desc: '目的地ID'
       }
     }
@@ -1939,11 +1939,11 @@ const api = {
 
     }
   },
-  getSiteOfCustomerDetail:{
+  getSiteOfCustomerDetail: {
     url: '/api/v1/delivery_point/:id/',
     method: 'get',
     desc: '新增客户站点详情',
-    param:{
+    param: {
 
     }
   },
@@ -1952,41 +1952,41 @@ const api = {
     method: 'post',
     desc: '新增客户站点接口',
     param: {
-      address :{
-        desc:'详细地址',
+      address: {
+        desc: '详细地址',
       },
-      area  :{
-        desc:'区',
+      area: {
+        desc: '区',
       },
-      city :{
-        desc:'市',
+      city: {
+        desc: '市',
       },
-      consignee :{
-        desc:'联系人',
+      consignee: {
+        desc: '联系人',
       },
-      consignee_phone :{
-        desc:'联系电话',
+      consignee_phone: {
+        desc: '联系电话',
       },
-      map_position :{
-        desc:'基础地标id',
+      map_position: {
+        desc: '基础地标id',
       },
-      province :{
-        desc:'省',
+      province: {
+        desc: '省',
       },
-      short_name_id :{
-        desc:'客户简称id',
+      short_name_id: {
+        desc: '客户简称id',
       },
-      station_type  :{
-        desc:'站点类型',
+      station_type: {
+        desc: '站点类型',
       },
-      station_name :{
-        desc:'站点名称',
+      station_name: {
+        desc: '站点名称',
       },
-      longitude :{
-        desc:'经度',
+      longitude: {
+        desc: '经度',
       },
-      latitude  :{
-        desc:'纬度',
+      latitude: {
+        desc: '纬度',
       },
     }
   },
@@ -1996,41 +1996,41 @@ const api = {
     method: 'put',
     desc: '新增客户站点接口',
     param: {
-      address :{
-        desc:'详细地址',
+      address: {
+        desc: '详细地址',
       },
-      area  :{
-        desc:'区',
+      area: {
+        desc: '区',
       },
-      city :{
-        desc:'市',
+      city: {
+        desc: '市',
       },
-      consignee :{
-        desc:'联系人',
+      consignee: {
+        desc: '联系人',
       },
-      consignee_phone :{
-        desc:'联系电话',
+      consignee_phone: {
+        desc: '联系电话',
       },
-      map_position :{
-        desc:'基础地标id',
+      map_position: {
+        desc: '基础地标id',
       },
-      province :{
-        desc:'省',
+      province: {
+        desc: '省',
       },
-      short_name_id :{
-        desc:'客户简称id',
+      short_name_id: {
+        desc: '客户简称id',
       },
-      station_type  :{
-        desc:'站点类型',
+      station_type: {
+        desc: '站点类型',
       },
-      station_name :{
-        desc:'站点名称',
+      station_name: {
+        desc: '站点名称',
       },
-      longitude :{
-        desc:'经度',
+      longitude: {
+        desc: '经度',
       },
-      latitude  :{
-        desc:'纬度',
+      latitude: {
+        desc: '纬度',
       },
     }
   },
@@ -2039,14 +2039,14 @@ const api = {
     method: 'post',
     desc: '新增供应商液厂',
     param: {
-      fluid_name  :{
-        desc:'液厂名称',
+      fluid_name: {
+        desc: '液厂名称',
       },
-      supplier  :{
-        desc:'供应商id',
+      supplier: {
+        desc: '供应商id',
       },
-      actual_fluid  :{
-        desc:'实际液厂id',
+      actual_fluid: {
+        desc: '实际液厂id',
       },
     }
   },
@@ -2055,14 +2055,14 @@ const api = {
     method: 'PUT',
     desc: '修改供应商液厂',
     param: {
-      fluid_name  :{
-        desc:'液厂名称',
+      fluid_name: {
+        desc: '液厂名称',
       },
-      supplier  :{
-        desc:'供应商id',
+      supplier: {
+        desc: '供应商id',
       },
-      actual_fluid  :{
-        desc:'实际液厂id',
+      actual_fluid: {
+        desc: '实际液厂id',
       },
     }
   },
@@ -2083,7 +2083,14 @@ const api = {
 
     }
   },
+  sureChangeCar: {
+    url: '/api/v1/interrupt-record/:id/',
+    method: 'PATCH',
+    desc: '确认车辆更换变更',
+    param: {
 
+    }
+  }
 
 
 }
