@@ -211,8 +211,15 @@ export default {
         }
         if (results.data && results.data.code == 0) {
           window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
         }
       }).catch((err) => {
+        this.$message.error('导出失败');
         this.exportBtn = {
           text: '导出',
           isLoading: false,

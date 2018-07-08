@@ -282,8 +282,15 @@ export default {
         }
         if (results.data && results.data.code == 0) {
           window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
         }
       }).catch((err) => {
+        this.$message.error('导出失败');
         this.exportBtn = {
           text: '导出',
           isLoading: false,
@@ -328,14 +335,15 @@ export default {
           price += parseFloat(this.multipleSelection[i].waiting_charges);
         }
       }
-      this.reconciliations(true, ids, price);
       console.log('合计', ids, price);
+      this.reconciliations(true, ids, price);
     },
     reconciliations(isAll, ids, price) {
       let content = '';
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
       };
+      console.log('批量对账',isAll, ids, price)
       if (isAll) {
         if (ids.length) {
           content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
@@ -343,7 +351,7 @@ export default {
           // postData.batch = 'unfinished';
         } else {
           this.$message({
-            message: '没有勾选未对账数据',
+            message: '请勾选未对账数据',
             type: 'warning'
           });
         }
@@ -362,7 +370,7 @@ export default {
 
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      if (postData.id.length) {
+      if (ids.length) {
         this.$confirm(content, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
