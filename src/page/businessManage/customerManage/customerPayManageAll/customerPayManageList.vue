@@ -7,6 +7,11 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="客户管理" name="customerManage">
+          
+        </el-tab-pane>
+        <el-tab-pane label="客户站点" name="customerStation">
+        </el-tab-pane>
+        <el-tab-pane label="客户付款方管理" name="customerPayManage">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom">
               <el-row :gutter="0">
@@ -22,17 +27,39 @@
             </el-form>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="客户站点" name="customerStation">
-        </el-tab-pane>
-        <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane>
       </el-tabs>
       <div class="operation-btn text-right">
         <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
-        <el-button type="success" @click="addCustomerManage">新增</el-button>
+        <el-button type="success" @click="addCustomerPayManage">新增</el-button>
       </div>
       <div class="table-list" v-loading="pageLoading">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          <el-table-column label="付款方名称" align="center"  prop="payer">
+          </el-table-column>
+          <el-table-column label="客户名称" align="center"  >
+            <template slot-scope="scope">
+              <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.customerTitle">
+                <el-col v-for="(item,index) in scope.row.consumer" v-if="index<5">
+                  {{item.consumer_name}}
+                </el-col>
+                <el-col v-else>......</el-col>
+              </el-row>
+              <span v-else>-</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="业务员" align="center"  >  
+             <template slot-scope="scope">
+            <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0"  :title="scope.row.saleManTitle">
+                <el-col v-for="(item,index) in scope.row.consumer" v-if="index<5" >
+                  {{item.sale_man_name}}
+                </el-col>
+                <el-col v-else>......</el-col>
+              </el-row>
+              <span v-else>-</span>
+          </template>
+          </el-table-column>
+          <el-table-column label="添加时间" align="center"  prop="created_at">
+          
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -50,53 +77,18 @@
 </template>
 <script>
 export default {
-  name: 'customerManageList',
+  name: 'customerPayManageList',
   data() {
     return {
-      activeName: "customerManage",
+      activeName: "customerPayManage",
       fifterParam: {
         keyword: "",
         field: "consumer_name",
       },
-      thTableList: [{
-        title: '客户名称',
-        param: 'consumer_name',
-        width: ''
-      }, {
-        title: '客户简称',
-        param: 'short_name',
-        width: ''
-      }, {
-        title: '联系人',
-        param: 'contact_person',
-        width: ''
-      }, {
-        title: '联系电话',
-        param: 'contact_phone',
-        width: ''
-      }, {
-        title: '亏吨标准(kg)',
-        param: 'kui_tons_standard',
-        width: '250'
-      }, {
-        title: '客户等级',
-        param: 'consumer_level_display',
-        width: ''
-      }, {
-        title: '分属业务员',
-        param: 'sale_man_name',
-        width: '250'
-      }, {
-        title: '添加时间',
-        param: 'created_at',
-        width: ''
-      }],
+      
       pageStatus: false,
       seachListParam: {
-        consumer_name: "",
-        short_name_id: "",
-        contact_phone: "",
-        sale_man_name: ""
+       
       },
       pageLoading: true,
       pageData: {
@@ -107,8 +99,7 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'consumer_name', value: '客户名称' },
-          { id: 'short_name', value: '客户简称' },
-          { id: 'contact_phone', value: '联系电话' },
+          { id: 'payer', value: '付款方名称' },
           { id: 'sale_man_name', value: '分属业务员' },
         ]
       },
@@ -120,13 +111,13 @@ export default {
 
   },
   methods: {
-    addCustomerManage: function() {
-      this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageEditAdd" });
+    addCustomerPayManage: function() {
+      this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll/customerPayManageEditAdd" });
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
-      }else if(targetName.name == 'customerPayManage'){
+      }else if(targetName.name == 'customerManage'){
         this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },
@@ -142,11 +133,22 @@ export default {
         this.saveSendData = sendData;
         sendData.page = 1;
       }
-      this.$$http('searchCustomerList', sendData).then(function(result) {
+      sendData.pageSize=vm.pageData.pageSize;
+      this.$$http('searchCustomerPayList', sendData).then(function(result) {
         var resultData;
         vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.data;
+          vm.tableData.forEach(Titem=>{
+            Titem.customerTitle="";
+            Titem.saleManTitle="";
+            if(Titem.consumer&&Titem.consumer.length>0){
+              Titem.consumer.forEach(Citem=>{
+                Titem.customerTitle+=Citem.consumer_name+",";
+                Titem.saleManTitle+=Citem.sale_man_name+",";
+              });
+            }
+          });
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }
@@ -159,7 +161,7 @@ export default {
     },
     jumpPage: function(scope) {
       if (scope.operator == "show") {
-        this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageDetalis?customerId=" + scope.rowData.id });
+        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll/customerPayManageDetalis?customerPayId=" + scope.rowData.id });
       } else if (scope.operator == "operation") {
 
       }

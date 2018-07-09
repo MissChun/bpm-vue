@@ -2090,9 +2090,39 @@ const api = {
     param: {
 
     }
+  },
+  searchCustomerPayList: {
+    url: '/api/v1/payer/',
+    method: 'GET',
+    desc: '查询付款方列表',
+    param: {
+
+    }
+  },
+  getCustomerPayDetlis: {
+    url: '/api/v1/payer/:id/',
+    method: 'GET',
+    desc: '查询付款方详情',
+    param: {
+
+    }
+  },
+  creatCustomerPayFrom: {
+    url: '/api/v1/payer/',
+    method: 'post',
+    desc: '新增付款方',
+    param: {
+
+    }
+  },
+  upadtecustomerPayFrom: {
+    url: '/api/v1/payer/:id/',
+    method: 'patch',
+    desc: '修改付款方',
+    param: {
+
+    }
   }
-
-
 }
 
 

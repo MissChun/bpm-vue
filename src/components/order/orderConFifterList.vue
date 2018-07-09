@@ -229,7 +229,7 @@
           <el-select v-model="changeStatusParam.changeStatusFied" filterable placeholder="请选择变更类型" v-if="changeStatusParam.changeStatusType=='truck'" v-loading="seletPadding">
             <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.plate_number" :value="item.id"></el-option>
           </el-select>
-          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择变更类型" v-else filterable>
+          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择" v-else filterable>
             <el-option v-for="(item,key) in changeSatusPerList" :key="key" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>

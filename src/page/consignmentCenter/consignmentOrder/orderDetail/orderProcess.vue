@@ -621,13 +621,13 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>变更前:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.after_truck_no)"></div>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.before_truck_no)"></div>
                               </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>变更后:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.before_truck_no)"></div>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.after_truck_no)"></div>
                               </div>
                             </el-col>
                           </el-row>

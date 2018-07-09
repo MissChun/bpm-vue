@@ -84,7 +84,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂:" prop="fluid">
+                  <el-form-item label="液厂名称:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="changeBindText('fluidName')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                       </el-option>
@@ -118,8 +118,8 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="采购优惠:" prop="discount_price">
-                    <el-input placeholder="请输入" type="text" v-model="pickOrderParam.discount_price"></el-input>
+                  <el-form-item label="采购优惠:" prop="business_price">
+                    <el-input placeholder="请输入" type="text" v-model="pickOrderParam.business_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -291,7 +291,7 @@ export default {
         trader: '',
         consignment_type: 'own',
         plan_tonnage: '',
-        discount_price: '0',
+        business_price: '0',
         unit_price: '',
         mark: '',
         unload_area: ''
@@ -323,7 +323,7 @@ export default {
         unit_price: [
           { required: true, message: '请填写采购价', trigger: 'blur' },
         ],
-        discount_price: [
+        business_price: [
           { validator: discountVa, trigger: 'blur' }
         ],
         mark: [
