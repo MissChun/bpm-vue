@@ -16,7 +16,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="液厂:">
+                  <el-form-item label="实际液厂:">
                     <el-select v-model="searchFilters.fluid" filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>
@@ -105,7 +105,7 @@ export default {
         }], //站点
       },
       thTableList: [{
-        title: '液厂',
+        title: '实际液厂',
         param: 'actual_fluid_name',
         width: ''
       }, {
