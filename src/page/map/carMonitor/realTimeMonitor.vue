@@ -340,6 +340,7 @@ export default {
       let master_driver = (detailData.driver && detailData.driver.master_driver) ? detailData.driver.master_driver.name : '无';
       let vice_driver = (detailData.driver && detailData.driver.vice_driver) ? detailData.driver.vice_driver.name : '无';
       let escort_staff = (detailData.driver && detailData.driver.escort_staff) ? detailData.driver.escort_staff.name : '无';
+      let speed = (detailData.map_data && detailData.map_data.speed) ? detailData.map_data.speed : 0;
 
       let operatorDom = '';
 
@@ -353,7 +354,7 @@ export default {
 
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 ">车牌号:${carMsg}</div>`;
-      infoWindowDom.infoBodyStr = `<div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
+      infoWindowDom.infoBodyStr = `<div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">速度：${speed}km/h</div><div class="fs-13 ">定位时间：${create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
       setTimeout(function() {

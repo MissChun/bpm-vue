@@ -13,7 +13,6 @@
                     <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.label" :value="item.id"></el-option>
                     </el-select>
-                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
               </el-row>

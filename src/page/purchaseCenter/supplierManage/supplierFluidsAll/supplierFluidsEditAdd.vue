@@ -1,5 +1,22 @@
 <template>
   <div class="out-contain">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList'}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -110,14 +127,9 @@ export default {
         text: '搜索'
       },
       fieldSelect: [{
-          key: 'position_name',
-          verbose: '实际液厂',
-        },
-        {
-          key: 'address',
-          verbose: '地址',
-        },
-      ],
+        key: 'position_name',
+        verbose: '实际液厂',
+      }, ],
       showLeftWindow: false,
       formData: {
         supplier: '',
@@ -199,6 +211,7 @@ export default {
         let postData = {
           id: id
         };
+        console.log('xxx1');
         this.$$http('getLandMarkDetail', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
@@ -243,7 +256,7 @@ export default {
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
           _this.map.addControl(new BasicControl.Zoom({
-            position: 'lt', //left top，左上角
+            position: 'rt', //left top，左上角
             showZoomNum: true //显示zoom值
           }));
 
@@ -504,26 +517,54 @@ export default {
 
     this.initMarkList();
 
-    this.getActualFluidList().then(() => {
-      this.renderMarker();
-      console.log('xxxxxx')
-      if (this.id) {
-        this.getFluidsDetail().then(() => {
-          return this.getLandmarkDetail(this.fluidDetail.map_position);
-        }).then(() => {
-          this.choosedActualFluid = this.landmarkDetail;
-          this.formData.actual_fluid = this.choosedActualFluid.id;
-          console.log('this.landmarkDetail', this.landmarkDetail);
-          this.map.setZoom(15);
-          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
-          //this.map.setZoomAndCenter(15, );
-        });
-      }
-    })
 
 
+    if (this.id) {
+      this.showLeftWindow = true;
 
+      this.getFluidsDetail().then(() => {
 
+        if (this.fluidDetail.map_position) {
+          this.getLandmarkDetail(this.fluidDetail.map_position).then(() => {
+            this.choosedActualFluid = this.landmarkDetail;
+            this.formData.actual_fluid = this.choosedActualFluid.id;
+            console.log('this.landmarkDetail', this.landmarkDetail);
+
+            let choosedActualFluidMarker = '';
+            AMapUI.loadUI(['overlay/SimpleMarker'],
+              (SimpleMarker) => {
+                choosedActualFluidMarker = new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('@/assets/img/l_2.png'),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                    }
+                  },
+                  label: {
+                    content: this.landmarkDetail.position_name,
+                    offset: new AMap.Pixel(30, 0)
+                  },
+                  map: this.map,
+                  position: [this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]
+                });
+
+              });
+
+            this.map.setZoom(15);
+            this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+          });
+        } else {
+          this.pageLoading = false;
+        }
+
+      })
+    } else {
+      this.getActualFluidList().then(() => {
+        this.renderMarker();
+      })
+    }
   },
 };
 
@@ -531,6 +572,9 @@ export default {
 <style scoped lang="less">
 .out-contain {
   position: relative;
+  .return-box {
+    height: 80px;
+  }
 }
 
 .search-filters-form {
@@ -626,7 +670,7 @@ export default {
 
 .side-alert-traggle {
   position: absolute;
-  top: 280px;
+  top: 470px;
 
   width: 26px;
   height: 50px;
@@ -658,7 +702,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 250px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

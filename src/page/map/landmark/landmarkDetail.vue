@@ -17,15 +17,15 @@
           </el-col>
         </el-row>
       </el-header>
+      <div class="text-right edit-btn-box">
+        <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
+      </div>
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
                 审核操作
-              </el-col>
-              <el-col :span="6" class="text-right" v-if="detailData.source_type && detailData.source_type.key !== 'DRIVER_UPLOAD'">
-                <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
               </el-col>
             </el-row>
           </div>
@@ -48,7 +48,7 @@
                 <label>审核操作:</label>
                 <div class="detail-form-item check-button">
                   <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
-                  <el-button type="danger" :disabled="isFailure" @click="checkConfirm(false)" size="mini">拒绝</el-button>
+                  <el-button type="danger" @click="checkConfirm(false)" size="mini" v-if="isFailure">拒绝</el-button>
                 </div>
               </div>
             </el-col>
@@ -63,7 +63,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.username)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.nick_name)"></div>
                 <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key ==='PLATFORM'" v-html="pbFunc.dealNullData( detailData.upload_user && detailData.upload_user.nick_name)"></div>
               </div>
             </el-col>
@@ -106,6 +106,9 @@
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
                 地标信息
+              </el-col>
+              <el-col :span="6" class="text-right" v-if="detailData.source_type && detailData.source_type.key !== 'DRIVER_UPLOAD'">
+                <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
               </el-col>
             </el-row>
           </div>
@@ -334,6 +337,12 @@ export default {
 .check-button {
   position: relative;
   top: -8px;
+}
+
+.edit-btn-box {
+  padding: 10px 30px 0 0;
+  position: relative;
+  top: 15px;
 }
 
 </style>

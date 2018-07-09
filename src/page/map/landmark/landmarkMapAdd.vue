@@ -1,5 +1,22 @@
 <template>
   <div class="out-wraper">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: returnRoute}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <div id="map-container" v-loading="pageLoading"></div>
     <div class='map-panel'>
       <el-input placeholder="请输入地址" v-model="keyword" @keyup.native.13="inputChangeFun" class="search-filters-screen" id="map-search-input">
@@ -81,6 +98,9 @@ export default {
     },
     pageTitle: function() {
       return this.$route.query.id ? '编辑地标' : '新增地标';
+    },
+    returnRoute: function() {
+      return this.$route.query.id ? `/mapManage/landMark/landmarkDetail/${this.$route.query.id}` : '/mapManage/landmark/landmarkList';
     }
   },
   data() {
@@ -444,7 +464,7 @@ export default {
 
 .map-panel {
   position: absolute;
-  top: 10px;
+  top: 110px;
   right: 10px;
   width: 400px;
   .search-filters-screen {}
@@ -458,7 +478,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 200px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

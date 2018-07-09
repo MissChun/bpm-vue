@@ -1,5 +1,22 @@
 <template>
   <div class="out-contain">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: '/businessManage/customerManage/stationManageAll/stationManageList'}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -127,14 +144,9 @@ export default {
         text: '搜索'
       },
       fieldSelect: [{
-          key: 'position_name',
-          verbose: '实际站点',
-        },
-        {
-          key: 'address',
-          verbose: '地址',
-        },
-      ],
+        key: 'position_name',
+        verbose: '实际站点',
+      }, ],
       showLeftWindow: false,
       formData: {
         position_name: '',
@@ -273,9 +285,9 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
+      let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
       let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">上传来源：' + mark_source +
+        '</div><div class="fs-13">上传来源：' + source_type +
         '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
 
       return infoBodyStr;
@@ -480,7 +492,7 @@ export default {
           area: area,
           city: city,
           consignee: this.formData.consignee,
-          consignee_phone: this.formData.consignee_phone,
+          consignee_phone: String(this.formData.consignee_phone),
           map_position: this.choosedActualSite.id,
           province: province,
           short_name_id: this.formData.short_name,
@@ -575,21 +587,53 @@ export default {
 
     this.getCustomerList();
 
-    this.getActualSiteList().then(() => {
-      this.renderMarker();
-      if (this.id) {
-        this.getSiteOfCustomerDetail().then(() => {
-          return this.getLandmarkDetail(this.siteOfCusmerDetail.map_position);
-        }).then(() => {
-          this.choosedActualSite = this.landmarkDetail;
 
-          this.map.setZoom(15);
-          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+    if (this.id) {
+      this.showLeftWindow = true;
+      this.getSiteOfCustomerDetail().then(() => {
 
-        });
-      }
-    })
+        if (this.siteOfCusmerDetail.map_position) {
+          this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
 
+            this.choosedActualSite = this.landmarkDetail;
+
+            AMapUI.loadUI(['overlay/SimpleMarker'],
+              (SimpleMarker) => {
+                let choosedActualFluidMarker = new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('@/assets/img/l_2.png'),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                    }
+                  },
+                  label: {
+                    content: this.landmarkDetail.position_name,
+                    offset: new AMap.Pixel(30, 0)
+                  },
+                  map: this.map,
+                  position: [this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]
+                });
+
+              });
+
+            this.map.setZoom(15);
+            this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+          });
+
+        } else {
+          this.pageLoading = false;
+        }
+
+      });
+
+    } else {
+      this.getActualSiteList().then(() => {
+        this.renderMarker();
+
+      })
+    }
 
   },
 };
@@ -693,7 +737,7 @@ export default {
 
 .side-alert-traggle {
   position: absolute;
-  top: 280px;
+  top: 450px;
 
   width: 26px;
   height: 50px;
@@ -725,7 +769,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 190px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

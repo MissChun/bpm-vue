@@ -183,8 +183,52 @@ export default [{
           }]
         }]
       }, {
-        path: 'purchasePriceManage',
-        name: 'purchasePriceManage',
+        path: 'supplierFluidsAll',
+        name: 'supplierFluidsAll',
+        meta: {
+          isVerificationL: false,
+          title: '供应商液厂',
+        },
+        redirect: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList',
+        component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsAll'], resolve),
+        children: [{
+          path: 'supplierFluidsList',
+          name: 'supplierFluidsList',
+          meta: {
+            isVerificationL: false,
+            title: '供应商液厂列表',
+          },
+          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList'], resolve),
+        }, {
+          path: 'supplierFluidsMap',
+          name: 'supplierFluidsMap',
+          meta: {
+            isVerificationL: false,
+            title: '地图页',
+          },
+          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsMap'], resolve),
+        }, {
+          path: 'supplierFluidsEditAdd',
+          name: 'supplierFluidsEditAdd',
+          meta: {
+            isVerificationL: false,
+            title: '供应商液厂新增、编辑',
+          },
+          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd'], resolve),
+        }]
+      }]
+    }, {
+      path: 'purchasePriceManage',
+      name: 'purchasePriceManage',
+      meta: {
+        isVerificationL: false,
+        title: '采购价管理',
+      },
+      redirect: '/purchaseCenter/purchasePriceManage/purchasePrice/purchasePriceList',
+      component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/purchasePriceManage'], resolve),
+      children: [{
+        path: 'purchasePrice',
+        name: 'purchasePrice',
         meta: {
           isVerificationL: false,
           title: '采购价管理',
