@@ -177,58 +177,14 @@ export default [{
             name: 'supplierFluidsEditAdd',
             meta: {
               isVerificationL: false,
-              title: '供应商液厂新增编辑',
+              title: '供应商液厂新增、编辑',
             },
             component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd'], resolve),
           }]
         }]
       }, {
-        path: 'supplierFluidsAll',
-        name: 'supplierFluidsAll',
-        meta: {
-          isVerificationL: false,
-          title: '供应商液厂',
-        },
-        redirect: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList',
-        component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsAll'], resolve),
-        children: [{
-          path: 'supplierFluidsList',
-          name: 'supplierFluidsList',
-          meta: {
-            isVerificationL: false,
-            title: '供应商液厂列表',
-          },
-          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList'], resolve),
-        }, {
-          path: 'supplierFluidsMap',
-          name: 'supplierFluidsMap',
-          meta: {
-            isVerificationL: false,
-            title: '地图页',
-          },
-          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsMap'], resolve),
-        }, {
-          path: 'supplierFluidsEditAdd',
-          name: 'supplierFluidsEditAdd',
-          meta: {
-            isVerificationL: false,
-            title: '供应商液厂新增、编辑',
-          },
-          component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd'], resolve),
-        }]
-      }]
-    }, {
-      path: 'purchasePriceManage',
-      name: 'purchasePriceManage',
-      meta: {
-        isVerificationL: false,
-        title: '采购价管理',
-      },
-      redirect: '/purchaseCenter/purchasePriceManage/purchasePrice/purchasePriceList',
-      component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/purchasePriceManage'], resolve),
-      children: [{
-        path: 'purchasePrice',
-        name: 'purchasePrice',
+        path: 'purchasePriceManage',
+        name: 'purchasePriceManage',
         meta: {
           isVerificationL: false,
           title: '采购价管理',
@@ -268,7 +224,7 @@ export default [{
               title: '目的地设置列表',
             },
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList'], resolve),
-          }, {
+          },{
             path: 'editDestination',
             name: 'editDestination',
             meta: {
@@ -278,39 +234,6 @@ export default [{
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/editDestination'], resolve),
           }]
         }]
-        // children: [{
-        //   path: 'purchasepriceManageList',
-        //   name: 'purchasepriceManageList',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '采购价管理列表',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/purchasepriceManageList'], resolve),
-        // }, {
-        //   path: 'destinationSetting',
-        //   name: 'destinationSetting',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '目的地设置',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/destinationSetting'], resolve),
-        // }, {
-        //   path: 'purchasepriceOp',
-        //   name: 'purchasepriceOp',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '操作记录',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/purchasepriceOp'], resolve),
-        // }, {
-        //   path: 'destinationEdit',
-        //   name: 'destinationEdit',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '编辑目的地',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/destinationEdit'], resolve),
-        // }]
       }]
     },
     //托运中心
