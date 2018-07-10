@@ -174,13 +174,13 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageList" });
+      }else if(targetName.name == 'customerPayManage'){
+        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },
     clickChildtabs: function(targetName) {
       if (targetName.name == 'statationMap') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll/stationManageMap" });
-      }else if(targetName.name == 'customerPayManage'){
-        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },
     customerList(query) {
