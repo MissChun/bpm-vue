@@ -118,7 +118,7 @@ export default {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
       }else if(targetName.name == 'customerManage'){
-        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
+        this.$router.push({ path: "/businessManage/customerManage/customerManageAll" });
       }
     },
     searchList: function() {

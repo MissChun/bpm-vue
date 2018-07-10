@@ -69,6 +69,7 @@
             </div>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -178,6 +179,8 @@ export default {
     clickChildtabs: function(targetName) {
       if (targetName.name == 'statationMap') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll/stationManageMap" });
+      }else if(targetName.name == 'customerPayManage'){
+        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },
     customerList(query) {
