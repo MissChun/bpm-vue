@@ -121,7 +121,7 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-              <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
+              <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="(!(fifterStatus.indexOf(props.row.status.key)>-1))&&props.row.section_type=='unload'">
                 <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -455,7 +455,7 @@ export default {
       if (type == 'cancleOrder') { //取消运单
         sendData.id = rowData.id;
         sendData.status = "canceled";
-        this.$confirm('取消运单后,系统将通知承运商确认,并通知驾驶员?', '确认取消运单', {
+        this.$confirm('取消运单后,系统将通知驾驶员,是否确认', '确认取消运单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

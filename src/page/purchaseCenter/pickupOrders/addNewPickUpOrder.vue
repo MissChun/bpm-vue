@@ -77,7 +77,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="供应商名称:" prop="supplier">
-                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading">
+                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading" >
                       <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -309,7 +309,7 @@ export default {
           { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         fluid: [
-          { required: true, message: '液厂', trigger: 'change' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
         plan_time: [
           { required: true, message: '请填写计划时间', trigger: 'blur' },
@@ -418,6 +418,7 @@ export default {
         this.loadingArr.fluidLoading = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data;
+          this.pickOrderParam.fluid="";
           this.selectData.fluidList = dataBody;
         }
       }).catch(() => {

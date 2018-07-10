@@ -578,6 +578,22 @@
                             </el-col>
                           </el-row>
                         </div>
+                         <div v-if="item.type === 'canceled'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
                         <div v-if="item.type === 'waiting_settlement'">
                           <el-row :gutter="40">
                             <el-col :span="8">
