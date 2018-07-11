@@ -216,17 +216,11 @@ export default {
               let infoTitleStr = '<div>车辆信息</span>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-              if (recycledInfoWindow) {
-                recycledInfoWindow.setInfoTitle(infoTitleStr);
-                recycledInfoWindow.setInfoBody(infoBodyStr);
-                return recycledInfoWindow;
-              } else {
-                return new SimpleInfoWindow({
-                  infoTitle: infoTitleStr,
-                  infoBody: infoBodyStr,
-                  offset: new AMap.Pixel(0, -37)
-                });
-              }
+              return new SimpleInfoWindow({
+                infoTitle: infoTitleStr,
+                infoBody: infoBodyStr,
+                offset: new AMap.Pixel(0, -37)
+              });
 
             },
 
@@ -237,38 +231,23 @@ export default {
               console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
 
-              if (recycledMarker) {
-                recycledMarker.setIconStyle({
+
+              return new SimpleMarker({
+                containerClassNames: 'my-marker',
+                iconStyle: {
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                     transform: 'rotate(' + rotateDeg + ')',
                   }
-                });
-                recycledMarker.setLabel({
+                },
+                label: {
                   content: dataItem.tractor.plate_number,
                   offset: new AMap.Pixel(30, 0)
-                });
+                }
+              });
 
-                return recycledMarker
-              } else {
-                return new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('../../../assets/img/' + src),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                      transform: 'rotate(' + rotateDeg + ')',
-                    }
-                  },
-                  label: {
-                    content: dataItem.tractor.plate_number,
-                    offset: new AMap.Pixel(30, 0)
-                  }
-                });
-              }
 
             },
 
@@ -283,9 +262,9 @@ export default {
 
           _this.markerList.on('selectedChanged', function(event, info) {
 
-            let plate_number = info.selected.data.tractor.plate_number;
             let infoWindow = _this.markerList.getInfoWindow();
             if (info.selected) {
+              let plate_number = info.selected.data.tractor.plate_number;
               _this.getDeviceDetail(plate_number).then((results) => {
 
                 AMap.plugin('AMap.Geocoder', function() {

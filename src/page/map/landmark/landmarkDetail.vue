@@ -107,9 +107,6 @@
               <el-col :span="12" :offset="6" class="text-center">
                 地标信息
               </el-col>
-              <el-col :span="6" class="text-right" v-if="detailData.source_type && detailData.source_type.key !== 'DRIVER_UPLOAD'">
-                <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
-              </el-col>
             </el-row>
           </div>
           <el-row :gutter="10">

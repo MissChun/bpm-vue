@@ -443,6 +443,14 @@ const api = {
       }
     }
   },
+  getFulidDetalis: {
+    url: '/api/v1/actual-fluids/:id/',
+    method: 'get',
+    desc: '实际液厂详情',
+    param: {
+
+    }
+  },
   updateCarrier: {
     url: '/api/v1/trader-carriers/:id/',
     method: 'patch',
