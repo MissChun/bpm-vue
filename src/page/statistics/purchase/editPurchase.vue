@@ -98,6 +98,23 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <el-form-item label="运单状态:">
+                    <el-input placeholder="请输入" type="text"  :disabled="isDisabled" v-model.trim="editMsgForm.discount_price"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否对账:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.unit_sum_price"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否开票:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
+                <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
                   </el-form-item>
@@ -146,6 +163,9 @@ export default {
         unit_sum_price: '',
         discounts_sum_price: '',
         station: '',
+        is_invoice:'',
+        is_reconciliation:'',
+        waybill_status:'',
         remark: ''
       },
 

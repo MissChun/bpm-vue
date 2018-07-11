@@ -26,7 +26,31 @@
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="运单状态:">
+                <el-select v-model="searchFilters.waybill_status" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.waybillStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="是否对账:">
+                <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label="是否开票:">
+                <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
+       <!--    <el-row :gutter="10">
+
+          </el-row> -->
         </el-form>
       </div>
       <div class="operation-btn">
@@ -43,11 +67,18 @@
         <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
-              <div v-if="item.param === 'waybill'">
-                <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
+              <!-- <div v-if="item.param === 'waybill'">
                 <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
               </div>
-              <div v-else>{{scope.row[item.param]}}</div>
+              <div v-else>{{scope.row[item.param]}}</div> -->
+              <div v-if="item.param === 'waybill'">
+                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
+              </div>
+              <div v-else>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <span v-else>{{scope.row[item.param]}}</span>
+              </div>
+
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -88,7 +119,9 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
-        created_at: '',
+        waybill_status: '',
+        is_reconciliation:'',
+        is_invoice:'',
         keyword: '',
         field: 'waybill',
       },
@@ -105,10 +138,20 @@ export default {
         key: 'create_department_check',
       }],
       selectData: {
-        isBindSelect: [
+        isReconciliationsSelect: [
           { id: '', value: '全部' },
-          { id: false, value: '未绑定' },
-          { id: true, value: '已绑定' }
+          { id: 'unfinished', value: '未对账' },
+          { id: 'finished', value: '已对账' }
+        ],
+        waybillStatusSelect: [
+          { id: '', value: '全部' },
+          { id: 'is_loading', value: '已装车待卸货' },
+          { id: 'is_unload', value: '卸货完成' }
+        ],
+        isInvoiceSelect: [
+          { id: '', value: '全部' },
+          { id: 'yes', value: '已开票' },
+          { id: 'no', value: '未开票' }
         ],
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
@@ -164,6 +207,18 @@ export default {
       }, {
         title: '优惠后总额',
         param: 'discounts_sum_price',
+        width: ''
+      }, {
+        title: '运动状态',
+        param: 'waybill_status',
+        width: ''
+      }, {
+        title: '是否对账',
+        param: 'is_reconciliation',
+        width: ''
+      }, {
+        title: '是否开票',
+        param: 'is_invoice',
         width: ''
       }],
       tableData: []
@@ -236,7 +291,10 @@ export default {
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        waybill_status: this.searchPostData.waybill_status,
+        is_reconciliation:this.searchPostData.is_reconciliation,
+        is_invoice:this.searchPostData.is_invoice,
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.active_time_start = this.planArriveTime[0];
