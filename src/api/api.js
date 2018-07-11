@@ -9,6 +9,38 @@
  */
 
 const api = {
+  batchSalesStatisticsStatus: {
+    url: '/api/v1/batch-update-sale/',
+    method: 'post',
+    desc: '销售统计批量、单个对账开票',
+    param: {
+      is_reconciliation: {
+        desc: '对账'
+      },
+      is_invoice: {
+        desc: '开票'
+      },
+      id:{
+        desc:'id'
+      }
+    }
+  },
+  batchPurchseStatisticsStatus: {
+    url: '/api/v1/batch-update-procument/',
+    method: 'post',
+    desc: '采购统计批量、单个对账开票',
+    param: {
+      is_reconciliation: {
+        desc: '对账'
+      },
+      is_invoice: {
+        desc: '开票'
+      },
+      id:{
+        desc:'id'
+      }
+    }
+  },
   businessDistribution: {
     url: '/api/v1/business_order/assign/',
     method: 'put',
@@ -191,7 +223,7 @@ const api = {
   reconciliations: {
     url: '/api/v1/batch-update-logistic/',
     method: 'post',
-    desc: '收入统计列表',
+    desc: '批量、单个对账',
     param: {
       id: {
         desc: '支持单个多个对账'

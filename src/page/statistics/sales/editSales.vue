@@ -148,6 +148,16 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <el-form-item label="是否对账:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否开票:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
                   </el-form-item>
@@ -208,6 +218,8 @@ export default {
         waiting_charges: '', //待时总额
         sale_man: '', //业务员
         active_time: '', //实际装车时间
+        is_invoice: '', //是否开票
+        is_reconciliation: '', //是否对账
         remark: '' //备注
       },
 
@@ -300,6 +312,8 @@ export default {
             waiting_charges: this.detail.waiting_charges, //待时总额
             sale_man: this.detail.sale_man, //业务员
             active_time: this.detail.active_time, //实际装车时间
+            is_invoice: this.detail.is_invoice.verbose,
+            is_reconciliation: this.detail.is_reconciliation.verbose,
             remark: ''
           }
           console.log('this.editMsgForm', this.detail, this.editMsgForm)

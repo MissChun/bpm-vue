@@ -99,17 +99,17 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运单状态:">
-                    <el-input placeholder="请输入" type="text"  :disabled="isDisabled" v-model.trim="editMsgForm.discount_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waybill_status"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否对账:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.unit_sum_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否开票:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -163,9 +163,9 @@ export default {
         unit_sum_price: '',
         discounts_sum_price: '',
         station: '',
-        is_invoice:'',
-        is_reconciliation:'',
-        waybill_status:'',
+        is_invoice: '',
+        is_reconciliation: '',
+        waybill_status: '',
         remark: ''
       },
 
@@ -239,6 +239,9 @@ export default {
             unit_sum_price: this.detail.unit_sum_price,
             discounts_sum_price: this.detail.discounts_sum_price,
             station: this.detail.station,
+            is_invoice: this.detail.is_invoice.verbose,
+            is_reconciliation: this.detail.is_reconciliation.verbose,
+            waybill_status: this.detail.waybill_status.verbose,
             remark: ''
           }
         }

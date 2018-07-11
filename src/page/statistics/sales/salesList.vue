@@ -26,28 +26,54 @@
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否对账:">
+                <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否开票:">
+                <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="20" class="total-data">
+          <el-col :span="14" class="total-data">
             一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
           </el-col>
-          <el-col :span="4" class="text-right">
+
+          <el-col :span="10" class="text-right">
+            <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
+            <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55">
+          </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
-              <div v-if="item.param === 'waybill'||item.param === 'business_order'">
-                <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
+              <!--  < div v-if="item.param === 'waybill'||item.param === 'business_order'">
+                <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link>
                 <span class="text-blue" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
-              <div v-else>{{scope.row[item.param]}}</div>
+              <div v-else>{{scope.row[item.param]}}</div> -->
+              <div v-if="item.param === 'waybill'">
+                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
+              </div>
+              <div v-else>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <span v-else>{{scope.row[item.param]}}</span>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="待时后总额" align="center" width="100" fixed="right">
@@ -60,9 +86,11 @@
               <div>{{scope.row.sale_man}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="100" fixed="right">
+          <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+              <el-button type="success" size="mini" v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+              <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -93,7 +121,8 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
-        created_at: '',
+        is_reconciliation: '',
+        is_invoice: '',
         keyword: '',
         field: 'business_order',
       },
@@ -103,10 +132,15 @@ export default {
         isDisabled: false,
       },
       selectData: {
-        isBindSelect: [
+        isInvoiceSelect: [
           { id: '', value: '全部' },
-          { id: false, value: '未绑定' },
-          { id: true, value: '已绑定' }
+          { id: 'yes', value: '已开票' },
+          { id: 'no', value: '未开票' }
+        ],
+        isReconciliationsSelect: [
+          { id: '', value: '全部' },
+          { id: 'unfinished', value: '未对账' },
+          { id: 'finished', value: '已对账' }
         ],
         fieldSelect: [
           { id: 'business_order', value: '业务单号' },
@@ -190,11 +224,20 @@ export default {
         param: 'waiting_price',
         width: ''
       }, {
+        title: '是否对账',
+        param: 'is_reconciliation',
+        width: ''
+      }, {
+        title: '是否开票',
+        param: 'is_invoice',
+        width: ''
+      }, {
         title: '销售总额',
         param: 'sell_rental',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      multipleSelection: [], //所选数据 
     }
   },
   methods: {
@@ -202,6 +245,10 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      // console.log('全选',this.multipleSelection)
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
@@ -224,7 +271,7 @@ export default {
         page_arg: 'sale',
         ids: []
       };
-       for (let i = 13; i <= 33; i++) {
+      for (let i = 13; i <= 33; i++) {
         postData.ids.push(i.toString());
       }
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
@@ -263,6 +310,66 @@ export default {
           isDisabled: false,
         }
       })
+    },
+    // 批量对账、开票弹窗
+    batchReconciliation(type) {
+      let ids = [];
+      let price = 0;
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].sell_rental);
+        }
+        if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].sell_rental);
+        }
+      }
+      console.log('合计', ids, price);
+      this.reconciliations(true, ids, price, type);
+    },
+    // 单个/批量 对账  开票
+    reconciliations(isAll, ids, price, type) {
+      let content = '';
+      let postData = {};
+      let title = '';
+      if (type === 'reconciliation') {
+        postData.is_reconciliation = 'finished';
+        title = '对账';
+      } else if (type === 'invoice') {
+        postData.is_invoice = 'yes';
+        title = '开票';
+      }
+      console.log('批量对账', isAll, ids, price)
+      if (isAll) {
+        if (ids.length) {
+          content = '未' + title + '共有' + ids.length + '单，费用合计' + price + '元，是否要对所选运单进行批量' + title + '？';
+          postData.id = ids;
+
+        } else {
+          this.$message({
+            message: '请勾选未' + title + (type === 'invoice' ? '/未对账' : '') + '数据',
+            type: 'warning'
+          });
+        }
+      } else {
+        content = '是否确认' + title + '？';
+        postData.id = ids.split(',');
+      }
+
+      if (ids.length) {
+        this.$confirm(content, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$$http('batchSalesStatisticsStatus', postData).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.getList();
+            }
+          })
+        }).catch(() => {});
+      }
     },
     getList() {
       let postData = {

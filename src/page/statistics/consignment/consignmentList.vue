@@ -298,6 +298,7 @@ export default {
         }
       })
     },
+    // 全部对账
     getUnReconciliations() {
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
@@ -326,6 +327,7 @@ export default {
         this.reconciliationsBtn.isLoading = false;
       })
     },
+    // 批量对账弹窗
     batchReconciliation() {
       let ids = [];
       let price = 0;
@@ -338,12 +340,13 @@ export default {
       console.log('合计', ids, price);
       this.reconciliations(true, ids, price);
     },
+    // 批量/单个  对账
     reconciliations(isAll, ids, price) {
       let content = '';
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
       };
-      console.log('批量对账',isAll, ids, price)
+      console.log('批量对账', isAll, ids, price)
       if (isAll) {
         if (ids.length) {
           content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
@@ -359,17 +362,17 @@ export default {
         content = '是否确认对账？';
         postData.id = ids.split(',');
       }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
+      // if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+      //   postData.leave_time_start = this.leaveTime[0];
+      //   postData.leave_time_end = this.leaveTime[1];
+      // }
+      // if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+      //   postData.active_time_start = this.activeTime[0];
+      //   postData.active_time_end = this.activeTime[1];
+      // }
 
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
+      // postData[this.searchPostData.field] = this.searchPostData.keyword;
+      // postData = this.pbFunc.fifterObjIsNull(postData);
       if (ids.length) {
         this.$confirm(content, "提示", {
           confirmButtonText: "确定",
