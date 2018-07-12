@@ -44,7 +44,7 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>业务员:</label>
+                <label>下单人:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.sale_name)"></div>
               </div>
             </el-col>

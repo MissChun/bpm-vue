@@ -196,6 +196,10 @@ export default {
         param: 'initial_price',
         width: ''
       }, {
+        title: '运输费率',
+        param: 'change_rate',
+        width: ''
+      }, {
         title: '标准运费',
         param: 'freight_value',
         width: ''

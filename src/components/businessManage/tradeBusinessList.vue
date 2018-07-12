@@ -328,7 +328,7 @@ export default {
           param: 'status_display',
           width: '200'
         }, {
-          title: '业务员',
+          title: '下单人',
           param: 'sale_name',
           width: ''
         }
