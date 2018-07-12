@@ -635,7 +635,7 @@
                             </el-col>
                           </el-row>
                         </div>
-                        <div v-if="item.type === 'modifying'">
+                        <div v-if="item.type === 'abnormal'">
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -741,7 +741,7 @@ export default {
         in_settlement: '结算中',
         finished: '已完成',
         canceled: '已取消',
-        modifying:'运力变更申请',
+        abnormal:'运力变更申请',
         normal:'运力已变更'
       },
       lockFalg: false,
@@ -764,7 +764,7 @@ export default {
       poundImg: {},
       suerId: "",
       allButton: {
-        'modifying': [{
+        'abnormal': [{
           text: "确认变更",
           type: "success",
           methods: "sureChangeCar"

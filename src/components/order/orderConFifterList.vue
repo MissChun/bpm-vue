@@ -262,13 +262,13 @@ export default {
       fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
       buttonModyfiyAll:{
          canceling: [],
-        abnormal: [],
-        modifying: [{
+        abnormal: [{
           text: "确认变更",
           type: "primary",
           attrPlan: true,
           methods_type: "sureChangeCar",
-        }]
+        }],
+        modifying: []
       },
       buttonAll: {
         //装车
