@@ -20,7 +20,7 @@
           <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-       <!--  <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
+        <!--  <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
               <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
@@ -134,17 +134,25 @@ export default {
               this.submitBtn.btnText = '登录';
               this.submitBtn.isDisabled = false;
               this.submitBtn.isBtnLoading = false;
-              console.log('登录', results.data)
               if (results.data && results.data.code === 0) {
                 resolve(results);
                 this.pbFunc.setLocalData('token', results.data.data.token, true);
                 this.pbFunc.setLocalData('user', results.data.data.user, true);
-                // this.getUser();
+                if (results.data.data.user && results.data.data.user.menus && results.data.data.user.menus.length) {
+
+                  this.pbFunc.setLocalData('menuList', results.data.data.user.menus, true);
+                  this.$message({
+                    message: '登录成功',
+                    type: 'success'
+                  });
+                  this.$emit('login');
+                } else {
+                  this.$alert('还没有设置权限！请联系管理员', '请注意', {
+                    confirmButtonText: '关闭',
+                  });
+                }
               } else {
-                // if (results.data && results.data.code === 600) {
-                //   this.isLogin = true;
-                //   this.userId = results.data.data.id;
-                // }
+
                 reject(results);
               }
             }).catch((err) => {
@@ -160,35 +168,9 @@ export default {
       })
 
     },
-    getMunusList() {
-      this.$$http('getMenusList').then((results) => {
-        if (results.data && results.data.code === 0) {
-          if (results.data.data.length) {
-            this.pbFunc.setLocalData('menuList', results.data.data, true);
-            this.$message({
-              message: '登录成功',
-              type: 'success'
-            });
-            this.$emit('login');
-          } else {
-            this.$alert('还没有设置权限！请联系管理员', '请注意', {
-              confirmButtonText: '关闭',
-            });
-          }
-        }
-      }).catch((err) => {
-        this.$message.error('登录失败');
-      })
-
-    },
-    // addroutes(menuList){ // if (menuList && menuList.length) { // for (let i in menuList) { // } // } // },
 
     login() {
-      this.loginAjax().then((results) => {
-        console.log('resultsxxx', results);
-        // this.getMunusList();
-         this.$emit('login');
-      })
+      this.loginAjax();
     },
     toLink(type) {
       if (type === 'register') {

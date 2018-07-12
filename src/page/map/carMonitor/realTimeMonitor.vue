@@ -15,6 +15,13 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="所属承运商:" label-width="105px">
+              <el-select v-model="searchFilters.carrier_name" @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in traderCarriersSelect" :key="key" :label="item.carrier_name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -47,8 +54,11 @@ export default {
         keyword: '',
         field: '',
         waybillStatus: '',
+        carrier_name: '',
       },
       typeSelect: [],
+      traderCarriersSelect: [],
+      getCarrierListLoading: true,
       waybillStatusSelect: [{
           key: '',
           verbose: '全部',
@@ -94,14 +104,13 @@ export default {
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
         let postData = {
-
+          plate_number: this.searchFilters.keyword,
+          status: this.searchFilters.waybillStatus,
+          carrier_name: this.searchFilters.carrier_name,
         };
-        if (this.searchFilters.keyword.length) {
-          postData.plate_number = this.searchFilters.keyword;
-        }
-        if (this.searchFilters.waybillStatus) {
-          postData.status = this.searchFilters.waybillStatus;
-        }
+
+        postData = this.pbFunc.fifterObjIsNull(postData);
+
         this.$$http('realTimeMonitor', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
@@ -130,7 +139,6 @@ export default {
 
               }
             }
-            console.log('this.carList', this.carList);
             resolve(results)
           } else {
             reject(results);
@@ -172,7 +180,32 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.deviceDetail = results.data.data;
-            console.log('deviceDetail', this.deviceDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+    /* 获取所属承运商列表 */
+    getTraderCarriersSelect: function(plate_number) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          need_all: true
+        };
+        this.getCarrierListLoading = true;
+        this.$$http('getCarrierList', postData).then((results) => {
+          this.getCarrierListLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.traderCarriersSelect = results.data.data;
+            let allItem = {
+              carrier_name: '全部',
+              id: '',
+            }
+            this.traderCarriersSelect.unshift(allItem);
             resolve(results)
           } else {
             reject(results);
@@ -228,9 +261,7 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               let rotateDeg = (dataItem.direction - 90) + 'deg';
-              console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
-
 
               return new SimpleMarker({
                 containerClassNames: 'my-marker',
@@ -247,7 +278,6 @@ export default {
                   offset: new AMap.Pixel(30, 0)
                 }
               });
-
 
             },
 
@@ -281,7 +311,6 @@ export default {
 
                       infoWindow.setInfoTitle(infoWindowDom.infoTitleStr);
                       infoWindow.setInfoBody(infoWindowDom.infoBodyStr);
-                      console.log('data', data);
                     }
                   })
                 })
@@ -307,7 +336,6 @@ export default {
     },
     /* 渲染infoWindow */
     getInfoWindowDom: function(results, jQuery) {
-      console.log('jQuery', jQuery);
       let _this = this;
       let infoWindowDom = {};
       let detailData = results.data.data;
@@ -320,6 +348,7 @@ export default {
       let vice_driver = (detailData.driver && detailData.driver.vice_driver) ? detailData.driver.vice_driver.name : '无';
       let escort_staff = (detailData.driver && detailData.driver.escort_staff) ? detailData.driver.escort_staff.name : '无';
       let speed = (detailData.map_data && detailData.map_data.speed) ? detailData.map_data.speed : 0;
+      let carrier_name = (detailData.carrier_name && detailData.carrier_name.length && detailData.carrier_name[0].carrier_name) ? detailData.carrier_name[0].carrier_name : 0;
 
       let operatorDom = '';
 
@@ -333,7 +362,7 @@ export default {
 
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 ">车牌号:${carMsg}</div>`;
-      infoWindowDom.infoBodyStr = `<div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">速度：${speed}km/h</div><div class="fs-13 ">定位时间：${create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
+      infoWindowDom.infoBodyStr = `<div class="fs-13 md-5">主驾驶：${master_driver}</div><div class="fs-13 md-5">副驾驶：${vice_driver}</div><div class="fs-13 md-5">押运员：${escort_staff}</div><div class="fs-13 md-5">任务状态：${status}</div><div class="fs-13 md-5">GPS状态：${device_status}</div><div class="fs-13 md-5">速度：${speed}km/h</div><div class="fs-13 md-5">定位时间：${create_time}</div><div class="fs-13 md-5">所属承运商：${carrier_name}</div><div class="fs-13">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
       setTimeout(function() {
@@ -346,7 +375,6 @@ export default {
     },
     /* 生成marker并点聚合 */
     renderMarker: function() {
-      console.log('markerList', this.markerList);
       let _this = this;
       let renderAndCluster = function() {
         /* 生成marker，详见高德地图标注列表api */
@@ -369,7 +397,6 @@ export default {
         setTimeout(() => {
           renderAndCluster();
         }, 1000)
-
       }
 
       _this.map.setFitView(_this.allMakers);
@@ -385,6 +412,7 @@ export default {
       zoom: 5
     });
     this.initMarkList();
+    this.getTraderCarriersSelect();
     _this.getMonitorList().then((data) => { //展示该数据
       _this.renderMarker();
     })
@@ -394,6 +422,12 @@ export default {
 
 </script>
 <style scoped lang="less">
+.map-loading {
+  /deep/ .el-loading-mask {
+    background-color: rgba(250, 250, 250, 0);
+  }
+}
+
 .map-out-container {
   width: 100%;
   height: 700px;

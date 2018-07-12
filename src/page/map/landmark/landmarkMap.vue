@@ -152,6 +152,9 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
+      }, {
+        label: '上传人姓名',
+        id: 'upload_user_nick_name',
       }],
       landmarkDetail: {},
 
@@ -278,7 +281,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
@@ -342,7 +344,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -358,12 +359,12 @@ export default {
       let confirm_status = (data.confirm_status && data.confirm_status.verbose) ? data.confirm_status.verbose : '无';
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
       let async_status = data.async_status ? '已同步' : '未同步';
-      let infoBodyStr = '<div class="fs-13">地标类型：' + position_type +
-        '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + confirm_status +
-        '</div><div class="fs-13">上传来源：' + source_type +
+      let infoBodyStr = '<div class="fs-13  md-5">地标类型：' + position_type +
+        '</div><div class="fs-13  md-5">地标位置：' + data.address +
+        '</div><div class="fs-13  md-5">审核状态：' + confirm_status +
+        '</div><div class="fs-13  md-5">上传来源：' + source_type +
         '</div><div class="fs-13">是否同步：' + async_status +
-        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary " href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
+        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary el-button--mini" href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
 
       return infoBodyStr;
     },
@@ -487,7 +488,6 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               src = _this.getIconSrc(dataItem);
-              console.log('src', src);
               if (recycledMarker) {
                 recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
@@ -530,12 +530,11 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
+
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 
@@ -613,6 +612,12 @@ export default {
 
 </script>
 <style scoped lang="less">
+.map-loading {
+  /deep/ .el-loading-mask {
+    background-color: rgba(250, 250, 250, 0);
+  }
+}
+
 .map-out-container {
   width: 100%;
   height: 700px;

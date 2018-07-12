@@ -7,7 +7,6 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="客户管理" name="customerManage">
-          
         </el-tab-pane>
         <el-tab-pane label="客户站点" name="customerStation">
         </el-tab-pane>
@@ -34,12 +33,12 @@
       </div>
       <div class="table-list" v-loading="pageLoading">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column label="付款方名称" align="center"  prop="payer">
+          <el-table-column label="付款方名称" align="center" prop="payer">
           </el-table-column>
-          <el-table-column label="客户名称" align="center"  >
+          <el-table-column label="客户名称" align="center">
             <template slot-scope="scope">
               <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.customerTitle">
-                <el-col v-for="(item,index) in scope.row.consumer" v-if="index<5">
+                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
                   {{item.consumer_name}}
                 </el-col>
                 <el-col v-else>......</el-col>
@@ -47,19 +46,18 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
-          <el-table-column label="业务员" align="center"  >  
-             <template slot-scope="scope">
-            <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0"  :title="scope.row.saleManTitle">
-                <el-col v-for="(item,index) in scope.row.consumer" v-if="index<5" >
+          <el-table-column label="业务员" align="center">
+            <template slot-scope="scope">
+              <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.saleManTitle">
+                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
                   {{item.sale_man_name}}
                 </el-col>
                 <el-col v-else>......</el-col>
               </el-row>
               <span v-else>-</span>
-          </template>
+            </template>
           </el-table-column>
-          <el-table-column label="添加时间" align="center"  prop="created_at">
-          
+          <el-table-column label="添加时间" align="center" prop="created_at">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -85,10 +83,10 @@ export default {
         keyword: "",
         field: "consumer_name",
       },
-      
+
       pageStatus: false,
       seachListParam: {
-       
+
       },
       pageLoading: true,
       pageData: {
@@ -117,7 +115,7 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
-      }else if(targetName.name == 'customerManage'){
+      } else if (targetName.name == 'customerManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerManageAll" });
       }
     },
@@ -133,19 +131,19 @@ export default {
         this.saveSendData = sendData;
         sendData.page = 1;
       }
-      sendData.pageSize=vm.pageData.pageSize;
+      sendData.pageSize = vm.pageData.pageSize;
       this.$$http('searchCustomerPayList', sendData).then(function(result) {
         var resultData;
         vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.data;
-          vm.tableData.forEach(Titem=>{
-            Titem.customerTitle="";
-            Titem.saleManTitle="";
-            if(Titem.consumer&&Titem.consumer.length>0){
-              Titem.consumer.forEach(Citem=>{
-                Titem.customerTitle+=Citem.consumer_name+",";
-                Titem.saleManTitle+=Citem.sale_man_name+",";
+          vm.tableData.forEach(Titem => {
+            Titem.customerTitle = "";
+            Titem.saleManTitle = "";
+            if (Titem.consumer && Titem.consumer.length > 0) {
+              Titem.consumer.forEach(Citem => {
+                Titem.customerTitle += Citem.consumer_name + ",";
+                Titem.saleManTitle += Citem.sale_man_name + ",";
               });
             }
           });

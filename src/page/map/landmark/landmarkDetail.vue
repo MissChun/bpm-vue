@@ -43,12 +43,12 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.source_type && detailData.source_type.verbose)"></div>
               </div>
             </el-col>
-            <el-col :span="8" v-if="!isSucess">
+            <el-col :span="8" v-if="detailData.confirm_status && detailData.confirm_status.key==='TO_CONFIRM'">
               <div class="label-list">
                 <label>审核操作:</label>
                 <div class="detail-form-item check-button">
-                  <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
-                  <el-button type="danger" @click="checkConfirm(false)" size="mini" v-if="isFailure">拒绝</el-button>
+                  <el-button type="primary" @click="checkConfirm(true)" size="mini">通过</el-button>
+                  <el-button type="danger" @click="checkConfirm(false)" size="mini">拒绝</el-button>
                 </div>
               </div>
             </el-col>
@@ -89,7 +89,7 @@
               <div class="label-list">
                 <label>匹配运单:</label>
                 <!--这里有问题，需要咨询后端-->
-                <div class="detail-form-item">无</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_num)"></div>
               </div>
             </el-col>
             <el-col :span="8">

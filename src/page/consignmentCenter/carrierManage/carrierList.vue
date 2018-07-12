@@ -90,7 +90,7 @@ export default {
         fieldSelect: [
           { id: 'carrier_name', value: '公司名称' },
           { id: 'contact', value: '联系人' },
-          { id: 'contact_phone', value: '联系电话' }
+          { id: 'contact_phone', value: '联系电话' },
         ]
       },
       thTableList: [{

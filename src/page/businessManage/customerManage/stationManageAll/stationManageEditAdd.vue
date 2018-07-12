@@ -242,7 +242,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.siteList = results.data.data.results;
@@ -286,7 +285,7 @@ export default {
     },
     getInfoWindowDom: function(data) {
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
+      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
         '</div><div class="fs-13">上传来源：' + source_type +
         '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
 
@@ -302,7 +301,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -401,20 +399,21 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
                 jQuery('#choose-Actual-fluid').on('click', function() {
                   _this.choosedActualSite = results.data.data;
                   _this.formData.map_position = _this.choosedActualSite.position_name;
 
-                  _this.formData.consignee = _this.choosedActualSite.contacts;
-                  _this.formData.consignee_phone = _this.choosedActualSite.tel;
+                  if (!_this.id) {
+                    _this.formData.consignee = _this.choosedActualSite.contacts;
+                    _this.formData.consignee_phone = _this.choosedActualSite.tel;
+                  }
+
                   _this.formData.address = _this.choosedActualSite.address;
                   _this.showLeftWindow = true;
 
@@ -561,6 +560,10 @@ export default {
 
             this.formData.address = this.siteOfCusmerDetail.address;
 
+            this.formData.is_active = this.siteOfCusmerDetail.is_active;
+
+            console.log('this.formData.is_active', this.formData.is_active);
+
             resolve(results);
           } else {
             reject(results);
@@ -587,53 +590,25 @@ export default {
 
     this.getCustomerList();
 
+    this.getActualSiteList().then(() => {
+      this.renderMarker();
+      if (this.id) {
+        this.getSiteOfCustomerDetail().then(() => {
+          if (this.siteOfCusmerDetail.map_position) {
+            this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
 
-    if (this.id) {
-      this.showLeftWindow = true;
-      this.getSiteOfCustomerDetail().then(() => {
+              this.choosedActualSite = this.landmarkDetail;
 
-        if (this.siteOfCusmerDetail.map_position) {
-          this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
+              this.map.setZoom(15);
+              this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+            });
 
-            this.choosedActualSite = this.landmarkDetail;
-
-            AMapUI.loadUI(['overlay/SimpleMarker'],
-              (SimpleMarker) => {
-                let choosedActualFluidMarker = new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('@/assets/img/l_2.png'),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                    }
-                  },
-                  label: {
-                    content: this.landmarkDetail.position_name,
-                    offset: new AMap.Pixel(30, 0)
-                  },
-                  map: this.map,
-                  position: [this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]
-                });
-
-              });
-
-            this.map.setZoom(15);
-            this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
-          });
-
-        } else {
-          this.pageLoading = false;
-        }
-
-      });
-
-    } else {
-      this.getActualSiteList().then(() => {
-        this.renderMarker();
-
-      })
-    }
+          } else {
+            this.pageLoading = false;
+          }
+        })
+      }
+    })
 
   },
 };

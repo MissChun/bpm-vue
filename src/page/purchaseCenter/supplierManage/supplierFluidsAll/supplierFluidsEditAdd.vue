@@ -182,7 +182,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.fluidList = results.data.data.results;
@@ -211,12 +210,10 @@ export default {
         let postData = {
           id: id
         };
-        console.log('xxx1');
         this.$$http('getLandMarkDetail', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -243,8 +240,8 @@ export default {
     },
     getInfoWindowDom: function(data) {
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">上传来源：' + source_type +
+      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13 md-5">上传来源：' + source_type +
         '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为供方液厂</a></div>';
 
       return infoBodyStr;
@@ -336,12 +333,10 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 
@@ -457,7 +452,7 @@ export default {
     },
 
     searchSupplierList: function(query) {
-      console.log('this.searchFilters.supplier', this.searchFilters.supplier);
+
       let postData = {
         need_all: true,
       }
@@ -480,16 +475,12 @@ export default {
         let postData = {
           id: this.id,
         };
-        console.log('this.id', this.id);
         this.$$http('getFluidDetail', postData).then((results) => {
           if (results.data && results.data.code == 0) {
 
             this.fluidDetail = results.data.data;
-            console.log(' this.fluidDetail', this.fluidDetail);
             this.formData.supplier = this.fluidDetail.supplier;
             this.formData.fluid_name = this.fluidDetail.fluid_name;
-
-
 
             resolve(results);
           } else {
@@ -519,52 +510,34 @@ export default {
 
 
 
-    if (this.id) {
-      this.showLeftWindow = true;
 
-      this.getFluidsDetail().then(() => {
+    this.getActualFluidList().then(() => {
+      this.renderMarker();
 
-        if (this.fluidDetail.map_position) {
-          this.getLandmarkDetail(this.fluidDetail.map_position).then(() => {
-            this.choosedActualFluid = this.landmarkDetail;
-            this.formData.actual_fluid = this.choosedActualFluid.id;
-            console.log('this.landmarkDetail', this.landmarkDetail);
+      if (this.id) {
+        this.showLeftWindow = true;
 
-            let choosedActualFluidMarker = '';
-            AMapUI.loadUI(['overlay/SimpleMarker'],
-              (SimpleMarker) => {
-                choosedActualFluidMarker = new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('@/assets/img/l_2.png'),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                    }
-                  },
-                  label: {
-                    content: this.landmarkDetail.position_name,
-                    offset: new AMap.Pixel(30, 0)
-                  },
-                  map: this.map,
-                  position: [this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]
-                });
+        this.getFluidsDetail().then(() => {
 
-              });
+          if (this.fluidDetail.map_position) {
+            this.getLandmarkDetail(this.fluidDetail.map_position).then(() => {
+              this.choosedActualFluid = this.landmarkDetail;
+              this.formData.actual_fluid = this.choosedActualFluid.id;
 
-            this.map.setZoom(15);
-            this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
-          });
-        } else {
-          this.pageLoading = false;
-        }
+              let choosedActualFluidMarker = '';
 
-      })
-    } else {
-      this.getActualFluidList().then(() => {
-        this.renderMarker();
-      })
-    }
+              this.map.setZoom(15);
+              this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+            });
+          } else {
+            this.pageLoading = false;
+          }
+
+        })
+      }
+    })
+
+
   },
 };
 

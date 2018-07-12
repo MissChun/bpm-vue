@@ -239,7 +239,10 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
-      }]
+      }, {
+        label: '上传人姓名',
+        id: 'upload_user_nick_name',
+      }, ]
 
     }
   },

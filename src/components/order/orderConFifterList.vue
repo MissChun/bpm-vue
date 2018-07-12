@@ -92,13 +92,16 @@
   white-space: nowrap;
   display: inline-block;
 }
-.el-icon-location{
-  cursor:pointer;
+
+.el-icon-location {
+  cursor: pointer;
 }
+
 #map-container {
   height: 400px;
   width: 100%;
 }
+
 </style>
 <template>
   <div>
@@ -167,16 +170,16 @@
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
-              <el-col >
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
+              <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
-            <el-row  v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
-              <el-col >
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
+              <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
-           </el-row>
+            </el-row>
           </div>
           <div style="clear:both"></div>
         </template>
@@ -189,7 +192,7 @@
               <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
             <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
-             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
+            <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
             <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
@@ -197,9 +200,9 @@
               </el-tooltip>
             </el-col>
             <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:
-            <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
-            <span v-else>{{props.row.status.verbose}}</span>
-          </el-col>
+              <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
+              <span v-else>{{props.row.status.verbose}}</span>
+            </el-col>
           </el-row>
         </template>
       </el-table-column>
@@ -257,11 +260,11 @@ export default {
       lockFalg: false,
       delayTime: 500,
       expandFalg: true,
-      showMap:false,
-      loadPosition:{},
+      showMap: false,
+      loadPosition: {},
       fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
-      buttonModyfiyAll:{
-         canceling: [],
+      buttonModyfiyAll: {
+        canceling: [],
         abnormal: [{
           text: "确认变更",
           type: "primary",
@@ -385,54 +388,54 @@ export default {
     getRowKeys: function(row) {
       return row.id;
     },
-     showMapDetalis:function(type,id){
-     var vm=this;
-     if(type=="load"){
-        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.coordinate.longitude;
-            vm.loadPosition.latitude=pointObj.coordinate.latitude;
-            vm.loadPosition.position=pointObj.coordinate.address;
+    showMapDetalis: function(type, id) {
+      var vm = this;
+      if (type == "load") {
+        this.$$http('getFulidDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.coordinate.longitude;
+            vm.loadPosition.latitude = pointObj.coordinate.latitude;
+            vm.loadPosition.position = pointObj.coordinate.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
-      }else if(type=="unload"){
-        this.$$http('getStationDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.location.longitude;
-            vm.loadPosition.latitude=pointObj.location.latitude;
-            vm.loadPosition.position=pointObj.address;
+      } else if (type == "unload") {
+        this.$$http('getStationDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.location.longitude;
+            vm.loadPosition.latitude = pointObj.location.latitude;
+            vm.loadPosition.position = pointObj.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
       }
     },
-    openDigo:function(obj){
-      var vm=this;
-      setTimeout(()=>{
+    openDigo: function(obj) {
+      var vm = this;
+      setTimeout(() => {
         landmarkMap = new AMap.Map('map-container', {
           zoom: 10,
         });
-      // /*创建点标记*/
+        // /*创建点标记*/
         positionMark = new AMap.Marker({
-            map:landmarkMap,
-          });
-         positionMark.setLabel({
-            content: vm.loadPosition.position,
-            offset: new AMap.Pixel(30, 0)
-         });
+          map: landmarkMap,
+        });
+        positionMark.setLabel({
+          content: vm.loadPosition.position,
+          offset: new AMap.Pixel(30, 0)
+        });
         let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
-      },100);  
+      }, 100);
     },
     changeExpand: function(row, expandedRows) {
       // var vm = this;
@@ -466,7 +469,7 @@ export default {
                 type: "success",
                 message: "取消运单成功",
               });
-              vm.$emit("chiledchangeTabs",{first:'first',second:"all"});
+              vm.$emit("chiledchangeTabs", { first: 'first', second: "all" });
               vm.$emit('searchList');
             } else {
               vm.$message.error("取消运单失败");
@@ -488,7 +491,7 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'sureDownOrder') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
-      }else if(type=='sureChangeCar'){
+      } else if (type == 'sureChangeCar') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       }
     },
