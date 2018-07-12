@@ -171,7 +171,7 @@ export default {
       });
     },
     clicktabs: function(targetName) {
-
+      this.reshCount();
     },
     changeTabs: function(fifterName) {
       this.activeName = fifterName;

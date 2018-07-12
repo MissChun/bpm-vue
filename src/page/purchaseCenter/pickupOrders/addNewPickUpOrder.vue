@@ -321,7 +321,7 @@ export default {
           { validator: planTongVa, trigger: 'blur' }
         ],
         unit_price: [
-          { required: true, message: '请填写采购价', trigger: 'blur' },
+          
         ],
         business_price: [
           { validator: discountVa, trigger: 'blur' }
