@@ -89,7 +89,8 @@
 
 </style>
 <template>
-  <div>
+  <div style="position:relative;">
+    <noData v-if="ListData.length==0"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="medium" height="550">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -197,6 +198,7 @@
 <script>
 let landmarkMap;
 let positionMark;
+import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
   data() {
@@ -215,6 +217,9 @@ export default {
       type: Array,
       default: []
     }
+  },
+  components: {
+    noData: noData
   },
   computed: {
     expandArr: function() {

@@ -104,7 +104,8 @@
 
 </style>
 <template>
-  <div>
+  <div style="position:relative;">
+    <noData v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -253,8 +254,12 @@
 <script>
 let landmarkMap;
 let positionMark;
+import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
+  components: {
+    noData: noData
+  },
   data() {
     return {
       lockFalg: false,
@@ -262,6 +267,7 @@ export default {
       expandFalg: true,
       showMap: false,
       loadPosition: {},
+      ListDataSearch:false,
       fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
       buttonModyfiyAll: {
         canceling: [],
@@ -545,6 +551,9 @@ export default {
       handler(newValue, oldValue) {
         console.log('newValue', newValue);
         console.log('oldValue', oldValue);
+        setTimeout(()=>{
+          this.ListDataSearch=true;
+        })
       },
       deep: true
     }
