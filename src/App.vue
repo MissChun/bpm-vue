@@ -21,9 +21,16 @@
 import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
+import noData from '@/components/common/noData';
+
+
+Vue.component("noData", noData);
 
 export default {
   name: 'App',
+  components: {
+    noData: noData,
+  },
   data() {
     return {
       menuData: null,
