@@ -298,7 +298,7 @@ export default {
         this.searchBtn.loading = false;
         this.searchBtn.text = '搜索';
         if (results.data && results.data.code == 0) {
-          //this.tableData = results.data.data.results;
+          this.tableData = results.data.data.results;
 
           this.pageData.totalCount = results.data.data.count;
 

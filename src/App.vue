@@ -66,6 +66,8 @@ export default {
         purchase: 'purchase',
         sales: 'sales',
         consignment: 'consignment',
+        income: 'income',
+
 
         setting: 'setting',
         organizationalStructure: 'organizationalStructure',
