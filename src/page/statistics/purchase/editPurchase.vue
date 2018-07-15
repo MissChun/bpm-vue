@@ -81,7 +81,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="优惠单价:" prop="discount_price">
+                  <el-form-item label="采购优惠:" prop="discount_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
                   </el-form-item>
                 </el-col>

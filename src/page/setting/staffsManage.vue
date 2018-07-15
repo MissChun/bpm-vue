@@ -264,6 +264,7 @@ export default {
             message: isDeletd ? '员工注销成功' : '员工启用成功',
             type: 'success'
           });
+          this.pageData.currentPage = 1;
           this.getStaffsList(this.currentDepartmentId, this.currentPositionId, isDeletd)
         }
       }).catch((err) => {

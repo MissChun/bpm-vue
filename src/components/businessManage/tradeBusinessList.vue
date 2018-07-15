@@ -497,6 +497,7 @@ export default {
                 setTimeout(() => {
                   instance.confirmButtonLoading = false;
                 }, 300);
+                this.pageData.currentPage = 1;
                 this.getList(this.statusActive);
               }
 
@@ -518,6 +519,7 @@ export default {
     closeDialog: function(isSave) {
       this.refuseDialog.isShow = false;
       if (isSave) {
+        this.pageData.currentPage = 1;
         this.getList(this.statusActive);
         // this.getProcess();
       }

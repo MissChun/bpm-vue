@@ -241,6 +241,7 @@ export default {
                 message: '删除职位成功',
                 type: 'success'
               });
+              this.pageData.currentPage = 1;
               this.getPositionList(this.departmentRow, this.active); //职位列表
             }
           }).catch((err) => {

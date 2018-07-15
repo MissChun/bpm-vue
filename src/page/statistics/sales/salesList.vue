@@ -67,11 +67,11 @@
                 <span class="text-blue" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div> -->
-              <div v-if="item.param === 'waybill'">
-                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
+              <div v-if="item.param === 'waybill'||item.param ==='business_order'">
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>{{scope.row[item.param]}}</span>
               </div>
             </template>
@@ -166,7 +166,7 @@ export default {
       }, {
         title: '客户名称',
         param: 'consumer_name',
-        width: ''
+        width: '200'
       }, {
         title: '车号',
         param: 'plate_number',
@@ -269,7 +269,9 @@ export default {
       let postData = {
         filename: '销售数据',
         page_arg: 'sale',
-        ids: []
+        ids: [],
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        is_invoice: this.searchPostData.is_invoice,
       };
       for (let i = 13; i <= 33; i++) {
         postData.ids.push(i.toString());
@@ -374,7 +376,9 @@ export default {
     getList() {
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        is_invoice: this.searchPostData.is_invoice,
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];

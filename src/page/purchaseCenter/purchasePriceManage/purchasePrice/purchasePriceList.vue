@@ -180,11 +180,14 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
-      this.startData = this.pbFunc.formatDate(this.dateTime);
-      this.endData = this.weekDate(5);
-      this.searachPostData.quote_date_start = this.startData;
-      this.searachPostData.quote_date_end = this.endData;
-      console.log('一周', this.startData, this.endData);
+      if(this.dateTime){
+        this.startData = this.pbFunc.formatDate(this.dateTime);
+        this.endData = this.weekDate(5);
+        this.searachPostData.quote_date_start = this.startData;
+        this.searachPostData.quote_date_end = this.endData;
+      }
+
+      console.log('一周', this.startData, this.endData,this.dateTime);
       this.getDateTitle();
       this.getList();
     },

@@ -76,7 +76,7 @@
               </div>
               <div v-else>{{scope.row[item.param]}}</div> -->
               <div v-if="item.param === 'waybill'">
-                <span class="text-blue" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
@@ -212,7 +212,7 @@ export default {
         param: 'business_price',
         width: ''
       }, {
-        title: '优惠单价（元）',
+        title: '采购优惠（元）',
         param: 'discount_price',
         width: ''
       }, {
@@ -258,7 +258,9 @@ export default {
       let postData = {
         filename: '采购数据',
         page_arg: 'procurement',
-        ids: []
+        ids: [],
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        is_invoice: this.searchPostData.is_invoice,
       };
       for (let i = 1; i <= 12; i++) {
         postData.ids.push(i.toString());

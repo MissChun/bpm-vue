@@ -61,9 +61,14 @@
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-                <span class="text-blue" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div>
+            </template>
+          </el-table-column>
+           <el-table-column label="是否对账" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_reconciliation.verbose}}</div>
             </template>
           </el-table-column>
           <el-table-column label="运费合计" align="center" width="100" fixed="right">
@@ -71,11 +76,7 @@
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
-            </template>
-          </el-table-column>
+
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
               <div v-if="scope.row.is_reconciliation.key==='unfinished'">
