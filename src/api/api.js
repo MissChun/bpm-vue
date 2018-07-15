@@ -20,8 +20,8 @@ const api = {
       is_invoice: {
         desc: '开票'
       },
-      id:{
-        desc:'id'
+      id: {
+        desc: 'id'
       }
     }
   },
@@ -36,8 +36,8 @@ const api = {
       is_invoice: {
         desc: '开票'
       },
-      id:{
-        desc:'id'
+      id: {
+        desc: 'id'
       }
     }
   },

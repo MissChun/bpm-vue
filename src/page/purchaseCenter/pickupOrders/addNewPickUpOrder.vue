@@ -292,7 +292,7 @@ export default {
         consignment_type: 'own',
         plan_tonnage: '',
         business_price: '0',
-        unit_price: '',
+        unit_price: '0',
         mark: '',
         unload_area: ''
       },
