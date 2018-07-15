@@ -40,7 +40,13 @@ export default {
   methods: {
     buildDictionary: function() {
       let dictionaryObject = {
-        dashborad: 'dashborad',
+        dashboard: 'dashborad',
+        purchaseDashboard: 'purchaseDashboard',
+        serviceCentreDashboard: 'serviceCentreDashboard',
+        energyDashboard: 'energyDashboard',
+        purchasingSDashboard: 'purchasingSDashboard',
+        salesSDashboard: 'salesSDashboard',
+
 
         purchaseCenter: 'purchaseCenter',
         pickupOrders: 'pickupOrders',
@@ -146,7 +152,15 @@ export default {
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
       console.log('allowedRouter', allowedRouter);
-      if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
+      if (isGoFirstPath) {
+        if (allowedRouter[0] && allowedRouter[0].children) {
+          console.log('allowedRouter[0].children[0]', allowedRouter[0].children)
+          this.$router.replace({ name: allowedRouter[0].children[0].name });
+        } else {
+          this.$router.replace({ path: allowedRouter[0].path });
+        }
+
+      }
 
     },
     getRoutesList: function(menuDictionaryObject) {
