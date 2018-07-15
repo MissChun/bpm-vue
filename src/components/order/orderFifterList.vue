@@ -138,7 +138,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'||props.row.status.key=='finished'||props.row.status.key=='canceled'">
+              <el-col >
                 <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
               </el-col>
             </el-row>

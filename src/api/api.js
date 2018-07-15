@@ -1861,7 +1861,7 @@ const api = {
     }
   },
   searchCustomerList: {
-    url: '/api/v1/consumer/',
+    url: '/api/v1/payer_consumer/',
     method: 'get',
     desc: '获取客户列表',
     param: {

@@ -46,6 +46,17 @@
               <span v-else>-</span>
             </template>
           </el-table-column>
+          <el-table-column label="客户简称" align="center">
+            <template slot-scope="scope">
+              <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.customerShortTitle">
+                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
+                  {{item.short_name}}
+                </el-col>
+                <el-col v-else>......</el-col>
+              </el-row>
+              <span v-else>-</span>
+            </template>
+          </el-table-column>
           <el-table-column label="业务员" align="center">
             <template slot-scope="scope">
               <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.saleManTitle">
@@ -97,6 +108,7 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'consumer_name', value: '客户名称' },
+          { id: 'short_name', value: '客户简称' },
           { id: 'payer', value: '付款方名称' },
           { id: 'sale_man_name', value: '分属业务员' },
         ]
@@ -144,6 +156,7 @@ export default {
               Titem.consumer.forEach(Citem => {
                 Titem.customerTitle += Citem.consumer_name + ",";
                 Titem.saleManTitle += Citem.sale_man_name + ",";
+                Titem.customerShortTitle+=Citem.short_name+",";
               });
             }
           });

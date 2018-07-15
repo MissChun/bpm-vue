@@ -14,7 +14,6 @@ export default [{
         title: '概览',
         iconName: 'icon-dashboard'
       },
-      //redirect: '/dashboard/purchaseDashboard',
       component: (resolve) => require(['../page/dashboard/dashboard'], resolve),
       children: [{
         path: 'purchaseDashboard',

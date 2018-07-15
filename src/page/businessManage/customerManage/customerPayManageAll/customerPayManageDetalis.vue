@@ -12,7 +12,12 @@
 }
 
 .insureBottom {}
-
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
 </style>
 <template>
   <div id="addPerson" class="detail-main">
@@ -44,31 +49,44 @@
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
-              <el-col :span="8">
+              <el-col :span="6" >
                 <el-form-item label="付款方名称:">
-                  <div class="detail-form-item">{{customerPayData.payer}}</div>
+                  <div class="detail-form-item whiteSpan" >{{customerPayData.payer}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="6" class="">
                 <el-form-item label="客户名称:">
                   <div class="detail-form-item" v-if="customerPayData.consumer&&customerPayData.consumer.length>0" >
                     <el-row>
-                      <el-col v-for="(item,index) in customerPayData.consumer" :key="item.id">{{item.consumer_name}}</el-col>
+                      <el-col v-for="(item,index) in customerPayData.consumer" :key="item.id" class="whiteSpan" :title="item.consumer_name">{{item.consumer_name}}</el-col>
                     </el-row>
                   </div>
                   <div class="detail-form-item" v-else v-html="pbFunc.dealNullData('')"></div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+
+               <el-col :span="6">
+                <el-form-item label="客户简称:">
+                  <div class="detail-form-item" v-if="customerPayData.consumer&&customerPayData.consumer.length>0" >
+                    <el-row>
+                      <el-col v-for="(item,index) in customerPayData.consumer" :key="item.short_name" class="whiteSpan" :title="item.short_name">{{item.short_name}}</el-col>
+                    </el-row>
+                  </div>
+                  <div class="detail-form-item" v-else v-html="pbFunc.dealNullData('')"></div>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="6">
                 <el-form-item label="业务员:">
                   <div class="detail-form-item" v-if="customerPayData.consumer&&customerPayData.consumer.length>0" >
                     <el-row>
-                      <el-col v-for="(item,index) in customerPayData.consumer" :key="item.consumer_name">{{item.sale_man_name}}</el-col>
+                      <el-col v-for="(item,index) in customerPayData.consumer" :key="item.consumer_name" class="whiteSpan" :title="item.sale_man_name">{{item.sale_man_name}}</el-col>
                     </el-row>
                   </div>
                   <div class="detail-form-item" v-else v-html="pbFunc.dealNullData('')"></div>
                 </el-form-item>
               </el-col>
+
             </el-row>
            
             <!-- </el-form> -->
