@@ -24,8 +24,17 @@
             <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
               <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
           </el-input>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="地标区域:" class="map-choose-address">
+            <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item>
+            <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -93,8 +102,12 @@
   </div>
 </template>
 <script>
+import chooseAddress from '@/components/chooseAddress';
 export default {
   name: 'stationManageEditAdd',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {
     id: function() {
       return this.$route.query.id || '';
@@ -157,6 +170,16 @@ export default {
           { required: true, message: '请选择实际液厂', trigger: 'change' },
         ],
       },
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
+      addressName: {
+        province: '',
+        city: '',
+        area: '',
+      },
     }
   },
   methods: {
@@ -177,6 +200,16 @@ export default {
 
         if (this.searchFilters.keyword.length) {
           postData.position_name = this.searchFilters.keyword;
+        }
+
+        if (this.addressName.province) {
+          postData.province = this.addressName.province;
+        }
+        if (this.addressName.city) {
+          postData.city = this.addressName.city;
+        }
+        if (this.addressName.area) {
+          postData.county = this.addressName.area;
         }
 
         this.pageLoading = true;

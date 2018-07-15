@@ -62,7 +62,6 @@ export default {
       this.$$http('getProvince').then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           this.provinceList = results.data.data;
-          console.log('this.provinceList', this.provinceList);
         }
       });
     },
@@ -72,7 +71,6 @@ export default {
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           this.cityList = results.data.data.cities;
-          console.log('this.cityList', this.cityList);
         }
       });
     },
@@ -82,7 +80,6 @@ export default {
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           this.areaList = results.data.data.counties;
-          console.log('this.areaList', this.areaList);
         }
       });
     },
@@ -110,7 +107,6 @@ export default {
           }
         }
       }
-      console.log('this.address', this.address.province)
       this.$emit('chooseProvince');
     },
     cityChange() {
@@ -135,7 +131,6 @@ export default {
           }
         }
       }
-      console.log('this.addressCode', this.address);
       this.$emit('chooseCity');
     },
     areaChange() {
@@ -174,13 +169,11 @@ export default {
       if (val) {
         this.getCity();
       }
-      console.log('provinceval, oldVal', val, oldVal);
     },
     'address.city': function(val, oldVal) {
       if (val) {
         this.getArea();
       }
-      console.log('provinceval, oldVal', val, oldVal);
     }
   }
 }

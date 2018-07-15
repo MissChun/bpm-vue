@@ -250,7 +250,6 @@ export default {
       this.placeSearch.search(this.keyword, (status, result) => {
 
         if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
-          console.log('result', result);
 
           this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
 

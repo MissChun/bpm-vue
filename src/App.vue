@@ -47,7 +47,6 @@ export default {
         purchasingSDashboard: 'purchasingSDashboard',
         salesSDashboard: 'salesSDashboard',
 
-
         purchaseCenter: 'purchaseCenter',
         pickupOrders: 'pickupOrders',
         supplierManage: 'supplierManage',
@@ -73,7 +72,6 @@ export default {
         sales: 'sales',
         consignment: 'consignment',
         income: 'income',
-
 
         setting: 'setting',
         organizationalStructure: 'organizationalStructure',
@@ -151,17 +149,13 @@ export default {
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
-      console.log('allowedRouter', allowedRouter);
       if (isGoFirstPath) {
         if (allowedRouter[0] && allowedRouter[0].children) {
-          console.log('allowedRouter[0].children[0]', allowedRouter[0].children)
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {
           this.$router.replace({ path: allowedRouter[0].path });
         }
-
       }
-
     },
     getRoutesList: function(menuDictionaryObject) {
 

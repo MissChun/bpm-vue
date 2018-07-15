@@ -20,12 +20,21 @@
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" id="map-search-input">
+          <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch">
             <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
               <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
           </el-input>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="地标区域:" class="map-choose-address">
+            <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item>
+            <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -113,15 +122,19 @@
   </div>
 </template>
 <script>
+import chooseAddress from '@/components/chooseAddress';
 export default {
   name: 'stationManageEditAdd',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {
     id: function() {
       return this.$route.query.id || '';
     },
     pageTitle: function() {
       return this.$route.query.id ? '编辑客户站点' : '新增客户站点';
-    }
+    },
   },
   data() {
     return {
@@ -146,9 +159,6 @@ export default {
       fieldSelect: [{
         key: 'position_name',
         verbose: '实际站点',
-      }, {
-        key: 'address',
-        verbose: '地址',
       }],
       showLeftWindow: false,
       formData: {
@@ -205,6 +215,16 @@ export default {
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '联系电话为11位手机号码/座机号码', trigger: 'blur' },
         ],
       },
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
+      addressName: {
+        province: '',
+        city: '',
+        area: '',
+      },
     }
   },
   methods: {
@@ -238,8 +258,18 @@ export default {
           simplify: true,
         };
 
-        if (this.searchFilters.keyword.length) {
+        if (this.searchFilters.keyword.length && this.searchFilters.field === 'position_name') {
           postData.position_name = this.searchFilters.keyword;
+        }
+
+        if (this.addressName.province) {
+          postData.province = this.addressName.province;
+        }
+        if (this.addressName.city) {
+          postData.city = this.addressName.city;
+        }
+        if (this.addressName.area) {
+          postData.county = this.addressName.area;
         }
 
         this.pageLoading = true;
@@ -314,82 +344,12 @@ export default {
 
       })
     },
-    inputChangeFun: function() { //输入搜索
-      this.placeSearch.search(this.keyword, (status, result) => {
 
-        if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
-          console.log('result', result);
-
-          this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
-
-        } else {
-          this.mapMessage = '无法获取位置'
-        }
-
-      });
-    },
-    getAddress: function(lnglat, isMapClickCallback) {
-      this.geocoder.getAddress(lnglat, (status, result) => { //逆地理查询地址
-        if (status == 'complete' && result.regeocode && result.regeocode.addressComponent) {
-
-          this.setMapPosition(lnglat);
-          this.setMapZoom();
-
-          if (isMapClickCallback) {
-            this.keyword = result.regeocode.formattedAddress;
-          }
-
-          this.addressDetail = {
-            address: result.regeocode.formattedAddress,
-            longitude: lnglat[0],
-            latitude: lnglat[1],
-            province: result.regeocode.addressComponent.province,
-            city: result.regeocode.addressComponent.city,
-            county: result.regeocode.addressComponent.district,
-          }
-
-          this.formData.address = result.regeocode.formattedAddress;
-
-          this.mapMessage = '';
-
-        } else {
-          this.mapMessage = '无法获取地址';
-        }
-      })
-    },
-    mapClickFun: function(e) { //点击地图回调
-      this.getAddress([e.lnglat.lng, e.lnglat.lat], true);
-    },
     initMarkList: function() {
 
       let _this = this;
 
-      /*初始化类*/
-      AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
 
-        let autoOptions = {
-          city: "", //城市，默认全国
-          input: "map-search-input" //使用联想输入的input的id
-        };
-
-        let autocomplete = new AMap.Autocomplete(autoOptions); //构造输入提示类
-
-        _this.placeSearch = new AMap.PlaceSearch({ //构造地点查询类
-          city: "", //城市
-        });
-
-        _this.geocoder = new AMap.Geocoder({ //构造逆地理编码类
-          city: "" //城市，默认：“全国”
-        });
-
-        _this.map.on('click', _this.mapClickFun); //对地图绑定点击事件
-
-        AMap.event.addListener(autocomplete, "select", (e) => { //选择提示
-          _this.keyword = e.poi.name;
-          _this.inputChangeFun();
-        });
-
-      });
 
       AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
@@ -638,7 +598,6 @@ export default {
 
             this.formData.is_active = this.siteOfCusmerDetail.is_active;
 
-            console.log('this.formData.is_active', this.formData.is_active);
 
             resolve(results);
           } else {

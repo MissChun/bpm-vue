@@ -1261,7 +1261,6 @@ const api = {
   getProvince: {
     url: '/api/v1/area/provinces/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取省列表',
     param: {
 
@@ -1270,7 +1269,6 @@ const api = {
   getCity: {
     url: '/api/v1/area/:id/cities/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取市列表',
     param: {
 
@@ -1279,7 +1277,6 @@ const api = {
   getArea: {
     url: '/api/v1/area/:id/county/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取区域列表',
     param: {
 

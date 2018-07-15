@@ -56,7 +56,6 @@ let removePending = (config, isCancel) => {
 
 //添加请求拦截器
 axios.interceptors.request.use(config => {
-  //console.log('axios.interceptors',config,config.url);
   removePending(config, true); //在一个ajax发送前执行一下取消操作
   let isNeedCancel = true;
   if (unCancelAjax.length) {
@@ -71,7 +70,6 @@ axios.interceptors.request.use(config => {
     config.cancelToken = new cancelToken((c) => {
       // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
       pending.push({ u: (config.url + '&' + config.method), cancel: c, time: new Date() });
-      //console.log('config,xxx',config,config.url,config.baseURL,config.baseURL + config.url + '&' + config.method,pending);
     });
   }
   return config;
@@ -81,7 +79,6 @@ axios.interceptors.request.use(config => {
 
 //添加响应拦截器
 axios.interceptors.response.use(response => {
-  //console.log('axios.interceptors',response,response.config);
   removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
   return response;
 }, error => {
@@ -91,7 +88,6 @@ axios.interceptors.response.use(response => {
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
-  console.log('error', error);
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {
@@ -171,12 +167,10 @@ const dealApiUrlParam = function(apiName, postData) {
     let maxTimes = 0;
     while (httpUrl.match(/:([0-9a-z_]+)/i)) {
       let tempV = RegExp.$1;
-      //console.log("tempV", tempV, postData)
       maxTimes++;
       //httpUrl最大支持10个变量替换
       if (maxTimes > 10) break;
       let reg = new RegExp(":" + tempV, "ig");
-      //console.log("tempV2", tempV, postData.hasOwnProperty(tempV))
       if (postData.hasOwnProperty(tempV)) {
         httpUrl = httpUrl.replace(reg, postData[tempV])
         delete postData[tempV];
@@ -249,7 +243,6 @@ const dealConfig = function(apiName, postData) {
         }
       }
       httpConfig.url = apiUrl;
-      // console.log('httpConfig', httpConfig);
       return httpConfig;
     } else {
       return false
@@ -272,7 +265,6 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
   let promise = new Promise(function(resolve, reject) {
     axios(httpConfig).then(
       (res) => {
-        // console.log('xxxx', res);
         //默认使用successState
         if (defaultSuccessCallback === undefined) {
           successState(res)
@@ -283,7 +275,6 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
       }
     ).catch(
       (response) => {
-        console.log('xxxx111', response);
         //默认使用errorState
         if (defaultErrorCallback === undefined) {
           errorState(response)
