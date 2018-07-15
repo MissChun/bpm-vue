@@ -578,7 +578,6 @@ export default {
     isShowBtn(data) {
       let status = '';
       if (data.length) status = data[0].type;
-      console.log('status', status);
       switch (status) {
         case 'modify_department_check': //部门修改
           return true;
@@ -617,7 +616,6 @@ export default {
       }
     },
     closeDialog: function(isSave) {
-      console.log('测试拒绝', isSave)
       this.refuseDialog.isShow = false;
       if (isSave) {
         this.getProcess();
@@ -648,14 +646,12 @@ export default {
               }
             }
             for (let j in this.statusType) {
-              // console.log('状态', this.processData[i].type, j)
               if (this.processData[i].type === j) {
                 this.processData[i].type_cn = this.statusType[j];
               }
 
             }
           }
-          console.log('this.processData', this.processData)
         }
       }).catch((err) => {
         this.pageLoading = false;

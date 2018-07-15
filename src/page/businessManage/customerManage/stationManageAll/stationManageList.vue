@@ -42,7 +42,7 @@
                       <el-button type="success" @click="addSite">新增</el-button>
                     </div>
                     <div class="table-list mt-25" v-loading="pageLoading">
-                      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+                      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
                         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
                           <template slot-scope="scope">
                             <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
@@ -56,6 +56,7 @@
                           </template>
                         </el-table-column>
                       </el-table>
+                      <no-data v-if="!pageLoading && !tableData.length"></no-data>
                     </div>
                     <div class="page-list text-center">
                       <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -151,8 +152,6 @@ export default {
   },
   methods: {
     jumpPage(row) {
-      console.log('row', row);
-
       this.$router.push({
         path: '/businessManage/customerManage/stationManageAll/stationManageEditAdd',
         query: {
@@ -189,7 +188,6 @@ export default {
       //   setTimeout(() => {
       //     this.loading = false;
       //     this.customerSearchList = this.selectData.consumerSelect.filter(item => {
-      //       console.log('item', item)
       //       return item.consumer_name.toLowerCase().indexOf(query.toLowerCase()) > -1;
       //     });
       //   }, 200);
@@ -233,14 +231,10 @@ export default {
       // }
 
       this.$$http('getStationList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

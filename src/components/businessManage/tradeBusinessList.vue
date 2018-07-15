@@ -68,7 +68,7 @@
         <el-tabs v-model="statusActive" @tab-click="statusClick">
           <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title" :name="tab.key">
             <div class="table-list">
-              <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':!tableData.length}">
                 <el-table-column type="selection" width="55">
                 </el-table-column>
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
@@ -101,6 +101,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <no-data v-if="!pageLoading && !tableData.length"></no-data>
             </div>
             <div class="page-list text-center">
               <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -527,7 +528,6 @@ export default {
     },
     handleClick: function(tab, event) {
       this.pageData.currentPage = 1;
-      console.log('tabhandleClick', tab);
       for (let i in this.tabList) {
         if (this.tabList[i].key === tab.name) {
           this.statusTabList = this.tabList[i].tabs;
@@ -535,7 +535,6 @@ export default {
         }
       }
       this.getList(this.statusActive);
-      console.log('tabs', this.statusTabList)
     },
     statusClick(tab, event) {
       this.pageData.currentPage = 1;
@@ -567,14 +566,10 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getBusinessList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

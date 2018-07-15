@@ -74,7 +74,7 @@
           </div>
           <div class="table-list mt-25">
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
-              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                   <template slot-scope="scope">
@@ -103,6 +103,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <no-data v-if="!pageLoading && !tableData.length"></no-data>
             </el-form>
           </div>
           <div class="page-list text-center">
@@ -186,8 +187,6 @@ export default {
         this.searachPostData.quote_date_start = this.startData;
         this.searachPostData.quote_date_end = this.endData;
       }
-
-      console.log('一周', this.startData, this.endData,this.dateTime);
       this.getDateTitle();
       this.getList();
     },
@@ -339,7 +338,6 @@ export default {
       })
     },
     handleClick(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'destination') {
         this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
       }

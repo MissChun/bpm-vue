@@ -30,7 +30,7 @@
           </div>
           <div class="table-list mt-25">
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
-              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
                   <template slot-scope="scope">
                     <div v-if="item.param === 'fluid_name'">{{scope.row[item.param]}}</div>
@@ -47,6 +47,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <no-data v-if="!pageLoading && !tableData.length"></no-data>
             </el-form>
           </div>
           <div class="page-list text-center">
@@ -136,7 +137,6 @@ export default {
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.$$http('getDestinationList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -149,14 +149,12 @@ export default {
           // }
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
     },
     handleClick(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'purchasePrice') {
         this.$router.push({ path: "/purchaseCenter/purchasePriceManage/purchasePrice/purchasePriceList" });
       }
@@ -170,7 +168,6 @@ export default {
       handler(val, oldVal) {　　
         // for (let i = 0; i < val.length; i++) {　　　　　　　　
         //   if (oldVal[i] != val[i]) {　　　　　　　　　　
-        console.log('更新检测', val)　　　　　　　　
         //   }　　　　　　
         // }
       },

@@ -56,6 +56,7 @@
                     </template>
                   </el-table-column>
                 </el-table>
+                <no-data v-if="!pageLoading && !tableData.length"></no-data>
               </el-form>
             </div>
             </el-form>
@@ -184,10 +185,10 @@ export default {
       this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview(file) {
-      console.log(file);
+
     },
     getBusinessList() {
       let postData = {
@@ -211,7 +212,6 @@ export default {
       this.$$http('getDestinationDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
           this.titleType = this.detail.fluid_name;
           for (let i in this.detail.areas) {
             this.selectMenus.push(this.detail.areas[i].area_id);
@@ -221,10 +221,6 @@ export default {
           if (timeArr.length) {
             this.editMsgForm.effect_time = new Date(dateArr[0], dateArr[1], dateArr[2], timeArr[0], timeArr[1]);
           }
-
-
-          console.log('有效时间', this.detail.areas, this.selectMenus)
-
         }
       })
 
@@ -247,12 +243,10 @@ export default {
           btnObject.isLoading = true;
 
           //postData = this.pbFunc.fifterObjIsNull(postData);
-          console.log('参数', postData, formName, btnObject, stepNum, isReview)
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
-            console.log('results', results);
             if (results.data && results.data.code == 0) {
               this.$message({
                 message: '提交成功',
@@ -282,14 +276,11 @@ export default {
         fluid_id: this.id,
         area_ids: this.selectMenus
       }
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, 0, true);
       }
     },
     editUnload(btn) {
-      console.log('this.userForm', this.editMsgForm);
-
       let formName = 'addFormSetpTwo';
       let btnObject = btn;
       // let keyArray = ['effect_time'];
@@ -298,7 +289,6 @@ export default {
       };
       let timeArr = this.editMsgForm.effect_time.Format("hh:mm:ss").split(':');
       postData.effect_time = timeArr.length ? timeArr[0] + ':' + timeArr[1] : '';
-      console.log('postDataNew', postData, this.editMsgForm.effect_time.Format("hh:mm:ss").split(':'));
       this.editAjax(postData, formName, btnObject, 1, true);
     },
     // saveBasicAndReview() {
@@ -315,7 +305,6 @@ export default {
     //   handler(val, oldVal) {　　
     //     // for (let i = 0; i < val.length; i++) {　　　　　　　　
     //     //   if (oldVal[i] != val[i]) {　　　　　　　　　　
-    //     console.log('更新检测', val)　　　　　　　　
     //     //   }　　　　　　
     //     // }
     //   },

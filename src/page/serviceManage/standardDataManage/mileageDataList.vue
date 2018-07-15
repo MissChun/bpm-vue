@@ -38,7 +38,7 @@
             <el-button type="success" @click="editMile">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading"  :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                 <template slot-scope="scope">
                   <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
@@ -56,6 +56,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -71,7 +72,6 @@ export default {
   name: 'mileageDataList',
   computed: {
     employmentTypeSelect: function() {
-      console.log('this.$store.getters.getIncludeAllSelect', this.$store.state.common.selectData.carrier_driver_work_type);
       return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
     }
   },
@@ -162,10 +162,7 @@ export default {
               this.tableData[i].carriersList += this.tableData[i].carriers[j].carrier_name + (j < this.tableData[i].carriers.length-1 ? '，' : '')
             }
           }
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -178,7 +175,6 @@ export default {
       };
 
       this.$$http('getCarrierList', postData).then((results) => {
-        console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
           this.selectData.carrierSelect = this.selectData.carrierSelect.concat(results.data.data);
         }
@@ -191,7 +187,6 @@ export default {
       };
 
       this.$$http('getFluidList', postData).then((results) => {
-        console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
           this.selectData.liquidSelect = this.selectData.liquidSelect.concat(results.data.data);
         }
@@ -204,7 +199,6 @@ export default {
       };
 
       this.$$http('getSiteList', postData).then((results) => {
-        console.log('results', results.data.data);
         if (results.data && results.data.code == 0) {
           this.selectData.siteSelect = this.selectData.siteSelect.concat(results.data.data);
         }
@@ -229,7 +223,6 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
         this.getList();
       })
     }

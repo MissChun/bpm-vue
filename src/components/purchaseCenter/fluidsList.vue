@@ -30,7 +30,7 @@
       <el-button type="success" @click="addFluids">新增</el-button>
     </div>
     <div class="table-list mt-25" v-loading="pageLoading">
-      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
         </el-table-column>
         <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -39,6 +39,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <no-data v-if="!pageLoading && !tableData.length"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -109,7 +110,6 @@ export default {
       this.getList();
     },
     searchSupplierList: function(query) {
-      console.log('this.searchFilters.supplier', this.searchFilters.supplier);
       let postData = {
         page_size: 100,
         page: 1,
@@ -138,14 +138,12 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getFluidsList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
 
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -153,7 +151,6 @@ export default {
 
     },
     jumpPage(row) {
-      console.log('row', row);
 
       this.$router.push({
         path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',

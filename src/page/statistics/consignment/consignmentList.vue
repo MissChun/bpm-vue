@@ -54,7 +54,7 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
@@ -86,6 +86,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -232,7 +233,6 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      // console.log('全选',this.multipleSelection)
     },
     pageChange() {
       setTimeout(() => {
@@ -342,7 +342,6 @@ export default {
           price += parseFloat(this.multipleSelection[i].waiting_charges);
         }
       }
-      console.log('合计', ids, price);
       this.reconciliations(true, ids, price);
     },
     // 批量/单个  对账
@@ -351,7 +350,6 @@ export default {
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
       };
-      console.log('批量对账', isAll, ids, price)
       if (isAll) {
         if (ids.length) {
           content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
@@ -413,14 +411,10 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getConsignmentStatisticsList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

@@ -211,7 +211,7 @@ export default {
   },
   methods: {
     activeTime() {
-      console.log('装车时间', this.editMsgForm.active_time);
+
     },
     returnToPage: function() {
       // if (this.$route.query.id) {
@@ -224,8 +224,6 @@ export default {
       this.$$http('getPurchaseStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
-
           this.editMsgForm = {
             waybill: this.detail.waybill,
             supplier: this.detail.supplier,
@@ -283,7 +281,6 @@ export default {
       let btnObject = btn;
       let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }
