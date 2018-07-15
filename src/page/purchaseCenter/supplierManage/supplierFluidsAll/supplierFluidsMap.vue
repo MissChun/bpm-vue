@@ -202,8 +202,9 @@ export default {
             },
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
+              let gasType = data.fluid_type ? data.fluid_type : '无';
               let infoTitleStr = '<div class="marker-info-window fs-13">液厂名称：<span class="fs-13">' + data.fluid_name + '</span></div>';
-              let infoBodyStr = '<div class="fs-13">所属供应商：' + data.supplier_name + '</div><div class="fs-13">实际液厂：' + data.actual_fluid + '</div><br><div class="text-right "><a href="/#/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
+              let infoBodyStr = '<div class="fs-13 md-5">所属供应商：' + data.supplier_name + '</div><div class="fs-13 md-5">实际液厂：' + data.actual_fluid + '</div><div class="fs-13 md-5">气种：' + gasType + '</div><br><div class="text-right "><a href="/#/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);
                 recycledInfoWindow.setInfoBody(infoBodyStr);

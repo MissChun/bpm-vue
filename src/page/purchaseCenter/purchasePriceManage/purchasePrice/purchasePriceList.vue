@@ -55,7 +55,7 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="0" v-if="false">
+              <el-row :gutter="0">
                 <el-col :span="6">
                   <el-form-item label="日期筛选:" label-width="105px">
                     <!-- <el-date-picker v-model="dateTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"  value-format="yyyy-MM-dd HH:mm:ss" ></el-date-picker> -->
@@ -74,7 +74,7 @@
           </div>
           <div class="table-list mt-25">
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
-              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading">
+              <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                   <template slot-scope="scope">
@@ -103,6 +103,7 @@
                   </template>
                 </el-table-column>
               </el-table>
+              <no-data v-if="!pageLoading && !tableData.length"></no-data>
             </el-form>
           </div>
           <div class="page-list text-center">
@@ -149,12 +150,14 @@ export default {
       activeName: 'purchasePrice',
       searachPostData: {}, //搜索参数
       searchFilters: {
+        quote_date_start:'',
+        quote_date_end:'',
         keyword: '',
         field: 'fluid_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '液厂名称' },
+          { id: 'fluid_name', value: '实际液厂' },
           { id: 'supplier_name', value: '供应商' },
         ]
       },
@@ -178,16 +181,19 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
-      this.startData = this.pbFunc.formatDate(this.dateTime);
-      this.endData = this.weekDate(5);
-      console.log('一周', this.startData, this.endData);
+      if(this.dateTime){
+        this.startData = this.pbFunc.formatDate(this.dateTime);
+        this.endData = this.weekDate(5);
+        this.searachPostData.quote_date_start = this.startData;
+        this.searachPostData.quote_date_end = this.endData;
+      }
+      this.getDateTitle();
       this.getList();
     },
     weekDate(number) {
       let time = new Date(this.dateTime);
-      console.log(this.dateTime, time)
       time.setDate(time.getDate() + number);
-      let week = time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate();
+      let week = time.getFullYear() + "-" +(time.getMonth() + 1<10?'0':'')+ (time.getMonth() + 1) + "-" + time.getDate();
       return week;
     },
     isPrevent(event) {
@@ -231,26 +237,21 @@ export default {
       }
     },
     isShowPrice(row, isShow, event) {
-
       if (isShow) {
         this.updateTableData(row, isShow);
         this.priceForm.price = row.today_unit_price;
-        console.log('event', event);
         this.$nextTick(function() {
           event.target.parentNode.lastChild.lastChild.firstChild.childNodes[1].focus();
         })
       } else {
-
         let postData = {
           id: row.id,
           today_unit_price: this.priceForm.price
         }
-        console.log('postData', postData, this.priceForm)
         setTimeout(() => {
           this.$refs['priceForm'].validate((valid) => {
             if (valid) {
               this.$$http('updatePurchasePrice', postData).then((results) => {
-                console.log('修改价格', results.data.data);
                 if (results.data && results.data.code == 0) {
                   // this.updateTableData(row,isShow);
 
@@ -279,13 +280,25 @@ export default {
         })
 
       }
-      console.log('this.tableData', this.tableData)
     },
     getDateTitle() {
-      this.$$http('getPriceDateList', {}).then((results) => {
-        console.log('results', results.data.data.results);
+      let postData = {
+        quote_date_start:this.searachPostData.quote_date_start,
+        quote_date_end:this.searachPostData.quote_date_end
+      }
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      this.$$http('getPriceDateList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           // this.tableData = results.data;
+          this.thTableList= [{
+            title: '液厂名称',
+            param: 'fluid_name',
+            width: ''
+          }, {
+            title: '目的地',
+            param: 'area',
+            width: ''
+          }];
           for (let i in results.data.data) {
             this.thTableList.push({
               title: results.data.data[i],
@@ -300,13 +313,14 @@ export default {
       this.pageLoading = true;
       let postData = {
         page: this.pageData.currentPage,
-        page_size: this.pageData.pageSize
+        page_size: this.pageData.pageSize,
+        quote_date_start:this.searachPostData.quote_date_start,
+        quote_date_end:this.searachPostData.quote_date_end
       }
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.$$http('getPurchasePriceList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -318,15 +332,12 @@ export default {
             }
           }
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
     },
     handleClick(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'destination') {
         this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList" });
       }
@@ -340,7 +351,6 @@ export default {
       handler(val, oldVal) {　　
         // for (let i = 0; i < val.length; i++) {　　　　　　　　
         //   if (oldVal[i] != val[i]) {　　　　　　　　　　
-        console.log('更新检测', val)　　　　　　　　
         //   }　　　　　　
         // }
       },

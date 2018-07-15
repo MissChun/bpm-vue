@@ -64,7 +64,6 @@ export default {
           this.submitBtn.isLoading = true;
           let postData = this.refuseRules;
           postData.order_id = this.refuseDialog.id;
-          console.log('拒绝', postData)
           this.$$http('toExamineBusiness', postData).then((results) => {
 
             this.submitBtn.btnText = '确 定';

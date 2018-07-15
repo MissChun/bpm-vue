@@ -83,7 +83,7 @@
                     </el-row>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" v-if="false">
                   <el-form-item label="营业执照:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="editMsgForm.license_pic" list-type="picture">

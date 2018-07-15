@@ -81,7 +81,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="优惠单价:" prop="discount_price">
+                  <el-form-item label="采购优惠:" prop="discount_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
                   </el-form-item>
                 </el-col>
@@ -93,6 +93,23 @@
                 <el-col :span="8">
                   <el-form-item label="优惠后总额:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.discounts_sum_price"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="运单状态:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waybill_status"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否对账:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否开票:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -146,6 +163,9 @@ export default {
         unit_sum_price: '',
         discounts_sum_price: '',
         station: '',
+        is_invoice: '',
+        is_reconciliation: '',
+        waybill_status: '',
         remark: ''
       },
 
@@ -191,7 +211,7 @@ export default {
   },
   methods: {
     activeTime() {
-      console.log('装车时间', this.editMsgForm.active_time);
+
     },
     returnToPage: function() {
       // if (this.$route.query.id) {
@@ -204,8 +224,6 @@ export default {
       this.$$http('getPurchaseStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
-
           this.editMsgForm = {
             waybill: this.detail.waybill,
             supplier: this.detail.supplier,
@@ -219,6 +237,9 @@ export default {
             unit_sum_price: this.detail.unit_sum_price,
             discounts_sum_price: this.detail.discounts_sum_price,
             station: this.detail.station,
+            is_invoice: this.detail.is_invoice.verbose,
+            is_reconciliation: this.detail.is_reconciliation.verbose,
+            waybill_status: this.detail.waybill_status.verbose,
             remark: ''
           }
         }
@@ -260,7 +281,6 @@ export default {
       let btnObject = btn;
       let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

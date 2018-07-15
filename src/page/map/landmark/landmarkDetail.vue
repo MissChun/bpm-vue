@@ -17,15 +17,15 @@
           </el-col>
         </el-row>
       </el-header>
+      <div class="text-right edit-btn-box">
+        <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
+      </div>
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
                 审核操作
-              </el-col>
-              <el-col :span="6" class="text-right">
-                <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
               </el-col>
             </el-row>
           </div>
@@ -43,12 +43,12 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.source_type && detailData.source_type.verbose)"></div>
               </div>
             </el-col>
-            <el-col :span="8" v-if="!isSucess">
+            <el-col :span="8" v-if="detailData.confirm_status && detailData.confirm_status.key==='TO_CONFIRM'">
               <div class="label-list">
                 <label>审核操作:</label>
                 <div class="detail-form-item check-button">
-                  <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
-                  <el-button type="danger" :disabled="isFailure" @click="checkConfirm(false)" size="mini">拒绝</el-button>
+                  <el-button type="primary" @click="checkConfirm(true)" size="mini">通过</el-button>
+                  <el-button type="danger" @click="checkConfirm(false)" size="mini">拒绝</el-button>
                 </div>
               </div>
             </el-col>
@@ -63,14 +63,15 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator
-.username)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.nick_name)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key ==='PLATFORM'" v-html="pbFunc.dealNullData( detailData.upload_user && detailData.upload_user.nick_name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item" v-html="detailData.confirm_info && detailData.confirm_info.operate_datetime"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key !=='PLATFORM'" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_datetime)"></div>
+                <div class="detail-form-item" v-if="detailData.source_type && detailData.source_type.key ==='PLATFORM'" v-html="pbFunc.dealNullData(detailData.create_time)"></div>
               </div>
             </el-col>
           </el-row>
@@ -88,7 +89,7 @@
               <div class="label-list">
                 <label>匹配运单:</label>
                 <!--这里有问题，需要咨询后端-->
-                <div class="detail-form-item">无</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_num)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -129,6 +130,12 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
+            <el-col :span="8" v-if="detailData.position_type && detailData.position_type.key ==='LNG_FACTORY'">
+              <div class="label-list">
+                <label>气种:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.gas_type && detailData.gas_type.verbose)"></div>
+              </div>
+            </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>联系电话:</label>
@@ -327,6 +334,12 @@ export default {
 .check-button {
   position: relative;
   top: -8px;
+}
+
+.edit-btn-box {
+  padding: 10px 30px 0 0;
+  position: relative;
+  top: 15px;
 }
 
 </style>

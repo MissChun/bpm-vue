@@ -48,22 +48,27 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
-            <!-- <el-button type="primary">导出</el-button> -->
+            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-                <span class="text-blue" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div>
+            </template>
+          </el-table-column>
+           <el-table-column label="是否对账" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_reconciliation.verbose}}</div>
             </template>
           </el-table-column>
           <el-table-column label="运费合计" align="center" width="100" fixed="right">
@@ -71,11 +76,7 @@
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
-            </template>
-          </el-table-column>
+
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
               <div v-if="scope.row.is_reconciliation.key==='unfinished'">
@@ -85,6 +86,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -116,6 +118,11 @@ export default {
         is_reconciliation: [],
         keyword: '',
         field: 'waybill',
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       selectData: {
         isReconciliationsSelect: [
@@ -191,6 +198,10 @@ export default {
         param: 'initial_price',
         width: ''
       }, {
+        title: '运输费率',
+        param: 'change_rate',
+        width: ''
+      }, {
         title: '标准运费',
         param: 'freight_value',
         width: ''
@@ -222,7 +233,6 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      // console.log('全选',this.multipleSelection)
     },
     pageChange() {
       setTimeout(() => {
@@ -244,6 +254,56 @@ export default {
       this.getList();
 
     },
+    exportData() {
+      let postData = {
+        filename: '托运数据',
+        page_arg: 'logistic',
+        ids: [],
+        is_reconciliation: this.searchPostData.is_reconciliation
+      };
+      for (let i = 34; i <= 55; i++) {
+        postData.ids.push(i.toString());
+      }
+      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+        postData.leave_time_start = this.leaveTime[0];
+        postData.leave_time_end = this.leaveTime[1];
+      }
+      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
+        postData.active_time_start = this.planArriveTime[0];
+        postData.active_time_end = this.planArriveTime[1];
+      }
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportLogisticData', postData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
+    // 全部对账
     getUnReconciliations() {
       let postData = {
         is_reconciliation: this.searchPostData.is_reconciliation
@@ -272,6 +332,7 @@ export default {
         this.reconciliationsBtn.isLoading = false;
       })
     },
+    // 批量对账弹窗
     batchReconciliation() {
       let ids = [];
       let price = 0;
@@ -282,8 +343,8 @@ export default {
         }
       }
       this.reconciliations(true, ids, price);
-      console.log('合计', ids, price);
     },
+    // 批量/单个  对账
     reconciliations(isAll, ids, price) {
       let content = '';
       let postData = {
@@ -296,7 +357,7 @@ export default {
           // postData.batch = 'unfinished';
         } else {
           this.$message({
-            message: '没有勾选未对账数据',
+            message: '请勾选未对账数据',
             type: 'warning'
           });
         }
@@ -304,18 +365,18 @@ export default {
         content = '是否确认对账？';
         postData.id = ids.split(',');
       }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
+      // if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+      //   postData.leave_time_start = this.leaveTime[0];
+      //   postData.leave_time_end = this.leaveTime[1];
+      // }
+      // if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+      //   postData.active_time_start = this.activeTime[0];
+      //   postData.active_time_end = this.activeTime[1];
+      // }
 
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      if (postData.id.length) {
+      // postData[this.searchPostData.field] = this.searchPostData.keyword;
+      // postData = this.pbFunc.fifterObjIsNull(postData);
+      if (ids.length) {
         this.$confirm(content, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -350,14 +411,10 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getConsignmentStatisticsList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

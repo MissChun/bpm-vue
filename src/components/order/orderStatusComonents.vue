@@ -64,7 +64,7 @@
     </div>
     <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
-        <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
+        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
               <orderConFifter :ListData="listFifterData" :status="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
@@ -109,8 +109,8 @@ export default {
         }, {
           text: '今天',
           onClick(picker) {
-            const end = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
-            const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
+            const end = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 23:59:59";
+            const start = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00";
             picker.$emit('pick', [start, end]);
           }
         }]
@@ -171,10 +171,10 @@ export default {
   },
   methods: {
     chiledchangeTabs: function(tabsObj) {
-      this.$emit("chiledchangeTabs", tabsObj);
+      this.$emit("childchangeTabs", tabsObj);
     },
-    changeTabs:function(name){
-      this.$emit("changeTab", name);
+    changeTabs: function(name) {
+      this.$emit("changeTabs", name);
     },
     searchList: function(targetName) {
       //
@@ -196,9 +196,9 @@ export default {
           sendData.search = 'all_finish';
         }
       } else {
-        if(this.fifterName == 'canceling'||this.fifterName == 'modifying'||this.fifterName == 'abnormal'){
-          sendData.interrupt_status=this.fifterName;
-        }else{
+        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
+          sendData.interrupt_status = this.fifterName;
+        } else {
           sendData.status = this.fifterName;
         }
       }
@@ -228,10 +228,10 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
-      }else{
+      } else {
 
         vm.saveSendData = sendData;
-        this.pageData.currentPage=1;
+        this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
       sendData.pageSize = this.pageData.pageSize;
@@ -251,24 +251,24 @@ export default {
             vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
-                dataBody.forEach((Ditem,index) => {
-                  Ditem.transPowerInfo={
-                    tractor:{},
-                    semitrailer:{},
-                    master_driver:{},
-                    vice_driver:{},
-                    escort_staff:{},
+                dataBody.forEach((Ditem, index) => {
+                  Ditem.transPowerInfo = {
+                    tractor: {},
+                    semitrailer: {},
+                    master_driver: {},
+                    vice_driver: {},
+                    escort_staff: {},
                   };
                   transPowerInfoList.forEach((Ttiem) => {
-                  var status=true;
+                    var status = true;
                     if (Ditem.capacity == Ttiem.id) {
-                      Ttiem.tractor=Ttiem.tractor?Ttiem.tractor:{};
-                      Ttiem.semitrailer=Ttiem.semitrailer?Ttiem.semitrailer:{};
-                      Ttiem.master_driver=Ttiem.master_driver?Ttiem.master_driver:{};
-                      Ttiem.vice_driver=Ttiem.vice_driver?Ttiem.vice_driver:{};
-                      Ttiem.escort_staff=Ttiem.escort_staff?Ttiem.escort_staff:{};
+                      Ttiem.tractor = Ttiem.tractor ? Ttiem.tractor : {};
+                      Ttiem.semitrailer = Ttiem.semitrailer ? Ttiem.semitrailer : {};
+                      Ttiem.master_driver = Ttiem.master_driver ? Ttiem.master_driver : {};
+                      Ttiem.vice_driver = Ttiem.vice_driver ? Ttiem.vice_driver : {};
+                      Ttiem.escort_staff = Ttiem.escort_staff ? Ttiem.escort_staff : {};
                       Ditem.transPowerInfo = Ttiem;
-                      status=false;
+                      status = false;
                     }
                   });
                 });
@@ -291,7 +291,7 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
-      this.$emit("changeTab", this.status);
+      this.$emit("changeTabs", this.status);
     },
     fifterData: function(listData) {
       this.listFifterData = listData;

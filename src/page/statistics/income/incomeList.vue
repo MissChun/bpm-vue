@@ -39,12 +39,12 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，采购优惠后总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，销售待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，运费合计{{tableData.summati?tableData.summati:0}}元，能源利润{{tableData.energy_prof?tableData.energy_prof:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
-            <el-button type="primary">导出</el-button>
+            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
@@ -70,6 +70,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -92,6 +93,11 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
@@ -176,6 +182,51 @@ export default {
       this.getList(this.statusActive);
 
     },
+    exportData() {
+      let postData = {
+        filename: '收入统计',
+        page_arg: 'income',
+        ids: []
+      };
+      for (let i = 56; i <= 77; i++) {
+        postData.ids.push(i.toString());
+      }
+      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
+        postData.active_time_start = this.planArriveTime[0];
+        postData.active_time_end = this.planArriveTime[1];
+      }
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+
+      this.$$http('exportIncomeData', postData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
@@ -195,14 +246,10 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getIncomeStatisticsList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

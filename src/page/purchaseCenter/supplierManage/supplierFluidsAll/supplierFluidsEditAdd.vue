@@ -1,5 +1,22 @@
 <template>
   <div class="out-contain">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsList'}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -7,8 +24,17 @@
             <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
               <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
           </el-input>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="地标区域:" class="map-choose-address">
+            <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item>
+            <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -76,8 +102,12 @@
   </div>
 </template>
 <script>
+import chooseAddress from '@/components/chooseAddress';
 export default {
   name: 'stationManageEditAdd',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {
     id: function() {
       return this.$route.query.id || '';
@@ -110,14 +140,9 @@ export default {
         text: '搜索'
       },
       fieldSelect: [{
-          key: 'position_name',
-          verbose: '实际站点',
-        },
-        {
-          key: 'address',
-          verbose: '地址',
-        },
-      ],
+        key: 'position_name',
+        verbose: '实际液厂',
+      }, ],
       showLeftWindow: false,
       formData: {
         supplier: '',
@@ -145,6 +170,16 @@ export default {
           { required: true, message: '请选择实际液厂', trigger: 'change' },
         ],
       },
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
+      addressName: {
+        province: '',
+        city: '',
+        area: '',
+      },
     }
   },
   methods: {
@@ -167,10 +202,19 @@ export default {
           postData.position_name = this.searchFilters.keyword;
         }
 
+        if (this.addressName.province) {
+          postData.province = this.addressName.province;
+        }
+        if (this.addressName.city) {
+          postData.city = this.addressName.city;
+        }
+        if (this.addressName.area) {
+          postData.county = this.addressName.area;
+        }
+
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.fluidList = results.data.data.results;
@@ -203,7 +247,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -230,8 +273,8 @@ export default {
     },
     getInfoWindowDom: function(data) {
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">上传来源：' + source_type +
+      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13 md-5">上传来源：' + source_type +
         '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为供方液厂</a></div>';
 
       return infoBodyStr;
@@ -243,7 +286,7 @@ export default {
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
           _this.map.addControl(new BasicControl.Zoom({
-            position: 'lt', //left top，左上角
+            position: 'rt', //left top，左上角
             showZoomNum: true //显示zoom值
           }));
 
@@ -323,12 +366,10 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 
@@ -444,7 +485,7 @@ export default {
     },
 
     searchSupplierList: function(query) {
-      console.log('this.searchFilters.supplier', this.searchFilters.supplier);
+
       let postData = {
         need_all: true,
       }
@@ -467,16 +508,12 @@ export default {
         let postData = {
           id: this.id,
         };
-        console.log('this.id', this.id);
         this.$$http('getFluidDetail', postData).then((results) => {
           if (results.data && results.data.code == 0) {
 
             this.fluidDetail = results.data.data;
-            console.log(' this.fluidDetail', this.fluidDetail);
             this.formData.supplier = this.fluidDetail.supplier;
             this.formData.fluid_name = this.fluidDetail.fluid_name;
-
-
 
             resolve(results);
           } else {
@@ -504,24 +541,34 @@ export default {
 
     this.initMarkList();
 
+
+
+
     this.getActualFluidList().then(() => {
       this.renderMarker();
-      console.log('xxxxxx')
+
       if (this.id) {
+        this.showLeftWindow = true;
+
         this.getFluidsDetail().then(() => {
-          return this.getLandmarkDetail(this.fluidDetail.map_position);
-        }).then(() => {
-          this.choosedActualFluid = this.landmarkDetail;
-          this.formData.actual_fluid = this.choosedActualFluid.id;
-          console.log('this.landmarkDetail', this.landmarkDetail);
-          this.map.setZoom(15);
-          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
-          //this.map.setZoomAndCenter(15, );
-        });
+
+          if (this.fluidDetail.map_position) {
+            this.getLandmarkDetail(this.fluidDetail.map_position).then(() => {
+              this.choosedActualFluid = this.landmarkDetail;
+              this.formData.actual_fluid = this.choosedActualFluid.id;
+
+              let choosedActualFluidMarker = '';
+
+              this.map.setZoom(15);
+              this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+            });
+          } else {
+            this.pageLoading = false;
+          }
+
+        })
       }
     })
-
-
 
 
   },
@@ -531,6 +578,9 @@ export default {
 <style scoped lang="less">
 .out-contain {
   position: relative;
+  .return-box {
+    height: 80px;
+  }
 }
 
 .search-filters-form {
@@ -626,7 +676,7 @@ export default {
 
 .side-alert-traggle {
   position: absolute;
-  top: 280px;
+  top: 470px;
 
   width: 26px;
   height: 50px;
@@ -658,7 +708,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 250px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

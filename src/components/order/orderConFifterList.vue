@@ -92,16 +92,20 @@
   white-space: nowrap;
   display: inline-block;
 }
-.el-icon-location{
-  cursor:pointer;
+
+.el-icon-location {
+  cursor: pointer;
 }
+
 #map-container {
   height: 400px;
   width: 100%;
 }
+
 </style>
 <template>
-  <div>
+  <div style="position:relative;">
+    <noData v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -114,14 +118,14 @@
                 </el-col>
                 <el-col :span="4" class="colinfo">{{props.row.delivery_order.plan_time.split(" ")[0]}}</br>{{props.row.delivery_order.plan_time.split(" ")[1]}}
                 </el-col>
-                <el-col :span="4" class="colinfo"><span v-if="props.row.delivery_order.active_time">{{props.row.delivery_order.active_time.split(" ")[0]}}</br>{{props.row.delivery_order.active_time.split(" ")[1]}}</span><span v-else>无</span>
+                <el-col :span="4" class="colinfo"><span v-if="props.row.pick_active_time">{{props.row.pick_active_time.split(" ")[0]}}</br>{{props.row.pick_active_time.split(" ")[1]}}</span><span v-else>无</span>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.delivery_order.plan_tonnage}}
                 </el-col>
-                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-              <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
+              <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)&&props.row.section_type.key=='unload'">
                 <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -167,7 +171,12 @@
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
               <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
@@ -184,17 +193,17 @@
               <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
             <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
-             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
+            <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
             <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">
-              <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
+              <el-tooltip :content="props.row.delivery_order.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
             <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:
-            <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
-            <span v-else>{{props.row.status.verbose}}</span>
-          </el-col>
+              <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
+              <span v-else>{{props.row.status.verbose}}</span>
+            </el-col>
           </el-row>
         </template>
       </el-table-column>
@@ -224,7 +233,7 @@
           <el-select v-model="changeStatusParam.changeStatusFied" filterable placeholder="请选择变更类型" v-if="changeStatusParam.changeStatusType=='truck'" v-loading="seletPadding">
             <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.plate_number" :value="item.id"></el-option>
           </el-select>
-          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择变更类型" v-else filterable>
+          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择" v-else filterable>
             <el-option v-for="(item,key) in changeSatusPerList" :key="key" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -245,16 +254,31 @@
 <script>
 let landmarkMap;
 let positionMark;
+import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
+  components: {
+    noData: noData
+  },
   data() {
     return {
       lockFalg: false,
       delayTime: 500,
       expandFalg: true,
-      showMap:false,
-      loadPosition:{},
+      showMap: false,
+      loadPosition: {},
+      ListDataSearch:false,
       fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
+      buttonModyfiyAll: {
+        canceling: [],
+        abnormal: [{
+          text: "确认变更",
+          type: "primary",
+          attrPlan: true,
+          methods_type: "sureChangeCar",
+        }],
+        modifying: []
+      },
       buttonAll: {
         //装车
         driver_pending_confirmation: [{ //司机未确认
@@ -362,7 +386,7 @@ export default {
       this.$$http("upStatus", sendData).then((results) => {
         console.log('results', results)
         //vm.$emit("changeTabs", 'fifth');
-        vm.changeSatusShow = false;
+        //vm.changeSatusShow = false;
       }).catch((err) => {
         console.log('errs', err);
       });
@@ -370,54 +394,54 @@ export default {
     getRowKeys: function(row) {
       return row.id;
     },
-     showMapDetalis:function(type,id){
-     var vm=this;
-     if(type=="load"){
-        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.coordinate.longitude;
-            vm.loadPosition.latitude=pointObj.coordinate.latitude;
-            vm.loadPosition.position=pointObj.coordinate.address;
+    showMapDetalis: function(type, id) {
+      var vm = this;
+      if (type == "load") {
+        this.$$http('getFulidDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.coordinate.longitude;
+            vm.loadPosition.latitude = pointObj.coordinate.latitude;
+            vm.loadPosition.position = pointObj.coordinate.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
-      }else if(type=="unload"){
-        this.$$http('getStationDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.location.longitude;
-            vm.loadPosition.latitude=pointObj.location.latitude;
-            vm.loadPosition.position=pointObj.address;
+      } else if (type == "unload") {
+        this.$$http('getStationDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.location.longitude;
+            vm.loadPosition.latitude = pointObj.location.latitude;
+            vm.loadPosition.position = pointObj.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
       }
     },
-    openDigo:function(obj){
-      var vm=this;
-      setTimeout(()=>{
+    openDigo: function(obj) {
+      var vm = this;
+      setTimeout(() => {
         landmarkMap = new AMap.Map('map-container', {
           zoom: 10,
         });
-      // /*创建点标记*/
+        // /*创建点标记*/
         positionMark = new AMap.Marker({
-            map:landmarkMap,
-          });
-         positionMark.setLabel({
-            content: vm.loadPosition.position,
-            offset: new AMap.Pixel(30, 0)
-         });
+          map: landmarkMap,
+        });
+        positionMark.setLabel({
+          content: vm.loadPosition.position,
+          offset: new AMap.Pixel(30, 0)
+        });
         let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
-      },100);  
+      }, 100);
     },
     changeExpand: function(row, expandedRows) {
       // var vm = this;
@@ -440,7 +464,7 @@ export default {
       if (type == 'cancleOrder') { //取消运单
         sendData.id = rowData.id;
         sendData.status = "canceled";
-        this.$confirm('取消运单后,系统将通知承运商确认,并通知驾驶员?', '确认取消运单', {
+        this.$confirm('取消运单后,系统将通知驾驶员,是否确认', '确认取消运单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -451,7 +475,8 @@ export default {
                 type: "success",
                 message: "取消运单成功",
               });
-              vm.$emit("chiledchangeTabs",{first:'sxith',second:"all"});
+              vm.$emit("chiledchangeTabs", { first: 'first', second: "all" });
+              vm.$emit('searchList');
             } else {
               vm.$message.error("取消运单失败");
             }
@@ -471,6 +496,8 @@ export default {
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'sureDownOrder') {
+        this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+      } else if (type == 'sureChangeCar') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       }
     },
@@ -524,6 +551,9 @@ export default {
       handler(newValue, oldValue) {
         console.log('newValue', newValue);
         console.log('oldValue', oldValue);
+        setTimeout(()=>{
+          this.ListDataSearch=true;
+        })
       },
       deep: true
     }

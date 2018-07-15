@@ -79,7 +79,7 @@
                     <el-collapse v-model="extendsArr">
                       <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key" v-bind:class="{paddingCancle: item.type=='confirm_match'}">
                         <div v-if="item.type === 'driver_pending_confirmation'">
-                          <el-row>
+                          <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>生成运单号</label>
@@ -124,22 +124,31 @@
                         </div>
                         <div v-if="item.type === 'to_fluid'">
                           <el-row :gutter="40">
-                            <el-col :span="8">
+                           <el-col :span="8">
                               <div class="label-list">
                                 <label>司机:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.master_driver)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.master_driver)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.master_driver_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>副驾:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.copilot_name)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.copilot_name)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.copilot_driver_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>押运:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.supercargo_name)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.supercargo_name)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.supercargo_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                           </el-row>
@@ -378,7 +387,7 @@
                         </div>
                         <div v-if="item.type === 'confirm_match'" style="margin-top:-20px;">
                           <div v-for="(Mitem,Mkey) in item.waiting_matchArr" v-bind:class="{ garyColor: Mitem.status!='new',padds:Mkey==0,borderB:item.waiting_matchArr.length>1&&Mkey!=item.waiting_matchArr.length-1 }" style="border-left:none;border-right:none;">
-                            <el-row style="padding:15px 0;">
+                            <el-row :gutter="40" >
                               <el-col :span="22">
                                 <el-row :gutter="40">
                                   <el-col :span="8">
@@ -578,6 +587,22 @@
                             </el-col>
                           </el-row>
                         </div>
+                         <div v-if="item.type === 'canceled'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
                         <div v-if="item.type === 'waiting_settlement'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -610,13 +635,59 @@
                             </el-col>
                           </el-row>
                         </div>
+                        <div v-if="item.type === 'abnormal'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更类型:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.msg)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更前:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.before_truck_no)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更后:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.after_truck_no)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更提交时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
+                         <div v-if="item.type === 'normal'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
                       </el-collapse-item>
                     </el-collapse>
                   </el-col>
                   <el-col :span="2" :offset="1">
                     <div v-if="detailData.length>1">
                       <div v-for="(item,key) in allButton[detailData[detailData.length-1].type]">
-                        <el-button style="margin-top:20px;width:100%" :type="item.type" @click="orderOperation(item.methods)">{{item.text}}</el-button>
+                        <el-button style="margin-top:20px;width:100%" :type="item.type" @click="orderOperation(item.methods,detailData[detailData.length-1])">{{item.text}}</el-button>
                       </div>
                     </div>
                   </el-col>
@@ -669,7 +740,9 @@ export default {
         waiting_settlement: '待提交结算',
         in_settlement: '结算中',
         finished: '已完成',
-        canceled: '已取消'
+        canceled: '已取消',
+        abnormal:'运力变更申请',
+        normal:'运力已变更'
       },
       lockFalg: false,
       activeName: 'second',
@@ -691,7 +764,11 @@ export default {
       poundImg: {},
       suerId: "",
       allButton: {
-
+        'abnormal': [{
+          text: "确认变更",
+          type: "success",
+          methods: "sureChangeCar"
+        }]
       }
     }
   },
@@ -746,6 +823,25 @@ export default {
         }
       }
     },
+
+    sureChangeCar:function(rowData){
+      var sendData={};
+      this.pageLoading=true;
+      sendData.id=rowData.interrupt_record_id;
+      sendData.status='success';
+      this.$$http('sureChangeCar',sendData).then(results=>{
+        this.pageLoading=false;
+        this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList" });
+        if(results.data.code==0){
+          vm.$message({
+            type: "success",
+            message: "确认变更成功"
+          })
+        }
+      }).catch(()=>{
+        vm.$message.error("确认变更失败");
+      });
+    },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${this.setpId}/${this.willId}` });
@@ -754,9 +850,10 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${this.setpId}/${this.willId}` });
       }
     },
-    orderOperation: function(type) {
-
-
+    orderOperation: function(type,rowData) {
+      if(type=='sureChangeCar'){
+        this.sureChangeCar(rowData);
+      }
     },
     getData: function() {
       var sendData = {};

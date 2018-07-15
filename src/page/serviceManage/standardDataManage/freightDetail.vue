@@ -41,6 +41,12 @@
                   <div class="table-list">
                     <el-table :data="detailData.records" stripe style="width: 100%" size="mini">
                       <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                        <template slot-scope="scope">
+                          <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'">
+                            {{scope.row[item.param]}}<span v-if="item.param==='start_mileage'">（不含）</span><span v-if="item.param==='end_mileage'">（含）</span>
+                          </div>
+                          <div v-else>{{scope.row[item.param]}}</div>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </div>
@@ -71,7 +77,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>生效承运商:</label>
-                         <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')" -->
+                        <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')" -->
                         <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')">
                           <!-- <span v-for="(row,index) in detailData.agreements" v-if="index<5">{{row.carrier_name}}<span v-if="index!=4&&index!=detailData.agreements.length-1">，</span></span> -->
                         </div>

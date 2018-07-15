@@ -90,7 +90,7 @@
             <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
               需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
             </el-col>
-            <el-col :span="2" v-if="delivery_list.status.key!='canceled'&&this.delivery_list.status.key != 'confirmed'">
+            <el-col :span="2" v-if="delivery_list.status.key=='determine'">
               <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
             </el-col>
           </el-row>
@@ -331,14 +331,13 @@ export default {
       };
       vm.$$http('getPickOrderDetail', postData1).then((results) => {
         getDataNum++;
-
         if (results.data && results.data.code == 0) {
           console.log("当前订单数据", results.data.data);
           var list=[];
           results.data.data.trips.forEach((item,index)=>{
-            if(item.status!='canceled'){
+            // if(item.status!='canceled'){
               list.push(item);
-            }
+            // }
           });
           results.data.data.trips=list;
           vm.delivery_list = results.data.data;
@@ -391,17 +390,20 @@ export default {
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
+              if(this.delivery_list.trips[j].status=='canceled'){
+                operationArr[i].waybill = this.delivery_list.trips[j];
+              }else{
+                operationArr[i].waybill = this.delivery_list.trips[j];
+                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
                 operationArr[i].disableChoose = true;
                 addflag = false;
                 operationArr[i].bindCheckBox = true;
-                operationArr[i].waybill = this.delivery_list.trips[j];
                 newArr.push(operationArr[i]);
                 break;
+                }
               }
             }
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              
             // }
           }
           if (addflag) {
@@ -415,7 +417,7 @@ export default {
 
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
-        if (this.delivery_list.status.key == "canceled" || this.delivery_list.status.key == 'confirmed') {
+        if (this.delivery_list.status.key != 'determine') {
           this.trueAll_list.forEach(item => {
             item.disableChoose = true;
           });

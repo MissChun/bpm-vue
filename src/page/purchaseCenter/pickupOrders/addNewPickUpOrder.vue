@@ -77,14 +77,14 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="供应商名称:" prop="supplier">
-                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading">
+                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading" >
                       <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂:" prop="fluid">
+                  <el-form-item label="液厂名称:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="changeBindText('fluidName')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                       </el-option>
@@ -118,8 +118,8 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="采购优惠:" prop="discount_price">
-                    <el-input placeholder="请输入" type="text" v-model="pickOrderParam.discount_price"></el-input>
+                  <el-form-item label="采购优惠:" prop="business_price">
+                    <el-input placeholder="请输入" type="text" v-model="pickOrderParam.business_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -153,7 +153,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="16">
-                  <el-form-item label="承运方式:" v-loading="loadingArr.carriersLoading" prop="carriers">
+                  <el-form-item label="承运商:" v-loading="loadingArr.carriersLoading" prop="carriers">
                     <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                       <el-form-item label="自有:" label-width="60px">
                         <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">
@@ -291,8 +291,8 @@ export default {
         trader: '',
         consignment_type: 'own',
         plan_tonnage: '',
-        discount_price: '0',
-        unit_price: '',
+        business_price: '0',
+        unit_price: '0',
         mark: '',
         unload_area: ''
       },
@@ -309,7 +309,7 @@ export default {
           { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         fluid: [
-          { required: true, message: '液厂', trigger: 'change' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
         plan_time: [
           { required: true, message: '请填写计划时间', trigger: 'blur' },
@@ -321,9 +321,9 @@ export default {
           { validator: planTongVa, trigger: 'blur' }
         ],
         unit_price: [
-          { required: true, message: '请填写采购价', trigger: 'blur' },
+          
         ],
-        discount_price: [
+        business_price: [
           { validator: discountVa, trigger: 'blur' }
         ],
         mark: [
@@ -418,6 +418,7 @@ export default {
         this.loadingArr.fluidLoading = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data;
+          this.pickOrderParam.fluid="";
           this.selectData.fluidList = dataBody;
         }
       }).catch(() => {

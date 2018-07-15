@@ -1,5 +1,22 @@
 <template>
   <div class="out-wraper">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: returnRoute}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <div id="map-container" v-loading="pageLoading"></div>
     <div class='map-panel'>
       <el-input placeholder="请输入地址" v-model="keyword" @keyup.native.13="inputChangeFun" class="search-filters-screen" id="map-search-input">
@@ -14,7 +31,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="地标类型:" prop="position_type">
-                <el-select v-model="formData.position_type" :disabled="!!id" placeholder="请选择">
+                <el-select v-model="formData.position_type" placeholder="请选择">
                   <el-option v-for="(item,key) in positionTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -30,7 +47,7 @@
           <el-row v-if="formData.position_type === 'LNG_FACTORY'">
             <el-col :span="20">
               <el-form-item label="气种:" prop="gas_type">
-                <el-select v-model="formData.gas_type" :disabled="!!id" placeholder="请选择">
+                <el-select v-model="formData.gas_type" placeholder="请选择">
                   <el-option v-for="(item,key) in gasTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
@@ -81,6 +98,9 @@ export default {
     },
     pageTitle: function() {
       return this.$route.query.id ? '编辑地标' : '新增地标';
+    },
+    returnRoute: function() {
+      return this.$route.query.id ? `/mapManage/landMark/landmarkDetail/${this.$route.query.id}` : '/mapManage/landmark/landmarkList';
     }
   },
   data() {
@@ -122,7 +142,7 @@ export default {
         "key": "SEA_GAS",
         "verbose": "海气"
       }, {
-        "key": "NORTHWEST",
+        "key": "NORTHWEST_GAS",
         "verbose": "西北气"
       }],
       rules: {
@@ -230,7 +250,6 @@ export default {
       this.placeSearch.search(this.keyword, (status, result) => {
 
         if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
-          console.log('result', result);
 
           this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
 
@@ -331,14 +350,7 @@ export default {
               county: this.detailData.county && this.detailData.county.area_name ? this.detailData.county.area_name : '',
             }
 
-            setTimeout(() => {
-              this.setMapZoom();
-              this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
 
-              this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
-              this.oldMarker.show();
-
-            }, 500)
 
 
             resolve(results);
@@ -367,14 +379,13 @@ export default {
           county: this.addressDetail.county,
         };
 
-        if (apiName === 'addLandmark' && this.formData.position_type === 'LNG_FACTORY') {
+        if (this.formData.position_type === 'LNG_FACTORY') {
           postData.gas_type = this.formData.gas_type;
         }
 
         if (apiName === 'patchLandMarkDetail') {
           postData.id = this.id;
           delete postData.source_type;
-          delete postData.position_type;
         }
 
         this.submitBtn.btnText = '提交中';
@@ -409,15 +420,31 @@ export default {
 
       })
     },
+    setCenter: function() {
+      if (this.map && this.oldMarker) {
+        this.setMapZoom();
+        this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+
+        this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+        this.oldMarker.show();
+      } else {
+        setTimeout(() => {
+          this.setCenter();
+        }, 500)
+      }
+    },
 
   },
+
   created: function() {
 
   },
   mounted: function() {
     this.initMap();
     if (this.id) {
-      this.getLandmarkDetail();
+      this.getLandmarkDetail().then(() => {
+        this.setCenter();
+      });
     }
   }
 
@@ -436,7 +463,7 @@ export default {
 
 .map-panel {
   position: absolute;
-  top: 10px;
+  top: 110px;
   right: 10px;
   width: 400px;
   .search-filters-screen {}
@@ -450,7 +477,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 200px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

@@ -102,13 +102,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="采购单价:" prop="business_price">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
+                  <el-form-item label="采购单价:" prop="unit_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="业务优惠:" prop="discount_price">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
+                  <el-form-item label="业务优惠:" prop="business_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -119,8 +119,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="卸车数:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.unload_nums"></el-input>
+                  <el-form-item label="卸车数:" prop="unload_nums">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unload_nums"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -147,6 +147,16 @@
                 </el-col>
               </el-row>
               <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="是否对账:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否开票:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -200,42 +210,44 @@ export default {
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         unit_price: '', //销售单价
-        business_price: '', //采购单价
+        business_price: '', //业务优惠
         discount_price: '', //优惠单价
         unload_num: '', //卸车数
         waiting_price: '', //卸车待时金额
         sell_rental: '', //销售总额
         waiting_charges: '', //待时总额
         sale_man: '', //业务员
-        active_time:'',//实际装车时间
+        active_time: '', //实际装车时间
+        is_invoice: '', //是否开票
+        is_reconciliation: '', //是否对账
         remark: '' //备注
       },
 
       rules: {
         actual_quantity: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         plan_tonnage: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         check_quantity: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         discount_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         deficiency: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^(-)?[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         unit_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         waiting_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        // sell_rental: [
-        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        // ],
+        unload_nums: [
+          { pattern: /^[0-9]$/, message: '支持数值输入', trigger: 'blur' }
+        ],
         // waiting_charges: [
         //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         // ],
@@ -273,8 +285,6 @@ export default {
       this.$$http('getSalesStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
-
           this.editMsgForm = {
             waybill: this.detail.waybill, //运单
             business_order: this.detail.business_order, //业务单号
@@ -291,18 +301,19 @@ export default {
             plan_tonnage: this.detail.plan_tonnage, //装车吨位
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
-            unit_price: this.detail.unit_price, //销售单价
-            business_price: this.detail.business_price, //采购单价
+            unit_price: this.detail.unit_price, //采购单价
+            business_price: this.detail.business_price, //业务优惠
             discount_price: this.detail.discount_price, //优惠单价
             unload_nums: this.detail.unload_nums, //卸车数
             waiting_price: this.detail.waiting_price, //卸车待时金额
             sell_rental: this.detail.sell_rental, //销售总额
             waiting_charges: this.detail.waiting_charges, //待时总额
             sale_man: this.detail.sale_man, //业务员
-            active_time:this.detail.active_time,//实际装车时间
+            active_time: this.detail.active_time, //实际装车时间
+            is_invoice: this.detail.is_invoice.verbose,
+            is_reconciliation: this.detail.is_reconciliation.verbose,
             remark: ''
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
         }
       })
 
@@ -340,9 +351,8 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'deficiency', 'check_quantity', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

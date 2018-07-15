@@ -9,26 +9,26 @@
             <el-input placeholder="请输入" v-model="staffRules.mobile_number" :disabled="staffDialog.type==='update'?true:false" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
-    <!--       <el-form-item label="姓名：" prop="nick_name">
+          <el-form-item label="姓名：" prop="nick_name">
             <el-input placeholder="请输入" v-model="staffRules.nick_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
-          </el-form-item> -->
-        <!--   <el-form-item label="初始密码：" prop="password">
-            <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          </el-form-item>
+          <el-form-item label="初始密码：" prop="password">
+            <el-input placeholder="请输入" type="text" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
-          </el-form-item> -->
+          </el-form-item>
           <!-- <el-form-item label="初始密码：" v-else>
             <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item> -->
-          <!-- <el-form-item label="用户名：" prop="username">
+         <!--  <el-form-item label="用户名：" prop="username">
             <el-input placeholder="请输入" v-model="staffRules.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item> -->
-          <!-- <el-form-item label="邮箱：" prop="email">
+          <el-form-item label="邮箱：" prop="email">
             <el-input placeholder="请输入" v-model="staffRules.email" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item label="部门：" prop="department">
             <el-select v-model="staffRules.department" filterable placeholder="请选择" @change="getPositionList(true)">
               <el-option v-for="(item,key) in departmentList" :key="key" :label="item.department_name" :value="item.id"></el-option>
@@ -78,11 +78,11 @@ export default {
     return {
       operation: this.staffDialog.type,
       staffRules: {
-        // username: '',
-        // password: '',
-        // nick_name: '',
+        username: '',
+        password: '',
+        nick_name: '',
         mobile_number: '',
-        // email: '',
+        email: '',
         department: '',
         position: ''
       },
@@ -92,23 +92,24 @@ export default {
         //   { required: true, message: '请输入用户名', trigger: 'blur' },
         //   { pattern: /([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/gi, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         // ],
-        // password: [
-        //   { required: true, message: '请输入密码', trigger: 'blur' },
-        //   { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符(除空格),至少包含2种', trigger: 'blur' },
-        //   { validator: isSpace, trigger: 'blur' },
-        // ],
-        // nick_name: [
-        //   { required: true, message: '请输入姓名', trigger: 'blur' },
-        //   { min: 1, max: 5, message: '姓名为1-5字', trigger: 'blur' }
-        // ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          // { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符(除空格),至少包含2种', trigger: 'blur' },
+          { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
+          { validator: isSpace, trigger: 'blur' },
+        ],
+        nick_name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+          { min: 1, max: 5, message: '姓名为1-5字', trigger: 'blur' }
+        ],
         mobile_number: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^1\d{10}$/, message: '手机号码格式不正确，请重新输入', trigger: 'blur' }
         ],
-        // email: [
-        //   { required: true, message: '请输入邮箱', trigger: 'blur' },
-        //   { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: '邮箱格式不正确，请重新输入', trigger: 'blur' }
-        // ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: '邮箱格式不正确，请重新输入', trigger: 'blur' }
+        ],
         department: [
           { required: true, message: '请选择部门', trigger: 'blur' },
         ],
@@ -149,7 +150,6 @@ export default {
           }
 
           this.$$http(apiName, postData).then((results) => {
-            console.log('部门', results.data);
             // this.pageLoading = false;
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
@@ -196,32 +196,44 @@ export default {
   },
   watch: {
     staffDialog: {
-      handler(val, oldVal) {　　　　　　
+      handler(val, oldVal) {　　
+        const isSpace = (rule, value, callback) => {
+          if (value.indexOf(" ") != -1) {
+            callback(new Error('密码不能包含空格'));
+          } else {
+            callback();
+          }
+        };　　　　
         if (val.isShow && val.type === 'update') {
-          console.log('staffRow', this.staffRow)
           this.staffRules = {
             // username: this.staffRow.username,
-            // password: '',
-            // nick_name: this.staffRow.nick_name,
+            password: '',
+            nick_name: this.staffRow.nick_name,
             mobile_number: this.staffRow.mobile_number,
-            // email: this.staffRow.email,
+            email: this.staffRow.email,
             department: this.staffRow.department_id,
             position: this.staffRow.position_id
           }
-          console.log('this.staffRules',this.staffRules)
+          this.rules.password[0].required = false;
           this.getPositionList();
           this.title = '修改员工';
         } else {
           this.title = '新增员工';
           this.staffRules = {
             // username: '',
-            // password: '',
-            // nick_name: '',
+            password: '',
+            nick_name: '',
             mobile_number: '',
-            // email: '',
+            email: '',
             department: '',
             position: ''
           }
+           this.rules.password = [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
+            // { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
+            { validator: isSpace, trigger: 'blur' },
+          ];
         }　　
         if(this.$refs['staffRules']){
           this.$refs['staffRules'].clearValidate();　　　　

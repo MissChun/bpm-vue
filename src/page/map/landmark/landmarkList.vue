@@ -19,7 +19,6 @@
                     <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.label" :value="item.id"></el-option>
                     </el-select>
-                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
               </el-row>
@@ -73,8 +72,8 @@
             <el-button type="success" @click="addLandmark">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}" v-loading="pageLoading">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:'150'">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
@@ -82,6 +81,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>1">
@@ -96,10 +96,12 @@
 </template>
 <script>
 import chooseAddress from '@/components/chooseAddress';
+
 export default {
   name: 'landMarkList',
   components: {
     chooseAddress: chooseAddress,
+
   },
   computed: {},
   data() {
@@ -157,7 +159,7 @@ export default {
         width: ''
       }, {
         title: '上传时间',
-        param: 'created_time',
+        param: 'create_time',
         width: '200'
       }, {
         title: '上传来源',
@@ -240,7 +242,10 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
-      }]
+      }, {
+        label: '上传人姓名',
+        id: 'upload_user_nick_name',
+      }, ]
 
     }
   },

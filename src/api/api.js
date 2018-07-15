@@ -9,15 +9,124 @@
  */
 
 const api = {
+  batchSalesStatisticsStatus: {
+    url: '/api/v1/batch-update-sale/',
+    method: 'post',
+    desc: '销售统计批量、单个对账开票',
+    param: {
+      is_reconciliation: {
+        desc: '对账'
+      },
+      is_invoice: {
+        desc: '开票'
+      },
+      id: {
+        desc: 'id'
+      }
+    }
+  },
+  batchPurchseStatisticsStatus: {
+    url: '/api/v1/batch-update-procument/',
+    method: 'post',
+    desc: '采购统计批量、单个对账开票',
+    param: {
+      is_reconciliation: {
+        desc: '对账'
+      },
+      is_invoice: {
+        desc: '开票'
+      },
+      id: {
+        desc: 'id'
+      }
+    }
+  },
+  businessDistribution: {
+    url: '/api/v1/business_order/assign/',
+    method: 'put',
+    desc: '业务单分配',
+    param: {
+      order_ids: {
+        desc: '业务单id'
+      },
+      order_assign: {
+        desc: '业务单分配'
+      }
+    }
+  },
+  exportIncomeData: {
+    url: '/export/income/',
+    method: 'post',
+    desc: '收入统计数据',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 income'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportLogisticData: {
+    url: '/export/logistic/',
+    method: 'post',
+    desc: '托运数据',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportSaleData: {
+    url: '/export/sale/',
+    method: 'post',
+    desc: '导出销售数据',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 sale'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportPurchaseData: {
+    url: '/export/procument/',
+    method: 'post',
+    desc: '导出采购数据',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 例：procurement'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   getStationList: {
     url: '/api/v1/delivery_point/',
     method: 'get',
     desc: '客户站点列表',
     param: {
-      consumer_id:{
+      consumer_id: {
         desc: '客户id'
       },
-      relations:{
+      relations: {
         desc: '业务区域ID列表'
       }
     }
@@ -35,10 +144,10 @@ const api = {
     method: 'patch',
     desc: '设置生效时间',
     param: {
-      effect_time:{
+      effect_time: {
         desc: '生效时间 %H:%M'
       },
-      relations:{
+      relations: {
         desc: '业务区域ID列表'
       }
     }
@@ -48,10 +157,10 @@ const api = {
     method: 'post',
     desc: '目的地设置更新',
     param: {
-      fluid_id:{
+      fluid_id: {
         desc: '液厂ID'
       },
-      area_ids:{
+      area_ids: {
         desc: '业务区域ID列表'
       }
     }
@@ -61,7 +170,7 @@ const api = {
     method: 'get',
     desc: '目的地设置详情',
     param: {
-      id:{
+      id: {
         desc: '目的地ID'
       }
     }
@@ -114,7 +223,7 @@ const api = {
   reconciliations: {
     url: '/api/v1/batch-update-logistic/',
     method: 'post',
-    desc: '收入统计列表',
+    desc: '批量、单个对账',
     param: {
       id: {
         desc: '支持单个多个对账'
@@ -364,6 +473,14 @@ const api = {
       need_all: {
         desc: '是否分页'
       }
+    }
+  },
+  getFulidDetalis: {
+    url: '/api/v1/actual-fluids/:id/',
+    method: 'get',
+    desc: '实际液厂详情',
+    param: {
+
     }
   },
   updateCarrier: {
@@ -1144,7 +1261,6 @@ const api = {
   getProvince: {
     url: '/api/v1/area/provinces/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取省列表',
     param: {
 
@@ -1153,7 +1269,6 @@ const api = {
   getCity: {
     url: '/api/v1/area/:id/cities/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取市列表',
     param: {
 
@@ -1162,7 +1277,6 @@ const api = {
   getArea: {
     url: '/api/v1/area/:id/county/',
     method: 'get',
-    notNeedToken: true,
     desc: '获取区域列表',
     param: {
 
@@ -1744,7 +1858,7 @@ const api = {
     }
   },
   searchCustomerList: {
-    url: '/api/v1/consumer/',
+    url: '/api/v1/payer_consumer/',
     method: 'get',
     desc: '获取客户列表',
     param: {
@@ -1862,11 +1976,11 @@ const api = {
 
     }
   },
-  getSiteOfCustomerDetail:{
+  getSiteOfCustomerDetail: {
     url: '/api/v1/delivery_point/:id/',
     method: 'get',
     desc: '新增客户站点详情',
-    param:{
+    param: {
 
     }
   },
@@ -1875,41 +1989,41 @@ const api = {
     method: 'post',
     desc: '新增客户站点接口',
     param: {
-      address :{
-        desc:'详细地址',
+      address: {
+        desc: '详细地址',
       },
-      area  :{
-        desc:'区',
+      area: {
+        desc: '区',
       },
-      city :{
-        desc:'市',
+      city: {
+        desc: '市',
       },
-      consignee :{
-        desc:'联系人',
+      consignee: {
+        desc: '联系人',
       },
-      consignee_phone :{
-        desc:'联系电话',
+      consignee_phone: {
+        desc: '联系电话',
       },
-      map_position :{
-        desc:'基础地标id',
+      map_position: {
+        desc: '基础地标id',
       },
-      province :{
-        desc:'省',
+      province: {
+        desc: '省',
       },
-      short_name_id :{
-        desc:'客户简称id',
+      short_name_id: {
+        desc: '客户简称id',
       },
-      station_type  :{
-        desc:'站点类型',
+      station_type: {
+        desc: '站点类型',
       },
-      station_name :{
-        desc:'站点名称',
+      station_name: {
+        desc: '站点名称',
       },
-      longitude :{
-        desc:'经度',
+      longitude: {
+        desc: '经度',
       },
-      latitude  :{
-        desc:'纬度',
+      latitude: {
+        desc: '纬度',
       },
     }
   },
@@ -1919,41 +2033,41 @@ const api = {
     method: 'put',
     desc: '新增客户站点接口',
     param: {
-      address :{
-        desc:'详细地址',
+      address: {
+        desc: '详细地址',
       },
-      area  :{
-        desc:'区',
+      area: {
+        desc: '区',
       },
-      city :{
-        desc:'市',
+      city: {
+        desc: '市',
       },
-      consignee :{
-        desc:'联系人',
+      consignee: {
+        desc: '联系人',
       },
-      consignee_phone :{
-        desc:'联系电话',
+      consignee_phone: {
+        desc: '联系电话',
       },
-      map_position :{
-        desc:'基础地标id',
+      map_position: {
+        desc: '基础地标id',
       },
-      province :{
-        desc:'省',
+      province: {
+        desc: '省',
       },
-      short_name_id :{
-        desc:'客户简称id',
+      short_name_id: {
+        desc: '客户简称id',
       },
-      station_type  :{
-        desc:'站点类型',
+      station_type: {
+        desc: '站点类型',
       },
-      station_name :{
-        desc:'站点名称',
+      station_name: {
+        desc: '站点名称',
       },
-      longitude :{
-        desc:'经度',
+      longitude: {
+        desc: '经度',
       },
-      latitude  :{
-        desc:'纬度',
+      latitude: {
+        desc: '纬度',
       },
     }
   },
@@ -1962,14 +2076,14 @@ const api = {
     method: 'post',
     desc: '新增供应商液厂',
     param: {
-      fluid_name  :{
-        desc:'液厂名称',
+      fluid_name: {
+        desc: '液厂名称',
       },
-      supplier  :{
-        desc:'供应商id',
+      supplier: {
+        desc: '供应商id',
       },
-      actual_fluid  :{
-        desc:'实际液厂id',
+      actual_fluid: {
+        desc: '实际液厂id',
       },
     }
   },
@@ -1978,14 +2092,14 @@ const api = {
     method: 'PUT',
     desc: '修改供应商液厂',
     param: {
-      fluid_name  :{
-        desc:'液厂名称',
+      fluid_name: {
+        desc: '液厂名称',
       },
-      supplier  :{
-        desc:'供应商id',
+      supplier: {
+        desc: '供应商id',
       },
-      actual_fluid  :{
-        desc:'实际液厂id',
+      actual_fluid: {
+        desc: '实际液厂id',
       },
     }
   },
@@ -2006,9 +2120,54 @@ const api = {
 
     }
   },
+  sureChangeCar: {
+    url: '/api/v1/interrupt-record/:id/',
+    method: 'PATCH',
+    desc: '确认车辆更换变更',
+    param: {
 
+    }
+  },
+  searchCustomerPayList: {
+    url: '/api/v1/payer/',
+    method: 'GET',
+    desc: '查询付款方列表',
+    param: {
 
+    }
+  },
+  getCustomerPayDetlis: {
+    url: '/api/v1/payer/:id/',
+    method: 'GET',
+    desc: '查询付款方详情',
+    param: {
 
+    }
+  },
+  creatCustomerPayFrom: {
+    url: '/api/v1/payer/',
+    method: 'post',
+    desc: '新增付款方',
+    param: {
+
+    }
+  },
+  upadtecustomerPayFrom: {
+    url: '/api/v1/payer/:id/',
+    method: 'patch',
+    desc: '修改付款方',
+    param: {
+
+    }
+  },
+  getDashboard: {
+    url: '/api/v1/section-trips/dashborad/',
+    method: 'get',
+    desc: "获取概览数据",
+    param: {
+
+    }
+  }
 }
 
 

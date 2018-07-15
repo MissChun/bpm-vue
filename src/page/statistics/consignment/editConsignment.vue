@@ -114,6 +114,11 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <el-form-item label="运输费率:" prop="change_rate">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_rate"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="标准运费:" prop="freight_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
                   </el-form-item>
@@ -123,13 +128,14 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.difference_value"></el-input>
                   </el-form-item>
                 </el-col>
+
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="分卸费:" prop="lcl_cost">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.lcl_cost"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="卸车待时金额:" prop="waiting_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
@@ -140,13 +146,13 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="是否对账:" prop="is_reconciliation">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation.verbose"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -200,6 +206,7 @@ export default {
         change_rate: '', //运输费率
         difference_value: '', //气差金额
         freight_value: '', //标准运费
+        change_rate:'',//运输费率
         lcl_cost: '', //分卸费
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
@@ -215,32 +222,32 @@ export default {
 
       rules: {
         check_quantity: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         stand_mile: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         initial_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         change_rate: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         difference_value: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         freight_value: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         waiting_price: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         lcl_cost: [
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        // waiting_charges: [
-        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        // ],
+        change_rate: [
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -290,6 +297,7 @@ export default {
             change_rate: this.detail.change_rate, //运输费率
             difference_value: this.detail.difference_value, //气差金额
             freight_value: this.detail.freight_value, //标准运费
+            change_rate:this.detail.change_rate,//运输费率
             lcl_cost: this.detail.lcl_cost, //分卸费
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
@@ -302,7 +310,6 @@ export default {
             station: this.detail.station, //站点
             remark: '' //备注
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
         }
       })
 
@@ -340,9 +347,8 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['check_quantity', 'stand_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value','freight_value', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

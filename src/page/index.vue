@@ -494,7 +494,7 @@ export default {
     },
     isLogin() {
       if (this.user && this.user.profile) {
-        this.$router.push({ path: '/dashborad' });
+        this.$router.push({ path: '/dashboard/purchaseDashboard' });
       } else {
         this.$router.push({ path: '/login' });
       }

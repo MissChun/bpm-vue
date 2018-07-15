@@ -1,5 +1,22 @@
 <template>
   <div class="out-contain">
+    <el-header>
+      <el-row>
+        <el-col :span="3">
+          <router-link :to="{path: '/businessManage/customerManage/stationManageAll/stationManageList'}">
+            <div class="go-return icon-back"></div>
+          </router-link>
+        </el-col>
+        <el-col :span="18">
+          <p>{{pageTitle }}
+          </p>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="18">
+        </el-col>
+      </el-row>
+    </el-header>
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -7,8 +24,17 @@
             <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
               <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
-            <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
           </el-input>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="地标区域:" class="map-choose-address">
+            <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item>
+            <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -96,15 +122,19 @@
   </div>
 </template>
 <script>
+import chooseAddress from '@/components/chooseAddress';
 export default {
   name: 'stationManageEditAdd',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {
     id: function() {
       return this.$route.query.id || '';
     },
     pageTitle: function() {
       return this.$route.query.id ? '编辑客户站点' : '新增客户站点';
-    }
+    },
   },
   data() {
     return {
@@ -127,14 +157,9 @@ export default {
         text: '搜索'
       },
       fieldSelect: [{
-          key: 'position_name',
-          verbose: '实际站点',
-        },
-        {
-          key: 'address',
-          verbose: '地址',
-        },
-      ],
+        key: 'position_name',
+        verbose: '实际站点',
+      }],
       showLeftWindow: false,
       formData: {
         position_name: '',
@@ -190,6 +215,16 @@ export default {
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '联系电话为11位手机号码/座机号码', trigger: 'blur' },
         ],
       },
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
+      addressName: {
+        province: '',
+        city: '',
+        area: '',
+      },
     }
   },
   methods: {
@@ -223,14 +258,23 @@ export default {
           simplify: true,
         };
 
-        if (this.searchFilters.keyword.length) {
+        if (this.searchFilters.keyword.length && this.searchFilters.field === 'position_name') {
           postData.position_name = this.searchFilters.keyword;
+        }
+
+        if (this.addressName.province) {
+          postData.province = this.addressName.province;
+        }
+        if (this.addressName.city) {
+          postData.city = this.addressName.city;
+        }
+        if (this.addressName.area) {
+          postData.county = this.addressName.area;
         }
 
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.siteList = results.data.data.results;
@@ -273,9 +317,9 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let mark_source = (data.mark_source && data.mark_source.verbose) ? data.mark_source.verbose : '无';
-      let infoBodyStr = '<div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">上传来源：' + mark_source +
+      let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
+      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13">上传来源：' + source_type +
         '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
 
       return infoBodyStr;
@@ -290,7 +334,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -305,6 +348,9 @@ export default {
     initMarkList: function() {
 
       let _this = this;
+
+
+
       AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
@@ -389,20 +435,21 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
                 jQuery('#choose-Actual-fluid').on('click', function() {
                   _this.choosedActualSite = results.data.data;
                   _this.formData.map_position = _this.choosedActualSite.position_name;
 
-                  _this.formData.consignee = _this.choosedActualSite.contacts;
-                  _this.formData.consignee_phone = _this.choosedActualSite.tel;
+                  if (!_this.id) {
+                    _this.formData.consignee = _this.choosedActualSite.contacts;
+                    _this.formData.consignee_phone = _this.choosedActualSite.tel;
+                  }
+
                   _this.formData.address = _this.choosedActualSite.address;
                   _this.showLeftWindow = true;
 
@@ -480,7 +527,7 @@ export default {
           area: area,
           city: city,
           consignee: this.formData.consignee,
-          consignee_phone: this.formData.consignee_phone,
+          consignee_phone: String(this.formData.consignee_phone),
           map_position: this.choosedActualSite.id,
           province: province,
           short_name_id: this.formData.short_name,
@@ -549,6 +596,9 @@ export default {
 
             this.formData.address = this.siteOfCusmerDetail.address;
 
+            this.formData.is_active = this.siteOfCusmerDetail.is_active;
+
+
             resolve(results);
           } else {
             reject(results);
@@ -579,17 +629,21 @@ export default {
       this.renderMarker();
       if (this.id) {
         this.getSiteOfCustomerDetail().then(() => {
-          return this.getLandmarkDetail(this.siteOfCusmerDetail.map_position);
-        }).then(() => {
-          this.choosedActualSite = this.landmarkDetail;
+          if (this.siteOfCusmerDetail.map_position) {
+            this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
 
-          this.map.setZoom(15);
-          this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+              this.choosedActualSite = this.landmarkDetail;
 
-        });
+              this.map.setZoom(15);
+              this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+            });
+
+          } else {
+            this.pageLoading = false;
+          }
+        })
       }
     })
-
 
   },
 };
@@ -693,7 +747,7 @@ export default {
 
 .side-alert-traggle {
   position: absolute;
-  top: 280px;
+  top: 450px;
 
   width: 26px;
   height: 50px;
@@ -725,7 +779,7 @@ export default {
 .landmark-dialog {
   position: absolute;
   left: 0;
-  top: 100px;
+  top: 190px;
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;

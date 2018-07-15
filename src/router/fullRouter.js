@@ -7,14 +7,31 @@ export default [{
     title: '首页'
   },
   children: [{
-      path: 'dashborad',
-      name: 'dashborad',
+      path: 'dashboard',
+      name: 'dashboard',
       meta: {
         isVerificationL: false,
         title: '概览',
         iconName: 'icon-dashboard'
       },
-      component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
+      component: (resolve) => require(['../page/dashboard/dashboard'], resolve),
+      children: [{
+        path: 'purchaseDashboard',
+        name: 'purchaseDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '采购概览',
+        },
+        component: (resolve) => require(['../page/dashboard/purchaseDashboard'], resolve),
+      }, {
+        path: 'serviceCentreDashboard',
+        name: 'serviceCentreDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '服务中心概览',
+        },
+        component: (resolve) => require(['../page/dashboard/serviceCentreDashboard'], resolve),
+      }]
     }, {
       path: 'purchaseCenter',
       name: 'purchaseCenter',
@@ -177,7 +194,7 @@ export default [{
             name: 'supplierFluidsEditAdd',
             meta: {
               isVerificationL: false,
-              title: '供应商液厂新增编辑',
+              title: '供应商液厂新增、编辑',
             },
             component: (resolve) => require(['../page/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd'], resolve),
           }]
@@ -224,7 +241,7 @@ export default [{
               title: '目的地设置列表',
             },
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList'], resolve),
-          },{
+          }, {
             path: 'editDestination',
             name: 'editDestination',
             meta: {
@@ -234,39 +251,6 @@ export default [{
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/editDestination'], resolve),
           }]
         }]
-        // children: [{
-        //   path: 'purchasepriceManageList',
-        //   name: 'purchasepriceManageList',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '采购价管理列表',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/purchasepriceManageList'], resolve),
-        // }, {
-        //   path: 'destinationSetting',
-        //   name: 'destinationSetting',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '目的地设置',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/destinationSetting'], resolve),
-        // }, {
-        //   path: 'purchasepriceOp',
-        //   name: 'purchasepriceOp',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '操作记录',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/purchasepriceOp'], resolve),
-        // }, {
-        //   path: 'destinationEdit',
-        //   name: 'destinationEdit',
-        //   meta: {
-        //     isVerificationL: false,
-        //     title: '编辑目的地',
-        //   },
-        //   component: (resolve) => require(['../page/purchaseCenter/purchasepriceManage/destinationEdit'], resolve),
-        // }]
       }]
     },
     //托运中心
@@ -434,74 +418,111 @@ export default [{
         component: (resolve) => require(['../page/businessManage/customerManage'], resolve),
         redirect: '/businessManage/customerManage/customerManageAll/customerManageList',
         children: [{
-          path: 'customerManageAll',
-          name: 'customerManageAll',
-          meta: {
-            isVerificationL: false,
-            title: '客户管理',
+            path: 'customerManageAll',
+            name: 'customerManageAll',
+            meta: {
+              isVerificationL: false,
+              title: '客户管理',
+            },
+            redirect: '/businessManage/customerManage/customerManageAll/customerManageList',
+            component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll'], resolve),
+            children: [{
+              path: 'customerManageList',
+              name: 'customerManageList',
+              meta: {
+                isVerificationL: false,
+                title: '客户管理列表',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageList'], resolve),
+            }, {
+              path: 'customerManageDetalis',
+              name: 'customerManageDetalis',
+              meta: {
+                isVerificationL: false,
+                title: '客户管理详情',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageDetalis'], resolve),
+            }, {
+              path: 'customerManageEditAdd',
+              name: 'customerManageEditAdd',
+              meta: {
+                isVerificationL: false,
+                title: '客户管理新增编辑',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageEditAdd'], resolve),
+            }]
           },
-          redirect: '/businessManage/customerManage/customerManageAll/customerManageList',
-          component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll'], resolve),
-          children: [{
-            path: 'customerManageList',
-            name: 'customerManageList',
+          {
+            path: 'customerPayManageAll',
+            name: 'customerPayManageAll',
             meta: {
               isVerificationL: false,
-              title: '客户管理列表',
+              title: '付款方管理',
             },
-            component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageList'], resolve),
-          }, {
-            path: 'customerManageDetalis',
-            name: 'customerManageDetalis',
-            meta: {
-              isVerificationL: false,
-              title: '客户管理详情',
-            },
-            component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageDetalis'], resolve),
-          }, {
-            path: 'customerManageEditAdd',
-            name: 'customerManageEditAdd',
-            meta: {
-              isVerificationL: false,
-              title: '客户管理新增编辑',
-            },
-            component: (resolve) => require(['../page/businessManage/customerManage/customerManageAll/customerManageEditAdd'], resolve),
-          }]
-        }, {
-          path: 'stationManageAll',
-          name: 'stationManageAll',
-          meta: {
-            isVerificationL: false,
-            title: '客户站点',
+            redirect: '/businessManage/customerManage/customerPayManageAll/customerPayManageList',
+            component: (resolve) => require(['../page/businessManage/customerManage/customerPayManageAll'], resolve),
+            children: [{
+              path: 'customerPayManageList',
+              name: 'customerPayManageList',
+              meta: {
+                isVerificationL: false,
+                title: '付款方列表',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerPayManageAll/customerPayManageList'], resolve),
+            }, {
+              path: 'customerPayManageDetalis',
+              name: 'customerPayManageDetalis',
+              meta: {
+                isVerificationL: false,
+                title: '付款方详情',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerPayManageAll/customerPayManageDetalis'], resolve),
+            }, {
+              path: 'customerPayManageEditAdd',
+              name: 'customerPayManageEditAdd',
+              meta: {
+                isVerificationL: false,
+                title: '付款方新增编辑',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/customerPayManageAll/customerPayManageEditAdd'], resolve),
+            }]
           },
-          redirect: '/businessManage/customerManage/stationManageAll/stationManageList',
-          component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll'], resolve),
-          children: [{
-            path: 'stationManageList',
-            name: 'stationManageList',
+          {
+            path: 'stationManageAll',
+            name: 'stationManageAll',
             meta: {
               isVerificationL: false,
-              title: '站点列表',
+              title: '客户站点',
             },
-            component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageList'], resolve),
-          }, {
-            path: 'stationManageEditAdd',
-            name: 'stationManageEditAdd',
-            meta: {
-              isVerificationL: false,
-              title: '编辑、新增站点',
-            },
-            component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageEditAdd'], resolve),
-          }, {
-            path: 'stationManageMap',
-            name: 'stationManageMap',
-            meta: {
-              isVerificationL: false,
-              title: '站点地图',
-            },
-            component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageMap'], resolve),
-          }]
-        }]
+            redirect: '/businessManage/customerManage/stationManageAll/stationManageList',
+            component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll'], resolve),
+            children: [{
+              path: 'stationManageList',
+              name: 'stationManageList',
+              meta: {
+                isVerificationL: false,
+                title: '站点列表',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageList'], resolve),
+            }, {
+              path: 'stationManageEditAdd',
+              name: 'stationManageEditAdd',
+              meta: {
+                isVerificationL: false,
+                title: '编辑、新增站点',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageEditAdd'], resolve),
+            }, {
+              path: 'stationManageMap',
+              name: 'stationManageMap',
+              meta: {
+                isVerificationL: false,
+                title: '站点地图',
+              },
+              component: (resolve) => require(['../page/businessManage/customerManage/stationManageAll/stationManageMap'], resolve),
+            }]
+          }
+        ]
       }]
     },
     {
@@ -837,43 +858,41 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/consignment/editConsignment'], resolve)
         }]
-      },
-      //  {
-      //   path: 'income',
-      //   name: "income",
-      //   redirect: '/statistics/income/incomeList',
-      //   meta: {
-      //     title: '收入统计',
-      //     isVerificationL: false
-      //   },
-      //   component: (resolve) => require(['../page/statistics/income/income'], resolve),
-      //   children: [{
-      //     path: 'incomeList',
-      //     name: "incomeList",
-      //     meta: {
-      //       title: '收入统计列表',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
-      //   }, {
-      //     path: 'incomeWaybillDetail/:willId/:orderId/',
-      //     name: "incomeWaybillDetail",
-      //     meta: {
-      //       title: '运力单详情',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/income/incomeWaybillDetail'], resolve)
-      //   }, {
-      //     path: 'incomeBusinessDetail',
-      //     name: "incomeBusinessDetail",
-      //     meta: {
-      //       title: '业务单详情',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/income/incomeBusinessDetail'], resolve)
-      //   }]
-      // }
-      ]
+      }, {
+        path: 'income',
+        name: "income",
+        redirect: '/statistics/income/incomeList',
+        meta: {
+          title: '收入统计',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/income/income'], resolve),
+        children: [{
+          path: 'incomeList',
+          name: "incomeList",
+          meta: {
+            title: '收入统计列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
+        }, {
+          path: 'incomeWaybillDetail/:willId/:orderId/',
+          name: "incomeWaybillDetail",
+          meta: {
+            title: '运力单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/income/incomeWaybillDetail'], resolve)
+        }, {
+          path: 'incomeBusinessDetail',
+          name: "incomeBusinessDetail",
+          meta: {
+            title: '业务单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/income/incomeBusinessDetail'], resolve)
+        }]
+      }]
     },
     {
       path: 'setting',

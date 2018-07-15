@@ -2,6 +2,8 @@
     min-height: 50px;
 
     border: 1px solid @tms-border-two-level;
+
+    position: relative;
     .el-table--mini {
         th {
             padding: 10px 0;
@@ -43,4 +45,15 @@
     &:active {
         color: @tms-blue;
     }
+}
+
+.tabal-height-50{
+  height: 50px;
+}
+
+.tabal-height-500{
+  height: 500px;
+  /deep/ .el-table__body-wrapper{
+    height: 456px;
+  }
 }

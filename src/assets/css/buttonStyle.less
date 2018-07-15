@@ -34,10 +34,7 @@
 .el-button--primary {
     border-color: @tms-blue!important;
     background-color: @tms-blue!important;
-
-
-    &:active,
-    &:focus {
+    &:active {
         border-color: @tms-blue!important;
         background-color: @tms-blue!important;
     }
@@ -49,12 +46,14 @@
     &.is-plain {
         color: @tms-blue;
         border-color: @tms-transparent-border-blue!important;
-        background-color: @tms-transparent-blue!important;
-        &:hover,
-        &:active,
-        &:focus {
+        background: @tms-transparent-blue!important;
+        &:hover {
+            color: @tms-white!important;
             border-color: @tms-blue!important;
-            background-color: @tms-blue!important;
+            background: @tms-blue!important;
+        }
+        &:focus {
+            color: @tms-blue;
         }
     }
     &.is-active,

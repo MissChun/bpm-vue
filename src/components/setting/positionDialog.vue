@@ -102,16 +102,13 @@ export default {
             postData = this.positionRules;
           } else if (this.positionDialog.type === 'update') {
             apiName = 'updatePosition';
-            console.log('修改职位')
             postData = {
               position_name: this.positionRules.position_name,
               id: this.positionRow.id,
-              leader: this.positionRow.leader
+              leader: this.positionRules.leader
             }
           }
-
           this.$$http(apiName, postData).then((results) => {
-            console.log('部门', results.data);
             // this.pageLoading = false;
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
@@ -140,8 +137,6 @@ export default {
   watch: {
     positionDialog: {
       handler(val, oldVal) {　　　　　　
-        console.log('编辑', val, oldVal);
-        console.log('部门', this.departmentRow)
         this.getPositionList(this.departmentRow.id)
         if (val.isShow && val.type === 'update') {
           this.positionRules.position_name = this.positionRow.position_name;

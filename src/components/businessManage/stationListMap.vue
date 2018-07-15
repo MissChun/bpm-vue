@@ -17,6 +17,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="启用状态:">
+              <el-select v-model="searchFilters.is_active">
+                <el-option v-for="(item,key) in activeList" :key="key" :label="item.verbose" :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled">{{searchBtn.text}}</el-button>
           </el-col>
         </el-row>
@@ -45,6 +52,7 @@ export default {
       searchFilters: {
         choosedCustomer: '',
         stationName: '',
+        is_active: '',
       },
       landmarkDetail: {},
       customerList: [],
@@ -53,7 +61,17 @@ export default {
         isDisabled: false,
         isLoading: false,
         text: '搜索'
-      }
+      },
+      activeList: [{
+        verbose: '全部',
+        key: ''
+      }, {
+        verbose: '已启用',
+        key: 'True'
+      }, {
+        verbose: '未启用',
+        key: 'False'
+      }]
     }
   },
   methods: {
@@ -95,7 +113,8 @@ export default {
         let postData = {
           need_all: true,
           consumer_id: this.searchFilters.choosedCustomer,
-          station_name: this.searchFilters.station_name,
+          station_name: this.searchFilters.stationName,
+          is_active: this.searchFilters.is_active,
         };
         postData = this.pbFunc.fifterObjIsNull(postData);
         this.$$http('getSiteList', postData).then((results) => {
@@ -164,7 +183,7 @@ export default {
             getInfoWindow: function(data, context, recycledInfoWindow) {
               let isActive = data.is_active ? '启用' : '未启用';
               let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.station_name + '</span></div>';
-              let infoBodyStr = '<div class="fs-13">所属客户：' + data.short_name + '</div><div class="fs-13">站点类型：' + data.station_type_display + '</div><div class="fs-13">实际站点名称：' + data.map_station_name + '</div><div class="fs-13">联系人：' + data.consignee + '</div><div class="fs-13">联系电话：' + data.consignee_phone + '</div><div class="fs-13">地址：' + data.address + '</div><div class="fs-13">启用状态：' + isActive + '</div><br><div class="text-right "><a href="/#/businessManage/customerManage/stationManageAll/stationManageEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
+              let infoBodyStr = '<div class="fs-13 md-5" >所属客户：' + data.short_name + '</div><div class="fs-13 md-5">站点类型：' + data.station_type_display + '</div><div class="fs-13 md-5">实际站点名称：' + data.map_station_name + '</div><div class="fs-13 md-5">联系人：' + data.consignee + '</div><div class="fs-13 md-5">联系电话：' + data.consignee_phone + '</div><div class="fs-13 md-5">地址：' + data.address + '</div><div class="fs-13 ">启用状态：' + isActive + '</div><br><div class="text-right "><a href="/#/businessManage/customerManage/stationManageAll/stationManageEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
 
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);

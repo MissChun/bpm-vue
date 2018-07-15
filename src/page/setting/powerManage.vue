@@ -59,7 +59,7 @@
                     <el-button type="primary" size="medium" @click="setPower">保存</el-button>
                     <el-button size="medium" @click="cancel" v-if="selectMenusCopy.length||selectMenus.length">取消</el-button>
                   </div>
-                  <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading">
+                  <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading" :class="{'tabal-height-500':!permissionsTableData.length}">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                     </el-table-column>
                     <el-table-column label="操作" width="200" align="center">
@@ -77,6 +77,7 @@
                       </template>
                     </el-table-column>
                   </el-table>
+                  <no-data v-if="!permissionsLoading && !permissionsTableData.length"></no-data>
                   <div class="page-list text-center">
                     <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
                     </el-pagination>
@@ -84,8 +85,8 @@
                 </div>
               </el-tab-pane>
             </el-tabs>
-            <div class="user-no-data text-center text-stance" v-if="!positionTableData.length&&!permissionsLoading">
-              暂无数据
+            <div class="user-no-data" v-if="!positionTableData.length&&!permissionsLoading">
+              <no-data v-if="!permissionsLoading && !positionTableData.length"></no-data>
             </div>
           </div>
         </el-col>
@@ -216,7 +217,6 @@ export default {
         if (results.data && results.data.code == 0) {
           this.permissionsTableData = results.data.data.data;
           this.permissionsLoading = false;
-          console.log('权限列表', this.permissionsTableData)
         }
       }).catch((err) => {
         this.permissionsLoading = false;
@@ -224,7 +224,6 @@ export default {
       })
     },
     powerClick: function(tab, event) {
-      console.log('职位', tab, event);
       this.currentPositionId = tab.name;
       this.currentPositionName = tab.label;
       this.getPositionDetail();
@@ -233,7 +232,6 @@ export default {
     getPositionDetail: function() {
       this.$$http('getPositionDetail', { id: this.currentPositionId }).then((results) => {
         if (results.data && results.data.code == 0) {
-          console.log('getPositionDetail', results.data);
           this.currentPositionName = results.data.data.position_name;
           this.selectMenus = [];
           this.positionDetailMenus = results.data.data.permissions;
@@ -241,7 +239,6 @@ export default {
             this.selectMenus.push(this.positionDetailMenus[i].id);
           }
           this.selectMenusCopy = this.selectMenus;
-          console.log('this.selectMenus', this.selectMenus);
 
         }
       }).catch((err) => {})

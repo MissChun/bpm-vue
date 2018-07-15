@@ -6,15 +6,13 @@
         position: relative;
 
         // margin-top: 10px;
-        .user-no-data {
-            height: 200px;
-            padding: 20px 10px;
+         .user-no-data {
+            height: 500px;
+            // padding: 20px 10px;
             margin-top: 36px;
-
-            line-height: 200px;
-
             border: 1px solid @tms-border-two-level;
             background: @tms-white;
+            position: relative;
         }
         .add-user-btn {
             position: absolute;
@@ -93,6 +91,15 @@
             padding: 20px 10px;
 
             background-color: @tms-white;
+            border: 1px solid @tms-border-two-level;
+            .table-list{
+              border: 0;
+              .el-table{
+                 &:before{
+                  height: 0;
+                }
+              }
+            }
             .staff-radio {
                 margin: 10px 0 20px 0;
             }
