@@ -206,7 +206,7 @@ export default {
         width: ''
       }, {
         title: '采购单价',
-        param: 'discount_price',
+        param: 'unit_price',
         width: ''
       }, {
         title: '业务优惠',

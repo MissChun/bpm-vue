@@ -102,13 +102,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="采购单价:" prop="business_price">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
+                  <el-form-item label="采购单价:" prop="unit_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="业务优惠:" prop="discount_price">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
+                  <el-form-item label="业务优惠:" prop="business_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -210,7 +210,7 @@ export default {
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         unit_price: '', //销售单价
-        business_price: '', //采购单价
+        business_price: '', //业务优惠
         discount_price: '', //优惠单价
         unload_num: '', //卸车数
         waiting_price: '', //卸车待时金额
@@ -301,8 +301,8 @@ export default {
             plan_tonnage: this.detail.plan_tonnage, //装车吨位
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
-            unit_price: this.detail.unit_price, //销售单价
-            business_price: this.detail.business_price, //采购单价
+            unit_price: this.detail.unit_price, //采购单价
+            business_price: this.detail.business_price, //业务优惠
             discount_price: this.detail.discount_price, //优惠单价
             unload_nums: this.detail.unload_nums, //卸车数
             waiting_price: this.detail.waiting_price, //卸车待时金额
