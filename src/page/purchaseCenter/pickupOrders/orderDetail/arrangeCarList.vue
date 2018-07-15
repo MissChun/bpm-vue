@@ -98,7 +98,6 @@
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
             <div class="table-list border-top-clear">
-
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column prop="tractor.plate_number" align="center" label="车号" :width="140" fixed="left">
                 </el-table-column>
@@ -152,52 +151,53 @@ export default {
         }]
       },
       thTableList: [
-      // {
-      //   title: '车号',
-      //   param: 'tractor.plate_number',
-      //   width: ''
-      // },
-      {
-        title: '变更',
-        param: 'waybill.waybill_change_status_display',
-        width: ''
-      }, {
-        title: '运单状态',
-        param: 'waybill.status_display',
-        width: ''
-      }, {
-        title: '运单号',
-        param: 'waybill.waybill',
-        width: ''
-      }, {
-        title: '挂车',
-        param: 'semitrailer.plate_number',
-        width: '250'
-      }, {
-        title: '司机',
-        param: 'master_driver.name',
-        width: ''
-      }, {
-        title: '司机电话',
-        param: 'master_driver.mobile_phone',
-        width: ''
-      }, {
-        title: '押运',
-        param: 'escort_staff.name',
-        width: ''
-      }, {
-        title: '押运电话',
-        param: 'escort_staff.mobile_phone',
-        width: ''
-      }, {
-        title: '副驾',
-        param: 'vice_driver.name',
-        width: ''
-      }, {
-        title: '副驾电话',
-        param: 'vice_driver.mobile_phone',
-        width: ''
-      }],
+        // {
+        //   title: '车号',
+        //   param: 'tractor.plate_number',
+        //   width: ''
+        // },
+        {
+          title: '变更',
+          param: 'waybill.waybill_change_status_display',
+          width: ''
+        }, {
+          title: '运单状态',
+          param: 'waybill.status_display',
+          width: ''
+        }, {
+          title: '运单号',
+          param: 'waybill.waybill',
+          width: ''
+        }, {
+          title: '挂车',
+          param: 'semitrailer.plate_number',
+          width: '250'
+        }, {
+          title: '司机',
+          param: 'master_driver.name',
+          width: ''
+        }, {
+          title: '司机电话',
+          param: 'master_driver.mobile_phone',
+          width: ''
+        }, {
+          title: '押运',
+          param: 'escort_staff.name',
+          width: ''
+        }, {
+          title: '押运电话',
+          param: 'escort_staff.mobile_phone',
+          width: ''
+        }, {
+          title: '副驾',
+          param: 'vice_driver.name',
+          width: ''
+        }, {
+          title: '副驾电话',
+          param: 'vice_driver.mobile_phone',
+          width: ''
+        }
+      ],
       tableData: [],
       renderPage_list: [],
 
@@ -333,13 +333,13 @@ export default {
         getDataNum++;
         if (results.data && results.data.code == 0) {
           console.log("当前订单数据", results.data.data);
-          var list=[];
-          results.data.data.trips.forEach((item,index)=>{
+          var list = [];
+          results.data.data.trips.forEach((item, index) => {
             // if(item.status!='canceled'){
-              list.push(item);
+            list.push(item);
             // }
           });
-          results.data.data.trips=list;
+          results.data.data.trips = list;
           vm.delivery_list = results.data.data;
         }
         if (getDataNum == 2) {
@@ -365,7 +365,7 @@ export default {
         //   }
         // });
         // if (addflag) {
-          newArrs.push(Ditem.capacity);
+        newArrs.push(Ditem.capacity);
         // }
       });
       var getlistParam = {
@@ -373,7 +373,7 @@ export default {
       }
       vm.$$http("getTransPowerInfo", getlistParam).then((transPower) => {
         if (transPower.data.code == 0) {
-          vm.tractor_semitrailers_List = transPower.data.data.results;
+          vm.tractor_semitrailers_List = transPower.data.data;
           vm.sortData(true);
         }
 
@@ -390,16 +390,16 @@ export default {
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              if(this.delivery_list.trips[j].status=='canceled'){
+              if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-              }else{
+              } else {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
-                operationArr[i].disableChoose = true;
-                addflag = false;
-                operationArr[i].bindCheckBox = true;
-                newArr.push(operationArr[i]);
-                break;
+                if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
+                  operationArr[i].disableChoose = true;
+                  addflag = false;
+                  operationArr[i].bindCheckBox = true;
+                  newArr.push(operationArr[i]);
+                  break;
                 }
               }
             }
