@@ -145,6 +145,7 @@ export default {
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
+      console.log('allowedRouter', allowedRouter);
       if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
 
     },

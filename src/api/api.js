@@ -2162,6 +2162,14 @@ const api = {
     param: {
 
     }
+  },
+  getDashboard: {
+    url: '/api/v1/section-trips/dashborad/',
+    method: 'get',
+    desc: "获取概览数据",
+    param: {
+
+    }
   }
 }
 

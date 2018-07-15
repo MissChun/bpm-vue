@@ -20,7 +20,7 @@
     <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch">
+          <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" id="map-search-input">
             <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
               <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
@@ -146,7 +146,10 @@ export default {
       fieldSelect: [{
         key: 'position_name',
         verbose: '实际站点',
-      }, ],
+      }, {
+        key: 'address',
+        verbose: '地址',
+      }],
       showLeftWindow: false,
       formData: {
         position_name: '',
@@ -311,10 +314,83 @@ export default {
 
       })
     },
+    inputChangeFun: function() { //输入搜索
+      this.placeSearch.search(this.keyword, (status, result) => {
 
+        if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
+          console.log('result', result);
+
+          this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
+
+        } else {
+          this.mapMessage = '无法获取位置'
+        }
+
+      });
+    },
+    getAddress: function(lnglat, isMapClickCallback) {
+      this.geocoder.getAddress(lnglat, (status, result) => { //逆地理查询地址
+        if (status == 'complete' && result.regeocode && result.regeocode.addressComponent) {
+
+          this.setMapPosition(lnglat);
+          this.setMapZoom();
+
+          if (isMapClickCallback) {
+            this.keyword = result.regeocode.formattedAddress;
+          }
+
+          this.addressDetail = {
+            address: result.regeocode.formattedAddress,
+            longitude: lnglat[0],
+            latitude: lnglat[1],
+            province: result.regeocode.addressComponent.province,
+            city: result.regeocode.addressComponent.city,
+            county: result.regeocode.addressComponent.district,
+          }
+
+          this.formData.address = result.regeocode.formattedAddress;
+
+          this.mapMessage = '';
+
+        } else {
+          this.mapMessage = '无法获取地址';
+        }
+      })
+    },
+    mapClickFun: function(e) { //点击地图回调
+      this.getAddress([e.lnglat.lng, e.lnglat.lat], true);
+    },
     initMarkList: function() {
 
       let _this = this;
+
+      /*初始化类*/
+      AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
+
+        let autoOptions = {
+          city: "", //城市，默认全国
+          input: "map-search-input" //使用联想输入的input的id
+        };
+
+        let autocomplete = new AMap.Autocomplete(autoOptions); //构造输入提示类
+
+        _this.placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+          city: "", //城市
+        });
+
+        _this.geocoder = new AMap.Geocoder({ //构造逆地理编码类
+          city: "" //城市，默认：“全国”
+        });
+
+        _this.map.on('click', _this.mapClickFun); //对地图绑定点击事件
+
+        AMap.event.addListener(autocomplete, "select", (e) => { //选择提示
+          _this.keyword = e.poi.name;
+          _this.inputChangeFun();
+        });
+
+      });
+
       AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
