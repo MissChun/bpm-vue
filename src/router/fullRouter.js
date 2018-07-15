@@ -7,14 +7,32 @@ export default [{
     title: '首页'
   },
   children: [{
-      path: 'dashborad',
-      name: 'dashborad',
+      path: 'dashboard',
+      name: 'dashboard',
       meta: {
         isVerificationL: false,
         title: '概览',
         iconName: 'icon-dashboard'
       },
-      component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
+      //redirect: '/dashboard/purchaseDashboard',
+      component: (resolve) => require(['../page/dashboard/dashboard'], resolve),
+      children: [{
+        path: 'purchaseDashboard',
+        name: 'purchaseDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '采购概览',
+        },
+        component: (resolve) => require(['../page/dashboard/purchaseDashboard'], resolve),
+      }, {
+        path: 'serviceCentreDashboard',
+        name: 'serviceCentreDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '服务中心概览',
+        },
+        component: (resolve) => require(['../page/dashboard/serviceCentreDashboard'], resolve),
+      }]
     }, {
       path: 'purchaseCenter',
       name: 'purchaseCenter',
@@ -224,7 +242,7 @@ export default [{
               title: '目的地设置列表',
             },
             component: (resolve) => require(['../page/purchaseCenter/purchasePriceManage/destinationSetting/destinationSettingList'], resolve),
-          },{
+          }, {
             path: 'editDestination',
             name: 'editDestination',
             meta: {
