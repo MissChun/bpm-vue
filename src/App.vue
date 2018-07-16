@@ -12,6 +12,7 @@
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/elementReset';
+@import './assets/css/news.less';//消息通知
 
 </style>
 <template>

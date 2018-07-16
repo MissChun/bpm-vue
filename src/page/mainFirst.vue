@@ -75,6 +75,16 @@
   float: right;
   padding: 0 2em;
   color: black;
+  .notice{
+    display:inline-block;
+    position: relative;
+  }
+  /deep/ .el-badge__content{
+    &.is-fixed{
+      top: 18px;
+      right: 16px;
+    }
+  }
   i {
     font-size: 24px;
     margin-right: 6px;
@@ -186,6 +196,66 @@
   }
 }
 
+// 消息通知
+.notice-temp{
+  background-color: #fff;
+  width: 386px;
+  height: 422px;
+  box-shadow:0px 0px 7px 0px rgba(107,107,107,0.5);
+  position: absolute;
+  font-size: 14px;
+  top: 52px;
+  right: -100px;
+  .notice-temp-title{
+    height: 50px;
+    text-align: center;
+    line-height: 54px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+  .notice-temp-content{
+    margin: 10px 0;
+    ul{
+      list-style-type: none;
+      li{
+        position: relative;
+
+        height: 40px;
+        line-height: 20px;
+        padding: 10px 20px;
+        color: #606266;
+        text-align:justify;
+        span{
+          color:#B8B8B8;
+        }
+        &:hover{
+          background: #F4F6F9;
+        }
+        &.is-unread{
+          &:before{
+            content:' ';
+            display:block;
+            position: absolute;
+            left: 7px;
+            top: 28px;
+            width: 5px;
+            height: 5px;
+            border-radius: 10px;
+            background-color:#f56c6c;
+
+          }
+        }
+      }
+    }
+
+  }
+  .notice-temp-footer{
+    height: 50px;
+    border-top:  1px solid #e4e7ed;
+    line-height: 50px;
+    color: #9E9E9E;
+    padding: 0 22px;
+  }
+}
 </style>
 <template>
   <el-container>
@@ -203,13 +273,43 @@
             </el-breadcrumb>
           </div>
           <div class="usermenu" v-if="user.nick_name">
-            <i class="icon-user"></i><span></span>
+            <div class="notice">
+              <el-badge :value="10" :max="10" class="item">
+                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+              </el-badge>
+              <div class="notice-temp" v-if="showNotice">
+                <div class="notice-temp-title">系统通知</div>
+                <div class="notice-temp-content">
+                  <ul>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                  </ul>
+                </div>
+                <div class="notice-temp-footer">
+                  <el-row>
+                    <el-col :span="12">
+                      <span class="cursor-pointer" v-on:click="signRead(true)">全部已读</span>
+                    </el-col>
+                    <el-col :span="12" class="text-right">
+                      <span class="cursor-pointer"v-on:click="signRead(false)">查看全部 ></span>
+                    </el-col>
+                  </el-row>
+                </div>
+              </div>
+            </div>
+
+            <span class="ml-25 mr-25 text-stance fs-18">|</span>
+            <i class="icon-user"></i>
             <el-dropdown trigger="click" @command="logout">
               <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+
             <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
           </div>
         </div>
@@ -265,7 +365,8 @@ export default {
   data() {
     return {
       user: {},
-      menus: []
+      menus: [],
+      showNotice:false
     };
   },
   components: {
@@ -280,6 +381,19 @@ export default {
     }
   },
   methods: {
+    // 展示消息浮窗
+    isShowNotice(){
+      this.showNotice = true;
+    },
+    signRead(isShow){
+      if(isShow){
+
+      }else{
+        this.showNotice = false;
+        this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
+      }
+
+    },
     signOut: function() {
       /*this.$$http('signOut', {}).then((results) => {
         if (results.data && results.data.code == 0) {
