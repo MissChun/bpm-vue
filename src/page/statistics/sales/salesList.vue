@@ -52,7 +52,7 @@
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>

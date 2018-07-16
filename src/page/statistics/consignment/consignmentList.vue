@@ -48,8 +48,8 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>

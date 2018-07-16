@@ -39,7 +39,7 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，采购优惠后总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，销售待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，运费合计{{tableData.summati?tableData.summati:0}}元，能源利润{{tableData.energy_prof?tableData.energy_prof:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>

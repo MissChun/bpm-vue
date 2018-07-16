@@ -139,7 +139,7 @@ export default {
         param: 'mobile_number',
         width: ''
       }, {
-        title: '用户名',
+        title: '姓名',
         param: 'nick_name',
         width: ''
       }, {
