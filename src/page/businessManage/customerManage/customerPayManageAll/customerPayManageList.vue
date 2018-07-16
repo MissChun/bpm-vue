@@ -156,7 +156,7 @@ export default {
               Titem.consumer.forEach(Citem => {
                 Titem.customerTitle += Citem.consumer_name + ",";
                 Titem.saleManTitle += Citem.sale_man_name + ",";
-                Titem.customerShortTitle+=Citem.short_name+",";
+                Titem.customerShortTitle += Citem.short_name + ",";
               });
             }
           });

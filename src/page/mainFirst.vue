@@ -177,14 +177,15 @@
     -o-transform: rotate(45deg);
   }
 }
-/deep/ .el-breadcrumb__item{
-  &:last-child{
-    .el-breadcrumb__inner{
-      color:#26c6da;
-    }
 
+/deep/ .el-breadcrumb__item {
+  &:last-child {
+    .el-breadcrumb__inner {
+      color: #26c6da;
+    }
   }
 }
+
 </style>
 <template>
   <el-container>
@@ -280,7 +281,7 @@ export default {
   },
   methods: {
     signOut: function() {
-      this.$$http('signOut', {}).then((results) => {
+      /*this.$$http('signOut', {}).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
             message: '退出成功',
@@ -293,7 +294,17 @@ export default {
 
       }).catch((err) => {
         this.$message.error('退出失败');
-      })
+      })*/
+
+      this.$$http('signOut', {});
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      });
+      localStorage.clear();
+      this.$store.state.common.users = {};
+      this.$router.push({ path: '/login' });
+
     },
     logout: function() {
       this.$confirm("确定退出?", "提示", {

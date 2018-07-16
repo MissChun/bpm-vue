@@ -126,7 +126,7 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
-      }else if(targetName.name == 'customerPayManage'){
+      } else if (targetName.name == 'customerPayManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },

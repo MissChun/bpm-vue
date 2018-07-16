@@ -555,6 +555,7 @@ export default {
     searchAndRender: function() {
       this.initData();
       this.getAllRecords('getTripRecords').then(() => {
+
         this.getAllRecords('getOfflineAndStopRecords');
       });
     },
@@ -956,25 +957,27 @@ export default {
       this.navg1.pause();
     },
     resumeDriving: function() { //恢复
-      this.isDisplay = true;
-      let naviStatus = this.navg1.getNaviStatus();
-      if (naviStatus === 'stop') {
-        this.infoWindow.open(this.map, this.resultPath[0]);
-        this.navg1.setSpeed(this.speed);
-        this.navg1.start();
-      } else {
-        let cursor = this.navg1.getCursor();
-        if (cursor.idx == (this.totalDataResult.length - 1)) {
+      if (this.navg1) {
+        this.isDisplay = true;
+        let naviStatus = this.navg1.getNaviStatus();
+        if (naviStatus === 'stop') {
           this.infoWindow.open(this.map, this.resultPath[0]);
           this.navg1.setSpeed(this.speed);
           this.navg1.start();
         } else {
-          this.navg1.resume();
+          let cursor = this.navg1.getCursor();
+          if (cursor.idx == (this.totalDataResult.length - 1)) {
+            this.infoWindow.open(this.map, this.resultPath[0]);
+            this.navg1.setSpeed(this.speed);
+            this.navg1.start();
+          } else {
+            this.navg1.resume();
+          }
         }
       }
     },
     changeSpeed: function() {
-      this.navg1.setSpeed(this.speed);
+      this.navg1 && this.navg1.setSpeed(this.speed);
     },
     triggerAlert: function() {
       this.showLeftWindow = !this.showLeftWindow;
@@ -1096,6 +1099,7 @@ export default {
         this.searchAndRender();
       } else {
         this.pageLoading = false;
+        this.offlineAndstopLoading = false;
         this.$message({
           message: '无轨迹信息',
           type: 'success'
@@ -1105,12 +1109,17 @@ export default {
       this.getConOrderDetail().then(() => {
         if (this.stationIdArray.length) {
           this.getLandMarkList().then(() => {
-            this.markerList.render(this.fluidStationList);
+            if (this.fluidStationList) {
+              this.markerList.render(this.fluidStationList);
+            }
+
           });
         }
         if (this.actualFluidId) {
           this.getFulidDetalis(this.actualFluidId).then(() => {
-            this.markerList.render(this.fluidStationList);
+            if (this.fluidStationList) {
+              this.markerList.render(this.fluidStationList);
+            }
           });
         }
       });

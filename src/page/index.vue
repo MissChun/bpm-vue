@@ -512,6 +512,7 @@ export default {
         .catch(() => {});
     },
     signOut: function() {
+      /*
       this.$$http('signOut', {}).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
@@ -525,7 +526,16 @@ export default {
 
       }).catch((err) => {
         this.$message.error('退出失败');
-      })
+      })*/
+      this.$$http('signOut')
+
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      });
+      localStorage.clear();
+      this.user = '';
+      this.$router.push({ path: '/' });
     }
   },
   created() {
