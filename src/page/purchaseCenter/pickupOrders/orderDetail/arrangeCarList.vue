@@ -373,7 +373,7 @@ export default {
       }
       vm.$$http("getTransPowerInfo", getlistParam).then((transPower) => {
         if (transPower.data.code == 0) {
-          vm.tractor_semitrailers_List = transPower.data.data;
+          vm.tractor_semitrailers_List = transPower.data.data.results;
           vm.sortData(true);
         }
 
