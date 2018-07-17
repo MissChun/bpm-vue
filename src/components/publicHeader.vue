@@ -2,29 +2,30 @@
   <el-header>
     <el-row>
       <el-col :span="12">
-        <router-link :to="{path: '/'}"><div href="" title="业务管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div></router-link>
+        <router-link :to="{path: '/'}">
+          <div title="业务管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        </router-link>
       </el-col>
       <el-col :span="12">
+      <!--   <div class="usermenu text-right" v-if="users&&users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
+          <router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
+          <a v-on:click="logout" class="cursor-pointer">退出</a>
+        </div> -->
         <div class="usermenu text-right">
-          <!-- <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span> -->
-          <!-- <router-link :to="{path: '/login'}">登录</router-link> -->
+          <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span>
+          <router-link :to="{path: '/login'}">登录</router-link>
         </div>
       </el-col>
     </el-row>
   </el-header>
-  <!--
-  <div class="nav">
-    <div class="usermenu" v-if="user.name">
-      欢迎您：{{user.name}}
-      <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
-      <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
-    </div>
-  </div> -->
 </template>
 <script>
 export default {
   name: 'publicHeader',
-  props: {},
+  props: {
+    users: Object,
+    logout: Function,
+  },
 
   data: function() {
 
@@ -33,10 +34,6 @@ export default {
     }
   },
   computed: {
-    users: function() {
-      // console.log('users', this.pbFunc.getLocalData('user',true));
-      return this.pbFunc.getLocalData('user', true);
-    }
 
   },
   methods: {
@@ -64,7 +61,7 @@ export default {
 }
 
 .el-header img {
-  margin-top: 12px;
+  margin-top: 15px;
 }
 
 .text-right {

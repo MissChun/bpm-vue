@@ -9,6 +9,29 @@
  */
 
 const api = {
+  batchReadMessages: {
+    url: '/api/v1/bpm_messages/:id/',
+    method: 'patch',
+    desc: '消息批量已读',
+    param: {
+      ids:{
+        desc:'id'
+      }
+    }
+  },
+  getMessagesList: {
+    url: '/api/v1/bpm_messages/',
+    method: 'get',
+    desc: '通知消息列表',
+    param: {
+      page:{
+        desc:'当前页数'
+      },
+      page_size:{
+        desc:'一页条数'
+      }
+    }
+  },
   batchSalesStatisticsStatus: {
     url: '/api/v1/batch-update-sale/',
     method: 'post',

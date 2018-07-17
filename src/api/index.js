@@ -26,8 +26,7 @@ if (currentUrl.match('pbpm.91lng.cn')) {
 } else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
   domainUrl = 'http://bpm.91lng.cn';
 } else {
-  //domainUrl = 'http://devbpm.hhtdlng.com';
-  domainUrl = 'http://bpm.hhtdlng.com'
+  domainUrl = 'http://devbpm.hhtdlng.com';
 }
 
 

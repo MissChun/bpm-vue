@@ -259,64 +259,9 @@
 </style>
 <template>
   <el-container>
-    <el-header>
-      <el-row type="flex" class="g-head">
-        <router-link :to="{path: '/'}">
-          <div href="" title="业务管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
-        </router-link>
-        <div class="nav">
-          <div class="g-statues-bar p-lr">
-            <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
-                {{ item.meta.title || "" }}
-              </el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
-          <div class="usermenu" v-if="user.nick_name">
-            <div class="notice">
-              <el-badge :value="10" :max="10" class="item">
-                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
-              </el-badge>
-              <div class="notice-temp" v-if="showNotice">
-                <div class="notice-temp-title">系统通知</div>
-                <div class="notice-temp-content">
-                  <ul>
-                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                  </ul>
-                </div>
-                <div class="notice-temp-footer">
-                  <el-row>
-                    <el-col :span="12">
-                      <span class="cursor-pointer" v-on:click="signRead(true)">全部已读</span>
-                    </el-col>
-                    <el-col :span="12" class="text-right">
-                      <span class="cursor-pointer"v-on:click="signRead(false)">查看全部 ></span>
-                    </el-col>
-                  </el-row>
-                </div>
-              </div>
-            </div>
-
-            <span class="ml-25 mr-25 text-stance fs-18">|</span>
-            <i class="icon-user"></i>
-            <el-dropdown trigger="click" @command="logout">
-              <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>退出</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-
-            <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
-          </div>
-        </div>
-      </el-row>
-    </el-header>
+    <common-header :type="'loginAfter'"></common-header>
     <el-container>
-      <el-aside style="width: 230px;">
+      <el-aside style="width: 190px;">
         <el-menu class="g-side" router>
           <el-row style="margin-top:30px;">
             <el-col>
@@ -352,7 +297,7 @@
       </el-aside>
       <el-main>
         <template>
-          <div style="padding:30px 2% 0 3%;">
+          <div style="margin-top: 61px;">
             <router-view></router-view>
           </div>
         </template>
@@ -361,6 +306,7 @@
   </el-container>
 </template>
 <script>
+import commonHeader from '@/components/common/commonHeader'
 export default {
   data() {
     return {
@@ -370,7 +316,8 @@ export default {
     };
   },
   components: {
-    mainHeader: 'mainHeader'
+    mainHeader: 'mainHeader',
+    commonHeader: commonHeader
   },
   computed: {
     activeMenu: function() {

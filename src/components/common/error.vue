@@ -4,7 +4,7 @@
 </style>
 <template>
   <div class="error">
-    <public-header :is-find="true"></public-header>
+    <common-header :type="'error'"></common-header>
     <div class="error-content">
       <div class="error-left">
         <div class="font">{{errorObj.title}}</div>
@@ -21,11 +21,10 @@
   </div>
 </template>
 <script type="text/javascript">
-import publicHeader from '../publicHeader'
-
+import commonHeader from '@/components/common/commonHeader'
 export default {
   components: {
-    publicHeader: publicHeader,
+    commonHeader: commonHeader,
   },
   props: ['errorObj'],
   data: function() {
