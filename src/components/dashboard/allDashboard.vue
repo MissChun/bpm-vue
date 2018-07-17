@@ -40,7 +40,7 @@ export default {
       pageLoading:false,
       allDashboard:{
         'purchaseDashboard':[//采购概览
-          {key:'determine_count',value:'待添加车辆订单',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine'},
+          {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine'},
         ],
         'serviceCentreDashboard':[
           {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList'},

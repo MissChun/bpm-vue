@@ -134,7 +134,7 @@ export default {
       };
       var vm = this;
       this.customerLoading = true;
-      this.$$http("searchCustomerList", sendData).then((result) => {
+      this.$$http("searchPayCustomerList", sendData).then((result) => {
         if (result.data.code == 0) {
           vm.customerSelectData = result.data.data.data;
           vm.customerPayData.consumer.forEach(item=>{

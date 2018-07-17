@@ -38,7 +38,7 @@
           <el-table-column label="客户名称" align="center">
             <template slot-scope="scope">
               <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.customerTitle">
-                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
+                <el-col v-for="(item,index) in scope.row.consumer"  v-if="index<5">
                   {{item.consumer_name}}
                 </el-col>
                 <el-col v-else>......</el-col>
@@ -49,7 +49,7 @@
           <el-table-column label="客户简称" align="center">
             <template slot-scope="scope">
               <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.customerShortTitle">
-                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
+                <el-col v-for="(item,index) in scope.row.consumer"  v-if="index<5">
                   {{item.short_name}}
                 </el-col>
                 <el-col v-else>......</el-col>
@@ -60,7 +60,7 @@
           <el-table-column label="业务员" align="center">
             <template slot-scope="scope">
               <el-row v-if="scope.row.consumer&&scope.row.consumer.length>0" :title="scope.row.saleManTitle">
-                <el-col v-for="(item,index) in scope.row.consumer" :key="key" v-if="index<5">
+                <el-col v-for="(item,index) in scope.row.consumer"  v-if="index<5">
                   {{item.sale_man_name}}
                 </el-col>
                 <el-col v-else>......</el-col>
