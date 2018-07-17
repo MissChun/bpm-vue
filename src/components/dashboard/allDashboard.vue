@@ -44,7 +44,7 @@ export default {
         ],
         'serviceCentreDashboard':[
           {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList'},
-          {key:'waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList'},
+          {key:'waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match'},
           {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList'},
         ]
       },

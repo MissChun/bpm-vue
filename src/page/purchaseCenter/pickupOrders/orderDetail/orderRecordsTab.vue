@@ -266,8 +266,40 @@ export default {
         console.log(results);
         if (results.data.code == 0) {
           results.data.data.forEach(item => {
-            vm.allTableList[item.type + "_list"].push(item);
+            if(item.type!=='add_driver'&&item.type!=='modify'){
+              vm.allTableList[item.type + "_list"].push(item);
+            }
+            if(item.type=="add_driver"){
+              item.add_driver_no.forEach(Aitem=>{
+                vm.allTableList.add_driver_list.push({
+                  operator:item.operator,
+                  operator_time:item.operator_time,
+                  driver_no:Aitem,
+                  msg:"新增车辆"
+                });
+              });
+            }
+            if(item.type=="modify"){
+              item.add_driver_no.forEach(Aitem=>{
+                vm.allTableList.modify_list.push({
+                  operator:item.operator,
+                  operator_time:item.operator_time,
+                  driver_no:Aitem,
+                  msg:"新增车辆"
+                });
+               
+              });
+              item.del_driver_no.forEach(Aitem=>{
+                vm.allTableList.modify_list.push({
+                  operator:item.operator,
+                  operator_time:item.operator_time,
+                  driver_no:Aitem,
+                  msg:"删除车辆"
+                });
+              });
+            }
           });
+
           var infoList = vm.pbFunc.deepcopy(vm.allTableList);
           vm.renderList.r_create_list = infoList.create_list.splice(0, 5);
           vm.renderList.r_add_driver_list = infoList.add_driver_list.splice(0, 5);

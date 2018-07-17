@@ -75,7 +75,7 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>采购优惠:</label>
-                        <div class="detail-form-item">{{detailData.discount_price}}</div>
+                        <div class="detail-form-item">{{detailData.business_price}}</div>
                       </div>
                     </el-col>
                       <el-col :span="6">
@@ -174,7 +174,7 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item" v-if="detailData.carriers && detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}/小时</div>
+                        <div class="detail-form-item" v-if="detailData.carriers && detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}元/小时</div>
                       </div>
                     </el-col>
                   </el-row>
