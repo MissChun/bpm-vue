@@ -23,10 +23,9 @@ import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
 import noData from '@/components/common/noData';
-
-
+import exportButton from '@/components/common/exportButton';
 Vue.component("noData", noData);
-
+Vue.component("exportButton", exportButton);
 export default {
   name: 'App',
   components: {

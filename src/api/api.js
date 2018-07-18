@@ -9,9 +9,33 @@
  */
 
 const api = {
+  exportPlanTractor: {
+    url: '/export/tractor/',
+    method: 'post',
+    desc: '导出车辆指派',
+    param: {
+
+    }
+  },
+  getAllmenus: {
+    url: '/api/v1/menus/',
+    method: 'get',
+    desc: '获取所有菜单',
+    param: {
+
+    }
+  },
+  getUnreadNewNum: {
+    url: '/notifications/web_messages/unread_count/',
+    method: 'get',
+    desc: '未读信息的条数',
+    param: {
+
+    }
+  },
   batchReadMessages: {
-    url: '/api/v1/bpm_messages/:id/',
-    method: 'patch',
+    url: '/notifications/web_messages/bulk_read/',
+    method: 'put',
     desc: '消息批量已读',
     param: {
       ids:{
@@ -20,7 +44,7 @@ const api = {
     }
   },
   getMessagesList: {
-    url: '/api/v1/bpm_messages/',
+    url: '/notifications/web_messages/',
     method: 'get',
     desc: '通知消息列表',
     param: {
@@ -29,6 +53,42 @@ const api = {
       },
       page_size:{
         desc:'一页条数'
+      }
+    }
+  },
+  // batchReadMessages: {
+  //   url: '/api/v1/bpm_messages/:id/',
+  //   method: 'patch',
+  //   desc: '消息批量已读',
+  //   param: {
+  //     ids:{
+  //       desc:'id'
+  //     }
+  //   }
+  // },
+  // getMessagesList: {
+  //   url: '/api/v1/bpm_messages/',
+  //   method: 'get',
+  //   desc: '通知消息列表',
+  //   param: {
+  //     page:{
+  //       desc:'当前页数'
+  //     },
+  //     page_size:{
+  //       desc:'一页条数'
+  //     }
+  //   }
+  // },
+  getExportTableTitle: {
+    url: '/export/header/',
+    method: 'get',
+    desc: '导出列表头部',
+    param: {
+      page_arg:{
+        desc:'表格类型'
+      },
+      need_all:{
+        desc:'全部'
       }
     }
   },

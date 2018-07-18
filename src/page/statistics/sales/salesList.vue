@@ -48,11 +48,11 @@
           <el-col :span="14" class="total-data">
             一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
           </el-col>
-
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
+            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportSaleData'"></export-button>
+            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('sale')">{{exportBtn.text}}</el-button> -->
           </el-col>
         </el-row>
       </div>
@@ -81,7 +81,7 @@
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="业务员" align="center" width="100" fixed="right">
+          <el-table-column label="业务员" align="center" width="150" fixed="right">
             <template slot-scope="scope">
               <div>{{scope.row.sale_man}}</div>
             </template>
@@ -127,10 +127,9 @@ export default {
         keyword: '',
         field: 'business_order',
       },
-      exportBtn: {
-        text: '导出',
-        isLoading: false,
-        isDisabled: false,
+      exportType: {
+        type: 'sale',
+        filename: '销售数据'
       },
       selectData: {
         isInvoiceSelect: [
@@ -239,6 +238,7 @@ export default {
       }],
       tableData: [],
       multipleSelection: [], //所选数据 
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -264,53 +264,6 @@ export default {
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
 
-    },
-    exportData() {
-      let postData = {
-        filename: '销售数据',
-        page_arg: 'sale',
-        ids: [],
-        is_reconciliation: this.searchPostData.is_reconciliation,
-        is_invoice: this.searchPostData.is_invoice,
-      };
-      for (let i = 13; i <= 33; i++) {
-        postData.ids.push(i.toString());
-      }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.exportBtn = {
-        text: '导出中',
-        isLoading: true,
-        isDisabled: true,
-      }
-
-      this.$$http('exportSaleData', postData).then((results) => {
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
-        }
-      }).catch((err) => {
-        this.$message.error('导出失败');
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
     },
     // 批量对账、开票弹窗
     batchReconciliation(type) {
@@ -385,7 +338,7 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getSalesStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

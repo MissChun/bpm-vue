@@ -22,7 +22,7 @@ export default {
           backgroundColor: "white",
           width: '100%',
           textAlign: 'center',
-          zIndex: 500,
+          zIndex: 9,
         }
       }
     }

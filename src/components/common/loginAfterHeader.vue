@@ -170,64 +170,64 @@
 </style>
 <template>
   <!-- <div style="height: 60px;width: 100;"> -->
-    <el-header>
-      <el-row type="flex" class="g-head">
-        <router-link :to="{path: '/'}">
-          <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.png"></div>
-        </router-link>
-        <div class="nav">
-          <div class="g-statues-bar p-lr">
-            <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
-                {{ item.meta.title || "" }}
-              </el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
-          <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
-            <div class="notice">
-              <div class="notice-temp" v-if="showNotice">
-                <div class="notice-temp-title">系统通知</div>
-                <div class="notice-temp-content" v-loading="noticeLoading">
-                  <ul>
-                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
-                  </ul>
-                </div>
-                <div class="notice-temp-footer">
-                  <el-row>
-                    <el-col :span="12">
-                      <span class="cursor-pointer" v-on:click="signRead(true)">全部已读</span>
-                    </el-col>
-                    <el-col :span="12" class="text-right">
-                      <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
-                    </el-col>
-                  </el-row>
-                </div>
-              </div>
-              <el-badge :value="10" :max="10" class="item">
-                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice(true)"></i>
-              </el-badge>
-            </div>
-            <span class="ml-25 mr-25 text-stance fs-18">|</span>
-            <i class="icon-user"></i>
-            <el-dropdown trigger="click" @command="logout">
-              <span class="el-dropdown-link">Hi，{{users.profile.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>退出</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
-          </div>
+  <el-header>
+    <el-row type="flex" class="g-head">
+      <router-link :to="{path: '/'}">
+        <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.png"></div>
+      </router-link>
+      <div class="nav">
+        <div class="g-statues-bar p-lr">
+          <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
+              {{ item.meta.title || "" }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
         </div>
-      </el-row>
-    </el-header>
+        <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
+          <div class="notice">
+            <div class="notice-temp" v-if="showNotice">
+              <div class="notice-temp-title">系统通知</div>
+              <div class="notice-temp-content" v-loading="noticeLoading">
+                <ul>
+                  <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
+                </ul>
+              </div>
+              <div class="notice-temp-footer">
+                <el-row>
+                  <el-col :span="12">
+                    <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
+                  </el-col>
+                  <el-col :span="12" class="text-right">
+                    <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
+              <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+            </el-badge>
+          </div>
+          <span class="ml-25 mr-25 text-stance fs-18">|</span>
+          <i class="icon-user"></i>
+          <el-dropdown trigger="click" @command="logout">
+            <span class="el-dropdown-link">Hi，{{users.profile.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
+        </div>
+      </div>
+    </el-row>
+  </el-header>
   <!-- </div> -->
 </template>
 <script>
 export default {
   name: 'loginAfterheader',
   props: {
-    users:Object,
-    logout:Function,
+    users: Object,
+    logout: Function,
 
 
   },
@@ -251,7 +251,7 @@ export default {
   },
   created() {
     this.wsLink();
-
+    this.getUnreadNewNum();
   },
   methods: {
     wsLink() {
@@ -288,25 +288,36 @@ export default {
       }
     },
     // 展示消息浮窗
-    isShowNotice(isShow) {
-      if (isShow) {
-        this.showNotice = true;
-      }
+    isShowNotice() {
+      this.showNotice = true;
       this.noticeLoading = true;
       let postData = {
         page: 1,
-        page_size: 5
+        page_size: 5,
+      }
+      if (this.unreadNewNum) {
+        postData.unread_only = true;
       }
       this.$$http('getMessagesList', postData).then((results) => {
         this.noticeLoading = false;
-        if (results.data && results.data.code == 0) {
-          this.noticeList = results.data.data.results;
-        }
+        // if (results.data && results.data.code == 0) {
+          console.log('消息',results.data);
+          this.noticeList = results.data.results;
+        // }
       }).catch((err) => {
         this.noticeLoading = false;
       })
     },
-
+     // 未读消息
+    getUnreadNewNum() {
+      this.$$http('getUnreadNewNum', {}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.$store.state.common.unreadNewNum = results.data.data.count;
+          // this.unreadNewNum = results.data.data.count;
+        }
+      }).catch((err) => {})
+    },
+    // 一键已读  查看全部
     signRead(isShow) {
       if (isShow) {
         let postData = {
@@ -316,21 +327,43 @@ export default {
           if (!this.noticeList[i].read) {
             postData.ids.push(this.noticeList[i].id);
           }
-
         }
-        // console.log('ids',postData)
-        this.$$http('batchReadMessages', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
-            this.isShowNotice();
-            // this.noticeList = results.data.data.results;
-          }
-        }).catch((err) => {})
+        if (postData.ids.length) {
+          this.$$http('batchReadMessages', postData).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.getUnreadNewNum();
+            }
+          }).catch((err) => {})
+        }
       } else {
-        this.showNotice = false;
         this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
       }
-
+      this.showNotice = false;
     },
+    // signRead(isShow) {
+    //   if (isShow) {
+    //     let postData = {
+    //       ids: []
+    //     }
+    //     for (let i in this.noticeList) {
+    //       if (!this.noticeList[i].read) {
+    //         postData.ids.push(this.noticeList[i].id);
+    //       }
+
+    //     }
+    //     // console.log('ids',postData)
+    //     this.$$http('batchReadMessages', postData).then((results) => {
+    //       if (results.data && results.data.code == 0) {
+    //         // this.isShowNotice();
+    //         // this.noticeList = results.data.data.results;
+    //       }
+    //     }).catch((err) => {})
+    //   } else {
+
+    //     this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
+    //   }
+    //   this.showNotice = false;
+    // },
   }
 }
 

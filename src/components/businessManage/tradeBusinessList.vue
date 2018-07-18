@@ -7,8 +7,8 @@
     top: -15px;
     z-index: 2;
   }
-  .operation-btn-list{
-    span+span{
+  .operation-btn-list {
+    span+span {
       margin-left: 10px;
     }
   }
@@ -94,7 +94,7 @@
                         <el-button type="primary" plain size="mini" v-if="scope.row.order_assign.key==='own'" @click="singleBtn(false,'third',scope.row.id)">转为三方</el-button>
                         <el-button type="primary" size="mini" v-if="scope.row.order_assign.key==='third'" @click="singleBtn(false,'own',scope.row.id)">转为自有</el-button>
                       </span>
-                        <span>
+                      <span>
                         <el-button type="primary" size="mini" @click="checkLink(scope.row)">查看</el-button>
                       </span>
                     </div>
@@ -489,20 +489,24 @@ export default {
               order_id: id,
               action: 'pass'
             }).then((results) => {
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
               if (results.data && results.data.code == 0) {
                 this.$message({
                   message: '通过审核成功',
                   type: 'success'
                 });
                 done();
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false;
-                }, 300);
+
                 this.pageData.currentPage = 1;
                 this.getList(this.statusActive);
               }
 
             }).catch((err) => {
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
               this.$message.error('通过审核失败');
             })
 

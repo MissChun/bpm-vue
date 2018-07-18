@@ -87,11 +87,12 @@
               </el-select>
             </el-form-item>
           </el-col> -->
-            <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
-              需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
-            </el-col>
-            <el-col :span="2" v-if="delivery_list.status.key=='determine'">
-              <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
+            <el-col :span="10" :offset="14" style="line-height:40px;font-size:14px;">
+              <span class="mr-10">
+                需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
+              </span>
+              <el-button v-if="delivery_list.status.key=='determine'" type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
+              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
             </el-col>
           </el-row>
         </div>
@@ -128,6 +129,11 @@ export default {
         currentPage: 1,
         totalPage: 1,
         pageSize: 10,
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       searchFilters: {
         keyword: '',
@@ -207,6 +213,7 @@ export default {
       now_capacities: [],
       alerySureList: [],
       allChangeList: [],
+      exportPostData: {}, //导出筛选
     }
   },
   computed: {
@@ -220,6 +227,43 @@ export default {
   methods: {
     checkSelectable: function(row) {
       return !row.disableChoose
+    },
+    // 导出列表
+    exportData(exportType, ids) {
+      let postData = {
+        filename: '用车计划导出表',
+        tractor_list: [this.id]
+      };
+      // this.exportPostData = this.postDataFilter(this.exportPostData);
+      // let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportPlanTractor', postData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {

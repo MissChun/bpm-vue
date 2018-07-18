@@ -190,9 +190,10 @@ export default {
       this.isValid = '1';
       this.active = index.toString();
       this.$$http('getPositionList', postData).then((results) => {
+        this.positionLoading = false;
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data;
-          this.positionLoading = false;
+
           if (this.positionTableData.length) {
             if (this.$route.query.departmentId && this.$route.query.positionId) {
               this.powerActive = this.$route.query.positionId;
@@ -214,9 +215,10 @@ export default {
     getPermissionsList: function() {
       this.permissionsLoading = true;
       this.$$http('getPermissionsList', {}).then((results) => {
+        this.permissionsLoading = false;
         if (results.data && results.data.code == 0) {
           this.permissionsTableData = results.data.data.data;
-          this.permissionsLoading = false;
+
         }
       }).catch((err) => {
         this.permissionsLoading = false;
@@ -283,23 +285,24 @@ export default {
               cancelButtonText: "取消",
               type: "warning"
             })
-            .then(() => {
+            .then((action, instance) => {
               let postData = {
                 id: this.currentPositionId,
                 permissions: this.selectMenus
               }
-              this.$$http('updatePosition', postData).then((results) => {
-                if (results.data && results.data.code == 0) {
-                  this.selectMenusCopy = this.selectMenus;
-                  this.$message({
-                    message: '更改权限设置成功',
-                    type: 'success'
-                  });
-                }
-              }).catch((err) => {
+              console.log('权限修改',action, instance)
+              // this.$$http('updatePosition', postData).then((results) => {
+              //   if (results.data && results.data.code == 0) {
+              //     this.selectMenusCopy = this.selectMenus;
+              //     this.$message({
+              //       message: '更改权限设置成功',
+              //       type: 'success'
+              //     });
+              //   }
+              // }).catch((err) => {
 
-                this.$message.error('修改权限失败');
-              })
+              //   this.$message.error('修改权限失败');
+              // })
             })
             .catch(() => {
               this.$message({
