@@ -86,7 +86,7 @@
                 <el-table-column label="操作" align="center" width="190" fixed="right">
                   <template slot-scope="scope">
                     <div class="operation-btn-list">
-                      <span v-if="statusActive==='create_department_check'||scope.row.status==='create_department_check'">
+                      <span v-if="isShowBtn(statusActive)||isShowBtn(scope.row.status)">
                         <el-button type="danger" plain size="mini" @click="refuse('create_department_check',scope.row.id)">拒绝</el-button>
                         <el-button type="primary" plain size="mini" @click="adopt('create_department_check',scope.row.id)">通过</el-button>
                       </span>
@@ -292,7 +292,7 @@ export default {
         {
           title: '客户名称',
           param: 'consumer_name',
-          width: ''
+          width: '200'
         }, {
           title: '客户简称',
           param: 'short_name',
@@ -300,7 +300,7 @@ export default {
         }, {
           title: '付款方',
           param: 'payer_name',
-          width: ''
+          width: '200'
         }, {
           title: '卸货站',
           param: 'station',
@@ -350,6 +350,22 @@ export default {
   methods: {
     checkLink(row) {
       this.$router.push({ path: this.detailLink, query: { id: row.id } });
+    },
+    isShowBtn(status) {
+      switch (status) {
+        case 'modify_department_check': //部门修改
+          return true;
+          break;
+        case 'create_department_check': //部门审核
+          return true;
+          break;
+        case 'cancel_check': //取消审核
+          return true;
+          break;
+          // case 'plan_arrive_time':
+          //   return '到站时间';
+          //   break;
+      }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;

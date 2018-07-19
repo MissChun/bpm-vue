@@ -697,19 +697,22 @@ export default {
               order_id: this.id,
               action: 'pass'
             }).then((results) => {
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
               if (results.data && results.data.code == 0) {
                 this.$message({
                   message: '通过审核成功',
                   type: 'success'
                 });
                 done();
-                setTimeout(() => {
-                  instance.confirmButtonLoading = false;
-                }, 300);
                 this.getProcess();
               }
 
             }).catch((err) => {
+              setTimeout(() => {
+                instance.confirmButtonLoading = false;
+              }, 300);
               this.$message.error('通过审核失败');
             })
 
