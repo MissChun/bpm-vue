@@ -149,6 +149,7 @@ export default {
           { id: 'station', value: '卸货站' },
           { id: 'plate_number', value: '车号' },
           { id: 'sale_man', value: '业务员' },
+          { id: 'payer_name', value: '付款方' },
         ]
       },
       thTableList: [{
@@ -166,6 +167,10 @@ export default {
       }, {
         title: '客户名称',
         param: 'consumer_name',
+        width: '220'
+      }, {
+        title: '付款方',
+        param: 'payer_name',
         width: '200'
       }, {
         title: '车号',

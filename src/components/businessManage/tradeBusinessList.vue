@@ -261,6 +261,7 @@ export default {
           { id: 'short_name', value: '客户简称' },
           { id: 'order_number', value: '业务单号' },
           { id: 'supplier', value: '供应商' },
+          { id: 'payer_name', value: '付款方' },
         ]
       },
       thTableList: [{
@@ -295,6 +296,10 @@ export default {
         }, {
           title: '客户简称',
           param: 'short_name',
+          width: ''
+        }, {
+          title: '付款方',
+          param: 'payer_name',
           width: ''
         }, {
           title: '卸货站',

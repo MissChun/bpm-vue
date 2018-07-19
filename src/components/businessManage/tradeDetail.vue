@@ -72,6 +72,12 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
+                <label>付款方:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.payer_name)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
                 <label>来源液厂:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_name)"></div>
               </div>
@@ -82,14 +88,14 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waiting_total)"></div>
               </div>
             </el-col>
+          </el-row>
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>销售价格:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.unit_price)"></div>
               </div>
             </el-col>
-          </el-row>
-          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>销售总价:</label>
@@ -102,14 +108,14 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.settlement_price)"></div>
               </div>
             </el-col>
+          </el-row>
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>结算总价:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.settlement_total_price)"></div>
               </div>
             </el-col>
-          </el-row>
-          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>备注:</label>
