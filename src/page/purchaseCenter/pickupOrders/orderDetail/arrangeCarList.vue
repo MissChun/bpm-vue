@@ -128,7 +128,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
-        pageSize: 2,
+        pageSize: 10,
       },
       exportBtn: {
         text: '导出',
@@ -213,7 +213,6 @@ export default {
       now_capacities: [],
       alerySureList: [],
       allChangeList: [],
-      exportPostData: {}, //导出筛选
     }
   },
   computed: {
@@ -229,11 +228,15 @@ export default {
       return !row.disableChoose
     },
     // 导出列表
-    exportData(exportType, ids) {
+    exportData() {
       let postData = {
         filename: '用车计划导出表',
-        tractor_list: [this.id]
+        tractor_list: []
       };
+      for(let i in this.lastSearch_list){
+        postData.tractor_list.push(this.lastSearch_list[i].id);
+      }
+      console.log('postData',postData)
       // this.exportPostData = this.postDataFilter(this.exportPostData);
       // let newPostData = Object.assign(this.exportPostData, postData);
       this.exportBtn = {
