@@ -128,7 +128,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
-        pageSize: 10,
+        pageSize: 2,
       },
       exportBtn: {
         text: '导出',
@@ -206,7 +206,7 @@ export default {
       ],
       tableData: [],
       renderPage_list: [],
-
+      lastSearch_list:[],
       trueAll_list: [],
       delivery_list: { status: {} },
       tractor_semitrailers_List: [],
@@ -474,9 +474,7 @@ export default {
 
     },
     searchThisByData: function(searchPage, type) {
-      if (this.delivery_list.status.key != "confirmed") {
-
-
+      //if (this.delivery_list.status.key != "confirmed") {
         var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
         var value = this.searchFilters.keyword;
         var newArr = [];
@@ -499,7 +497,7 @@ export default {
 
         this.renderAll_list = newArr;
         this.bindChekboxFunction(searchPage, newArr);
-      }
+      //}
     },
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);
