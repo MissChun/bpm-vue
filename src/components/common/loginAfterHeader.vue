@@ -108,8 +108,7 @@
   background-color: #fff;
   width: 100%;
   height: 422px;
-  box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5);
-  //position: absolute;
+  box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5); //position: absolute;
   font-size: 14px;
   top: 52px;
   right: -100px;
@@ -206,7 +205,7 @@
               </div>
             </div>
             <span slot="reference">
-              <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
+              <el-badge :value="$store.state.common.unreadNewNum" :max="100" class="item">
                 <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
               </el-badge>
             </span>
@@ -260,6 +259,7 @@ export default {
   },
   methods: {
     wsLink() {
+      let vm = this;
       let currentUrl = document.location.href.toString();
       let domainUrl = '';
       if (currentUrl.match('pbpm.91lng.cn')) {
@@ -281,15 +281,26 @@ export default {
       //   }
       // }, 10000)
       ws.onmessage = function(event) {
+
         console.log('接收的消息', event.data)
-        this.$notify({
-          title: '系统通知',
-          message: event.data,
+        let msg = JSON.parse(event.data);
+        // vm.$store.state.common.unreadNewNum++;
+        vm.$store.commit('ChangeMsgNum', {
+          num: 1
+        });
+        vm.$notify({
+          title: msg.message_type.verbose,
+          message: msg.content,
+          position: 'bottom-right',
+          duration: 0
         });
 
       }
       ws.onerror = function(event) {
-        console.log('报错', event)
+        // vm.wsLink();
+      }
+      ws.onclose = function(event) {
+        vm.wsLink();
       }
     },
     // 展示消息浮窗
@@ -380,7 +391,9 @@ export default {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
               if (row) {
-                this.$store.state.common.unreadNewNum--;
+                if (this.$store.state.common.unreadNewNum) {
+                  this.$store.state.common.unreadNewNum--;
+                }
                 if (this.isShowLink(row)) {
                   this.urlLink(row);
                 }

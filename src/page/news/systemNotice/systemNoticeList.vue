@@ -89,7 +89,7 @@ export default {
       }).catch((err) => {})
     },
     isShowLink(row) {
-      if (row.order_id || row.delivery_id || row.waybill_id) {
+      if (row.delivery_id || row.waybill_id) {
         return true;
       } else {
         return false;
@@ -97,12 +97,12 @@ export default {
     },
     // 详情跳转
     urlLink(row) {
-      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
-        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
-      } else if (row.order_id || row.delivery_id) {
-        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.delivery_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.delivery_id + '/add' });
+      } else if (row.delivery_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/' + row.delivery_id + '/add' });
       } else if (row.waybill_id) {
-        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trips_id });
       }
     },
     // 标记全部已读  单个已读
@@ -123,7 +123,11 @@ export default {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             if (row) {
-              this.$store.state.common.unreadNewNum--;
+              if (this.$store.state.common.unreadNewNum) {
+                this.$store.commit('ChangeMsgNum', {
+                  num: -1
+                });
+              }
               if (this.isShowLink(row)) {
                 this.urlLink(row);
               }
