@@ -106,10 +106,10 @@
 // 消息通知
 .notice-temp {
   background-color: #fff;
-  width: 386px;
+  width: 100%;
   height: 422px;
   box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5);
-  position: absolute;
+  //position: absolute;
   font-size: 14px;
   top: 52px;
   right: -100px;
@@ -184,30 +184,35 @@
           </el-breadcrumb>
         </div>
         <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
-          <div class="notice" v-if="false">
-            <div class="notice-temp" v-if="showNotice">
-              <div class="notice-temp-title">系统通知</div>
-              <div class="notice-temp-content" v-loading="noticeLoading">
-                <ul>
-                  <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
-                </ul>
-              </div>
-              <div class="notice-temp-footer">
-                <el-row>
-                  <el-col :span="12">
-                    <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
-                  </el-col>
-                  <el-col :span="12" class="text-right">
-                    <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
-                  </el-col>
-                </el-row>
+          <el-popover placement="top" width="386" trigger="click" v-model="showNotice">
+            <div class="notice" v-if="!false">
+              <div class="notice-temp" v-if="showNotice">
+                <div class="notice-temp-title">系统通知</div>
+                <div class="notice-temp-content" v-loading="noticeLoading">
+                  <ul>
+                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
+                  </ul>
+                </div>
+                <div class="notice-temp-footer">
+                  <el-row>
+                    <el-col :span="12">
+                      <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
+                    </el-col>
+                    <el-col :span="12" class="text-right">
+                      <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
+                    </el-col>
+                  </el-row>
+                </div>
               </div>
             </div>
-            <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
-              <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
-            </el-badge>
-          </div>
-          <!-- <span class="ml-25 mr-25 text-stance fs-18">|</span> -->
+            <span slot="reference">
+              <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
+                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+              </el-badge>
+            </span>
+            <!-- <el-button>click 激活</el-button> -->
+          </el-popover>
+          <span class="ml-25 mr-25 text-stance fs-18">|</span>
           <i class="icon-user"></i>
           <el-dropdown trigger="click" @command="logout">
             <span class="el-dropdown-link">Hi，{{users.profile.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
@@ -250,23 +255,23 @@ export default {
 
   },
   created() {
-    // this.wsLink();
-    // this.getUnreadNewNum();
+    this.wsLink();
+    this.getUnreadNewNum();
   },
   methods: {
     wsLink() {
       let currentUrl = document.location.href.toString();
       let domainUrl = '';
-      if (currentUrl.match('ptms.91lng.cn')) {
-        domainUrl = 'ptms.91lng.cn';
-      } else if (currentUrl.match('tms.hhtdlng.com')) {
-        domainUrl = 'tms.hhtdlng.com';
-      } else if (currentUrl.match('tms.91lng.cn')) {
-        domainUrl = 'tms.91lng.cn';
+      if (currentUrl.match('pbpm.91lng.cn')) {
+        domainUrl = 'pbpm.91lng.cn';
+      } else if (currentUrl.match('bpm.hhtdlng.com')) {
+        domainUrl = 'bpm.hhtdlng.com';
+      } else if (currentUrl.match('bpm.91lng.cn')) {
+        domainUrl = 'bpm.91lng.cn';
       } else {
-        domainUrl = 'devtms.hhtdlng.com';
+        domainUrl = 'devbpm.hhtdlng.com';
       }
-      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/');
+      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       ws.onopen = function(event) {
         console.log('链接消息', event)
       }
@@ -301,14 +306,14 @@ export default {
       this.$$http('getMessagesList', postData).then((results) => {
         this.noticeLoading = false;
         // if (results.data && results.data.code == 0) {
-          console.log('消息',results.data);
-          this.noticeList = results.data.results;
+        console.log('消息', results.data);
+        this.noticeList = results.data.results;
         // }
       }).catch((err) => {
         this.noticeLoading = false;
       })
     },
-     // 未读消息
+    // 未读消息
     getUnreadNewNum() {
       this.$$http('getUnreadNewNum', {}).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -317,21 +322,71 @@ export default {
         }
       }).catch((err) => {})
     },
+    // 展示消息浮窗
+    isShowNotice() {
+      this.showNotice = true;
+      this.noticeLoading = true;
+      let postData = {
+        page: 1,
+        page_size: 5,
+      }
+      if (this.$store.state.common.unreadNewNum) {
+        postData.unread_only = true;
+      }
+      this.$$http('getMessagesList', postData).then((results) => {
+        this.noticeLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.noticeList = results.data.data.results;
+        }
+      }).catch((err) => {
+        this.noticeLoading = false;
+      })
+    },
+    isShowLink(row) {
+      if (row.order_id || row.delivery_id || row.waybill_id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 详情跳转
+    urlLink(row) {
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
+      } else if (row.order_id || row.delivery_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      } else if (row.waybill_id) {
+        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+      }
+    },
     // 一键已读  查看全部
-    signRead(isShow) {
+    signRead(isShow, row) {
       if (isShow) {
         let postData = {
           ids: []
         }
-        for (let i in this.noticeList) {
-          if (!this.noticeList[i].read) {
-            postData.ids.push(this.noticeList[i].id);
+        if (row) {
+          postData.ids.push(row.id);
+        } else {
+          for (let i in this.noticeList) {
+            if (!this.noticeList[i].read) {
+              postData.ids.push(this.noticeList[i].id);
+            }
+
           }
         }
+        console.log('postData', postData)
         if (postData.ids.length) {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
-              this.getUnreadNewNum();
+              if (row) {
+                this.$store.state.common.unreadNewNum--;
+                if (this.isShowLink(row)) {
+                  this.urlLink(row);
+                }
+              } else {
+                this.getUnreadNewNum();
+              }
             }
           }).catch((err) => {})
         }

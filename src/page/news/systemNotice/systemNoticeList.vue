@@ -14,7 +14,7 @@
         <el-tab-pane label="系统通知" name="system">
           <div class="news" v-loading="pageLoading" :class="{'tabal-height-500':!newsList.length}">
             <ul>
-              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead(item.id)">
+              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead('',item)">
                 <el-row :gutter="10">
                   <el-col :span="18">
                     <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。
@@ -22,24 +22,11 @@
                   <el-col :span="4" class="text-right text-time">
                     {{item.created_at}}
                   </el-col>
-                  <el-col :span="2" class="text-right">
+                  <el-col :span="2" class="text-right" v-if="isShowLink(item)">
                     <el-button type="primary" size="mini">查看详情</el-button>
                   </el-col>
                 </el-row>
               </li>
-              <!-- <li class="is-unread cursor-pointer">
-                <el-row :gutter="10">
-                  <el-col :span="18">
-                    【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。
-                  </el-col>
-                  <el-col :span="4" class="text-right text-time">
-                    2018-07-07 16:23
-                  </el-col>
-                  <el-col :span="2" class="text-right">
-                    <el-button type="primary" size="mini">查看详情</el-button>
-                  </el-col>
-                </el-row>
-              </li> -->
             </ul>
             <no-data v-if="!pageLoading && !newsList.length"></no-data>
           </div>
@@ -101,27 +88,47 @@ export default {
         }
       }).catch((err) => {})
     },
-    batchRead(id) {
+    isShowLink(row) {
+      if (row.order_id || row.delivery_id || row.waybill_id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 详情跳转
+    urlLink(row) {
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
+      } else if (row.order_id || row.delivery_id) {
+        this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      } else if (row.waybill_id) {
+        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+      }
+    },
+    // 标记全部已读  单个已读
+    batchRead(even, row) {
       let postData = {
         ids: []
       }
-      if (id) {
-        postData.ids.push(id)
+      if (row) {
+        postData.ids.push(row.id);
       } else {
         for (let i in this.newsList) {
           if (!this.newsList[i].read) {
             postData.ids.push(this.newsList[i].id);
           }
-
         }
       }
       if (postData.ids.length) {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
-            this.getList();
-            if(id){
-              this.$store.state.common.unreadNewNum --;
-            }else{
+            if (row) {
+              this.$store.state.common.unreadNewNum--;
+              if (this.isShowLink(row)) {
+                this.urlLink(row);
+              }
+              this.getList();
+            } else {
               this.getUnreadNewNum();
             }
           }

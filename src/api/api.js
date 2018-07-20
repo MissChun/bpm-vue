@@ -139,7 +139,7 @@ const api = {
   },
   exportIncomeData: {
     url: '/export/income/',
-    method: 'post',
+    method: 'get',
     desc: '收入统计数据',
     param: {
       filename: {
@@ -155,7 +155,7 @@ const api = {
   },
   exportLogisticData: {
     url: '/export/logistic/',
-    method: 'post',
+    method: 'get',
     desc: '托运数据',
     param: {
       filename: {
@@ -171,7 +171,7 @@ const api = {
   },
   exportSaleData: {
     url: '/export/sale/',
-    method: 'post',
+    method: 'get',
     desc: '导出销售数据',
     param: {
       filename: {
@@ -187,7 +187,7 @@ const api = {
   },
   exportPurchaseData: {
     url: '/export/procument/',
-    method: 'post',
+    method: 'get',
     desc: '导出采购数据',
     param: {
       filename: {
