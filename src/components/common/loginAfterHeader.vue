@@ -264,9 +264,9 @@ export default {
       let domainUrl = '';
       if (currentUrl.match('pbpm.91lng.cn')) {
         domainUrl = 'pbpm.91lng.cn';
-      } else if (currentUrl.match('bpm.hhtdlng.com')) {
+      } else if (currentUrl.match('bpm.hhtdlng.com') && !currentUrl.match('devbpm.hhtdlng.com')) {
         domainUrl = 'bpm.hhtdlng.com';
-      } else if (currentUrl.match('bpm.91lng.cn')) {
+      } else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
         domainUrl = 'bpm.91lng.cn';
       } else {
         domainUrl = 'devbpm.hhtdlng.com';
@@ -300,7 +300,7 @@ export default {
         // vm.wsLink();
       }
       ws.onclose = function(event) {
-        vm.wsLink();
+        // vm.wsLink();
       }
     },
     // 展示消息浮窗
@@ -316,10 +316,10 @@ export default {
       }
       this.$$http('getMessagesList', postData).then((results) => {
         this.noticeLoading = false;
-        // if (results.data && results.data.code == 0) {
+        if (results.data && results.data.code == 0) {
         console.log('消息', results.data);
         this.noticeList = results.data.results;
-        // }
+        }
       }).catch((err) => {
         this.noticeLoading = false;
       })
@@ -367,7 +367,7 @@ export default {
       } else if (row.order_id || row.delivery_id) {
         this.$router.push({ path: '/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
       } else if (row.waybill_id) {
-        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+        this.$router.push({ path: '/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trip_id });
       }
     },
     // 一键已读  查看全部
