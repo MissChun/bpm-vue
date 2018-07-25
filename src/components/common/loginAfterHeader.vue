@@ -241,6 +241,7 @@ export default {
       showNotice: false,
       noticeLoading: false,
       noticeList: [],
+      wsNum:10
     }
   },
   computed: {
@@ -299,8 +300,12 @@ export default {
       ws.onerror = function(event) {
         // vm.wsLink();
       }
-      ws.onclose = function(event) {
-        // vm.wsLink();
+      ws.onclose = (event) => {
+        this.wsNum--;
+        if (this.wsNum > 0) {
+          vm.wsLink();
+        }
+
       }
     },
     // // 展示消息浮窗
