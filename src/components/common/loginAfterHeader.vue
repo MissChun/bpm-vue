@@ -204,9 +204,9 @@
                 </div>
               </div>
             </div>
-            <span slot="reference">
-              <el-badge :value="$store.state.common.unreadNewNum" :max="100" class="item">
-                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+            <span slot="reference" v-on:click="isShowNotice">
+              <el-badge :value="$store.state.common.unreadNewNum?$store.state.common.unreadNewNum:''" :max="10" class="item">
+                <i class="icon-notice cursor-pointer"></i>
               </el-badge>
             </span>
             <!-- <el-button>click 激活</el-button> -->
@@ -303,27 +303,28 @@ export default {
         // vm.wsLink();
       }
     },
-    // 展示消息浮窗
-    isShowNotice() {
-      this.showNotice = true;
-      this.noticeLoading = true;
-      let postData = {
-        page: 1,
-        page_size: 5,
-      }
-      if (this.unreadNewNum) {
-        postData.unread_only = true;
-      }
-      this.$$http('getMessagesList', postData).then((results) => {
-        this.noticeLoading = false;
-        if (results.data && results.data.code == 0) {
-        console.log('消息', results.data);
-        this.noticeList = results.data.results;
-        }
-      }).catch((err) => {
-        this.noticeLoading = false;
-      })
-    },
+    // // 展示消息浮窗
+    // isShowNotice() {
+    //   this.showNotice = true;
+    //   this.noticeLoading = true;
+    //   let postData = {
+    //     page: 1,
+    //     page_size: 5,
+    //   }
+    //   if (this.unreadNewNum) {
+    //     postData.unread_only = true;
+    //   }
+    //   this.getUnreadNewNum();
+    //   this.$$http('getMessagesList', postData).then((results) => {
+    //     this.noticeLoading = false;
+    //     if (results.data && results.data.code == 0) {
+    //     console.log('消息', results.data);
+    //     this.noticeList = results.data.results;
+    //     }
+    //   }).catch((err) => {
+    //     this.noticeLoading = false;
+    //   })
+    // },
     // 未读消息
     getUnreadNewNum() {
       this.$$http('getUnreadNewNum', {}).then((results) => {
@@ -344,6 +345,7 @@ export default {
       if (this.$store.state.common.unreadNewNum) {
         postData.unread_only = true;
       }
+      this.getUnreadNewNum();
       this.$$http('getMessagesList', postData).then((results) => {
         this.noticeLoading = false;
         if (results.data && results.data.code == 0) {

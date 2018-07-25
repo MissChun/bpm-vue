@@ -122,8 +122,8 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         plan_arrive_time: [],
-        is_reconciliation: '',
-        is_invoice: '',
+        is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
+        is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
         field: 'business_order',
       },
@@ -267,8 +267,10 @@ export default {
     startSearch() {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
-      this.getList(this.statusActive);
-
+      this.getList();
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
+      }
     },
     // 批量对账、开票弹窗
     batchReconciliation(type) {
@@ -359,7 +361,7 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.getList();
   }
 
 }

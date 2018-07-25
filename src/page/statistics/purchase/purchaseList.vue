@@ -81,7 +81,7 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
-                <span v-else>{{scope.row[item.param]}}</span>
+                <span v-else v-html="scope.row[item.param]"></span>
               </div>
             </template>
           </el-table-column>
@@ -137,8 +137,8 @@ export default {
       searchFilters: {
         plan_arrive_time: [],
         waybill_status: '',
-        is_reconciliation: '',
-        is_invoice: '',
+        is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
+        is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
         field: 'waybill',
       },
@@ -254,6 +254,9 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
+      }
     },
     // 全部对账
     getUnReconciliations() {
@@ -362,6 +365,10 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.data) {
+            this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
+          }
+
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

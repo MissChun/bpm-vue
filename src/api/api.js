@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getLedgerList: {
+    url: '/api/v1/ledger/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
   exportPlanTractor: {
     url: '/export/tractor/',
     method: 'post',

@@ -35,12 +35,12 @@
               <el-row :gutter="10">
                 <el-col :span="8">
                   <el-form-item label="计划到站日期:" label-width="105px">
-                    <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="下计划日期:" label-width="105px">
-                    <el-date-picker v-model="createdAt" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="createdAt" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -53,17 +53,14 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
-            <!-- <el-button type="primary" plain>导入</el-button> -->
-            <!-- <el-button type="primary">导出</el-button> -->
-          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
     <div>
       <div class="nav-tab-setting mt-25">
-        <div class="business-btn" v-if="activeName==='relation'&&isToExamine">
-          <el-button type="primary" @click="batchDistributionBtn">批量分配</el-button>
+        <div class="business-btn">
+          <el-button type="primary" @click="batchDistributionBtn" v-if="activeName==='relation'&&isToExamine">批量分配</el-button>
+          <!-- <el-button type="primary" plain :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
         </div>
         <el-tabs v-model="statusActive" @tab-click="statusClick">
           <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title" :name="tab.key">
@@ -147,6 +144,11 @@ export default {
         isShow: false,
         id: ''
       },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
       distribution: 'own',
       distributionDialog: false, //分配弹窗
       pageLoading: false,
@@ -155,9 +157,9 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName: 'add',
-      statusActive: 'create_department_check',
-      planArriveTime: [], //计划到站时间
+      activeName: this.$route.query.tabClassifyStatus ? this.$route.query.tabClassifyStatus : 'add',
+      statusActive: this.$route.query.businessStatus ? this.$route.query.businessStatus : 'create_department_check',
+      planArriveTime: this.$route.query.planArriveTime ? (this.$route.query.planArriveTime).split(',') : [], //计划到站时间
       createdAt: [], //下计划日期
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -344,12 +346,46 @@ export default {
       sureBtn: {
         isDisabled: false,
         isLoading: false
-      }
+      },
+      exportPostData: {}, //导出参数
     }
   },
   methods: {
     checkLink(row) {
       this.$router.push({ path: this.detailLink, query: { id: row.id } });
+    },
+    // 导出列表
+    exportData() {
+
+      this.exportPostData.export_excel = 'export';
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('getBusinessList', this.exportPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.down_url);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     isShowBtn(status) {
       switch (status) {
@@ -570,6 +606,9 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
+      }
     },
     getList(status) {
       let postData = {
@@ -578,18 +617,18 @@ export default {
         status: status === 'all' ? '' : status
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.plan_arrive_time_start = this.planArriveTime[0] + ' 00:00:00';
-        postData.plan_arrive_time_end = this.planArriveTime[1] + ' 23:59:59';
+        postData.plan_arrive_time_start = this.planArriveTime[0];
+        postData.plan_arrive_time_end = this.planArriveTime[1];
       }
       if (this.createdAt instanceof Array && this.createdAt.length > 0) {
-        postData.created_at_start = this.createdAt[0] + ' 00:00:00';
-        postData.created_at_end = this.createdAt[1] + ' 23:59:59';
+        postData.created_at_start = this.createdAt[0];
+        postData.created_at_end = this.createdAt[1];
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getBusinessList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -604,6 +643,11 @@ export default {
   },
   created() {
     this.getList(this.statusActive);
+    for (let i in this.tabList) {
+      if (this.tabList[i].key === this.activeName) {
+        this.statusTabList = this.tabList[i].tabs;
+      }
+    }
   }
 
 }
