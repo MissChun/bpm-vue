@@ -2274,6 +2274,14 @@ const api = {
     param: {
 
     }
+  },
+  exportOrder: {
+    url: '/api/v1/section-trips/',
+    method: 'get',
+    desc: "导出运单列表",
+    param: {
+
+    }
   }
 }
 

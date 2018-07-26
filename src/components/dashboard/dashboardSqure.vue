@@ -27,7 +27,7 @@
 <template>
   <div class="squreModule" @click="gotoPage">
     <el-row style="height:60px">
-      <el-col class="text-center" style="line-height:60px;height:60px"><span class="boldB">{{dashboradSqureData.num}}</span><span>单</span></el-col>
+      <el-col class="text-center" style="line-height:60px;height:60px"><span class="boldB">{{dashboradSqureData.num}}</span><span>{{dashboradSqureData.dimension=='car'?'车':'单'}}</span></el-col>
     </el-row>
     <el-row style="height:40px">
       <el-col class="text-center" style="line-height:20px;height:40px"><span>{{dashboradSqureData.value}}</span></el-col>

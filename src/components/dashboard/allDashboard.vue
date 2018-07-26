@@ -71,7 +71,7 @@ export default {
         'purchaseDashboard':[
           {//采购概览
           'dashboardSqureData':[
-              {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine'},
+              {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine',dimension:"order"},
             ],
             'searchShow':false,
             'type':'procurement_centre_scedule',
@@ -79,9 +79,9 @@ export default {
           },
           {
           'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true},
-              {key:'unwork_end_time_count',value:'未装车',extendTable:true},
-              {key:'work_end_time_count',value:'已装车',extendTable:true},
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car"},
+              {key:'unwork_end_time_count',value:'未装车',extendTable:true,dimension:"car"},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car"},
             ],
             'searchShow':true,
             'type':'procurement_centre_dashborad',
@@ -92,9 +92,9 @@ export default {
         'serviceCentreDashboard':[//服务中心概览
           {
             'dashboardSqureData':[
-              {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList'},
-              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match'},
-              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList'}
+              {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList',dimension:"order"},
+              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"order"},
+              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList',dimension:"order"}
             ],
             'searchShow':false,
             'type':'service_centre_schedule',
@@ -102,11 +102,11 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true},
-              {key:'work_end_time_count',value:'已装车',extendTable:true},
-              {key:'waiting_match_count',value:'已装车未关联',extendTable:true},
-              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false},
-              {key:'truck_count',value:'当日卸车计划数',extendTable:true}
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car"},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car"},
+              {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"car"},
+              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"order"},
+              {key:'truck_count',value:'当日卸车计划数',extendTable:true,dimension:"order"}
             ],
             'searchShow':true,
             'searchData':[],
@@ -118,8 +118,8 @@ export default {
         'puchaseStatisticsDashboard':[//采购统计概览
           {
             'dashboardSqureData':[
-              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/purchase/purchaseList?is_reconciliation=unfinished'},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/purchase/purchaseList?is_invoice=no'},
+              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/purchase/purchaseList?is_reconciliation=unfinished',dimension:"car"},
+              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/purchase/purchaseList?is_invoice=no',dimension:"car"},
             ],
             'searchShow':false,
             'type':'procurement_statistics_dashborad',
@@ -129,8 +129,8 @@ export default {
         'salesStatisticsDashboard':[//销售概览
           {
             'dashboardSqureData':[
-              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished'},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no'},
+              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"car"},
+              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"car"},
             ],
             'searchShow':false,
             'type':'sale_statistics_dashborad',
@@ -138,7 +138,7 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'waiting_settlement_count',value:'已卸车',extendTable:true},
+              {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"car"},
             ],
             'searchShow':true,
             'searchData':[],

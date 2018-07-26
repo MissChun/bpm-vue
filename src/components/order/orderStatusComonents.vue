@@ -20,7 +20,7 @@
 </style>
 <template>
   <div>
-    <div class="tab-content">
+    <div class="tab-content" style="position:relative;">
       <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
         <el-row :gutter="0">
           <el-col :span="15">
@@ -69,10 +69,12 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder"  :loading="exportLoading">导出</el-button>
     </div>
-    <div class="nav-tab-setting mt-25" v-loading="pageLoading">
-      <el-tabs v-model="fifterName" @tab-click="clickFifter">
-        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key">
+
+    <div class="nav-tab-setting mt-25" >
+      <el-tabs v-model="fifterName" @tab-click="clickFifter" >
+        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
               <orderConFifter :ListData="listFifterData" :status="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
@@ -125,6 +127,7 @@ export default {
       },
       expandStatus: true,
       pageLoading: false,
+      exportLoading:false,
       fifterName: "",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
@@ -190,6 +193,71 @@ export default {
     },
     changeTabs: function(name) {
       this.$emit("changeTabs", name);
+    },
+    exportOrder:function(){
+      var sendData = {};
+      var vm = this;
+      this.exportLoading = true;
+      if (this.fifterName == 'all') {
+        if (this.status == 'first') {
+          sendData.search = 'all_truck_loaded';
+        } else if (this.status == 'second') {
+          sendData.search = 'all_match';
+        } else if (this.status == 'third') {
+          sendData.search = 'all_unload';
+        } else if (this.status == 'fourth') {
+          sendData.search = 'all_settle';
+        } else if (this.status == 'fifth') {
+          sendData.search = 'all_change';
+        } else if (this.status == 'sxith') {
+          sendData.search = 'all_finish';
+        }else if (this.status == 'seven') {
+          sendData.search = '';
+        }
+      } else {
+        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
+          sendData.interrupt_status = this.fifterName;
+        } else {
+          sendData.status = this.fifterName;
+        }
+      }
+
+      if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
+        sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
+        sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
+      }
+      if (this.timeParam.unload_plan_time instanceof Array && this.timeParam.unload_plan_time.length > 0) {
+        sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
+        sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
+      }
+      if (this.timeParam.active_time instanceof Array && this.timeParam.active_time.length > 0) {
+        sendData.load_active_time_start = this.timeParam.active_time[0]; //实际装车
+        sendData.load_active_time_end = this.timeParam.active_time[1];
+      }
+      if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
+        sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
+        sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
+      }
+      if (this.fifterParam.field) {
+        sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      }
+      sendData.carrier_type=this.carrier_type;
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
+      } else {
+        vm.saveSendData = sendData;
+        this.pageData.currentPage = 1;
+        sendData.page = this.pageData.currentPage;
+      }
+      sendData.pageSize = this.pageData.pageSize;
+      sendData.export_excel='export'
+      this.$$http("exportOrder", sendData).then((results) => {
+        this.exportLoading = false;
+        if(results.data&&results.data.code==0){
+          window.open(results.data.data.down_url);
+        }
+      });
     },
     searchList: function(targetName) {
       //
