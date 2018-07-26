@@ -140,7 +140,8 @@ export default {
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
         'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '故障中' }],
-        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
+        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
+        'seven': [{ key: 'all', value: '全部' }]
       },
       timeParam: {
         unload_active_time: [],
@@ -208,6 +209,8 @@ export default {
           sendData.search = 'all_change';
         } else if (this.status == 'sxith') {
           sendData.search = 'all_finish';
+        }else if (this.status == 'seven') {
+          sendData.search = '';
         }
       } else {
         if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {

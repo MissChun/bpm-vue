@@ -46,8 +46,8 @@ const api = {
     method: 'put',
     desc: '消息批量已读',
     param: {
-      ids:{
-        desc:'id'
+      ids: {
+        desc: 'id'
       }
     }
   },
@@ -56,11 +56,11 @@ const api = {
     method: 'get',
     desc: '通知消息列表',
     param: {
-      page:{
-        desc:'当前页数'
+      page: {
+        desc: '当前页数'
       },
-      page_size:{
-        desc:'一页条数'
+      page_size: {
+        desc: '一页条数'
       }
     }
   },
@@ -92,11 +92,11 @@ const api = {
     method: 'get',
     desc: '导出列表头部',
     param: {
-      page_arg:{
-        desc:'表格类型'
+      page_arg: {
+        desc: '表格类型'
       },
-      need_all:{
-        desc:'全部'
+      need_all: {
+        desc: '全部'
       }
     }
   },
@@ -2260,9 +2260,17 @@ const api = {
     }
   },
   getDashboard: {
-    url: '/api/v1/section-trips/dashborad/',
+    url: '/api/v1/dashborad/',
     method: 'get',
     desc: "获取概览数据",
+    param: {
+
+    }
+  },
+  getDetalisDashboard: {
+    url: '/api/v1/dashborad-detail/',
+    method: 'get',
+    desc: "获取概览详细数据",
     param: {
 
     }

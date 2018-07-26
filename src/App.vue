@@ -44,9 +44,8 @@ export default {
         purchaseDashboard: 'purchaseDashboard',
         serviceCentreDashboard: 'serviceCentreDashboard',
         energyDashboard: 'energyDashboard',
-        purchasingSDashboard: 'purchasingSDashboard',
-        salesSDashboard: 'salesSDashboard',
-
+        salesStatisticsDashboard:'salesStatisticsDashboard',
+        puchaseStatisticsDashboard:'puchaseStatisticsDashboard',
         purchaseCenter: 'purchaseCenter',
         pickupOrders: 'pickupOrders',
         supplierManage: 'supplierManage',

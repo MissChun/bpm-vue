@@ -47,13 +47,25 @@ export default {
   },
   methods: {
     gotoPage:function(){
-      this.$router.push({ path:this.dashboradSqureData.goUrl});
+      if(this.dashboradSqureData.goUrl){
+         this.$router.push({ path:this.dashboradSqureData.goUrl});
+      }else{
+        this.$emit('clickExtendTable',this.dashboradSqureData);
+      }
+     
     }
   },
   created() {
 
   },
-  props:['dashboradSqureData']
+  props:{
+    dashboradSqureData:{
+      num:String,
+      value:String,
+      goUrl:String,
+      extendTable:Boolean
+    }
+  },
 };
 
 </script>
