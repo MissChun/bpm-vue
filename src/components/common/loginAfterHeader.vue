@@ -189,7 +189,7 @@
                 <div class="notice-temp-title">系统通知</div>
                 <div class="notice-temp-content" v-loading="noticeLoading">
                   <ul>
-                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
+                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item,item.read)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}<span class="time">{{item.created_at}}</span></li>
                   </ul>
                 </div>
                 <div class="notice-temp-footer">
@@ -378,7 +378,7 @@ export default {
       }
     },
     // 一键已读  查看全部
-    signRead(isShow, row) {
+    signRead(isShow, row, isRead) {
       if (isShow) {
         let postData = {
           ids: []
@@ -393,7 +393,7 @@ export default {
 
           }
         }
-        if (postData.ids.length && !row.read) {
+        if (postData.ids.length && !isRead) {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
               if (row) {
@@ -408,10 +408,10 @@ export default {
               }
             }
           }).catch((err) => {})
-        }
-      } else if (postData.ids.length && row.read) {
-        if (this.isShowLink(row)) {
-          this.urlLink(row);
+        } else if (postData.ids.length && isRead) {
+          if (this.isShowLink(row)) {
+            this.urlLink(row);
+          }
         }
       } else {
         this.$router.push({ path: '/news/systemNotice/systemNoticeList' });

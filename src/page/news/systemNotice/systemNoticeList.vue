@@ -14,7 +14,7 @@
         <el-tab-pane label="系统通知" name="system">
           <div class="news" v-loading="pageLoading" :class="{'tabal-height-500':!newsList.length}">
             <ul>
-              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead('',item)">
+              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead('',item,item.read)">
                 <el-row :gutter="10">
                   <el-col :span="18">
                     <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}
@@ -106,7 +106,7 @@ export default {
       }
     },
     // 标记全部已读  单个已读
-    batchRead(even, row) {
+    batchRead(even, row, isRead) {
       let postData = {
         ids: []
       }
@@ -119,7 +119,7 @@ export default {
           }
         }
       }
-      if (postData.ids.length && !row.read) {
+      if (postData.ids.length&&!isRead) {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             if (row) {
@@ -139,7 +139,7 @@ export default {
         }).catch((err) => {
 
         })
-      } else {
+      }else if(postData.ids.length && isRead) {
         if (this.isShowLink(row)) {
           this.urlLink(row);
         }
