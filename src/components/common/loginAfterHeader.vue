@@ -205,7 +205,7 @@
               </div>
             </div>
             <span slot="reference" v-on:click="isShowNotice">
-              <el-badge :value="$store.state.common.unreadNewNum?$store.state.common.unreadNewNum:''" :max="10" class="item">
+              <el-badge :value="$store.state.common.unreadNewNum?($store.state.common.unreadNewNum<9?$store.state.common.unreadNewNum:'N'):''" class="item">
                 <i class="icon-notice cursor-pointer"></i>
               </el-badge>
             </span>
@@ -241,7 +241,7 @@ export default {
       showNotice: false,
       noticeLoading: false,
       noticeList: [],
-      wsNum:10
+      wsNum: 10
     }
   },
   computed: {
@@ -393,8 +393,7 @@ export default {
 
           }
         }
-        console.log('postData', postData)
-        if (postData.ids.length) {
+        if (postData.ids.length && !row.read) {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
               if (row) {
@@ -409,6 +408,10 @@ export default {
               }
             }
           }).catch((err) => {})
+        }
+      } else if (postData.ids.length && row.read) {
+        if (this.isShowLink(row)) {
+          this.urlLink(row);
         }
       } else {
         this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
