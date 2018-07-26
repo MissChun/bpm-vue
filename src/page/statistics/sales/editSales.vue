@@ -254,7 +254,7 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         unload_nums: [
-          { pattern: /^[0-9]$/, message: '支持数值输入', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
         // waiting_charges: [
         //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
