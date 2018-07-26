@@ -18,17 +18,20 @@
   height:0px;
   margin:0 0 0 10px;
 }
+.marginNone{
+  margin:0 0 0 10px;
+}
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
     <div v-for="(itemList,index) in renderDashboard" :key="index">
       <div class="dashboradContent">
-        <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title==''}">{{itemList.title}}</div>
+        <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}">{{itemList.title}}</div>
         <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" v-if="itemList.searchShow" style="margin-top:30px;">
-          <el-row>
+          <el-row >
             <el-col :span="8">
               <el-form-item align="right" label="时间搜索:" >
-                  <el-date-picker  style="width:100%" :editable="editable"  v-model="itemList.searchData" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  <el-date-picker  style="width:100%" :editable="editable"  :clearable="clearable" v-model="itemList.searchData" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
               </el-form-item>
             </el-col>
@@ -37,9 +40,9 @@
             </el-col>
           </el-row>
         </el-form>
-        <el-row  v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20"  style="margin:0 0 40px 0" :key="Rindex">
-          <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:40px;" :key="item.key">
-            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable"></dashboradSqure> 
+        <el-row  v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20"  style="margin:10px 0 40px 0" :key="Rindex">
+          <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:15px;" :key="item.key">
+            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" v-loading="item.vLoading" :activeData="extendgetData"></dashboradSqure> 
           </el-col>
           <el-collapse-transition>
           <el-col :span="24" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :sendTime="itemList.searchData"></dashboardTable></el-col>
@@ -62,6 +65,7 @@ export default {
     return {
       pageLoading:false,
       editable:false,
+      clearable:false,
       extendData:{},
       extendgetData:{},
       tableShowSatus:false,
@@ -79,9 +83,9 @@ export default {
           },
           {
           'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car"},
-              {key:'unwork_end_time_count',value:'未装车',extendTable:true,dimension:"car"},
-              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car"},
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car",vLoading:false},
+              {key:'unwork_end_time_count',value:'未装车',extendTable:true,dimension:"car",vLoading:false},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car",vLoading:false},
             ],
             'searchShow':true,
             'type':'procurement_centre_dashborad',
@@ -102,11 +106,11 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car"},
-              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car"},
-              {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"car"},
-              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"order"},
-              {key:'truck_count',value:'当日卸车计划数',extendTable:true,dimension:"order"}
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car",vLoading:false},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car",vLoading:false},
+              {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"car",vLoading:false},
+              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"order",vLoading:false},
+              {key:'truck_count',value:'当日计划数',extendTable:true,dimension:"order",vLoading:false}
             ],
             'searchShow':true,
             'searchData':[],
@@ -129,8 +133,8 @@ export default {
         'salesStatisticsDashboard':[//销售概览
           {
             'dashboardSqureData':[
-              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"car"},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"car"},
+              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"car",vLoading:false},
+              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"car",vLoading:false},
             ],
             'searchShow':false,
             'type':'sale_statistics_dashborad',
@@ -138,7 +142,7 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"car"},
+              {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"car",vLoading:false,vLoading:false},
             ],
             'searchShow':true,
             'searchData':[],
@@ -169,7 +173,9 @@ export default {
                 sendData.filter_type=Iitem.key;
                 sendData.start_time=item.searchData[0];
                 sendData.end_time=item.searchData[1];
+                backItem.vLoading=true;
                 vm.$$http('getDetalisDashboard',sendData).then((results)=>{
+                  backItem.vLoading=false;
                   if(results.data.code==0){
                     vm.$set(vm.extendData,Iitem.key,results.data.data);
                     vm.$set(vm,'extendgetData',Iitem);

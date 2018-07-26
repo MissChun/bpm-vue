@@ -152,7 +152,7 @@ export default {
         active_time: [],
         load_plan_time: []
       },
-      carrier_type:"own",
+      carrier_type:"",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -164,6 +164,7 @@ export default {
           { id: 'waybill_number', value: '运单号' },
         ],
         carrier_type_select:[
+          { id: '', value: '全部' },
           { id: 'own', value: '自有承运商(自有)' },
           { id: 'external', value: '外部承运商(合作)' },
         ]

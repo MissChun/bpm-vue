@@ -102,7 +102,7 @@
               </el-col>
               <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
               </el-col>
-              <el-col :span="4" class="colinfo">无
+              <el-col :span="4" class="colinfo"><span v-if="props.row.active_time">{{props.row.active_time.split(" ")[0]}}</br>{{props.row.active_time.split(" ")[1]}}</span> <span v-else>无</span>
               </el-col>
               <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
               </el-col>

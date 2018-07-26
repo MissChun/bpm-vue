@@ -23,9 +23,12 @@
   color:#4a9bf8;
   font-weight: bold;
 }
+.activeSqure{
+  background-color:#f2f5fe;
+}
 </style>
 <template>
-  <div class="squreModule" @click="gotoPage">
+  <div class="squreModule" @click="gotoPage" v-bind:class="{activeSqure:activeData&&activeData.key==dashboradSqureData.key}">
     <el-row style="height:60px">
       <el-col class="text-center" style="line-height:60px;height:60px"><span class="boldB">{{dashboradSqureData.num}}</span><span>{{dashboradSqureData.dimension=='car'?'车':'单'}}</span></el-col>
     </el-row>
@@ -58,14 +61,7 @@ export default {
   created() {
 
   },
-  props:{
-    dashboradSqureData:{
-      num:String,
-      value:String,
-      goUrl:String,
-      extendTable:Boolean
-    }
-  },
+  props:['dashboradSqureData','activeData'],
 };
 
 </script>

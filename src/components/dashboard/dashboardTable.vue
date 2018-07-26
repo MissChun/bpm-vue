@@ -6,7 +6,7 @@
 </style>
 <template>
   
-  <div class="table-list" style="margin-top:20px;width: 500px">
+  <div class="table-list" style="margin-top:20px;width: 700px">
      <el-table
       :data="dashboardTableData"  max-height="250"  size="mini" stripe>
       <el-table-column v-for="(item,key) in renderTableData" :key="key"   align="center" :label="item.title" >
@@ -27,8 +27,8 @@ export default {
       tableData:{
         //服务中心
         'car_plan_count':[
-          {title:"实际液场",width:'',param:'actual_fluid_name'},
-          {title:"用车计划数",width:'',param:'require_car_number',showDetalis:true},
+          {title:"实际液厂",width:'',param:'actual_fluid_name'},
+          {title:"用车计划车数",width:'',param:'require_car_number',showDetalis:true},
         ],
         'work_end_time_count':[
           {title:"实际液厂",width:'',param:'actual_fluid_name'},
