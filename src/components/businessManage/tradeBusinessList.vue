@@ -60,7 +60,7 @@
       <div class="nav-tab-setting mt-25">
         <div class="business-btn">
           <el-button type="primary" @click="batchDistributionBtn" v-if="activeName==='relation'&&isToExamine">批量分配</el-button>
-          <!-- <el-button type="primary" plain :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+          <el-button type="primary" plain :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
         </div>
         <el-tabs v-model="statusActive" @tab-click="statusClick">
           <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title" :name="tab.key">

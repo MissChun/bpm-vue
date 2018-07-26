@@ -110,13 +110,8 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
-          { id: 'business_order', value: '业务单' },
-          { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '实际液厂' },
           { id: 'supplier', value: '供应商' },
-          { id: 'station', value: '卸货地' },
           { id: 'consumer_name', value: '客户名称' },
-          { id: 'payer_name', value: '付款方' },
           { id: 'carrier', value: '承运商' }
         ]
       },
@@ -136,110 +131,26 @@ export default {
         title: '客户名称',
         param: 'consumer_name',
         width: ''
-      },{
-        title: '付款方',
-        param: 'payer_name',
-        width: '200'
       }, {
         title: '承运商',
         param: 'carrier',
         width: '200'
       }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
         title: '实际液厂',
         param: 'fluid',
+        width: ''
+      }, {
+        title: '卸货站',
+        param: 'station',
         width: ''
       }, {
         title: '实际装车时间',
         param: 'active_time',
         width: '180'
-      },{
-        title: '采购单价',
-        param: 'buy_price',
-        width: ''
-      },{
-        title: '实际装车吨位',
-        param: 'active_tonnage',
-        width: ''
-      }, {
-        title: '采购优惠',
-        param: 'discount_price',
-        width: ''
-      },{
-        title: '业务优惠',
-        param: 'business_price',
-        width: ''
-      },{
-        title: '采购总额',
-        param: 'discounts_sum_price',
-        width: ''
-      },{
-        title: '卸货站',
-        param: 'station',
-        width: ''
       }, {
         title: '实际离站时间',
         param: 'leave_time',
         width: '180'
-      },{
-        title: '销售单价',
-        param: 'sale_price',
-        width: ''
-      },{
-        title: '实收吨位',
-        param: 'actual_quantity',
-        width: ''
-      }, {
-        title: '亏吨',
-        param: 'deficiency',
-        width: ''
-      },{
-        title: '核算吨位',
-        param: 'check_quantity',
-        width: ''
-      },{
-        title: '卸车待时金额',
-        param: 'waiting_price',
-        width: ''
-      },{
-        title: '销售总额',
-        param: 'sell_rental',
-        width: ''
-      },{
-        title: '卸车数',
-        param: 'unload_nums',
-        width: ''
-      },{
-        title: '业务员',
-        param: 'sale_man',
-        width: ''
-      },{
-        title: '标准里程',
-        param: 'stand_mile',
-        width: ''
-      },{
-        title: '起步价',
-        param: 'initial_price',
-        width: ''
-      },{
-        title: '运输费率',
-        param: 'change_rate',
-        width: ''
-      }, {
-        title: '标准运费',
-        param: 'freight_value',
-        width: ''
-      },{
-        title: '气差金额',
-        param: 'difference_value',
-        width: ''
-      },{
-        title: '分卸费',
-        param: 'lcl_cost',
-        width: ''
       }, {
         title: '采购优惠后总额',
         param: 'unit_sum_price',
@@ -290,7 +201,7 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
-      this.$$http('getLedgerList', postData).then((results) => {
+      this.$$http('getIncomeStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;

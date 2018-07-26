@@ -879,7 +879,7 @@ export default [{
         name: "income",
         redirect: '/statistics/income/incomeList',
         meta: {
-          title: '收入统计',
+          title: '业务台账',
           isVerificationL: false
         },
         component: (resolve) => require(['../page/statistics/income/income'], resolve),
@@ -887,7 +887,7 @@ export default [{
           path: 'incomeList',
           name: "incomeList",
           meta: {
-            title: '收入统计列表',
+            title: '业务台账列表',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
