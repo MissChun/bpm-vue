@@ -378,7 +378,8 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+    this.getList();
   }
 
 }

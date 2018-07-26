@@ -642,6 +642,7 @@ export default {
     }
   },
   created() {
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
     for (let i in this.tabList) {
       if (this.tabList[i].key === this.activeName) {
