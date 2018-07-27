@@ -299,17 +299,20 @@ export default {
 
       }
       ws.onerror = function(event) {
-        this.wsNumError--;
-        if (this.wsNumError > 0) {
-          vm.wsLink();
-        }
+        setTimeout(() => {
+          this.wsNumError--;
+          if (this.wsNumError > 0) {
+            vm.wsLink();
+          }
+        }, 60000)
       }
       ws.onclose = (event) => {
-        this.wsNumClose--;
-        if (this.wsNumClose > 0) {
-          vm.wsLink();
-        }
-
+        setTimeout(() => {
+          this.wsNumClose--;
+          if (this.wsNumClose > 0) {
+            vm.wsLink();
+          }
+        }, 60000)
       }
     },
     // // 展示消息浮窗
