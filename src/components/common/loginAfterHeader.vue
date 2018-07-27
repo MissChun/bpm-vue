@@ -241,7 +241,8 @@ export default {
       showNotice: false,
       noticeLoading: false,
       noticeList: [],
-      wsNum: 10
+      wsNumClose: 10,
+      wsNumError:10
     }
   },
   computed: {
@@ -298,11 +299,14 @@ export default {
 
       }
       ws.onerror = function(event) {
-        // vm.wsLink();
+        this.wsNumError--;
+        if (this.wsNumError > 0) {
+          vm.wsLink();
+        }
       }
       ws.onclose = (event) => {
-        this.wsNum--;
-        if (this.wsNum > 0) {
+        this.wsNumClose--;
+        if (this.wsNumClose > 0) {
           vm.wsLink();
         }
 
