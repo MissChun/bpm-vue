@@ -163,6 +163,7 @@ export default {
       var vm=this;
       if(this.extendgetData&&(this.extendgetData.key==backItem.key)&&!isOnlySearch){
         vm.$set(this,'tableShowSatus',!this.tableShowSatus);
+        vm.extendgetData={};
       }else{
         if(backItem.extendTable){
           this.allDashboard[this.dispatchPage].forEach(item=>{

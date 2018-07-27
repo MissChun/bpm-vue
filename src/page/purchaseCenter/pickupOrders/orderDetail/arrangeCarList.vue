@@ -166,7 +166,13 @@ export default {
           title: '变更',
           param: 'waybill.waybill_change_status_display',
           width: ''
-        }, {
+        }, 
+        {
+          title: '变更前',
+          param: 'waybill.abnormal_plate_number',
+          width: ''
+        },
+        {
           title: '运单状态',
           param: 'waybill.status_display',
           width: ''

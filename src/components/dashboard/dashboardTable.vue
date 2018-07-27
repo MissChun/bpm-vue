@@ -7,7 +7,7 @@
 <template>
   
   <div class="table-list" style="margin-top:20px;width: 700px">
-     <el-table
+     <el-table style="font-weight:normal;"
       :data="dashboardTableData"  max-height="250"  size="mini" stripe>
       <el-table-column v-for="(item,key) in renderTableData" :key="key"   align="center" :label="item.title" >
         <template slot-scope="scope">
