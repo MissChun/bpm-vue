@@ -320,6 +320,9 @@ export default {
     height: 100px;
     width: 100px;
   }
+  >div {
+    margin-right: 5px;
+  }
 }
 
 #map-container {

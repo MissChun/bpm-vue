@@ -588,7 +588,9 @@ export default {
 
             this.formData.consignee = this.siteOfCusmerDetail.consignee;
             this.formData.consignee_phone = this.siteOfCusmerDetail.consignee_phone;
-            this.formData.short_name = this.siteOfCusmerDetail.owner && this.siteOfCusmerDetail.owner.length && this.siteOfCusmerDetail.owner[0] || '';
+            this.formData.short_name = this.siteOfCusmerDetail.owner_name && this.siteOfCusmerDetail.owner_name.length && this.siteOfCusmerDetail.owner_name[0] || '';
+
+            console.log('this.siteOfCusmerDetail.owner', this.siteOfCusmerDetail.owner_name);
 
             this.formData.station_type = this.siteOfCusmerDetail.station_type;
 
