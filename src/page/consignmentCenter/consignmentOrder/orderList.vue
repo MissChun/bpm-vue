@@ -15,42 +15,49 @@
         <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_driver_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_driver_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_match_count" name="second">
           <div v-if="activeName=='second'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_match_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_match_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_unload_count" name="third">
           <div v-if="activeName=='third'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_unload_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_unload_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_settlement_count" name="fourth">
           <div v-if="activeName=='fourth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs " @changeTabs="changeTabs" :countParam="allcounts['all_settlement_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs " @changeTabs="changeTabs" :countParam="allcounts['all_settlement_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_change_count" name="fifth">
           <div v-if="activeName=='fifth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_change_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_change_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.all_finish_count" name="sxith">
           <div v-if="activeName=='sxith'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_finish_count']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @childchangeTabs="childchangeTabs" @changeTabs="changeTabs" :countParam="allcounts['all_finish_count']" :secondActiveName="secondActiveName"></orderStatusComonents>
+            </keep-alive>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane :label="statusName.all_count" name="seven">
+          <div v-if="activeName=='seven'">
+            <keep-alive>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" @childchangeTabs="childchangeTabs" :countParam="allcounts['all_count']" @reshCount="reshCount" :secondActiveName="secondActiveName"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -80,7 +87,8 @@ export default {
         all_unload_count:'卸车',
         all_settlement_count:'结算',
         all_change_count:'变更中',
-        all_finish_count:'历史'
+        all_finish_count:'历史',
+        all_count:'全部'
       },
        allStatusName:{
         all_driver_count:'装车',
@@ -88,7 +96,8 @@ export default {
         all_unload_count:'卸车',
         all_settlement_count:'结算',
         all_change_count:'变更中',
-        all_finish_count:'历史'
+        all_finish_count:'历史',
+        all_count:'全部'
       },
       allcounts:{
         'all_driver_count':{},
@@ -97,12 +106,14 @@ export default {
         'all_settlement_count':{},
         'all_change_count':{},
         'all_finish_count':{},
+        'all_count':{}
       },
       timeParam: [],
       listFifterData: [],
       rules: {},
-      activeName: 'first',
+      activeName: '',
       fifterName: 'all',
+      secondActiveName:"",
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -124,6 +135,8 @@ export default {
 
   },
   created() {
+    this.activeName=this.$route.query.goTo||"first";
+    this.secondActiveName=this.$route.query.secondActiveName||"all"
     this.pageLoading=true;
     this.reshCount();
     // this.$$http("getConCount",{}).then(results=>{
@@ -171,14 +184,17 @@ export default {
       });
     },
     clicktabs: function(targetName) {
+      this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList?goTo="+targetName.name+"&secondActiveName=all" });
       this.reshCount();
     },
     changeTabs: function(fifterName) {
-      this.activeName = fifterName;
+      //this.activeName = fifterName;
+      this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList?goTo="+fifterName+"&secondActiveName=all" });
       this.reshCount();
     },
     childchangeTabs:function(tabsObj){
-      this.activeName = tabsObj.first;
+      //this.activeName = tabsObj.first;
+      this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList?goTo="+tabsObj.first+"&secondActiveName="+tabsObj.second });
       this.reshCount();
     },
     goAddNewOder: function() {
@@ -186,7 +202,14 @@ export default {
     },
 
   },
-
+  watch: {
+    '$route' (to, from) {
+      //刷新参数放到这里里面去触发就可以刷新相同界面了
+      this.activeName=this.$route.query.goTo||"first";
+      this.secondActiveName=this.$route.query.secondActiveName||"all"
+      //this.searchList();    
+    }
+  }
 };
 
 </script>

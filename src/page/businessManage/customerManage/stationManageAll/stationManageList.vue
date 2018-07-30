@@ -47,7 +47,8 @@
                           <template slot-scope="scope">
                             <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
                             <div v-if="item.param==='addresss'">{{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.address}}</div>
-                            <div v-if="item.param!=='addresss'&&item.param!=='is_active'">{{scope.row[item.param]}}</div>
+                            <div v-if="item.param==='owner_name'">{{scope.row.owner_name && scope.row.owner_name.length && scope.row.owner_name[0] || '无'}}</div>
+                            <div v-if="item.param!=='addresss'&& item.param!=='is_active' && item.param!=='owner_name'">{{scope.row[item.param]}}</div>
                           </template>
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -70,7 +71,7 @@
             </div>
           </div>
         </el-tab-pane>
-        <!-- <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane> -->
+        <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -124,7 +125,7 @@ export default {
         width: ''
       }, {
         title: '所属客户',
-        param: 'short_name',
+        param: 'owner_name',
         width: ''
       }, {
         title: '联系人',
@@ -173,7 +174,7 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageList" });
-      }else if(targetName.name == 'customerPayManage'){
+      } else if (targetName.name == 'customerPayManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },

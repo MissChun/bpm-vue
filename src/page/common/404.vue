@@ -8,11 +8,11 @@
 </template>
 <script type="text/javascript">
 import error from '@/components/common/error'
-
 export default {
   components: {
     error: error,
   },
+
   data: function() {
     return {
       errorObj:{

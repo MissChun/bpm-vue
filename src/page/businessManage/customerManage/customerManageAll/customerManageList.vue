@@ -24,7 +24,7 @@
         </el-tab-pane>
         <el-tab-pane label="客户站点" name="customerStation">
         </el-tab-pane>
-        <!-- <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane> -->
+        <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane>
       </el-tabs>
       <div class="operation-btn text-right">
         <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
@@ -126,7 +126,7 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerStation') {
         this.$router.push({ path: "/businessManage/customerManage/stationManageAll" });
-      }else if(targetName.name == 'customerPayManage'){
+      } else if (targetName.name == 'customerPayManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },

@@ -9,6 +9,113 @@
  */
 
 const api = {
+  exportLedgerData: {
+    url: '/export/ledger/',
+    method: 'get',
+    desc: '业务台账',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  getLedgerList: {
+    url: '/api/v1/ledger/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
+  exportPlanTractor: {
+    url: '/export/tractor/',
+    method: 'post',
+    desc: '导出车辆指派',
+    param: {
+
+    }
+  },
+  getAllmenus: {
+    url: '/api/v1/menus/',
+    method: 'get',
+    desc: '获取所有菜单',
+    param: {
+
+    }
+  },
+  getUnreadNewNum: {
+    url: '/notifications/web_messages/unread_count/',
+    method: 'get',
+    desc: '未读信息的条数',
+    param: {
+
+    }
+  },
+  batchReadMessages: {
+    url: '/notifications/web_messages/bulk_read/',
+    method: 'put',
+    desc: '消息批量已读',
+    param: {
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  getMessagesList: {
+    url: '/notifications/web_messages/',
+    method: 'get',
+    desc: '通知消息列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页条数'
+      }
+    }
+  },
+  // batchReadMessages: {
+  //   url: '/api/v1/bpm_messages/:id/',
+  //   method: 'patch',
+  //   desc: '消息批量已读',
+  //   param: {
+  //     ids:{
+  //       desc:'id'
+  //     }
+  //   }
+  // },
+  // getMessagesList: {
+  //   url: '/api/v1/bpm_messages/',
+  //   method: 'get',
+  //   desc: '通知消息列表',
+  //   param: {
+  //     page:{
+  //       desc:'当前页数'
+  //     },
+  //     page_size:{
+  //       desc:'一页条数'
+  //     }
+  //   }
+  // },
+  getExportTableTitle: {
+    url: '/export/header/',
+    method: 'get',
+    desc: '导出列表头部',
+    param: {
+      page_arg: {
+        desc: '表格类型'
+      },
+      need_all: {
+        desc: '全部'
+      }
+    }
+  },
   batchSalesStatisticsStatus: {
     url: '/api/v1/batch-update-sale/',
     method: 'post',
@@ -56,7 +163,7 @@ const api = {
   },
   exportIncomeData: {
     url: '/export/income/',
-    method: 'post',
+    method: 'get',
     desc: '收入统计数据',
     param: {
       filename: {
@@ -72,7 +179,7 @@ const api = {
   },
   exportLogisticData: {
     url: '/export/logistic/',
-    method: 'post',
+    method: 'get',
     desc: '托运数据',
     param: {
       filename: {
@@ -88,7 +195,7 @@ const api = {
   },
   exportSaleData: {
     url: '/export/sale/',
-    method: 'post',
+    method: 'get',
     desc: '导出销售数据',
     param: {
       filename: {
@@ -104,7 +211,7 @@ const api = {
   },
   exportPurchaseData: {
     url: '/export/procument/',
-    method: 'post',
+    method: 'get',
     desc: '导出采购数据',
     param: {
       filename: {
@@ -456,7 +563,7 @@ const api = {
     }
   },
   getSiteList: {
-    url: '/api/v1/delivery_point/',
+    url: '/api/v1/tms_delivery_point/',
     method: 'get',
     desc: '站点列表',
     param: {
@@ -1865,6 +1972,14 @@ const api = {
 
     }
   },
+  searchPayCustomerList: {
+    url: '/api/v1/payer_consumer/',
+    method: 'get',
+    desc: '获取客户列表',
+    param: {
+
+    }
+  },
   getCustomerDetlis: {
     url: '/api/v1/consumer/:id/',
     method: 'get',
@@ -2161,9 +2276,25 @@ const api = {
     }
   },
   getDashboard: {
-    url: '/api/v1/section-trips/dashborad/',
+    url: '/api/v1/dashborad/',
     method: 'get',
     desc: "获取概览数据",
+    param: {
+
+    }
+  },
+  getDetalisDashboard: {
+    url: '/api/v1/dashborad-detail/',
+    method: 'get',
+    desc: "获取概览详细数据",
+    param: {
+
+    }
+  },
+  exportOrder: {
+    url: '/api/v1/section-trips/',
+    method: 'get',
+    desc: "导出运单列表",
     param: {
 
     }

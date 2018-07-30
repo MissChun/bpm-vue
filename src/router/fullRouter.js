@@ -31,6 +31,22 @@ export default [{
           title: '服务中心概览',
         },
         component: (resolve) => require(['../page/dashboard/serviceCentreDashboard'], resolve),
+      }, {
+        path: 'puchaseStatisticsDashboard',
+        name: 'puchaseStatisticsDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '采购统计概览',
+        },
+        component: (resolve) => require(['../page/dashboard/puchaseStatisticsDashboard'], resolve),
+      }, {
+        path: 'salesStatisticsDashboard',
+        name: 'salesStatisticsDashboard',
+        meta: {
+          isVerificationL: false,
+          title: '销售统计概览',
+        },
+        component: (resolve) => require(['../page/dashboard/salesStatisticsDashboard'], resolve),
       }]
     }, {
       path: 'purchaseCenter',
@@ -863,7 +879,7 @@ export default [{
         name: "income",
         redirect: '/statistics/income/incomeList',
         meta: {
-          title: '收入统计',
+          title: '业务台账',
           isVerificationL: false
         },
         component: (resolve) => require(['../page/statistics/income/income'], resolve),
@@ -871,7 +887,7 @@ export default [{
           path: 'incomeList',
           name: "incomeList",
           meta: {
-            title: '收入统计列表',
+            title: '业务台账列表',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
@@ -930,6 +946,43 @@ export default [{
           },
           component: (resolve) => require(['../page/setting/powerManage'], resolve)
         }
+      ]
+    }, {
+      path: 'news',
+      name: 'news',
+      meta: {
+        isVerificationL: false,
+        title: '消息通知',
+        iconName: 'icon-setting'
+      },
+      component: (resolve) => require(['../page/news/news'], resolve),
+      children: [{
+          path: 'systemNotice',
+          name: "systemNotice",
+          meta: {
+            title: '系统通知',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/news/news'], resolve),
+          children: [{
+            path: 'systemNoticeList',
+            name: "systemNoticeList",
+            meta: {
+              title: '系统通知列表',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/news/systemNotice/systemNoticeList'], resolve)
+          }]
+        },
+        // {
+        //   path: 'staffsManage',
+        //   name: "staffsManage",
+        //   meta: {
+        //     title: '员工管理',
+        //     isVerificationL: true
+        //   },
+        //   component: (resolve) => require(['../page/setting/staffsManage'], resolve)
+        // }
       ]
     }
   ]

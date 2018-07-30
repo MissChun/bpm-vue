@@ -155,19 +155,19 @@
           </div>
           <div class="listDetalis carList" style="width:15%">
             <el-row class="commh carInfo">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor" :title="props.row.transPowerInfo.tractor.plate_number">车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor" >车号:<span :title="props.row.transPowerInfo.tractor.plate_number">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer" :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''">挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer" >挂车:<span :title="props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ''"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver" :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver" >驾驶员:<span :title="props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:''">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.vice_driver" :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.vice_driver" >副驾:<span :title="props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:''">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo ">
-              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.escort_staff" :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
+              <el-col class="whiteSpan" v-if="props.row.transPowerInfo && props.row.transPowerInfo.escort_staff" >押运:<span :title="props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:''">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
@@ -190,9 +190,11 @@
           <el-row justify="space-between" type="flex">
             <el-col :span="4" :title="props.row.delivery_order.order_number" class="whiteSpan">订单号:{{props.row.delivery_order.order_number}}</el-col>
             <el-col :span="4" :title="props.row.waybill.waybill_number" class="whiteSpan">
-              <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
+              <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer">运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
-            <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
+            <el-col :span="4" :title="props.row.business_order.order_number||'无'" class="whiteSpan" >
+              卸货单号:<span v-if="props.row.business_order.order_number">{{props.row.business_order.order_number}}</span><span v-else>无</span>
+            </el-col>
             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan" v-if="props.row.delivery_order.carriers&&props.row.delivery_order.carriers[0]">承运商:{{props.row.delivery_order.carriers[0].carrier_name}}</el-col>
             <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">

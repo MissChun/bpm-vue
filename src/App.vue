@@ -12,6 +12,7 @@
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/elementReset';
+@import './assets/css/news.less';//消息通知
 
 </style>
 <template>
@@ -22,10 +23,9 @@ import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
 import noData from '@/components/common/noData';
-
-
+import exportButton from '@/components/common/exportButton';
 Vue.component("noData", noData);
-
+Vue.component("exportButton", exportButton);
 export default {
   name: 'App',
   components: {
@@ -44,9 +44,8 @@ export default {
         purchaseDashboard: 'purchaseDashboard',
         serviceCentreDashboard: 'serviceCentreDashboard',
         energyDashboard: 'energyDashboard',
-        purchasingSDashboard: 'purchasingSDashboard',
-        salesSDashboard: 'salesSDashboard',
-
+        salesStatisticsDashboard:'salesStatisticsDashboard',
+        puchaseStatisticsDashboard:'puchaseStatisticsDashboard',
         purchaseCenter: 'purchaseCenter',
         pickupOrders: 'pickupOrders',
         supplierManage: 'supplierManage',

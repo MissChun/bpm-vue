@@ -17,6 +17,7 @@
             </div>
           </div>
         </el-tab-pane>
+        <el-tab-pane label="客户付款方管理" name="customerPayManage"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -42,6 +43,8 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'customerManage') {
         this.$router.push({ path: "/businessManage/customerManage/customerManageAll/customerManageList" });
+      } else if (targetName.name == 'customerPayManage') {
+        this.$router.push({ path: "/businessManage/customerManage/customerPayManageAll" });
       }
     },
     clickChildtabs: function(targetName) {

@@ -182,8 +182,9 @@ export default {
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
               let isActive = data.is_active ? '启用' : '未启用';
+              let owner_name = data.owner_name && data.owner_name.length && data.owner_name[0] || '无';
               let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.station_name + '</span></div>';
-              let infoBodyStr = '<div class="fs-13 md-5" >所属客户：' + data.short_name + '</div><div class="fs-13 md-5">站点类型：' + data.station_type_display + '</div><div class="fs-13 md-5">实际站点名称：' + data.map_station_name + '</div><div class="fs-13 md-5">联系人：' + data.consignee + '</div><div class="fs-13 md-5">联系电话：' + data.consignee_phone + '</div><div class="fs-13 md-5">地址：' + data.address + '</div><div class="fs-13 ">启用状态：' + isActive + '</div><br><div class="text-right "><a href="/#/businessManage/customerManage/stationManageAll/stationManageEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
+              let infoBodyStr = '<div class="fs-13 md-5" >所属客户：' + owner_name + '</div><div class="fs-13 md-5">站点类型：' + data.station_type_display + '</div><div class="fs-13 md-5">实际站点名称：' + data.map_station_name + '</div><div class="fs-13 md-5">联系人：' + data.consignee + '</div><div class="fs-13 md-5">联系电话：' + data.consignee_phone + '</div><div class="fs-13 md-5">地址：' + data.address + '</div><div class="fs-13 ">启用状态：' + isActive + '</div><br><div class="text-right "><a href="/#/businessManage/customerManage/stationManageAll/stationManageEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
 
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);

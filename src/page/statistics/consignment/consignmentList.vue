@@ -48,8 +48,8 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="9" class="text-right">
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
+            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
           </el-col>
         </el-row>
       </div>
@@ -66,7 +66,7 @@
               <div v-else>{{scope.row[item.param]}}</div>
             </template>
           </el-table-column>
-           <el-table-column label="是否对账" align="center" width="100">
+          <el-table-column label="是否对账" align="center" width="100">
             <template slot-scope="scope">
               <div>{{scope.row.is_reconciliation.verbose}}</div>
             </template>
@@ -76,7 +76,6 @@
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
               <div v-if="scope.row.is_reconciliation.key==='unfinished'">
@@ -96,12 +95,12 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'salesList',
   computed: {
 
   },
-
   data() {
     return {
       pageLoading: false,
@@ -119,10 +118,9 @@ export default {
         keyword: '',
         field: 'waybill',
       },
-      exportBtn: {
-        text: '导出',
-        isLoading: false,
-        isDisabled: false,
+      exportType:{
+        filename:'托运数据',
+        type:'logistic'
       },
       selectData: {
         isReconciliationsSelect: [
@@ -228,6 +226,7 @@ export default {
        
       multipleSelection: [], //所选数据   
       reconciliationList: [], //
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -253,55 +252,6 @@ export default {
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
 
-    },
-    exportData() {
-      let postData = {
-        filename: '托运数据',
-        page_arg: 'logistic',
-        ids: [],
-        is_reconciliation: this.searchPostData.is_reconciliation
-      };
-      for (let i = 34; i <= 55; i++) {
-        postData.ids.push(i.toString());
-      }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.active_time_start = this.planArriveTime[0];
-        postData.active_time_end = this.planArriveTime[1];
-      }
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.exportBtn = {
-        text: '导出中',
-        isLoading: true,
-        isDisabled: true,
-      }
-      this.$$http('exportLogisticData', postData).then((results) => {
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
-        }
-      }).catch((err) => {
-        this.$message.error('导出失败');
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
     },
     // 全部对账
     getUnReconciliations() {
@@ -339,10 +289,10 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].waiting_charges);
+          price += parseFloat(this.multipleSelection[i].waiting_charges)*100;
         }
       }
-      this.reconciliations(true, ids, price);
+      this.reconciliations(true, ids, price/100);
     },
     // 批量/单个  对账
     reconciliations(isAll, ids, price) {
@@ -389,8 +339,6 @@ export default {
           })
         }).catch(() => {});
       }
-
-
     },
     getList() {
       let postData = {
@@ -409,7 +357,7 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getConsignmentStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

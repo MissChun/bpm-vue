@@ -102,7 +102,7 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '液厂名称' },
+          { id: 'fluid_name', value: '实际液厂' },
           { id: 'supplier_name', value: '供应商' },
         ]
       },

@@ -51,17 +51,22 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="付款方:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.payer_name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="车号:">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实际装车时间:">
                     <el-date-picker v-model="editMsgForm.active_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实际液厂:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
@@ -72,13 +77,13 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.station"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="离站时间:">
                     <el-date-picker v-model="editMsgForm.leave_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="装车吨位:" prop="plan_tonnage">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plan_tonnage"></el-input>
@@ -89,30 +94,30 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="亏吨:" prop="deficiency">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="核算吨位:" prop="check_quantity">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="采购单价:" prop="unit_price">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
+                  <el-form-item label="采购单价:" prop="discount_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="业务优惠:" prop="business_price">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="销售单价:" prop="unit_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
@@ -123,13 +128,13 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unload_nums"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="卸车待时金额:" prop="waiting_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="销售总额:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sell_rental"></el-input>
@@ -140,13 +145,13 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="业务员:" prop="sale_man">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sale_man"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="是否对账:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation"></el-input>
@@ -157,6 +162,8 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -200,6 +207,7 @@ export default {
         plate_number: '', //车牌号
         short_name: '', //客户简称
         consumer_name: '', //客户名称
+        payer_name: '', //付款方
         station: '', //站点
         plate_number: '', //车牌号
         leave_time: '', //l离站时间
@@ -211,7 +219,7 @@ export default {
         check_quantity: '', //核算吨位
         unit_price: '', //销售单价
         business_price: '', //业务优惠
-        discount_price: '', //优惠单价
+        discount_price: '', //采购单价
         unload_num: '', //卸车数
         waiting_price: '', //卸车待时金额
         sell_rental: '', //销售总额
@@ -246,7 +254,7 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         unload_nums: [
-          { pattern: /^[0-9]$/, message: '支持数值输入', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
         // waiting_charges: [
         //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
@@ -292,6 +300,7 @@ export default {
             plate_number: this.detail.plate_number, //车牌号
             short_name: this.detail.short_name, //客户简称
             consumer_name: this.detail.consumer_name, //客户名称
+            payer_name: this.detail.payer_name, //付款方
             station: this.detail.station, //站点
             plate_number: this.detail.plate_number, //车牌号
             leave_time: this.detail.leave_time, //l离站时间
@@ -303,7 +312,7 @@ export default {
             check_quantity: this.detail.check_quantity, //核算吨位
             unit_price: this.detail.unit_price, //采购单价
             business_price: this.detail.business_price, //业务优惠
-            discount_price: this.detail.discount_price, //优惠单价
+            discount_price: this.detail.discount_price, //采购单价
             unload_nums: this.detail.unload_nums, //卸车数
             waiting_price: this.detail.waiting_price, //卸车待时金额
             sell_rental: this.detail.sell_rental, //销售总额

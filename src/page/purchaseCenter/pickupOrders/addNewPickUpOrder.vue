@@ -324,7 +324,7 @@ export default {
           
         ],
         business_price: [
-          { validator: discountVa, trigger: 'blur' }
+          //{ validator: discountVa, trigger: 'blur' }
         ],
         mark: [
           { min: 0, max: 200, message: '最多200个字段', trigger: 'change' }

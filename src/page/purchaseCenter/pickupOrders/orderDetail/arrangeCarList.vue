@@ -87,18 +87,18 @@
               </el-select>
             </el-form-item>
           </el-col> -->
-            <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
-              需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
-            </el-col>
-            <el-col :span="2" v-if="delivery_list.status.key=='determine'">
-              <el-button type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
+            <el-col :span="10" :offset="14" style="line-height:40px;font-size:14px;">
+              <span class="mr-10">
+                需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
+              </span>
+              <el-button v-if="delivery_list.status.key=='determine'" type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
+              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
             </el-col>
           </el-row>
         </div>
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
             <div class="table-list border-top-clear">
-
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column prop="tractor.plate_number" align="center" label="车号" :width="140" fixed="left">
                 </el-table-column>
@@ -130,6 +130,11 @@ export default {
         totalPage: 1,
         pageSize: 10,
       },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
       searchFilters: {
         keyword: '',
         field: 'tractor.plate_number',
@@ -152,55 +157,62 @@ export default {
         }]
       },
       thTableList: [
-      // {
-      //   title: '车号',
-      //   param: 'tractor.plate_number',
-      //   width: ''
-      // },
-      {
-        title: '变更',
-        param: 'waybill.waybill_change_status_display',
-        width: ''
-      }, {
-        title: '运单状态',
-        param: 'waybill.status_display',
-        width: ''
-      }, {
-        title: '运单号',
-        param: 'waybill.waybill',
-        width: ''
-      }, {
-        title: '挂车',
-        param: 'semitrailer.plate_number',
-        width: '250'
-      }, {
-        title: '司机',
-        param: 'master_driver.name',
-        width: ''
-      }, {
-        title: '司机电话',
-        param: 'master_driver.mobile_phone',
-        width: ''
-      }, {
-        title: '押运',
-        param: 'escort_staff.name',
-        width: ''
-      }, {
-        title: '押运电话',
-        param: 'escort_staff.mobile_phone',
-        width: ''
-      }, {
-        title: '副驾',
-        param: 'vice_driver.name',
-        width: ''
-      }, {
-        title: '副驾电话',
-        param: 'vice_driver.mobile_phone',
-        width: ''
-      }],
+        // {
+        //   title: '车号',
+        //   param: 'tractor.plate_number',
+        //   width: ''
+        // },
+        {
+          title: '变更',
+          param: 'waybill.waybill_change_status_display',
+          width: ''
+        }, 
+        {
+          title: '变更前',
+          param: 'waybill.abnormal_plate_number',
+          width: ''
+        },
+        {
+          title: '运单状态',
+          param: 'waybill.status_display',
+          width: ''
+        }, {
+          title: '运单号',
+          param: 'waybill.waybill',
+          width: ''
+        }, {
+          title: '挂车',
+          param: 'semitrailer.plate_number',
+          width: '250'
+        }, {
+          title: '司机',
+          param: 'master_driver.name',
+          width: ''
+        }, {
+          title: '司机电话',
+          param: 'master_driver.mobile_phone',
+          width: ''
+        }, {
+          title: '押运',
+          param: 'escort_staff.name',
+          width: ''
+        }, {
+          title: '押运电话',
+          param: 'escort_staff.mobile_phone',
+          width: ''
+        }, {
+          title: '副驾',
+          param: 'vice_driver.name',
+          width: ''
+        }, {
+          title: '副驾电话',
+          param: 'vice_driver.mobile_phone',
+          width: ''
+        }
+      ],
       tableData: [],
       renderPage_list: [],
-
+      lastSearch_list:[],
       trueAll_list: [],
       delivery_list: { status: {} },
       tractor_semitrailers_List: [],
@@ -220,6 +232,53 @@ export default {
   methods: {
     checkSelectable: function(row) {
       return !row.disableChoose
+    },
+    // 导出列表
+    exportData() {
+      let postData = {
+        filename: '用车计划导出表',
+        tractor_list: []
+      };
+      for(let i in this.lastSearch_list){
+        var addflag=true;
+        if(this.lastSearch_list[i].waybill&&this.lastSearch_list[i].waybill.status=='canceled'){
+          addflag=false;
+        }
+        if(addflag){
+          postData.tractor_list.push(this.lastSearch_list[i].id);
+        }
+      }
+      console.log('postData',postData)
+      // this.exportPostData = this.postDataFilter(this.exportPostData);
+      // let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportPlanTractor', postData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
@@ -333,13 +392,13 @@ export default {
         getDataNum++;
         if (results.data && results.data.code == 0) {
           console.log("当前订单数据", results.data.data);
-          var list=[];
-          results.data.data.trips.forEach((item,index)=>{
+          var list = [];
+          results.data.data.trips.forEach((item, index) => {
             // if(item.status!='canceled'){
-              list.push(item);
+            list.push(item);
             // }
           });
-          results.data.data.trips=list;
+          results.data.data.trips = list;
           vm.delivery_list = results.data.data;
         }
         if (getDataNum == 2) {
@@ -365,7 +424,7 @@ export default {
         //   }
         // });
         // if (addflag) {
-          newArrs.push(Ditem.capacity);
+        newArrs.push(Ditem.capacity);
         // }
       });
       var getlistParam = {
@@ -390,16 +449,16 @@ export default {
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
-              if(this.delivery_list.trips[j].status=='canceled'){
+              if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-              }else{
+              } else {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0){
-                operationArr[i].disableChoose = true;
-                addflag = false;
-                operationArr[i].bindCheckBox = true;
-                newArr.push(operationArr[i]);
-                break;
+                if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
+                  operationArr[i].disableChoose = true;
+                  addflag = false;
+                  operationArr[i].bindCheckBox = true;
+                  newArr.push(operationArr[i]);
+                  break;
                 }
               }
             }
@@ -430,9 +489,7 @@ export default {
 
     },
     searchThisByData: function(searchPage, type) {
-      if (this.delivery_list.status.key != "confirmed") {
-
-
+      //if (this.delivery_list.status.key != "confirmed") {
         var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
         var value = this.searchFilters.keyword;
         var newArr = [];
@@ -455,7 +512,7 @@ export default {
 
         this.renderAll_list = newArr;
         this.bindChekboxFunction(searchPage, newArr);
-      }
+      //}
     },
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);

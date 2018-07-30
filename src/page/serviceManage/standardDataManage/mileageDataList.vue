@@ -10,21 +10,21 @@
               <el-row :gutter="30">
                 <el-col :span="6">
                   <el-form-item label="承运商:">
-                    <el-select v-model="searchFilters.carriers" @change="startSearch" filterable placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" @change="startSearch" clearable filterable placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.carrierSelect" :key="key" :label="item.carrier_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="实际液厂:">
-                    <el-select v-model="searchFilters.fluid" filterable @change="startSearch" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.fluid" clearable filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="站点:">
-                    <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.station" clearable filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.siteSelect" :key="key" :label="item.station_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>

@@ -20,7 +20,7 @@
 </style>
 <template>
   <div>
-    <div class="tab-content">
+    <div class="tab-content" style="position:relative;">
       <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
         <el-row :gutter="0">
           <el-col :span="15">
@@ -45,6 +45,14 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+              <el-form-item align="right" label="承运类型:" label-width="105px">
+                <el-select  v-model="carrier_type"  placeholder="请选择" @change="searchList" style="width:90%;">
+                    <el-option v-for="(item,key) in selectData.carrier_type_select" :key="item.id" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" v-if="status!='first'">
@@ -61,10 +69,12 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder"  :loading="exportLoading">导出</el-button>
     </div>
-    <div class="nav-tab-setting mt-25" v-loading="pageLoading">
-      <el-tabs v-model="fifterName" @tab-click="clickFifter">
-        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key">
+
+    <div class="nav-tab-setting mt-25" >
+      <el-tabs v-model="fifterName" @tab-click="clickFifter" >
+        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
               <orderConFifter :ListData="listFifterData" :status="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
@@ -117,7 +127,8 @@ export default {
       },
       expandStatus: true,
       pageLoading: false,
-      fifterName: "all",
+      exportLoading:false,
+      fifterName: "",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
@@ -132,7 +143,8 @@ export default {
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
         'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '故障中' }],
-        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
+        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
+        'seven': [{ key: 'all', value: '全部' }]
       },
       timeParam: {
         unload_active_time: [],
@@ -140,6 +152,7 @@ export default {
         active_time: [],
         load_plan_time: []
       },
+      carrier_type:"",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -149,6 +162,11 @@ export default {
           { id: 'truck_no', value: '车号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
+        ],
+        carrier_type_select:[
+          { id: '', value: '全部' },
+          { id: 'own', value: '自有承运商(自有)' },
+          { id: 'external', value: '外部承运商(合作)' },
         ]
       },
       searchStatus: false,
@@ -161,13 +179,14 @@ export default {
       saveSendData: {},
       fifterParam: {
         keyword: "",
-        field: "carrier_name",
+        field: "truck_no",
       },
     };
   },
   props: {
     status: String,
-    countParam: Object
+    countParam: Object,
+    secondActiveName:String
   },
   methods: {
     chiledchangeTabs: function(tabsObj) {
@@ -176,11 +195,10 @@ export default {
     changeTabs: function(name) {
       this.$emit("changeTabs", name);
     },
-    searchList: function(targetName) {
-      //
+    exportOrder:function(){
       var sendData = {};
       var vm = this;
-      this.pageLoading = true;
+      this.exportLoading = true;
       if (this.fifterName == 'all') {
         if (this.status == 'first') {
           sendData.search = 'all_truck_loaded';
@@ -194,6 +212,8 @@ export default {
           sendData.search = 'all_change';
         } else if (this.status == 'sxith') {
           sendData.search = 'all_finish';
+        }else if (this.status == 'seven') {
+          sendData.search = '';
         }
       } else {
         if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
@@ -222,14 +242,77 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-
-      sendData.pageSize = this.pageData.pageSize;
-
+      sendData.carrier_type=this.carrier_type;
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
       } else {
+        vm.saveSendData = sendData;
+        this.pageData.currentPage = 1;
+        sendData.page = this.pageData.currentPage;
+      }
+      sendData.pageSize = this.pageData.pageSize;
+      sendData.export_excel='export'
+      this.$$http("exportOrder", sendData).then((results) => {
+        this.exportLoading = false;
+        if(results.data&&results.data.code==0){
+          window.open(results.data.data.down_url);
+        }
+      });
+    },
+    searchList: function(targetName) {
+      //
+      var sendData = {};
+      var vm = this;
+      this.pageLoading = true;
+      if (this.fifterName == 'all') {
+        if (this.status == 'first') {
+          sendData.search = 'all_truck_loaded';
+        } else if (this.status == 'second') {
+          sendData.search = 'all_match';
+        } else if (this.status == 'third') {
+          sendData.search = 'all_unload';
+        } else if (this.status == 'fourth') {
+          sendData.search = 'all_settle';
+        } else if (this.status == 'fifth') {
+          sendData.search = 'all_change';
+        } else if (this.status == 'sxith') {
+          sendData.search = 'all_finish';
+        }else if (this.status == 'seven') {
+          sendData.search = '';
+        }
+      } else {
+        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
+          sendData.interrupt_status = this.fifterName;
+        } else {
+          sendData.status = this.fifterName;
+        }
+      }
 
+      if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
+        sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
+        sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
+      }
+      if (this.timeParam.unload_plan_time instanceof Array && this.timeParam.unload_plan_time.length > 0) {
+        sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
+        sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
+      }
+      if (this.timeParam.active_time instanceof Array && this.timeParam.active_time.length > 0) {
+        sendData.load_active_time_start = this.timeParam.active_time[0]; //实际装车
+        sendData.load_active_time_end = this.timeParam.active_time[1];
+      }
+      if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
+        sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
+        sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
+      }
+      if (this.fifterParam.field) {
+        sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      }
+      sendData.carrier_type=this.carrier_type;
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
+      } else {
         vm.saveSendData = sendData;
         this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
@@ -291,13 +374,17 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
-      this.$emit("changeTabs", this.status);
+      //this.$emit("changeTabs", this.status);
+      this.$emit("childchangeTabs", { first: this.status, second:targetName.name });
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
     },
     pageChange: function() {
       setTimeout(() => {
+        if(this.saveSendData.export_excel){
+          delete this.saveSendData.export_excel
+        }
         this.searchStatus = true;
         this.searchList();
       });
@@ -337,6 +424,7 @@ export default {
     this.assemblyData(this.countParam);
   },
   created() {
+    this.fifterName=this.secondActiveName;
     //this.listFifterData = this.listData;
     this.searchList();
   },

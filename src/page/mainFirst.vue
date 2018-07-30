@@ -75,6 +75,16 @@
   float: right;
   padding: 0 2em;
   color: black;
+  .notice{
+    display:inline-block;
+    position: relative;
+  }
+  /deep/ .el-badge__content{
+    &.is-fixed{
+      top: 18px;
+      right: 16px;
+    }
+  }
   i {
     font-size: 24px;
     margin-right: 6px;
@@ -177,45 +187,81 @@
     -o-transform: rotate(45deg);
   }
 }
-/deep/ .el-breadcrumb__item{
-  &:last-child{
-    .el-breadcrumb__inner{
-      color:#26c6da;
+
+/deep/ .el-breadcrumb__item {
+  &:last-child {
+    .el-breadcrumb__inner {
+      color: #26c6da;
+    }
+  }
+}
+
+// 消息通知
+.notice-temp{
+  background-color: #fff;
+  width: 386px;
+  height: 422px;
+  box-shadow:0px 0px 7px 0px rgba(107,107,107,0.5);
+  position: absolute;
+  font-size: 14px;
+  top: 52px;
+  right: -100px;
+  .notice-temp-title{
+    height: 50px;
+    text-align: center;
+    line-height: 54px;
+    border-bottom: 1px solid #e4e7ed;
+  }
+  .notice-temp-content{
+    margin: 10px 0;
+    ul{
+      list-style-type: none;
+      li{
+        position: relative;
+
+        height: 40px;
+        line-height: 20px;
+        padding: 10px 20px;
+        color: #606266;
+        text-align:justify;
+        span{
+          color:#B8B8B8;
+        }
+        &:hover{
+          background: #F4F6F9;
+        }
+        &.is-unread{
+          &:before{
+            content:' ';
+            display:block;
+            position: absolute;
+            left: 7px;
+            top: 28px;
+            width: 5px;
+            height: 5px;
+            border-radius: 10px;
+            background-color:#f56c6c;
+
+          }
+        }
+      }
     }
 
+  }
+  .notice-temp-footer{
+    height: 50px;
+    border-top:  1px solid #e4e7ed;
+    line-height: 50px;
+    color: #9E9E9E;
+    padding: 0 22px;
   }
 }
 </style>
 <template>
   <el-container>
-    <el-header>
-      <el-row type="flex" class="g-head">
-        <router-link :to="{path: '/'}">
-          <div href="" title="业务管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
-        </router-link>
-        <div class="nav">
-          <div class="g-statues-bar p-lr">
-            <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
-              <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
-                {{ item.meta.title || "" }}
-              </el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
-          <div class="usermenu" v-if="user.nick_name">
-            <i class="icon-user"></i><span></span>
-            <el-dropdown trigger="click" @command="logout">
-              <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>退出</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
-          </div>
-        </div>
-      </el-row>
-    </el-header>
+    <common-header :type="'loginAfter'"></common-header>
     <el-container>
-      <el-aside style="width: 230px;">
+      <el-aside style="width: 190px;">
         <el-menu class="g-side" router>
           <el-row style="margin-top:30px;">
             <el-col>
@@ -251,7 +297,7 @@
       </el-aside>
       <el-main>
         <template>
-          <div style="padding:30px 2% 0 3%;">
+          <div style="margin-top: 61px;">
             <router-view></router-view>
           </div>
         </template>
@@ -260,15 +306,18 @@
   </el-container>
 </template>
 <script>
+import commonHeader from '@/components/common/commonHeader'
 export default {
   data() {
     return {
       user: {},
-      menus: []
+      menus: [],
+      showNotice:false
     };
   },
   components: {
-    mainHeader: 'mainHeader'
+    mainHeader: 'mainHeader',
+    commonHeader: commonHeader
   },
   computed: {
     activeMenu: function() {
@@ -279,8 +328,21 @@ export default {
     }
   },
   methods: {
+    // 展示消息浮窗
+    isShowNotice(){
+      this.showNotice = true;
+    },
+    signRead(isShow){
+      if(isShow){
+
+      }else{
+        this.showNotice = false;
+        this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
+      }
+
+    },
     signOut: function() {
-      this.$$http('signOut', {}).then((results) => {
+      /*this.$$http('signOut', {}).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
             message: '退出成功',
@@ -293,7 +355,17 @@ export default {
 
       }).catch((err) => {
         this.$message.error('退出失败');
-      })
+      })*/
+
+      this.$$http('signOut', {});
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      });
+      localStorage.clear();
+      this.$store.state.common.users = {};
+      this.$router.push({ path: '/login' });
+
     },
     logout: function() {
       this.$confirm("确定退出?", "提示", {

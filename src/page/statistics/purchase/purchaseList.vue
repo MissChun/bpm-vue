@@ -61,7 +61,8 @@
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>
+            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button> -->
           </el-col>
         </el-row>
       </div>
@@ -80,11 +81,11 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
-                <span v-else>{{scope.row[item.param]}}</span>
+                <span v-else v-html="scope.row[item.param]"></span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="采购总额" align="center" fixed="right">
+          <el-table-column label="采购总额" align="center" width="100" fixed="right">
             <template slot-scope="scope">
               <div>{{scope.row.unit_sum_price}}</div>
             </template>
@@ -136,15 +137,14 @@ export default {
       searchFilters: {
         plan_arrive_time: [],
         waybill_status: '',
-        is_reconciliation: '',
-        is_invoice: '',
+        is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
+        is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
         field: 'waybill',
       },
-      exportBtn: {
-        text: '导出',
-        isLoading: false,
-        isDisabled: false,
+      exportType: {
+        type: 'procurement',
+        filename: '采购数据'
       },
       statusTabList: [{
         title: '经理审批中',
@@ -231,6 +231,7 @@ export default {
       }],
       tableData: [],
       multipleSelection: [], //所选数据   
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -253,53 +254,9 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
-    },
-    exportData() {
-      let postData = {
-        filename: '采购数据',
-        page_arg: 'procurement',
-        ids: [],
-        is_reconciliation: this.searchPostData.is_reconciliation,
-        is_invoice: this.searchPostData.is_invoice,
-      };
-      for (let i = 1; i <= 12; i++) {
-        postData.ids.push(i.toString());
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
       }
-      if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.active_time_start = this.planArriveTime[0];
-        postData.active_time_end = this.planArriveTime[1];
-      }
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.exportBtn = {
-        text: '导出中',
-        isLoading: true,
-        isDisabled: true,
-      }
-
-      this.$$http('exportPurchaseData', postData).then((results) => {
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
-        }
-      }).catch((err) => {
-        this.$message.error('导出失败');
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
     },
     // 全部对账
     getUnReconciliations() {
@@ -337,14 +294,14 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price);
+          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
         }
         if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price);
+          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
         }
       }
-      this.reconciliations(true, ids, price, type);
+      this.reconciliations(true, ids, price/100, type);
     },
     // 单个/批量 对账  开票
     reconciliations(isAll, ids, price, type) {
@@ -403,11 +360,15 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getPurchaseStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.data) {
+            this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
+          }
+
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
@@ -417,7 +378,8 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+    this.getList();
   }
 
 }

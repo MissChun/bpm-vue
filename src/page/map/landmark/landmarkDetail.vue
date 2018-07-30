@@ -89,7 +89,7 @@
               <div class="label-list">
                 <label>匹配运单:</label>
                 <!--这里有问题，需要咨询后端-->
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_num)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">

@@ -303,7 +303,7 @@ export default {
           need_all: true,
         };
 
-        this.$$http('getShortName', postData).then((results) => {
+        this.$$http('searchPayCustomerList', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             this.customerList = results.data.data.data;
             resolve(results);
@@ -530,7 +530,7 @@ export default {
           consignee_phone: String(this.formData.consignee_phone),
           map_position: this.choosedActualSite.id,
           province: province,
-          short_name_id: this.formData.short_name,
+          consumer_id: this.formData.short_name,
           station_type: this.formData.station_type,
           station_name: this.formData.position_name,
 
@@ -588,7 +588,7 @@ export default {
 
             this.formData.consignee = this.siteOfCusmerDetail.consignee;
             this.formData.consignee_phone = this.siteOfCusmerDetail.consignee_phone;
-            this.formData.short_name = this.siteOfCusmerDetail.owner;
+            this.formData.short_name = this.siteOfCusmerDetail.owner && this.siteOfCusmerDetail.owner.length && this.siteOfCusmerDetail.owner[0] || '';
 
             this.formData.station_type = this.siteOfCusmerDetail.station_type;
 

@@ -23,11 +23,14 @@
   color:#4a9bf8;
   font-weight: bold;
 }
+.activeSqure{
+  background-color:#f2f5fe;
+}
 </style>
 <template>
-  <div class="squreModule" @click="gotoPage">
+  <div class="squreModule" @click="gotoPage" v-bind:class="{activeSqure:activeData&&activeData.key==dashboradSqureData.key}">
     <el-row style="height:60px">
-      <el-col class="text-center" style="line-height:60px;height:60px"><span class="boldB">{{dashboradSqureData.num}}</span><span>单</span></el-col>
+      <el-col class="text-center" style="line-height:60px;height:60px"><span class="boldB">{{dashboradSqureData.num}}</span><span>{{dashboradSqureData.dimension}}</span></el-col>
     </el-row>
     <el-row style="height:40px">
       <el-col class="text-center" style="line-height:20px;height:40px"><span>{{dashboradSqureData.value}}</span></el-col>
@@ -47,13 +50,18 @@ export default {
   },
   methods: {
     gotoPage:function(){
-      this.$router.push({ path:this.dashboradSqureData.goUrl});
+      if(this.dashboradSqureData.goUrl){
+         this.$router.push({ path:this.dashboradSqureData.goUrl});
+      }else{
+        this.$emit('clickExtendTable',this.dashboradSqureData);
+      }
+     
     }
   },
   created() {
 
   },
-  props:['dashboradSqureData']
+  props:['dashboradSqureData','activeData'],
 };
 
 </script>
