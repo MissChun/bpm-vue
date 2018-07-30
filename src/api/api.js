@@ -9,6 +9,22 @@
  */
 
 const api = {
+  exportLedgerData: {
+    url: '/export/ledger/',
+    method: 'get',
+    desc: '业务台账',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   getLedgerList: {
     url: '/api/v1/ledger/',
     method: 'get',
