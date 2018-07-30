@@ -294,14 +294,14 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price);
+          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
         }
         if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price);
+          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
         }
       }
-      this.reconciliations(true, ids, price, type);
+      this.reconciliations(true, ids, price/100, type);
     },
     // 单个/批量 对账  开票
     reconciliations(isAll, ids, price, type) {

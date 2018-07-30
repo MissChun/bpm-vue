@@ -289,10 +289,10 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].waiting_charges);
+          price += parseFloat(this.multipleSelection[i].waiting_charges)*100;
         }
       }
-      this.reconciliations(true, ids, price);
+      this.reconciliations(true, ids, price/100);
     },
     // 批量/单个  对账
     reconciliations(isAll, ids, price) {

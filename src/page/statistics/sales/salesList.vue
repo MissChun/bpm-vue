@@ -185,13 +185,21 @@ export default {
         param: 'fluid',
         width: ''
       }, {
-        title: '卸货站',
-        param: 'station',
+        title: '采购单价',
+        param: 'discount_price',
+        width: ''
+      }, {
+        title: '业务优惠',
+        param: 'business_price',
         width: ''
       }, {
         title: '实际离站时间',
         param: 'leave_time',
         width: '200'
+      }, {
+        title: '卸货站',
+        param: 'station',
+        width: ''
       }, {
         title: '装车吨位',
         param: 'plan_tonnage',
@@ -207,14 +215,6 @@ export default {
       }, {
         title: '核算吨位',
         param: 'check_quantity',
-        width: ''
-      }, {
-        title: '采购单价',
-        param: 'discount_price',
-        width: ''
-      }, {
-        title: '业务优惠',
-        param: 'business_price',
         width: ''
       }, {
         title: '销售单价',
@@ -268,7 +268,7 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
-      if(this.pbFunc.objSize(this.$route.query)){
+      if (this.pbFunc.objSize(this.$route.query)) {
         this.$router.push({ path: this.$route.path })
       }
     },
@@ -279,14 +279,14 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].sell_rental);
+          price += parseFloat(this.multipleSelection[i].sell_rental) * 100;
         }
         if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].sell_rental);
+          price += parseFloat(this.multipleSelection[i].sell_rental) * 100;
         }
       }
-      this.reconciliations(true, ids, price, type);
+      this.reconciliations(true, ids, price / 100, type);
     },
     // 单个/批量 对账  开票
     reconciliations(isAll, ids, price, type) {

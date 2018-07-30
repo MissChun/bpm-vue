@@ -547,7 +547,7 @@ const api = {
     }
   },
   getSiteList: {
-    url: '/api/v1/delivery_point/',
+    url: '/api/v1/tms_delivery_point/',
     method: 'get',
     desc: '站点列表',
     param: {

@@ -210,7 +210,7 @@ export default {
     chooseSite: function() {
       for (let i in this.fluidSiteSelect) {
         if (this.userForm.station === this.fluidSiteSelect[i].id) {
-          this.siteAddress = this.fluidSiteSelect[i].station_address;
+          this.siteAddress = this.fluidSiteSelect[i].detail_address;
           break;
         }
       }
