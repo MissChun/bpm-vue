@@ -45,7 +45,7 @@
             <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" v-loading="item.vLoading" :activeData="extendgetData"></dashboradSqure> 
           </el-col>
           <el-collapse-transition>
-          <el-col :span="24" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :sendTime="itemList.searchData"></dashboardTable></el-col>
+          <el-col :span="24" :id="'extendTab-'+extendgetData.key" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :sendTime="itemList.searchData"></dashboardTable></el-col>
         </el-collapse-transition>
         </el-row>
       </div>
@@ -75,7 +75,7 @@ export default {
         'purchaseDashboard':[
           {//采购概览
           'dashboardSqureData':[
-              {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine',dimension:"order"},
+              {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine',dimension:"单"},
             ],
             'searchShow':false,
             'type':'procurement_centre_scedule',
@@ -83,9 +83,9 @@ export default {
           },
           {
           'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car",vLoading:false},
-              {key:'unwork_end_time_count',value:'未装车',extendTable:true,dimension:"car",vLoading:false},
-              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car",vLoading:false},
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"车",vLoading:false},
+              {key:'unwork_end_time_count',value:'未装车',extendTable:true,dimension:"车",vLoading:false},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"车",vLoading:false},
             ],
             'searchShow':true,
             'type':'procurement_centre_dashborad',
@@ -96,9 +96,9 @@ export default {
         'serviceCentreDashboard':[//服务中心概览
           {
             'dashboardSqureData':[
-              {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList',dimension:"order"},
-              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"order"},
-              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList',dimension:"order"}
+              {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList',dimension:"单"},
+              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"单"},
+              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList',dimension:"条"}
             ],
             'searchShow':false,
             'type':'service_centre_schedule',
@@ -106,11 +106,11 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"car",vLoading:false},
-              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"car",vLoading:false},
-              {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"car",vLoading:false},
-              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"order",vLoading:false},
-              {key:'truck_count',value:'当日计划数',extendTable:true,dimension:"order",vLoading:false}
+              {key:'car_plan_count',value:'用车计划',extendTable:true,dimension:"车",vLoading:false},
+              {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"车",vLoading:false},
+              {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"车",vLoading:false},
+              {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"单",vLoading:false},
+              {key:'truck_count',value:'当日计划数',extendTable:true,dimension:"车",vLoading:false}
             ],
             'searchShow':true,
             'searchData':[],
@@ -122,8 +122,8 @@ export default {
         'puchaseStatisticsDashboard':[//采购统计概览
           {
             'dashboardSqureData':[
-              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/purchase/purchaseList?is_reconciliation=unfinished',dimension:"car"},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/purchase/purchaseList?is_invoice=no',dimension:"car"},
+              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/purchase/purchaseList?is_reconciliation=unfinished',dimension:"车"},
+              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/purchase/purchaseList?is_invoice=no',dimension:"车"},
             ],
             'searchShow':false,
             'type':'procurement_statistics_dashborad',
@@ -133,8 +133,8 @@ export default {
         'salesStatisticsDashboard':[//销售概览
           {
             'dashboardSqureData':[
-              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"car",vLoading:false},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"car",vLoading:false},
+              {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"车",vLoading:false},
+              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"车",vLoading:false},
             ],
             'searchShow':false,
             'type':'sale_statistics_dashborad',
@@ -142,7 +142,7 @@ export default {
           },
           {
             'dashboardSqureData':[
-              {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"car",vLoading:false,vLoading:false},
+              {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"车",vLoading:false,vLoading:false},
             ],
             'searchShow':true,
             'searchData':[],
@@ -181,6 +181,11 @@ export default {
                     vm.$set(vm.extendData,Iitem.key,results.data.data);
                     vm.$set(vm,'extendgetData',Iitem);
                     vm.tableShowSatus=true;
+                    setTimeout(()=>{
+                      var anchor = document.getElementById('extendTab-'+vm.extendgetData.key);
+                      //document.body.scrollTop = anchor.offsetTop;
+                      document.documentElement.scrollTop = anchor.offsetTop;
+                    },200);
                   }
                 });
               }
@@ -218,9 +223,11 @@ export default {
               vm.filterDashboard(results.data.data,item);
               resolve(results);
             }else{
+              vm.pageLoading=false;
               reject(results);
             }
           }).catch((err) => {
+            vm.pageLoading=false;
             reject(err);
           })
         })

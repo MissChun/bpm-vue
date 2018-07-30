@@ -16,7 +16,7 @@
         </el-table-column>
     </el-table>
 
-  </div>
+  </div>      
 </template>
 <script>
 export default {
@@ -77,9 +77,7 @@ export default {
       }
     },
     operation:function(item){
-      console.log("asd");
       if(item.showDetalis){
-      console.log("asd");
       }else if (item.goTopage){
         var pathParam="";
         if(item.timeParam){
@@ -89,7 +87,6 @@ export default {
           pathParam+=`&${time.statusType}=${this.sendStatusType}`
         }
         this.$router.push({ path: `${item.goTopage}`+pathParam });
-        console.log('asd',`${item.goTopage}`+pathParam );
       }
     }
   },
