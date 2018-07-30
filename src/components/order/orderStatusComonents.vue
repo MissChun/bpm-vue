@@ -382,6 +382,9 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
+        if(this.saveSendData.export_excel){
+          delete this.saveSendData.export_excel
+        }
         this.searchStatus = true;
         this.searchList();
       });
