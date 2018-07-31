@@ -89,7 +89,8 @@
               <div class="label-list">
                 <label>匹配运单:</label>
                 <!--这里有问题，需要咨询后端-->
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
+                <a href="javascript:void(0)" class="detail-form-item color-26c6da" v-if="detailData.waybill_number" @click="goOrderDetail">{{detailData.waybill_number}}</a>
+                <div class="detail-form-item" v-else v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -222,6 +223,13 @@ export default {
       this.imgObject.showPreview = true;
       this.imgObject.previewIndex = index;
     },
+    goOrderDetail: function() {
+      let stepId = this.detailData.section_trip_id;
+      let waybillId = this.detailData.waybill_id;
+      this.$router.push({
+        path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${stepId}/${waybillId}`,
+      })
+    },
     getDetail: function() {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -343,6 +351,10 @@ export default {
   padding: 10px 30px 0 0;
   position: relative;
   top: 15px;
+}
+
+.color-26c6da {
+  color: #26c6da;
 }
 
 </style>

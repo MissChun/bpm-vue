@@ -27,12 +27,12 @@ if (currentUrl.match('pbpm.91lng.cn')) {
   domainUrl = 'http://bpm.91lng.cn';
 } else {
   //domainUrl = 'http://bpm.hhtdlng.com';
-  domainUrl = 'http://devbpm.hhtdlng.com';
+  domainUrl = 'http://bpm.hhtdlng.com';
 }
 
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
-let unCancelAjax = ['getTripRecords', 'getOfflineAndStopRecords']; //设定可以重复请求的ajax请求的apiname(str)。
+let unCancelAjax = ['getTripRecords', 'getOfflineAndStopRecords','signOut']; //设定可以重复请求的ajax请求的apiname(str)。
 let cancelToken = axios.CancelToken;
 let cancelLimitTime = 500; //设置需要cancel的间隔时限
 

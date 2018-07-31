@@ -30,17 +30,17 @@
   <div>
     <el-row :gutter="0">
       <el-col :md="8">
-        <el-select v-model="address.province" @change="provinceChange" placeholder="省">
+        <el-select v-model="address.province" clearable @change="provinceChange" @clear="clearProvince" placeholder="省">
           <el-option v-for="(item,key) in provinceList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :md="8">
-        <el-select v-model="address.city" @change="cityChange" placeholder="市">
+        <el-select v-model="address.city" clearable @change="cityChange" @clear="clearCity" placeholder="市">
           <el-option v-for="(item,key) in cityList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :md="8">
-        <el-select v-model="address.area" @change="areaChange" placeholder="区">
+        <el-select v-model="address.area" clearable @change="areaChange" @clear="clearArea" placeholder="区">
           <el-option v-for="(item,key) in areaList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
@@ -82,6 +82,45 @@ export default {
           this.areaList = results.data.data.counties;
         }
       });
+    },
+    clearProvince() {
+      this.address.province = '';
+      this.address.city = '';
+      this.address.area = '';
+      if (this.addressName) {
+        this.addressName.province = '';
+        this.addressName.city = '';
+        this.addressName.area = '';
+      }
+      if (this.addressCode) {
+        this.addressName.province = '';
+        this.addressCode.city = '';
+        this.addressCode.area = '';
+      }
+      this.cityList = [];
+      this.areaList = [];
+    },
+    clearCity() {
+      this.address.city = '';
+      this.address.area = '';
+      if (this.addressName) {
+        this.addressName.city = '';
+        this.addressName.area = '';
+      }
+      if (this.addressCode) {
+        this.addressCode.city = '';
+        this.addressCode.area = '';
+      }
+      this.areaList = [];
+    },
+    clearArea() {
+      this.address.area = '';
+      if (this.addressName) {
+        this.addressName.area = '';
+      }
+      if (this.addressCode) {
+        this.addressCode.area = '';
+      }
     },
     provinceChange() {
       //this.getCity();
