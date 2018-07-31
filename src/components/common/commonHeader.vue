@@ -5,13 +5,13 @@
 
 </style>
 <template>
-    <div v-if="type==='loginAfter'">
+  <div v-if="type==='loginAfter'">
     <login-after-header :users="users" :logout="logout"></login-after-header>
   </div>
   <div v-else-if="type==='index'" class="index-header-He">
     <index-header :users="users" :logout="logout" :login-link="loginLink" :app-url="appUrl"></index-header>
   </div>
-   <div v-else-if="type==='error'">
+  <div v-else-if="type==='error'">
     <public-header :users="users" :logout="logout"></public-header>
   </div>
 </template>
@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     users: function() {
-      return this.pbFunc.getLocalData('user',true);
+      return this.pbFunc.getLocalData('user', true);
     }
   },
   created() {
@@ -68,15 +68,14 @@ export default {
                 message: '退出成功',
                 type: 'success'
               });
-              // this.$emit("logout");
-              localStorage.clear();
-              // this.users = [];
-              this.$router.push({ path: '/login' });
             }
-
           }).catch((err) => {
-            this.$message.error('退出失败');
+            //this.$message.error('退出失败');
           })
+          // this.$emit("logout");
+          localStorage.clear();
+          // this.users = [];
+          this.$router.push({ path: '/login' });
 
         })
         .catch(() => {});

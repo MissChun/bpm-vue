@@ -1,8 +1,8 @@
 <template>
   <div>
-    <keep-alive :include="['freightDataList','mileageDataList']">
+    <!-- <keep-alive :include="['freightDataList','mileageDataList']"> -->
       <router-view></router-view>
-    </keep-alive>
+    <!-- </keep-alive> -->
   </div>
 </template>
 <script>
