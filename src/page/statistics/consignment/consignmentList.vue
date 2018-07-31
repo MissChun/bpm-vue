@@ -107,7 +107,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 30,
+        pageSize: 10,
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间

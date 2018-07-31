@@ -279,11 +279,11 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].sell_rental) * 100;
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
         }
         if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].sell_rental) * 100;
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
         }
       }
       this.reconciliations(true, ids, price / 100, type);

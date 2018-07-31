@@ -131,7 +131,8 @@
         line-height: 20px;
         padding: 10px 20px;
         color: #606266;
-        text-align: justify;
+        text-align: left;
+        word-break:break-all;
         .time {
           color: #B8B8B8;
         }
@@ -156,7 +157,7 @@
   }
   .notice-temp-footer {
     height: 50px;
-    width: 342px;
+    width: 382px;
     border-top: 1px solid #e4e7ed;
     line-height: 50px;
     color: #9E9E9E;
@@ -183,7 +184,7 @@
           </el-breadcrumb>
         </div>
         <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
-          <el-popover placement="top" width="386" trigger="click" v-model="showNotice">
+          <el-popover placement="top" width="426" trigger="click" v-model="showNotice">
             <div class="notice" v-if="!false">
               <div class="notice-temp" v-if="showNotice">
                 <div class="notice-temp-title">系统通知</div>
@@ -294,7 +295,6 @@ export default {
           title: msg.message_type.verbose,
           message: msg.content,
           position: 'bottom-right',
-          duration: 0
         });
 
       }
