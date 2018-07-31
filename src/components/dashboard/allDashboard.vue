@@ -42,7 +42,7 @@
         </el-form>
         <el-row  v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20"  style="margin:10px 0 40px 0" :key="Rindex">
           <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:15px;" :key="item.key">
-            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" v-loading="item.vLoading" :activeData="extendgetData"></dashboradSqure> 
+            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" v-loading="item.vLoading" :activeData="extendgetData"></dashboradSqure>
           </el-col>
           <el-collapse-transition>
           <el-col :span="24" :id="'extendTab-'+extendgetData.key" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :sendTime="itemList.searchData"></dashboardTable></el-col>
@@ -69,7 +69,7 @@ export default {
       extendData:{},
       extendgetData:{},
       tableShowSatus:false,
-      defaultStart:new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate()-1) + " 16:00:00",
+      defaultStart:'',//new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate()-1) + " 16:00:00",
       defaultEnd:new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 16:00:00",
       allDashboard:{
         'purchaseDashboard':[
@@ -156,7 +156,10 @@ export default {
   },
   props:['dispatchPage'],
   computed: {
-    
+    yesterday(){
+      let today = new Date();
+      return new Date(today.getTime() - 24*60*60*1000);
+    }
   },
   methods: {
     clickExtendTable:function(backItem,isOnlySearch){
@@ -203,6 +206,7 @@ export default {
       }else{
         searchArr=this.allDashboard[vm.dispatchPage];
       }
+
       const promises = searchArr.map(function (item) {
         return new Promise((resolve, reject) => {
           var sendData={};
@@ -285,6 +289,7 @@ export default {
     }
   },
   created() {
+    this.defaultStart = this.yesterday.getFullYear() + '-' + (this.yesterday.getMonth() + 1) + '-' + this.yesterday.getDate() + " 16:00:00";
     this.getDashboard();
   },
   watch: {
