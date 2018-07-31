@@ -78,7 +78,7 @@
                         <div class="detail-form-item">{{detailData.business_price}}</div>
                       </div>
                     </el-col>
-                      <el-col :span="6">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>液厂名称:</label>
                         <div class="detail-form-item">{{detailData.fluid_name}}</div>
@@ -134,7 +134,7 @@
                         <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="6">
+                    <!--    <el-col :span="6">
                       <div class="label-list">
                         <label>实际装货时间:</label>
                         <div class="detail-form-item">{{detailData.active_time}}</div>
@@ -145,9 +145,7 @@
                         <label>实际装货吨位:</label>
                         <div class="detail-form-item">{{detailData.active_tonnage}}</div>
                       </div>
-                    </el-col>
-                  </el-row>
-                  <el-row :gutter="40">
+                    </el-col> -->
                     <el-col :span="6">
                       <div class="label-list">
                         <label>备注:</label>
@@ -155,6 +153,9 @@
                       </div>
                     </el-col>
                   </el-row>
+                  <!--    <el-row :gutter="40">
+
+                  </el-row> -->
                 </div>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
