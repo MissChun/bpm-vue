@@ -451,6 +451,12 @@ export default {
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
+                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity)){
+                  operationArr[i].disableChoose = true;
+                  addflag = false;
+                  operationArr[i].bindCheckBox = true;
+                  newArr.push(operationArr[i]);
+                }
               } else {
                 operationArr[i].waybill = this.delivery_list.trips[j];
                 if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
