@@ -32,7 +32,7 @@ if (currentUrl.match('pbpm.91lng.cn')) {
 
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
-let unCancelAjax = ['getTripRecords', 'getOfflineAndStopRecords', 'signOut']; //设定可以重复请求的ajax请求的apiname(str)。
+let unCancelAjax = ['getTripRecords', 'getOfflineAndStopRecords', 'signOut', 'getTransPowerInfo']; //设定可以重复请求的ajax请求的apiname(str)。
 let cancelToken = axios.CancelToken;
 let cancelLimitTime = 500; //设置需要cancel的间隔时限
 
@@ -61,7 +61,7 @@ axios.interceptors.request.use(config => {
   let isNeedCancel = true;
   if (unCancelAjax.length) {
     for (let i in unCancelAjax) {
-      if (api[unCancelAjax[i]].url == config.url) {
+      if (api[unCancelAjax[i]] && (api[unCancelAjax[i]].url == config.url)) {
         isNeedCancel = false;
         break;
       }
