@@ -18,13 +18,15 @@
         <div class="img-review-in-box">
           <ul>
             <li v-for="(item , key) in imgList" :key="key">
-              <div v-show="previewIndex == key"><img :src="item.src" :class="{'rotate-90':item.rotate ==1,'rotate-180':item.rotate ==2,'rotate-270':item.rotate ==3}" /></div>
+              <div v-show="previewIndex == key"><img :src="item.src" v-bind:style="imgStyle" /></div>
             </li>
           </ul>
         </div>
         <div class="preview-operator-btn">
-          <a href="javascript:void(0)" v-on:click="previousImg" v-show="imgList.length">上一张</a>
-          <a href="javascript:void(0)" v-on:click="nextImg" v-show="imgList.length">下一张</a>
+          <a href="javascript:void(0)" v-on:click="previousImg" v-show="imgList.length > 1">上一张</a>
+          <a href="javascript:void(0)" v-on:click="nextImg" v-show="imgList.length > 1">下一张</a>
+          <a href="javascript:void(0)" v-on:click="zoomBig" v-show="imgList.length">放大</a>
+          <a href="javascript:void(0)" v-on:click="zoomSmall" v-show="imgList.length">缩小</a>
           <a href="javascript:void(0)" v-on:click="rotateImg()">旋转</a>
           <a href="javascript:void(0)" v-on:click="closePreview()">关闭</a>
         </div>
@@ -36,17 +38,26 @@
 export default {
   name: 'imgReview',
   computed: {
-
+    imgStyle: function() {
+      let imgStyle = '';
+      imgStyle = `transform:rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
+        -ms-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
+        -moz-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
+        -webkit-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
+        -o-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});`
+      return imgStyle;
+    }
   },
   data() {
     return {
       previewIndex: 0,
       imgList: [],
+      zoomNum: 1,
+      rotateDeg: 0,
     }
   },
   methods: {
     nextImg() {
-      console.log('this', this);
       if (this.previewIndex < (this.imgList.length - 1)) {
         this.previewIndex++
       } else {
@@ -61,17 +72,22 @@ export default {
       }
     },
     rotateImg() {
-      if (this.imgList[this.previewIndex].rotate < 3) {
-        this.imgList[this.previewIndex].rotate++
-      } else {
-        this.imgList[this.previewIndex].rotate = 0;
+      this.rotateDeg += 90;
+    },
+    zoomBig() {
+      if (this.zoomNum < 1.8) {
+        this.zoomNum += 0.2;
+      }
+    },
+    zoomSmall() {
+      if (this.zoomNum > 0.4) {
+        this.zoomNum -= 0.2;
       }
     },
     closePreview() {
       this.imgObject.showPreview = false;
     },
     dealImg() {
-      console.log('this.imgObject', this.imgObject);
       let imgListArray = []
       if (this.imgObject && this.imgObject.imgList && this.imgObject.imgList.length) {
         for (let i in this.imgObject.imgList) {
@@ -79,11 +95,9 @@ export default {
           if (this.imgObject.imgList[i]) {
             imgListArray[i] = {};
             imgListArray[i].src = this.imgObject.imgList[i];
-            imgListArray[i].rotate = 0;
           }
         }
       }
-      console.log('imgListArray', imgListArray);
       return imgListArray;
     }
   },
@@ -95,22 +109,22 @@ export default {
     imgObject: Object,
   },
   watch: {
-    'imgObject.imgList': function(val, oldVal) {
-      let imgListArray = []
-      if (val.length) {
-        for (let i in val) {
-          imgListArray[i] = {};
-          if (val[i]) {
+    'imgObject': {
+      handler: function(val, oldVal) {
+        let imgListArray = []
+        if (val.imgList.length) {
+          for (let i in val.imgList) {
             imgListArray[i] = {};
-            imgListArray[i].src = val[i];
-            imgListArray[i].rotate = 0;
+            if (val.imgList[i]) {
+              imgListArray[i] = {};
+              imgListArray[i].src = val.imgList[i];
+            }
           }
         }
-      }
-      this.imgList = imgListArray;
-    },
-    'imgObject.previewIndex': function(val, oldVal) {
-      this.previewIndex = val;
+        this.imgList = imgListArray;
+        this.previewIndex = val.previewIndex || 0;
+      },
+      deep: true,
     }
   }
 }
@@ -168,11 +182,11 @@ export default {
     position: fixed;
     bottom: 50px;
     left: 50%;
-    margin-left: -105px;
+    margin-left: -155px;
 
 
     height: 24px;
-    width: 210px;
+    width: 310px;
 
     font-size: 16px;
     color: #fff;
@@ -186,42 +200,6 @@ export default {
       }
     }
   }
-}
-
-.rotate-90 {
-  -webkit-transform: rotate(90deg);
-  /* Safari and Chrome */
-  -moz-transform: rotate(90deg);
-  /* Firefox */
-  -ms-transform: rotate(90deg);
-  /* IE 9 */
-  -o-transform: rotate(90deg);
-  /* Opera */
-  transform: rotate(90deg);
-}
-
-.rotate-180 {
-  -webkit-transform: rotate(180deg);
-  /* Safari and Chrome */
-  -moz-transform: rotate(180deg);
-  /* Firefox */
-  -ms-transform: rotate(180deg);
-  /* IE 9 */
-  -o-transform: rotate(180deg);
-  /* Opera */
-  transform: rotate(180deg);
-}
-
-.rotate-270 {
-  -webkit-transform: rotate(270deg);
-  /* Safari and Chrome */
-  -moz-transform: rotate(270deg);
-  /* Firefox */
-  -ms-transform: rotate(270deg);
-  /* IE 9 */
-  -o-transform: rotate(270deg);
-  /* Opera */
-  transform: rotate(270deg);
 }
 
 </style>
