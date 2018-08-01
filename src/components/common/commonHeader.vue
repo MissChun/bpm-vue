@@ -62,6 +62,7 @@ export default {
           type: "info"
         })
         .then(() => {
+          this.$store.state.common.wsMsg.close();
           this.$$http('signOut', {}).then((results) => {
             if (results.data && results.data.code == 0) {
               this.$message({
