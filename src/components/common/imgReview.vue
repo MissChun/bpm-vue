@@ -61,7 +61,6 @@ export default {
       }
     },
     rotateImg() {
-      console.log('this.imgList[this.previewIndex].rotate', this.imgList[this.previewIndex], this.imgList[this.previewIndex].rotate);
       if (this.imgList[this.previewIndex].rotate < 3) {
         this.imgList[this.previewIndex].rotate++
       } else {

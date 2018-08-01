@@ -572,6 +572,16 @@ const api = {
       }
     }
   },
+  getSiteMapList: {
+    url: '/api/v1/delivery_point/',
+    method: 'get',
+    desc: '站点地图列表',
+    param: {
+      need_all: {
+        desc: '是否分页'
+      }
+    }
+  },
   getFluidList: {
     url: '/api/v1/actual-fluids/',
     method: 'get',

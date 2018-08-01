@@ -117,7 +117,7 @@ export default {
           is_active: this.searchFilters.is_active,
         };
         postData = this.pbFunc.fifterObjIsNull(postData);
-        this.$$http('getSiteList', postData).then((results) => {
+        this.$$http('getSiteMapList', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.siteList = results.data.data;
