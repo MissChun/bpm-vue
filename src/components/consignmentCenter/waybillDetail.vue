@@ -256,6 +256,19 @@
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
                 </div>
               </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>下单人:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.sale_man_name)"></div>
+                </div>
+              </el-col>
+
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>下单人电话:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.sale_man_phone)"></div>
+                </div>
+              </el-col>
             </el-row>
           </div>
         </div>
