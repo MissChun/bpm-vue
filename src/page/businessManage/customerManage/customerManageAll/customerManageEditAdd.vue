@@ -224,12 +224,12 @@ export default {
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
-        free_hour:"200",
-        waiting_price:"24",
-        waiting_price:"50",
+        free_hour:"",
+        waiting_price:"",
         contract_start_date:"",
         contract_end_date:"",
-        social_credit_codeVa:""
+        social_credit_codeVa:"",
+        kui_tons_standard:200
       },
 
       rules: {

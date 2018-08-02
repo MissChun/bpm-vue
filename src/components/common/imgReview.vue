@@ -183,7 +183,7 @@ export default {
     bottom: 50px;
     left: 50%;
     margin-left: -155px;
-
+    text-align:center;
 
     height: 24px;
     width: 310px;

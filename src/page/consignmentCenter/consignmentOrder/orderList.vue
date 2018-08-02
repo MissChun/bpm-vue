@@ -108,6 +108,15 @@ export default {
         'all_finish_count':{},
         'all_count':{}
       },
+      defaultSecond:{
+        first:'loading_waiting_audit',
+        second:'all',
+        third:'unloading_waiting_audit',
+        fourth:'all',
+        fifth:'all',
+        sxith:'all',
+        seven:'all'
+      },
       timeParam: [],
       listFifterData: [],
       rules: {},
@@ -184,7 +193,8 @@ export default {
       });
     },
     clicktabs: function(targetName) {
-      this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList?goTo="+targetName.name+"&secondActiveName=all" });
+      var defaultTabls=this.defaultSecond[targetName.name];
+      this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList?goTo="+targetName.name+"&secondActiveName="+defaultTabls });
       this.reshCount();
     },
     changeTabs: function(fifterName) {

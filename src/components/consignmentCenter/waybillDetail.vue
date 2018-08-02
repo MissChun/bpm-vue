@@ -279,7 +279,7 @@
                 </div>
               </el-col>
             </el-row>
-            
+
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -395,24 +395,24 @@
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
-                榜单信息
+                磅单信息
               </el-col>
             </el-row>
           </div>
           <el-row :gutter="40">
             <el-col :span="8">
               <div class="label-list">
-                <label>装车榜单:</label>
+                <label>装车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看榜单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看磅单</span>
                 </div>
               </div>
             </el-col>
             <el-col :span="8" v-if="orderId">
               <div class="label-list">
-                <label>卸车榜单:</label>
+                <label>卸车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看榜单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看磅单</span>
                 </div>
               </div>
             </el-col>
@@ -462,8 +462,8 @@ export default {
         showPreview: false,
         previewIndex: 0,
       },
-      loadingInfo: {}, //装车榜单
-      unloadInfo: {}, //卸车榜单
+      loadingInfo: {}, //装车磅单
+      unloadInfo: {}, //卸车磅单
     }
   },
   methods: {

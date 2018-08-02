@@ -162,6 +162,7 @@ export default {
           { id: 'truck_no', value: '车号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
+          { id: 'order_station', value: '卸货站点' },
         ],
         carrier_type_select:[
           { id: '', value: '全部' },

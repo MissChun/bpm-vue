@@ -50,7 +50,10 @@
 .padds {
   padding: 25px 0 0px 0
 }
-
+.sealTitle{
+  text-align: center;
+  margin-bottom: 20px;
+}
 </style>
 <template>
   <div>
@@ -757,6 +760,7 @@ export default {
         showPreview: false,
         previewIndex: 0,
       },
+      sealTitle:"",
       otherInput: "",
       surePound: {},
       exPound: {},
@@ -803,6 +807,7 @@ export default {
         }
       } else if (type == 'showSeal') {
         if (this.sealImgList.length > 0) {
+          vm.imgObject.title=this.sealTitle;
           vm.imgObject.imgList = this.sealImgList;
           vm.imgObject.showPreview = true;
         } else {
@@ -811,6 +816,18 @@ export default {
           sendData.id = id;
           this.$$http("getSeal", sendData).then(results => {
             if (results.data.code == 0) {
+              var poundTitle="铅封号：";
+              if(results.data.data.data[0].seal_no_list){
+                results.data.data.data[0].seal_no_list.forEach((item,index)=>{
+                  if(index!=results.data.data.data[0].seal_no_list.length-1){
+                    poundTitle+=item+"/";
+                  }else{
+                    poundTitle+=item;
+                  }
+                });
+              }
+              vm.imgObject.title=poundTitle;
+              vm.sealTitle=poundTitle;
               vm.imgObject.imgList = results.data.data.data[0].image_url_list;
               this.sealImgList = results.data.data.data[0].image_url_list;
               vm.imgObject.showPreview = true;
