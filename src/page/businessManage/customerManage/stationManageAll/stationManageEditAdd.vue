@@ -233,22 +233,144 @@ export default {
         this.$router.push({ path: '/mapManage/landmark/landmarkList' });
       }
     },
+    init: function() {
+      /* 初始化地图 */
+      this.map = new AMap.Map('map-container', {
+        zoom: 5
+      });
 
-    startSearch: function() {
-      this.searchBtn.isDisabled = true;
-      this.searchBtn.loading = true;
-      this.searchBtn.text = '搜索中';
+      this.initMarkList();
 
+      this.getCustomerList();
 
-      this.getActualSiteList().then((data) => { //展示该数据
-        this.renderMarker();
-        this.searchBtn.isDisabled = false;
-        this.searchBtn.loading = false;
-        this.searchBtn.text = '搜索';
-      })
-
+      this.getActualSiteListAndRender();
 
     },
+    /* 初始化标注列表 */
+    initMarkList: function() {
+      AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
+        (MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) => {
+          this.map.addControl(new BasicControl.Zoom({
+            position: 'lt', //left top，左上角
+            showZoomNum: true //显示zoom值
+          }));
+          let $ = MarkerList.utils.$; //即jQuery/Zepto
+
+          this.markerList = new MarkerList({
+            map: this.map,
+            //从数据中读取位置, 返回lngLat
+            getPosition: function(item) {
+              return [item.location.longitude, item.location.latitude];
+            },
+            //数据ID，如果不提供，默认使用数组索引，即index
+            getDataId: function(item, index) {
+              return item.id;
+            },
+            getInfoWindow: function(data, context, recycledInfoWindow) {
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
+              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
+              if (recycledInfoWindow) {
+                recycledInfoWindow.setInfoTitle(infoTitleStr);
+                recycledInfoWindow.setInfoBody(infoBodyStr);
+                return recycledInfoWindow;
+              } else {
+                return new SimpleInfoWindow({
+                  infoTitle: infoTitleStr,
+                  infoBody: infoBodyStr,
+                  offset: new AMap.Pixel(0, -37)
+                });
+              }
+            },
+            //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
+            getMarker: function(dataItem, context, recycledMarker) {
+              if (recycledMarker) {
+                recycledMarker.setIconStyle({
+                  src: require('@/assets/img/l_2.png'),
+                  style: {
+                    width: '20px',
+                    height: '20px',
+                  }
+                });
+                recycledMarker.setLabel({
+                  content: dataItem.position_name,
+                  offset: new AMap.Pixel(30, 0)
+                })
+                return recycledMarker
+              } else {
+                return new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('@/assets/img/l_2.png'),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                    }
+                  },
+                  label: {
+                    content: dataItem.position_name,
+                    offset: new AMap.Pixel(30, 0)
+                  }
+                });
+              }
+            },
+            //marker上监听的事件
+            markerEvents: ['click', 'mouseover', 'mouseout'],
+            selectedClassNames: 'selected',
+            autoSetFitView: false
+          });
+
+          this.markerList.on('selectedChanged', (event, info) => {
+            if (info.selected) {
+              let infoWindow = this.markerList.getInfoWindow();
+              let id = info.selected.data.id;
+              this.getLandmarkDetail(id).then((results) => {
+                let infoBodyStr = this.getInfoWindowDom(this.landmarkDetail);
+                infoWindow.setInfoBody(infoBodyStr);
+                jQuery('#choose-Actual-fluid').on('click', () => {
+                  this.choosedActualSite = results.data.data;
+                  this.formData.map_position = this.choosedActualSite.position_name;
+
+                  if (!this.id) {
+                    this.formData.consignee = this.choosedActualSite.contacts;
+                    this.formData.consignee_phone = this.choosedActualSite.tel;
+                  }
+
+                  this.formData.address = this.choosedActualSite.address;
+                  this.showLeftWindow = true;
+
+                })
+              }).catch(() => {
+                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
+                infoWindow.setInfoBody(infoBodyStr);
+              })
+            }
+          });
+
+        });
+    },
+    /* 获取客户列表 */
+    getCustomerList: function() {
+
+      return new Promise((resolve, reject) => {
+        let postData = {
+          need_all: true,
+        };
+
+        this.$$http('searchPayCustomerList', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.customerList = results.data.data.data;
+            resolve(results);
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(results);
+        })
+
+      })
+    },
+
+    /* 获取实际站点列表 */
     getActualSiteList: function() {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -296,210 +418,41 @@ export default {
 
       })
     },
-    getCustomerList: function() {
+    /* 获取实际站点列表后逻辑 */
+    getActualSiteListAndRender: function() {
+      this.getActualSiteList().then(() => {
+        this.renderMarker();
+        if (this.id) {
+          this.getSiteOfCustomerDetail().then(() => {
+            if (this.siteOfCusmerDetail.map_position) {
+              this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
 
-      return new Promise((resolve, reject) => {
-        let postData = {
-          need_all: true,
-        };
+                this.choosedActualSite = this.landmarkDetail;
 
-        this.$$http('searchPayCustomerList', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
-            this.customerList = results.data.data.data;
-            resolve(results);
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-          reject(results);
-        })
+                this.map.setZoom(15);
+                this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+              });
 
-      })
-    },
-    getInfoWindowDom: function(data) {
-      let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
-        '</div><div class="fs-13">上传来源：' + source_type +
-        '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
-
-      return infoBodyStr;
-    },
-
-    getLandmarkDetail: function(id) {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          id: id
-        };
-        this.$$http('getLandMarkDetail', postData).then((results) => {
-          this.pageLoading = false;
-          if (results.data && results.data.code == 0) {
-            this.landmarkDetail = results.data.data;
-            resolve(results)
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-          reject(err);
-        })
-
-      })
-    },
-
-    initMarkList: function() {
-
-      let _this = this;
-
-
-
-      AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
-        function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
-
-          _this.map.addControl(new BasicControl.Zoom({
-            position: 'lt', //left top，左上角
-            showZoomNum: true //显示zoom值
-          }));
-
-          let $ = MarkerList.utils.$; //即jQuery/Zepto
-
-          _this.markerList = new MarkerList({
-
-            map: _this.map,
-
-            //从数据中读取位置, 返回lngLat
-            getPosition: function(item) {
-              return [item.location.longitude, item.location.latitude];
-            },
-
-            //数据ID，如果不提供，默认使用数组索引，即index
-            getDataId: function(item, index) {
-              return index;
-            },
-
-            getInfoWindow: function(data, context, recycledInfoWindow) {
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
-              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
-              if (recycledInfoWindow) {
-                recycledInfoWindow.setInfoTitle(infoTitleStr);
-                recycledInfoWindow.setInfoBody(infoBodyStr);
-                return recycledInfoWindow;
-              } else {
-                return new SimpleInfoWindow({
-                  infoTitle: infoTitleStr,
-                  infoBody: infoBodyStr,
-                  offset: new AMap.Pixel(0, -37)
-                });
-              }
-            },
-
-            //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
-            getMarker: function(dataItem, context, recycledMarker) {
-              if (recycledMarker) {
-                recycledMarker.setIconStyle({
-                  src: require('@/assets/img/l_2.png'),
-                  style: {
-                    width: '20px',
-                    height: '20px',
-                  }
-                });
-                recycledMarker.setLabel({
-                  content: dataItem.position_name,
-                  offset: new AMap.Pixel(30, 0)
-                })
-
-                return recycledMarker
-              } else {
-                return new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('@/assets/img/l_2.png'),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                    }
-                  },
-                  label: {
-                    content: dataItem.position_name,
-                    offset: new AMap.Pixel(30, 0)
-                  }
-                });
-              }
-            },
-
-            //marker上监听的事件
-            markerEvents: ['click', 'mouseover', 'mouseout'],
-
-            selectedClassNames: 'selected',
-
-            autoSetFitView: false
-
-          });
-
-          _this.markerList.on('selectedChanged', function(event, info) {
-            if (info.selected) {
-              let infoWindow = _this.markerList.getInfoWindow();
-              let id = info.selected.data.id;
-              _this.getLandmarkDetail(id).then((results) => {
-                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
-                infoWindow.setInfoBody(infoBodyStr);
-                jQuery('#choose-Actual-fluid').on('click', function() {
-                  _this.choosedActualSite = results.data.data;
-                  _this.formData.map_position = _this.choosedActualSite.position_name;
-
-                  if (!_this.id) {
-                    _this.formData.consignee = _this.choosedActualSite.contacts;
-                    _this.formData.consignee_phone = _this.choosedActualSite.tel;
-                  }
-
-                  _this.formData.address = _this.choosedActualSite.address;
-                  _this.showLeftWindow = true;
-
-                })
-              }).catch(() => {
-                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
-                infoWindow.setInfoBody(infoBodyStr);
-              })
-              //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
-              if (!info.sourceEventInfo.isListElementEvent) {
-
-                if (info.selected.listElement) {
-                  scrollListElementIntoView($(info.selected.listElement));
-                }
-
-              }
+            } else {
+              this.pageLoading = false;
             }
-          });
-
-        });
+          })
+        }
+      })
     },
-    renderMarker: function() {
-      const renderAndCluster = () => {
-        this.markerList.render(this.siteList);
-        this.map.plugin(["AMap.MarkerClusterer"], () => {
-          this.allMakers = this.markerList.getAllMarkers();
-          if (this.cluster) {
-            this.cluster.setMarkers(this.allMakers);
-          } else {
-            this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
-          }
-
-        });
-      }
-      if (this.markerList) {
-        renderAndCluster();
-      } else {
-        setTimeout(() => {
-          this.renderMarker();
-        }, 200)
-      }
-
-      if (!this.id) {
-        this.map.setFitView(this.allMakers);
-      }
-
+    /* 按钮点击搜索 */
+    startSearch: function() {
+      this.searchBtn.isDisabled = true;
+      this.searchBtn.loading = true;
+      this.searchBtn.text = '搜索中';
+      this.getActualSiteList().then((data) => { //展示该数据
+        this.renderMarker();
+        this.searchBtn.isDisabled = false;
+        this.searchBtn.loading = false;
+        this.searchBtn.text = '搜索';
+      })
     },
+    /* 新增或编辑保存 */
     editStation: function() {
       this.$refs['stationForm'].validate((valid) => {
         if (valid) {
@@ -573,6 +526,83 @@ export default {
 
       })
     },
+    getInfoWindowDom: function(data) {
+      let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
+      let infoBodyStr = '<div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13">上传来源：' + source_type +
+        '</div></div><br><div class="text-right "><a href="javascript:void(0)" class="el-button el-button--primary el-button--mini" id="choose-Actual-fluid">设为客户站点</a></div>';
+
+      return infoBodyStr;
+    },
+    getLandmarkDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+        this.$$http('getLandMarkDetail', postData).then((results) => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkDetail = results.data.data;
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+    renderMarker: function() {
+      const renderAndCluster = () => {
+        this.markerList.render(this.siteList);
+        this.map.plugin(["AMap.MarkerClusterer"], () => {
+          this.allMakers = this.markerList.getAllMarkers();
+          if (this.cluster) {
+            this.cluster.setMarkers(this.allMakers);
+          } else {
+            this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+              minClusterSize: 3,
+              maxZoom: 17,
+            });
+          }
+        });
+        if (!this.id) {
+          this.map.setFitView(this.allMakers);
+        }
+      }
+
+      this.isInitMarkerList('markerList').then(() => {
+        renderAndCluster();
+      })
+
+    },
+    /* 判断markerlist是否已经初始化，经常遇到markerlist还未初始化完毕，直接调用报错 */
+    isInitMarkerList: function(markerList) {
+      return new Promise((resolve, reject) => {
+        let limitCount = 10; //limitCount设置重复调用的限制次数，防止无限调用。
+        let timeoutObject = null;
+        let isInitOverviewMarkerListFnc = () => {
+          if (this[markerList]) {
+            if (timeoutObject) {
+              clearTimeout(timeoutObject);
+            }
+            return resolve();
+          } else {
+            if (limitCount > 0) {
+              limitCount--;
+              timeoutObject = setTimeout(() => {
+                isInitOverviewMarkerListFnc();
+              }, 500)
+            } else {
+              clearTimeout(timeoutObject);
+              return resolve();
+            }
+          }
+        }
+        isInitOverviewMarkerListFnc();
+      })
+    },
     getSiteOfCustomerDetail: function() {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -589,8 +619,6 @@ export default {
             this.formData.consignee = this.siteOfCusmerDetail.consignee;
             this.formData.consignee_phone = this.siteOfCusmerDetail.consignee_phone;
             this.formData.short_name = this.siteOfCusmerDetail.owner && this.siteOfCusmerDetail.owner.length && this.siteOfCusmerDetail.owner[0] || '';
-
-            console.log('this.siteOfCusmerDetail.owner', this.siteOfCusmerDetail.owner_name);
 
             this.formData.station_type = this.siteOfCusmerDetail.station_type;
 
@@ -611,42 +639,18 @@ export default {
 
       })
 
-    }
-
+    },
   },
 
   created() {
 
   },
   mounted: function() {
-    this.map = new AMap.Map('map-container', {
-      zoom: 5
-    });
-
-    this.initMarkList();
-
-    this.getCustomerList();
-
-    this.getActualSiteList().then(() => {
-      this.renderMarker();
-      if (this.id) {
-        this.getSiteOfCustomerDetail().then(() => {
-          if (this.siteOfCusmerDetail.map_position) {
-            this.getLandmarkDetail(this.siteOfCusmerDetail.map_position).then(() => {
-
-              this.choosedActualSite = this.landmarkDetail;
-
-              this.map.setZoom(15);
-              this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
-            });
-
-          } else {
-            this.pageLoading = false;
-          }
-        })
-      }
-    })
-
+    this.init();
+  },
+  beforeDestroy: function() {
+    //注销地图对象，内存释放，清空地图容器,防止内存泄漏。
+    this.map.destroy();
   },
 };
 
