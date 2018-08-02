@@ -307,7 +307,7 @@ export default {
 
         } else {
           this.$message({
-            message: '请勾选未' + title + (type === 'invoice' ? '/未对账' : '') + '数据',
+            message: '请勾选未' + title  + '数据',
             type: 'warning'
           });
         }

@@ -75,7 +75,7 @@ export default {
           })
           // this.$emit("logout");
           localStorage.clear();
-          // this.users = [];
+          this.users = {};
           this.$router.push({ path: '/login' });
 
         })

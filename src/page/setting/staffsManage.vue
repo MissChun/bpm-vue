@@ -62,7 +62,6 @@
                     <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,'False',true)">已注销</el-radio>
                   </div>
                   <div class="table-list">
-
                     <el-table :data="staffsTableData" stripe style="width: 100%" size="mini" v-loading="staffLoading" :class="{'tabal-height-500':!staffsTableData.length}">
                       <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                       </el-table-column>
@@ -85,7 +84,6 @@
                     </div>
                   </div>
                 </div>
-
               </el-tab-pane>
             </el-tabs>
             <div class="user-no-data" v-if="!positionTableData.length&&!staffLoading">
@@ -122,7 +120,7 @@ export default {
       isValid: '1',
       departmentActive: 'department',
       staffsActive: '',
-      searchPostData:{},
+      searchPostData: {},
       searchFilters: {
 
         keyword: '',
@@ -280,7 +278,7 @@ export default {
     },
     //
     isDeletdStaffOp: function(row, isDeleted) {
-      if (isDeleted) {
+      if (isDeleted === "False") {
         this.$confirm("确定注销该员工？注销后可在“已注销”中找回。", "注销员工", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
