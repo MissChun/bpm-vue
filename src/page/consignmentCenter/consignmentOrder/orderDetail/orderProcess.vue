@@ -698,7 +698,7 @@
       </el-tabs>
     </div>
     <img-review :imgObject.sync='imgObject'>
-      <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
+      <div v-if="imgObject.title!=''" class="sealTitle">{{imgObject.title}}</div>
     </img-review>
   </div>
 </template>
@@ -755,6 +755,7 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
+        title:"",
       },
       sealTitle:"",
       otherInput: "",
@@ -775,6 +776,7 @@ export default {
   methods: {
     showImg: function(type, id) {
       var vm = this;
+      this.imgObject.title="";
       if (type == 'showPound') {
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
