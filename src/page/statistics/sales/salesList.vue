@@ -217,7 +217,7 @@ export default {
         param: 'check_quantity',
         width: ''
       }, {
-        title: '销售单价',
+        title: '结算价格',
         param: 'unit_price',
         width: ''
       }, {
