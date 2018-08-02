@@ -98,7 +98,7 @@ export default {
             'dashboardSqureData':[
               {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList',dimension:"单"},
               {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"单"},
-              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList',dimension:"条"}
+              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList?mile=0',dimension:"条"}
             ],
             'searchShow':false,
             'type':'service_centre_schedule',
