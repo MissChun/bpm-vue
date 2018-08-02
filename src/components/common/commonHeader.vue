@@ -37,11 +37,23 @@ export default {
     }
   },
   created() {
-
+    let vm = this;
+    let currentUrl = document.location.href.toString();
+    let domainUrl = '';
+    if (currentUrl.match('ptms.91lng.cn')) {
+      domainUrl = 'ptms.91lng.cn';
+    } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
+      domainUrl = 'tms.hhtdlng.com';
+    } else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
+      domainUrl = 'tms.91lng.cn';
+    } else {
+      domainUrl = 'devtms.hhtdlng.com';
+    }
+    this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
   },
   data: function() {
     return {
-
+      wsMsg: null
     }
   },
 
@@ -62,7 +74,7 @@ export default {
           type: "info"
         })
         .then(() => {
-          this.$store.state.common.wsMsg.close();
+          this.wsMsg.close();
           this.$$http('signOut', {}).then((results) => {
             if (results.data && results.data.code == 0) {
               this.$message({
@@ -75,7 +87,6 @@ export default {
           })
           // this.$emit("logout");
           localStorage.clear();
-          // this.users = [];
           this.$router.push({ path: '/login' });
 
         })

@@ -294,11 +294,11 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
+          price += parseFloat(this.multipleSelection[i].discounts_sum_price)*100;
         }
         if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].unit_sum_price)*100;
+          price += parseFloat(this.multipleSelection[i].discounts_sum_price)*100;
         }
       }
       this.reconciliations(true, ids, price/100, type);
@@ -317,12 +317,12 @@ export default {
       }
       if (isAll) {
         if (ids.length) {
-          content = '未' + title + '共有' + ids.length + '单，费用合计' + price + '元，是否要对所选运单进行批量' + title + '？';
+          content = '未' + title + '共有' + ids.length + '单，优惠后总额合计' + price + '元，是否要对所选运单进行批量' + title + '？';
           postData.id = ids;
 
         } else {
           this.$message({
-            message: '请勾选未' + title + (type === 'invoice' ? '/未对账' : '') + '数据',
+            message: '请勾选未' + title  + '数据',
             type: 'warning'
           });
         }

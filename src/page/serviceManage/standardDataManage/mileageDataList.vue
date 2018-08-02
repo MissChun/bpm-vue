@@ -29,6 +29,13 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+                <el-col :span="6">
+                  <el-form-item label="标准里程:">
+                    <el-select v-model="searchFilters.mile" clearable filterable @change="startSearch" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.mileSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
           </div>
@@ -38,7 +45,7 @@
             <el-button type="success" @click="editMile">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading"  :class="{'tabal-height-500':!tableData.length}">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                 <template slot-scope="scope">
                   <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
@@ -89,6 +96,7 @@ export default {
         station: '',
         carriers: '',
         field: '',
+        mile: this.$route.query.mile ? this.$route.query.mile : '',
       },
       selectData: {
         carrierSelect: [{
@@ -103,6 +111,13 @@ export default {
           id: '',
           station_name: '全部'
         }], //站点
+        mileSelect: [{
+          id: '',
+          value: '全部'
+        }, {
+          id: '0',
+          value: '为0'
+        }], //标准里程
       },
       thTableList: [{
         title: '实际液厂',
@@ -144,7 +159,8 @@ export default {
         page_size: this.pageData.pageSize,
         fluid: this.searchFilters.fluid,
         station: this.searchFilters.station,
-        carriers: this.searchFilters.carriers
+        carriers: this.searchFilters.carriers,
+        mile: this.searchFilters.mile
       };
       postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -159,7 +175,7 @@ export default {
           for (let i in this.tableData) {
             this.tableData[i].carriersList = '';
             for (let j in this.tableData[i].carriers) {
-              this.tableData[i].carriersList += this.tableData[i].carriers[j].carrier_name + (j < this.tableData[i].carriers.length-1 ? '，' : '')
+              this.tableData[i].carriersList += this.tableData[i].carriers[j].carrier_name + (j < this.tableData[i].carriers.length - 1 ? '，' : '')
             }
           }
           this.pageData.totalCount = results.data.data.count;

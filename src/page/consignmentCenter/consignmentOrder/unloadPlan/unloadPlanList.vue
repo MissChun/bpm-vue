@@ -105,7 +105,7 @@ export default {
       },
       fifterParam: {
         keyword: '',
-        field: '',
+        field: 'short_name',
         orderStateList: '',
       },
       searchFilters:{},

@@ -217,7 +217,7 @@ export default {
         param: 'check_quantity',
         width: ''
       }, {
-        title: '销售单价',
+        title: '结算价格',
         param: 'unit_price',
         width: ''
       }, {
@@ -302,12 +302,12 @@ export default {
       }
       if (isAll) {
         if (ids.length) {
-          content = '未' + title + '共有' + ids.length + '单，费用合计' + price + '元，是否要对所选运单进行批量' + title + '？';
+          content = '未' + title + '共有' + ids.length + '单，待时后总额合计' + price + '元，是否要对所选运单进行批量' + title + '？';
           postData.id = ids;
 
         } else {
           this.$message({
-            message: '请勾选未' + title + (type === 'invoice' ? '/未对账' : '') + '数据',
+            message: '请勾选未' + title  + '数据',
             type: 'warning'
           });
         }

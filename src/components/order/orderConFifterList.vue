@@ -301,6 +301,18 @@ export default {
           methods_type: "cancleOrder",
           attrPlan: true
         }],
+        waiting_seal:[{ //待上传铅封
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
+        }],
+        loading_waiting_audit:[{ //已装车待审核
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
+        }],
         //匹配卸车
         waiting_match: [{ //待匹配卸货单
           text: "匹配卸货单",

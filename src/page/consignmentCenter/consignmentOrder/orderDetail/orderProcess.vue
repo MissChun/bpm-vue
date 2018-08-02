@@ -50,7 +50,12 @@
 .padds {
   padding: 25px 0 0px 0
 }
-
+.sealTitle{
+  text-align: center;
+  margin-bottom: 20px;
+  z-index:5000;
+  position:relative;
+}
 </style>
 <template>
   <div>
@@ -187,14 +192,6 @@
                                 <div class="detail-form-item">
                                   <el-button type="text" style="height:0;line-height:0;text-align:left;padding-left:0;" @click="showImg('showSeal',item.car_seal)">点击查看铅封</el-button>
                                 </div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                          <el-row :gutter="40">
-                            <el-col :span="16">
-                              <div class="label-list">
-                                <label>铅封号:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.seal_no)"></div>
                               </div>
                             </el-col>
                           </el-row>
@@ -700,7 +697,9 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <img-review :imgObject.sync='imgObject'></img-review>
+    <img-review :imgObject.sync='imgObject'>
+      <div v-if="imgObject.title!=''" class="sealTitle">{{imgObject.title}}</div>
+    </img-review>
   </div>
 </template>
 <script>
@@ -756,7 +755,9 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
+        title:"",
       },
+      sealTitle:"",
       otherInput: "",
       surePound: {},
       exPound: {},
@@ -775,6 +776,7 @@ export default {
   methods: {
     showImg: function(type, id) {
       var vm = this;
+      this.imgObject.title="";
       if (type == 'showPound') {
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
@@ -803,6 +805,7 @@ export default {
         }
       } else if (type == 'showSeal') {
         if (this.sealImgList.length > 0) {
+          vm.imgObject.title=this.sealTitle;
           vm.imgObject.imgList = this.sealImgList;
           vm.imgObject.showPreview = true;
         } else {
@@ -811,6 +814,18 @@ export default {
           sendData.id = id;
           this.$$http("getSeal", sendData).then(results => {
             if (results.data.code == 0) {
+              var poundTitle="铅封号：";
+              if(results.data.data.data[0].seal_no_list){
+                results.data.data.data[0].seal_no_list.forEach((item,index)=>{
+                  if(index!=results.data.data.data[0].seal_no_list.length-1){
+                    poundTitle+=item+"/";
+                  }else{
+                    poundTitle+=item;
+                  }
+                });
+              }
+              vm.imgObject.title=poundTitle;
+              vm.sealTitle=poundTitle;
               vm.imgObject.imgList = results.data.data.data[0].image_url_list;
               this.sealImgList = results.data.data.data[0].image_url_list;
               vm.imgObject.showPreview = true;
