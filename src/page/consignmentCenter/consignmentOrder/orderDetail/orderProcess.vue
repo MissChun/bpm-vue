@@ -53,6 +53,8 @@
 .sealTitle{
   text-align: center;
   margin-bottom: 20px;
+  z-index:5000;
+  position:relative;
 }
 </style>
 <template>
@@ -190,14 +192,6 @@
                                 <div class="detail-form-item">
                                   <el-button type="text" style="height:0;line-height:0;text-align:left;padding-left:0;" @click="showImg('showSeal',item.car_seal)">点击查看铅封</el-button>
                                 </div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                          <el-row :gutter="40">
-                            <el-col :span="16">
-                              <div class="label-list">
-                                <label>铅封号:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.seal_no)"></div>
                               </div>
                             </el-col>
                           </el-row>
@@ -703,7 +697,9 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <img-review :imgObject.sync='imgObject'></img-review>
+    <img-review :imgObject.sync='imgObject'>
+      <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
+    </img-review>
   </div>
 </template>
 <script>
