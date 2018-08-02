@@ -270,6 +270,16 @@
                 </div>
               </el-col>
             </el-row>
+
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>实际里程:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_active_mile)"></div>
+                </div>
+              </el-col>
+            </el-row>
+            
           </div>
         </div>
         <div class="detail-list detail-form">
