@@ -144,8 +144,8 @@ export default {
 
   },
   created() {
-    this.activeName=this.$route.query.goTo||"first";
-    this.secondActiveName=this.$route.query.secondActiveName||"all"
+    this.activeName=this.$route.query.goTo||"second";
+    this.secondActiveName=this.$route.query.secondActiveName||"waiting_match"
     this.pageLoading=true;
     this.reshCount();
     // this.$$http("getConCount",{}).then(results=>{

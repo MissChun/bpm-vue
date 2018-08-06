@@ -238,7 +238,7 @@
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>计划卸货时间:</label>
+                  <label>计划到站时间:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.plan_arrive_time)"></div>
                 </div>
               </el-col>
@@ -252,7 +252,7 @@
             <el-row :gutter="40">
               <el-col :span="8">
                 <div class="label-list">
-                  <label>实际卸货时间:</label>
+                  <label>实际到站时间:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
                 </div>
               </el-col>
@@ -276,6 +276,18 @@
                 <div class="label-list">
                   <label>实际里程:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_active_mile)"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>实际卸货时间:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_end_time)"></div>
+                </div>
+              </el-col>
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>离站时间:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_audit_time)"></div>
                 </div>
               </el-col>
             </el-row>
