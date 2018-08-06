@@ -300,6 +300,10 @@ export default {
           this.$$http("canclePickOrder", sendData).then((results) => {
             if (results.data.code == 0) {
               vm.$emit("refreshList");
+            }else if(results.data.code == -1){
+              this.$alert(results.data.msg, '提示', {
+                confirmButtonText: '确定',
+              });
             }
           }).catch(() => {
 

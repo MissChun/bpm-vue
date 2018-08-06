@@ -243,15 +243,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      sendData.carrier_type=this.carrier_type;
-      if (this.searchStatus) {
-        sendData = this.saveSendData;
-        sendData.page = this.pageData.currentPage;
-      } else {
-        vm.saveSendData = sendData;
-        this.pageData.currentPage = 1;
-        sendData.page = this.pageData.currentPage;
-      }
+      sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel='export'
       this.$$http("exportOrder", sendData).then((results) => {
