@@ -39,7 +39,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="站点:" prop="station">
-                    <el-select filterable :loading="searchSiteLoading" v-model="userForm.station" placeholder="请输入选择" @change="chooseSite">
+                    <el-select filterable v-loading="searchSiteLoading" v-model="userForm.station" placeholder="请输入选择" @change="chooseSite">
                       <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.station_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>

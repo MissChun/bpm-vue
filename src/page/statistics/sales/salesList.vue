@@ -209,6 +209,10 @@ export default {
         param: 'actual_quantity',
         width: ''
       }, {
+        title: '标准里程',
+        param: 'stand_mile',
+        width: ''
+      },{
         title: '亏吨',
         param: 'deficiency',
         width: ''

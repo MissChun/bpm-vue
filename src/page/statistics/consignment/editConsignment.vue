@@ -107,12 +107,18 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="实际里程:" prop="actual_mile">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_mile"></el-input>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+              <el-row :gutter="40">
+                <el-col :span="8">
                   <el-form-item label="起步价:" prop="initial_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.initial_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运输费率:" prop="change_rate">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_rate"></el-input>
@@ -123,14 +129,13 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="气差金额:" prop="difference_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.difference_value"></el-input>
                   </el-form-item>
                 </el-col>
-
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="分卸费:" prop="lcl_cost">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.lcl_cost"></el-input>
@@ -141,13 +146,13 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运费合计:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="是否对账:" prop="is_reconciliation">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_reconciliation.verbose"></el-input>
@@ -202,6 +207,7 @@ export default {
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         stand_mile: '', //标准里程
+        actual_mile:'',//实际里程
         initial_price: '', //起步价
         change_rate: '', //运输费率
         difference_value: '', //气差金额
@@ -225,7 +231,10 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         stand_mile: [
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,1})?$/, message: '支持数值输入，最多支持小数点后1位', trigger: 'blur' }
+        ],
+        actual_mile: [
+          { pattern: /^[0-9]+(.[0-9]{0,1})?$/, message: '支持数值输入，最多支持小数点后1位', trigger: 'blur' }
         ],
         initial_price: [
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
@@ -293,6 +302,7 @@ export default {
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
             stand_mile: this.detail.stand_mile, //标准里程
+            actual_mile:this.detail.actual_mile,//实际里程
             initial_price: this.detail.initial_price, //起步价
             change_rate: this.detail.change_rate, //运输费率
             difference_value: this.detail.difference_value, //气差金额
@@ -347,7 +357,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value','freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['check_quantity', 'stand_mile','actual_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value','freight_value', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

@@ -191,6 +191,10 @@ export default {
         title: '标准里程',
         param: 'stand_mile',
         width: ''
+      },{
+        title: '实际里程',
+        param: 'actual_mile',
+        width: ''
       }, {
         title: '起步价',
         param: 'initial_price',

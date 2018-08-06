@@ -40,16 +40,19 @@ export default {
     let vm = this;
     let currentUrl = document.location.href.toString();
     let domainUrl = '';
-    if (currentUrl.match('ptms.91lng.cn')) {
-      domainUrl = 'ptms.91lng.cn';
-    } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
-      domainUrl = 'tms.hhtdlng.com';
-    } else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
-      domainUrl = 'tms.91lng.cn';
+    if (currentUrl.match('pbpm.91lng.cn')) {
+      domainUrl = 'pbpm.91lng.cn';
+    } else if (currentUrl.match('bpm.hhtdlng.com') && !currentUrl.match('devbpm.hhtdlng.com')) {
+      domainUrl = 'bpm.hhtdlng.com';
+    } else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
+      domainUrl = 'bpm.91lng.cn';
     } else {
-      domainUrl = 'devtms.hhtdlng.com';
+      domainUrl = 'devbpm.hhtdlng.com';
     }
-    this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+    if (this.users && this.users.id) {
+      this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+    }
+
   },
   data: function() {
     return {
