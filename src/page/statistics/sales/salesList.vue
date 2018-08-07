@@ -26,17 +26,24 @@
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
               <el-form-item label="是否对账:">
                 <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
               <el-form-item label="是否开票:">
                 <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="运单状态:">
+                <el-select v-model="searchFilters.waybill_status" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.waybillStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -71,7 +78,7 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'">{{scope.row[item.param].verbose}}</span>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>{{scope.row[item.param]}}</span>
               </div>
             </template>
@@ -88,9 +95,11 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
-              <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-              <el-button type="success" size="mini" v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-              <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              <div v-if="scope.row.waybill_status.key==='is_unload'">
+                <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                <el-button type="success" size="mini" v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+                <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -125,6 +134,7 @@ export default {
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
+        waybill_status: '',
         field: 'business_order',
       },
       exportType: {
@@ -150,7 +160,12 @@ export default {
           { id: 'plate_number', value: '车号' },
           { id: 'sale_man', value: '业务员' },
           { id: 'payer_name', value: '付款方' },
-        ]
+        ],
+        waybillStatusSelect: [
+          { id: '', value: '全部' },
+          { id: 'is_loading', value: '已卸货待结算' },
+          { id: 'is_unload', value: '结算完成' }
+        ],
       },
       thTableList: [{
         title: '运单号',
@@ -193,6 +208,10 @@ export default {
         param: 'business_price',
         width: ''
       }, {
+        title: '销售价格',
+        param: 'sale_price',
+        width: ''
+      }, {
         title: '实际离站时间',
         param: 'leave_time',
         width: '200'
@@ -212,7 +231,7 @@ export default {
         title: '标准里程',
         param: 'stand_mile',
         width: ''
-      },{
+      }, {
         title: '亏吨',
         param: 'deficiency',
         width: ''
@@ -231,6 +250,10 @@ export default {
       }, {
         title: '卸车待时金额',
         param: 'waiting_price',
+        width: ''
+      }, {
+        title: '运单状态',
+        param: 'waybill_status',
         width: ''
       }, {
         title: '是否对账',
@@ -281,14 +304,17 @@ export default {
       let ids = [];
       let price = 0;
       for (let i in this.multipleSelection) {
-        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
-          ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+        if (this.multipleSelection[i].waybill_status.key === 'is_unload') {
+          if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
+            ids.push(this.multipleSelection[i].id);
+            price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+          }
+          if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
+            ids.push(this.multipleSelection[i].id);
+            price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+          }
         }
-        if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
-          ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
-        }
+
       }
       this.reconciliations(true, ids, price / 100, type);
     },
@@ -311,7 +337,7 @@ export default {
 
         } else {
           this.$message({
-            message: '请勾选未' + title  + '数据',
+            message: '请勾选未' + title + '数据',
             type: 'warning'
           });
         }
@@ -340,6 +366,7 @@ export default {
         page_size: this.pageData.pageSize,
         is_reconciliation: this.searchPostData.is_reconciliation,
         is_invoice: this.searchPostData.is_invoice,
+        waybill_status: this.searchPostData.waybill_status
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
