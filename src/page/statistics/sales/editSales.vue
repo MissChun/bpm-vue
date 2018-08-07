@@ -90,12 +90,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实收吨位:" prop="actual_quantity">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
+                  <el-form-item label="标准里程:" prop="stand_mile">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_mile"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="实收吨位:" prop="actual_quantity">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="8">
                   <el-form-item label="亏吨:" prop="deficiency">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
@@ -106,18 +111,25 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="采购单价:" prop="discount_price">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="业务优惠:" prop="business_price">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_price"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="销售价格:" prop="unit_price">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sale_price"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="结算价格:" prop="unit_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
@@ -128,13 +140,13 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unload_nums"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="卸车待时金额:" prop="waiting_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="销售总额:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sell_rental"></el-input>
@@ -145,11 +157,16 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="业务员:" prop="sale_man">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sale_man"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="运单状态:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waybill_status"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -215,10 +232,12 @@ export default {
         deficiency: '', //亏吨
         deficiency_standar: '', //亏吨标准
         plan_tonnage: '', //装车吨位
+        stand_mile: '', //标准里程
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         unit_price: '', //销售单价
         business_price: '', //业务优惠
+        sale_price: '', //销售价格
         discount_price: '', //采购单价
         unload_num: '', //卸车数
         waiting_price: '', //卸车待时金额
@@ -228,7 +247,8 @@ export default {
         active_time: '', //实际装车时间
         is_invoice: '', //是否开票
         is_reconciliation: '', //是否对账
-        remark: '' //备注
+        remark: '', //备注,
+        waybill_status: '' //运单状态
       },
 
       rules: {
@@ -256,9 +276,9 @@ export default {
         unload_nums: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-        // waiting_charges: [
-        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        // ],
+        stand_mile: [
+          { pattern: /^[0-9]+(.[0-9]{0,1})?$/, message: '支持数值输入，最多支持小数点后1位', trigger: 'blur' }
+        ],
 
       },
       saveBasicAndReviewBtn: {
@@ -308,10 +328,12 @@ export default {
             deficiency: this.detail.deficiency, //亏吨
             deficiency_standar: this.detail.deficiency_standar, //亏吨标准
             plan_tonnage: this.detail.plan_tonnage, //装车吨位
+            stand_mile: this.detail.stand_mile, //标准里程
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
             unit_price: this.detail.unit_price, //采购单价
             business_price: this.detail.business_price, //业务优惠
+            sale_price: this.detail.sale_price, //销售价格
             discount_price: this.detail.discount_price, //采购单价
             unload_nums: this.detail.unload_nums, //卸车数
             waiting_price: this.detail.waiting_price, //卸车待时金额
@@ -321,7 +343,8 @@ export default {
             active_time: this.detail.active_time, //实际装车时间
             is_invoice: this.detail.is_invoice.verbose,
             is_reconciliation: this.detail.is_reconciliation.verbose,
-            remark: ''
+            remark: '',
+            waybill_status: this.detail.waybill_status.verbose //运单状态
           }
         }
       })
@@ -360,7 +383,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

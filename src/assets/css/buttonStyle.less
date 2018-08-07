@@ -55,11 +55,20 @@
         &:focus {
             color: @tms-blue;
         }
+        &.is-disabled {
+            color: @tms-transparent-font-disable-blue!important;
+            border-color: @tms-transparent-border-disable-blue!important;
+            background-color: @tms-transparent-disable-blue!important;
+        }
     }
     &.is-active,
     &:active {
         border-color: @tms-blue!important;
         background-color: @tms-blue!important;
+    }
+    &.is-disabled {
+        border-color: @tms-disable-border-blue!important;
+        background-color: @tms-disable-blue!important;
     }
 }
 .el-button--success {

@@ -492,7 +492,7 @@ export default {
               vm.$emit("chiledchangeTabs", { first: 'first', second: "all" });
               vm.$emit('searchList');
             } else {
-              vm.$message.error("取消运单失败");
+              vm.$message.error(results.data.msg);
             }
           })
 

@@ -175,6 +175,10 @@ export default {
         title: '采购总额',
         param: 'discounts_sum_price',
         width: ''
+      }, {
+        title: '采购优惠后总额',
+        param: 'unit_sum_price',
+        width: ''
       },{
         title: '卸货站',
         param: 'station',
@@ -207,6 +211,10 @@ export default {
         title: '销售总额',
         param: 'sell_rental',
         width: ''
+      }, {
+        title: '销售待时后总额',
+        param: 'waiting_charges',
+        width: ''
       },{
         title: '卸车数',
         param: 'unload_nums',
@@ -238,14 +246,6 @@ export default {
       },{
         title: '分卸费',
         param: 'lcl_cost',
-        width: ''
-      }, {
-        title: '采购优惠后总额',
-        param: 'unit_sum_price',
-        width: ''
-      }, {
-        title: '销售待时后总额',
-        param: 'waiting_charges',
         width: ''
       }],
       tableData: [],

@@ -198,7 +198,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>实际卸货时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[1].active_time)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_unload_time)"></div>
               </div>
             </el-col>
           </el-row>
@@ -217,7 +217,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>运单号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[0].waybill)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -246,13 +246,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>液厂:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_name)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.fluid_name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>液厂地址:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_address)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.fluid_address)"></div>
               </div>
             </el-col>
           </el-row>
@@ -266,7 +266,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>实际装车时间:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.trips&&detailData.deliver_order.trips[0].active_time)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.active_time)"></div>
               </div>
             </el-col>
             <el-col :span="8">
