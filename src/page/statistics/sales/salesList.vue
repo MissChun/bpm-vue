@@ -95,7 +95,16 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="140" fixed="right">
             <template slot-scope="scope">
-              <div v-if="scope.row.waybill_status.key==='is_unload'">
+              <!--  -->
+              <div v-if="scope.row.waybill_status.key==='is_loading'">
+                <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top">
+                  <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top">
+                  <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" size="mini">编辑</el-button>
+                </el-tooltip>
+              </div>
+              <div v-else>
                 <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
                 <el-button type="success" size="mini" v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
                 <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>

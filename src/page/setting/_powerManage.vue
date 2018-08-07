@@ -5,9 +5,36 @@
     .nav-tab-setting {
       .department-list {
         padding-bottom: 0;
-        .el-menu{
+        .el-menu {
           margin-bottom: 0;
         }
+      }
+    }
+  }
+}
+
+.el-table {
+  /deep/ td {
+    padding: 0;
+  }
+  /deep/ .cell {
+    padding: 0!important;
+  }
+  td {
+    //vertical-align: middle;
+    //display: table-cell;
+    font-size: 13px;
+    li {
+      height: 40px;
+      line-height: 40px;
+      border-bottom: 1px solid #e4e7ed;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      /deep/ .el-checkbox__label {
+        font-size: 13px;
       }
     }
   }
@@ -61,12 +88,25 @@
                   </div>
                   <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading" :class="{'tabal-height-500':!permissionsTableData.length}">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                      <template slot-scope="scope">
+                        <div v-if="item.param==='first'">{{scope.row.first.menu_name}}</div>
+                        <ul v-if="item.param==='second'">
+                          <li v-for="(second,key) in scope.row.second" :key="second.id">{{second.menu_name}}</li>
+                        </ul>
+                      </template>
                     </el-table-column>
                     <el-table-column label="操作" width="200" align="center">
                       <template slot-scope="scope">
-                        <el-checkbox-group v-model="selectMenus">
+                        <ul>
+                          <li v-for="(selectItem,key) in scope.row.second" :key="selectItem.id">
+                            <el-checkbox-group v-model="selectMenus">
+                              <el-checkbox :label="selectItem.id"><span></span></el-checkbox>
+                            </el-checkbox-group>
+                          </li>
+                        </ul>
+                        <!-- <el-checkbox-group v-model="selectMenus">
                           <el-checkbox :label="scope.row.id"><span></span></el-checkbox>
-                        </el-checkbox-group>
+                        </el-checkbox-group> -->
                         <!-- <dl class="power-op">
                           <dt v-for="(item,key) in scope.row.second_menus">
                             <el-checkbox-group v-model="selectMenus">
@@ -134,7 +174,13 @@ export default {
       },
       thTableList: [{
         title: '功能模块',
-        param: 'permission_name',
+        param: 'first',
+        param_two: 'menu_name',
+        width: ''
+      }, {
+        title: '子功能',
+        param: 'second',
+        param_two: 'menu_name',
         width: ''
       }],
       departmentTableData: [], //部门列表
@@ -214,10 +260,11 @@ export default {
     // 获取权限列表
     getPermissionsList: function() {
       this.permissionsLoading = true;
-      this.$$http('getPermissionsList', {}).then((results) => {
+      //getPermissionsList
+      this.$$http('getAllmenus', {}).then((results) => {
         this.permissionsLoading = false;
         if (results.data && results.data.code == 0) {
-          this.permissionsTableData = results.data.data.data;
+          this.permissionsTableData = results.data.data;
 
         }
       }).catch((err) => {
@@ -236,12 +283,11 @@ export default {
         if (results.data && results.data.code == 0) {
           this.currentPositionName = results.data.data.position_name;
           this.selectMenus = [];
-          this.positionDetailMenus = results.data.data.permissions;
-          for (let i in this.positionDetailMenus) {
-            this.selectMenus.push(this.positionDetailMenus[i].id);
-          }
+          this.selectMenus = results.data.data.menus;
+          // for (let i in this.positionDetailMenus) {
+          //   this.selectMenus.push(this.positionDetailMenus[i].id);
+          // }
           this.selectMenusCopy = this.selectMenus;
-
         }
       }).catch((err) => {})
     },
@@ -288,21 +334,22 @@ export default {
             .then((action, instance) => {
               let postData = {
                 id: this.currentPositionId,
-                permissions: this.selectMenus
+                //permissions: this.selectMenus
+                menus: this.selectMenus
               }
-              console.log('权限修改',action, instance)
-              // this.$$http('updatePosition', postData).then((results) => {
-              //   if (results.data && results.data.code == 0) {
-              //     this.selectMenusCopy = this.selectMenus;
-              //     this.$message({
-              //       message: '更改权限设置成功',
-              //       type: 'success'
-              //     });
-              //   }
-              // }).catch((err) => {
+              // console.log('权限修改', this.selectMenus)
+              this.$$http('updatePosition', postData).then((results) => {
+                if (results.data && results.data.code == 0) {
+                  this.selectMenusCopy = this.selectMenus;
+                  this.$message({
+                    message: '更改权限设置成功',
+                    type: 'success'
+                  });
+                }
+              }).catch((err) => {
 
-              //   this.$message.error('修改权限失败');
-              // })
+                this.$message.error('修改权限失败');
+              })
             })
             .catch(() => {
               this.$message({
