@@ -200,6 +200,8 @@ export default {
           if (valid) {
             this.submitBtn.btnText = '登录中';
             this.submitBtn.isBtnLoading = true;
+            let postData = this.ruleForm;
+            postData.platform = 'WEB_CLIENT';
             this.$$http('login', this.ruleForm).then((results) => {
               this.submitBtn.btnText = '登录';
               this.submitBtn.isDisabled = false;
