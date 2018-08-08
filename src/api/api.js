@@ -1169,10 +1169,10 @@ const api = {
     }
   },
   messageVerifyCode: {
-    url: '/common/message_verify_code/',
+    url: '/api/v1/sms_messages/login_verify_code/',
     method: 'post',
     notNeedToken: true,
-    desc: '图形验证码',
+    desc: '短信验证码',
     param: {
       phone: {
         desc: '手机号码',

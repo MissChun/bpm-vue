@@ -20,6 +20,16 @@
           <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
+        <el-form-item label="短信验证码" prop="sms_verify_code">
+          <el-row>
+            <el-col :span="14">
+              <el-input placeholder="请输入验证码" type="text" v-model.trim="ruleForm.sms_verify_code" class="vaInput"></el-input>
+            </el-col>
+            <el-col :span="9" :offset="1">
+              <el-button class="get-code-btn" style="" v-on:click="getMsgCode" type="primary" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
+            </el-col>
+          </el-row>
+        </el-form-item>
         <!--  <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
@@ -77,6 +87,7 @@ export default {
       ruleForm: {
         username: '',
         password: '',
+        sms_verify_code: ''
         // verify_key: '',
         // verify_code: ''
       },
@@ -92,16 +103,23 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           // { validator: validatePass, trigger: 'blur' }
         ],
-        // verify_code: [
-        //   { required: true, message: '请输入验证码', trigger: 'blur' },
-        //   { validator: checkImgCode, trigger: 'blur' }
-        // ]
+        sms_verify_code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { min: 4, max: 4, message: '输入4位验证码', trigger: 'blur' }
+        ]
       },
       submitBtn: {
         btnText: '登录',
         isLoading: false,
         isDisabled: false,
-      }
+      },
+      msgBtn: {
+        getCodeText: '获取验证码',
+        isLoading: false,
+        isDisabled: false,
+        sendStatus: false
+      },
+      times: 60
     };
   },
   computed: {
@@ -112,7 +130,59 @@ export default {
 
   },
   methods: {
+    msgBtnText(times) {
+      if (this.msgBtn.isBtnLoading) {
+        return '发送中...';
+      } else if (this.msgBtn.sendStatus) {
+        return times + "s";
+      } else if (!this.msgBtn.sendStatus && !this.msgBtn.isBtnLoading) {
+        return "发送验证码";
+      }
+    },
+    getMsgCode() {
+      let times = this.times;
+      let intCountdown;
+      if (this.ruleForm.username) {
+        const countdown = () => {
+          this.msgBtn.getCodeText = times + 's';
+          if (times >= 1) {
+            times--;
+          } else {
+            this.msgBtn.getCodeText = this.msgBtnText();
+            this.msgBtn.isDisabled = false;
+            clearInterval(intCountdown);
+          }
+        }
+        this.msgBtn.isLoading = true;
+        this.msgBtn.isDisabled = true;
+        this.msgBtn.getCodeText = this.msgBtnText();
+        this.$$http('messageVerifyCode', {
+          phone: this.ruleForm.username,
+          // method_type: 'reset_password'
+        }).then((results) => {
+          if (results.data && results.data.code == 0) {
+            setTimeout(() => {
+              this.msgBtn.getCodeText = times + 's';
+              this.$message({
+                message: '短信发送成功，请查看',
+                type: 'success'
+              });
+              intCountdown = setInterval(countdown, 1000);
+            }, 1000)
 
+          } else {
+            this.msgBtn.isDisabled = false;
+          }
+          this.msgBtn.isLoading = false;
+
+        }).catch((err) => {
+          this.msgBtn.isLoading = false;
+          this.msgBtn.isDisabled = false;
+        })
+      } else {
+        this.$message.error('请输入手机号码');
+      }
+    },
     getUser() {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {

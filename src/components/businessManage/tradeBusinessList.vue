@@ -264,6 +264,7 @@ export default {
           { id: 'order_number', value: '业务单号' },
           { id: 'supplier', value: '供应商' },
           { id: 'payer_name', value: '付款方' },
+          { id: 'sale_man_name', value: '下单人' },
         ]
       },
       thTableList: [{
@@ -606,7 +607,7 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
-      if(this.pbFunc.objSize(this.$route.query)){
+      if (this.pbFunc.objSize(this.$route.query)) {
         this.$router.push({ path: this.$route.path })
       }
     },
