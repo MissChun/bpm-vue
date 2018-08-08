@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getBusinessTabsList: {
+    url: '/api/v1/business_order/count/',
+    method: 'get',
+    desc: '业务单tab',
+    param: {
+
+    }
+  },
   exportLedgerData: {
     url: '/export/ledger/',
     method: 'get',
