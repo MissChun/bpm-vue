@@ -34,7 +34,6 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else {
     domainUrl = `${prefix}bpm.hhtdlng.com`; //本地开发环境
   }
-
   return domainUrl;
 }
 
