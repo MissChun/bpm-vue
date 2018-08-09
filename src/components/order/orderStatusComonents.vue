@@ -77,7 +77,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :status="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
