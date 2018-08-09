@@ -376,31 +376,37 @@ export default {
       this.$router.push({ path: this.detailLink, query: { id: row.id } });
     },
     getTabs() {
-      this.$$http('getBusinessTabsList', {}).then((results) => {
-        if (results.data && results.data.code == 0) {
-          console.log('tabs', results.data)
-          this.tabs = results.data.data;
-          for (let i in this.tabs) {
-            for (let j in this.tabList) {
-              if (this.tabs[i].label_key === this.tabList[j].key) {
-                this.tabList[j].num = this.tabs[i].num;
-                for (let z in this.tabs[i].tabs) {
-                  for (let y in this.tabList[j].tabs) {
-                    if (this.tabs[i].tabs[z].tab_key === this.tabList[j].tabs[y].key) {
-                      this.tabList[j].tabs[y].num = this.tabs[i].tabs[z].num;
+      return new Promise((resolve, reject) => {
+        this.$$http('getBusinessTabsList', {}).then((results) => {
+          if (results.data && results.data.code == 0) {
+            console.log('tabs', results.data)
+            this.tabs = results.data.data;
+            for (let i in this.tabs) {
+              for (let j in this.tabList) {
+                if (this.tabs[i].label_key === this.tabList[j].key) {
+                  this.tabList[j].num = this.tabs[i].num;
+                  for (let z in this.tabs[i].tabs) {
+                    for (let y in this.tabList[j].tabs) {
+                      if (this.tabs[i].tabs[z].tab_key === this.tabList[j].tabs[y].key) {
+                        this.tabList[j].tabs[y].num = this.tabs[i].tabs[z].num;
+                      }
                     }
                   }
+                  // if (i == 0&&isOne) {
+                  //   this.statusTabList = this.tabList[j].tabs;
+                  // }
                 }
-                if (i == 0) {
-                  this.statusTabList = this.tabList[j].tabs;
-                }
-              }
 
+              }
             }
+            resolve(results);
+          } else {
+            reject(results);
           }
-          console.log('列表', this.statusTabList)
-        }
-      }).catch((err) => {})
+        }).catch((err) => {
+          reject(err);
+        })
+      })
     },
     // 导出列表
     exportData() {
@@ -637,18 +643,28 @@ export default {
     },
     handleClick: function(tab, event) {
       this.pageData.currentPage = 1;
-      for (let i in this.tabList) {
-        if (this.tabList[i].key === tab.name) {
-          this.statusTabList = this.tabList[i].tabs;
-          this.statusActive = this.statusTabList[0].key;
+      this.getTabs().then((results) => {
+        if (results.data && results.data.code == 0) {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === tab.name) {
+              this.statusTabList = this.tabList[i].tabs;
+              this.statusActive = this.statusTabList[0].key;
+            }
+          }
+          this.getList(this.statusActive);
         }
-      }
-      this.getList(this.statusActive);
+      })
     },
     statusClick(tab, event) {
-      this.pageData.currentPage = 1;
-      this.statusActive = tab.name;
-      this.getList(this.statusActive);
+      this.getTabs().then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.pageData.currentPage = 1;
+          this.statusActive = tab.name;
+          this.getList(this.statusActive);
+        }
+      })
+
+
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -692,7 +708,25 @@ export default {
   created() {
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
-    this.getTabs();
+    this.getTabs().then((results) => {
+      if (results.data && results.data.code == 0) {
+        if (this.activeName === 'all_new') {
+          for (let i in this.tabList) {
+            if (i == 0) {
+              this.statusTabList = this.tabList[i].tabs;
+            }
+          }
+        } else {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === this.activeName) {
+              this.statusTabList = this.tabList[i].tabs;
+            }
+          }
+        }
+
+      }
+
+    });
     // for (let i in this.tabList) {
     //   if (this.tabList[i].key === this.activeName) {
     //     this.statusTabList = this.tabList[i].tabs;
