@@ -1,7 +1,7 @@
 <style scoped lang="less">
 .listTableAll {
   text-align: left;
-  font-size:12px;
+  font-size:13px;
 }
 
 .el-table {
@@ -28,7 +28,7 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      font-size:12px;
+      font-size:13px;
       height:25px;
       padding:5px 0;
       .el-table th.is-leaf {
@@ -93,7 +93,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size:12px;
+  font-size:13px;
 }
 
 .el-icon-location {
@@ -120,7 +120,7 @@
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod"  :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
       <template slot-scope="props">
-      <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
+      <div style="width:90%;float:left;font-size:13px;padding:10px 0 10px 45px;">
         <div v-if="expendShowConfig[props.row.status.key]=='loadExtend'" style="margin:10px 0;">
           <el-row style="margin-top:5px;">
               <el-col :span="4">
@@ -133,9 +133,9 @@
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                实际液厂: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
-                <el-tooltip v-else class="item" effect="dark" :content="props.row.delivery_order.fluid" placement="top-start">
-                  <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
+                实际液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.delivery_order.actual_fluid_name" placement="top-start">
+                  <span>{{props.row.delivery_order.actual_fluid_name.slice(0,8)}}....</span>
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
@@ -172,21 +172,24 @@
               </el-col>
             </el-row>
           </div>
-          <div v-if="expendShowConfig[props.row.status.key]=='matchExtend'">
-            <el-row style="margin-top:5px;">
+          <div v-if="expendShowConfig[props.row.status.key]=='matchExtend'" >
+            <el-row style="margin:5px 0;" :gutter="20">
               <el-col :span="4">
-                装货地: <span v-if="props.row.delivery_order.fluid_address&&props.row.delivery_order.fluid_address.length<10">{{props.row.delivery_order.fluid_address}}</span>
+                装货地: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.delivery_order.fluid" placement="top-start">
+                  <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
+                </el-tooltip>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 计划装车时间: {{props.row.pick_active_time}}
                 </el-tooltip>
               </el-col>
-               <el-col :span="4">
+               <el-col :span="4" class="whiteSpan">
                 实际装车时间: {{props.row.pick_active_time}}
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                实际装车吨位: {{props.row.pick_active_tonnage}}<el-button style="line-height:0px;height:0px" type="text" @click="showPound">(查看榜单)</el-button>
+                实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound">(磅)</a>
               </el-col>
               <el-col :span="4">
                 主车:  <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
@@ -195,30 +198,30 @@
                 主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
               </el-col>
             </el-row>
-            <el-row v-for="(Uitem,Uindex) in props.row.unload_trips"  style="position:relative;margin-top: 10px;">
+            <el-row v-for="(Uitem,Uindex) in props.row.unload_trips"  style="position:relative;margin:10px 0 0 0;" :gutter="20">
               <el-col :span="4" style="position:absolute;left:-20px;"><span>{{Uindex+1}}.</span></el-col>
-              <el-col :span="4"><span>卸货站:{{Uitem.business_order.station}}</span></el-col>
-              <el-col :span="4">卸货地址:<span v-if="Uitem.business_order.station_address.length<10">{{Uitem.business_order.station_address}}</span>
+              <el-col :span="4" class="whiteSpan"><span>卸货站:{{Uitem.business_order.station}}</span></el-col>
+              <el-col :span="4" class="whiteSpan">卸货地址:<span v-if="Uitem.business_order.station_address.length<10">{{Uitem.business_order.station_address}}</span>
                 <el-tooltip v-else class="item" effect="dark" :content="Uitem.business_order.station_address" placement="top-start">
                   <span>{{Uitem.business_order.station_address.slice(0,8)}}....</span>
                 </el-tooltip>
                 </el-col>
-              <el-col :span="4">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
-              <el-col :span="4">计划卸车:{{Uitem.business_order.plan_tonnage}}</el-col>
-              <el-col :span="8">收货人:{{Uitem.business_order.sale_man_name}}／{{Uitem.business_order.sale_man_phone}}</el-col>
+              <el-col :span="4" class="whiteSpan">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
+              <el-col :span="4" class="whiteSpan">计划卸车:{{Uitem.business_order.plan_tonnage}}吨</el-col>
+              <el-col :span="8" class="whiteSpan">收货人:{{Uitem.business_order.consignee}}／{{Uitem.business_order.consignee_phone}}</el-col>
             </el-row>
           </div>
           <div v-if="expendShowConfig[props.row.status.key]=='unloadExtend'">
-            <el-row style="margin-top:5px;">
+            <el-row style="margin-top:5px;" :gutter="20">
               <el-col :span="4">
-                装货地: <span v-if="props.row.delivery_order.fluid_address&&props.row.delivery_order.fluid_address.length<10">{{props.row.delivery_order.fluid_address}}</span>
+                装货地: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 实际装车时间: {{props.row.pick_active_time}}
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                实际装车吨位: {{props.row.pick_active_tonnage}}<el-button style="line-height:0px;height:0px" type="text" @click="showPound">(查看榜单)</el-button>
+                实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound">(磅)</a>
               </el-col>
               <el-col :span="4">
                 车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
@@ -231,7 +234,7 @@
                 车队: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
               </el-col>
             </el-row>
-            <el-row style="margin-top:20px;">
+            <el-row style="margin-top:20px;" :gutter="20">
               <el-col :span="4">
                 卸货站: {{props.row.business_order.station}}
               </el-col>
@@ -242,20 +245,20 @@
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                实际卸车吨位: {{props.row.active_tonnage}}
+                实际卸车吨位: {{props.row.active_tonnage}}吨
                 </el-tooltip>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 实际卸货时间: {{props.row.active_time}}
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 <span>实际到站时间: {{props.row.arrival_time}}</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 <span>离站时间: {{props.row.weight_audit_time}}</span>
               </el-col>
             </el-row>
-            <el-row style="margin-top:20px;">
+            <el-row style="margin-top:20px;" :gutter="20">
               <el-col :span="4">
                 标准里程: <span v-if="props.row.standard_mile">{{props.row.standard_mile}}</span><span v-else>0</span>km
               </el-col>
@@ -263,11 +266,11 @@
                 实际里程: <span v-if="props.row.weight_active_mile">{{props.row.weight_active_mile}}</span><span v-else>0</span>km
               </el-col>
               <el-col :span="4">
-                收货人: {{props.row.business_order.sale_man_name}}
+                收货人: {{props.row.business_order.consignee}}
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                收货人电话: {{props.row.business_order.sale_man_phone}}
+                收货人电话: {{props.row.business_order.consignee_phone}}
               </el-col>
               <el-col :span="4">
                 下单人: {{props.row.delivery_order.creator_name}}
@@ -295,50 +298,75 @@
       </template>
       </el-table-column>
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
+      <template slot-scope="props">
+        <div  :title="props.row.waybill.waybill_number" class="whiteSpan">
+          <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
+        </div>
+      </template>
       </el-table-column>
       <el-table-column label="装车液厂" prop="" min-width="150">
         <template slot-scope="props">
-          <span style="color:rgb(97,126,253);font-weight:bold;font-size:12px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
+          <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
           </template>
       </el-table-column>
-      <el-table-column label="计划装车时间" prop="" min-width="150" v-if="this.nowHead!='unloadHead'">
+       <el-table-column label="卸货站" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-            <span v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">{{props.row.delivery_order.plan_time}}</span><span v-else>无</span>
+          <span v-if="props.row.plan_time">{{props.row.business_order.station}}</span><span v-else>无</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际装车时间" prop="" min-width="150">
+      <el-table-column label="计划装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
-          <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}</span><span v-else>无</span>
+          <div class="whiteSpan"> 
+            <span v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">{{props.row.delivery_order.plan_time}}</span><span v-else>无</span>
+          </div>  
         </template>
       </el-table-column>
       <el-table-column label="计划装车吨位" prop="" min-width="150" v-if="this.nowHead=='loadHead'">
         <template slot-scope="props">
-          <span v-if="props.row.delivery_order&&props.row.delivery_order.plan_tonnage">{{props.row.delivery_order.plan_tonnage}}</span><span v-else>无</span>
+          <span v-if="props.row.delivery_order&&props.row.delivery_order.plan_tonnage">{{props.row.delivery_order.plan_tonnage}}吨</span><span v-else>无</span>
         </template>
       </el-table-column>
-      <el-table-column label="实际装车吨位" prop="" min-width="150">
-        <template slot-scope="props">
-          <span v-if="props.row.delivery_order&&props.row.delivery_order.pick_active_tonnage">{{props.row.delivery_order.pick_active_tonnage}}</span><span v-else>无</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="计划到站时间" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
+      <el-table-column label="计划到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
           <span v-if="props.row.plan_time">{{props.row.plan_time}}</span><span v-else>无</span>
         </template>
       </el-table-column>
-      <el-table-column label="计划到站吨位" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
+
+      <el-table-column label="计划卸车吨位" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <span v-if="props.row.plan_tonnage">{{props.row.plan_tonnage}}</span><span v-else>无</span>
+          <span v-if="props.row.plan_tonnage">{{props.row.plan_tonnage}}吨</span><span v-else>无</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
+        <template slot-scope="props">
+          <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}</span><span v-else>无</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="实际装车吨位" prop="" min-width="150" v-if="this.nowHead!='unloadHead'">
+        <template slot-scope="props">
+          <span v-if="props.row.delivery_order&&props.row.delivery_order.pick_active_tonnage">{{props.row.delivery_order.pick_active_tonnage}}吨</span><span v-else>无</span>
+        </template>
+      </el-table-column>
+
+       <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
+        <template slot-scope="props">
+          <span v-if="props.row.plan_tonnage">{{props.row.arrival_time}}</span><span v-else>无</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="实际卸车吨位" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
+        <template slot-scope="props">
+          <span v-if="props.row.pick_active_time">{{props.row.active_tonnage}}</span><span v-else>无</span>
         </template>
       </el-table-column>
       <el-table-column label="卸车信息" prop="" min-width="150" v-if="this.nowHead=='matchHead'">
        <template slot-scope="props">
-        <el-tooltip class="item" effect="dark"  placement="top-start">
+        <el-tooltip class="item" effect="dark"  placement="left">
           <div slot="content" style="width:250px;">
             <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" v-bind:class="{unloadList:Uindex!=0}">
               <el-col style="margin-top:10px;">站点:{{Uitem.business_order.station}}</el-col>
-              <el-col style="margin-top:10px;">计划吨位:{{Uitem.business_order.plan_tonnage}}</el-col>
-              <el-col style="margin-top:10px;">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
+              <el-col style="margin-top:10px;" >计划吨位:<span v-if="Uitem.business_order.plan_tonnage">{{Uitem.business_order.plan_tonnage}}吨</span></el-col>
+              <el-col style="margin-top:10px;" class="whiteSpan">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
             </el-row>
           </div>
           <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.unload_trips"><span v-if="props.row.unload_trips.length>1&&Uindex!=props.row.unload_trips.length-1">{{Uitem.business_order.station}}/</span><span v-else>{{Uitem.business_order.station}}</span></span></div>
@@ -347,7 +375,7 @@
       </el-table-column>
       <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="dark"  placement="top-start">
+          <el-tooltip class="item" effect="dark"  placement="left">
             <div slot="content" style="width:130px;">
               <el-row>
                 <el-col>车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
@@ -368,7 +396,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-       <el-table-column label="状态" prop="" min-width="150">
+       <el-table-column label="状态" prop="" min-width="150" >
         <template slot-scope="props">
           <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
           <span v-else>{{props.row.status.verbose}}</span>
@@ -467,14 +495,14 @@ export default {
         'reach_site':'unloadExtend',
         'unloading_waiting_audit':'unloadExtend',
         'unloading_audit_failed':'unloadExtend',
-        'waiting_seal':'unloadExtend',
+        'waiting_seal':'loadExtend',
         'waiting_settlement':'unloadExtend',
         'in_settlement':'unloadExtend',
-        'canceing':'matchHead',
-        'modifying':'matchHead',
-        'abnormal':'loadHead',
-        'finished':'unloadHead',
-        'canceled':'unloadHead'
+        'canceing':'matchExtend',
+        'modifying':'matchExtend',
+        'abnormal':'loadExtend',
+        'finished':'unloadExtend',
+        'canceled':'unloadExtend'
       },
       buttonAll: {
         //装车
@@ -516,7 +544,7 @@ export default {
           attrPlan: true
         }],
         confirm_match:[{ //待匹配卸货单
-          text: "确认卸货地",
+          text: "查看卸货地",
           type: "success",
           methods_type: "sureUnload",
           attrPlan: true

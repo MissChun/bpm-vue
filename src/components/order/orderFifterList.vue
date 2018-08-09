@@ -84,10 +84,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  font-size:12px;
+  font-size:13px;
 }
 .fontContro{
-  font-size:12px;
+  font-size:13px;
 }
 .buttonContent .el-row{
   margin-top:10px;
@@ -99,13 +99,13 @@
 <template>
   <div style="position:relative;">
     <noData v-if="ListData.length==0"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :expand-row-keys="expandIdArr" :cell-click="rowClick">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick"  :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
+          <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:xx
+                实际液厂:{{props.row.actual_fluid_address}}
               </el-col>
               <el-col :span="4">
                 采购价:{{props.row.unit_price}}
@@ -239,7 +239,6 @@ export default {
       expandFalg: false,
       lockFalg: false,
       loadPosition: {},
-      expandIdArr:[]
     };
   },
   props: {
@@ -263,17 +262,7 @@ export default {
 
   methods: {
     rowClick:function(row, event, column){
-      if(this.expandIdArr.indexOf(row.id)==-1){
-        this.expandIdArr.push(row.id);
-      }else{
-        var middleArr=[];
-        this.expandIdArr.forEach((item)=>{
-          if(item!=row.id){
-            middleArr.push(item);
-          }
-        });
-        this.expandIdArr=middleArr;
-      }
+      
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       
