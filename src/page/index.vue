@@ -472,34 +472,25 @@ export default {
   created() {
     let currentUrl = document.location.href.toString();
     this.newYear = this.getData();
-    if (currentUrl.match('pbpm.91lng.cn')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
-      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerPrepare';
-      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerPrepare';
-      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
-      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
+    const getUrl = (urlLink) => {
+
+      this.businessCodeImg = `http://www.pgyer.com/app/qrcode/newBusiness${urlLink}`;
+      this.driverCodeImg = `http://www.pgyer.com/app/qrcode/newDriver${urlLink}`;
+      this.consumerCodeImg = `https://www.pgyer.com/app/qrcode/newConsumer${urlLink}`;
+      this.appUrl.consumerAppUrl = `https://www.pgyer.com/newConsumer${urlLink}`;
+      this.appUrl.businessAppUrl = `https://www.pgyer.com/newBusiness${urlLink}`;
+      this.appUrl.driverAppUrl = `https://www.pgyer.com/newDriver${urlLink}`;
+    }
+    if (currentUrl.match('pbpm.hhtdlng.com')) {
+      getUrl('Temp')
+    } else if (currentUrl.match('pbpm.91lng.cn')) {
+      getUrl('Prepare')
     } else if (currentUrl.match('bpm.hhtdlng.com')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';
-      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerTest';
-      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerTest';
-      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
-      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
+      getUrl('Test')
     } else if (currentUrl.match('bpm.91lng.cn')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
-      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerPro';
-      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerPro';
-      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
-      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
+      getUrl('Pro')
     } else {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
-      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerDev';
-      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerDev';
-      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
-      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
+      getUrl('Dev')
     }
   }
 };

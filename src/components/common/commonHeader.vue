@@ -19,6 +19,7 @@
 import loginAfterHeader from '@/components/common/loginAfterHeader';
 import indexHeader from '@/components/indexHeader'
 import publicHeader from '@/components/publicHeader'
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'commonHeader',
   props: {
@@ -39,16 +40,7 @@ export default {
   created() {
     let vm = this;
     let currentUrl = document.location.href.toString();
-    let domainUrl = '';
-    if (currentUrl.match('pbpm.91lng.cn')) {
-      domainUrl = 'pbpm.91lng.cn';
-    } else if (currentUrl.match('bpm.hhtdlng.com') && !currentUrl.match('devbpm.hhtdlng.com')) {
-      domainUrl = 'bpm.hhtdlng.com';
-    } else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
-      domainUrl = 'bpm.91lng.cn';
-    } else {
-      domainUrl = 'devbpm.hhtdlng.com';
-    }
+    let domainUrl = getDomainUrl();
     if (this.users && this.users.id) {
       this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
     }
