@@ -8,11 +8,11 @@ import router from './router'
 import axios from 'axios'
 import store from './store/indexStore'
 import * as pbFunc from './assets/utils';
-import http from './api/index';
+import {httpServer} from './api/index';
 import App from './App'
 
 Vue.prototype.pbFunc = pbFunc;
-Vue.prototype.$$http = http;
+Vue.prototype.$$http = httpServer;
 
 // console.log('http', http);
 

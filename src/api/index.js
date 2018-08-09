@@ -17,16 +17,30 @@ let timeout = 15000;
 
 /* 配置访问url */
 let domainUrl = '';
-let currentUrl = document.location.href.toString();
 
-if (currentUrl.match('pbpm.hhtdlng.com')) {
-  domainUrl = 'http://pbpm.hhtdlng.com';
-}  else if (currentUrl.match('bpm.91lng.cn') && !currentUrl.match('pbpm.91lng.cn')) {
-  domainUrl = 'http://bpm.91lng.cn';
-} else {
 
-  domainUrl = 'http://bpm.hhtdlng.com';
+export const getDomainUrl = function(prefix=''){//掐指一算五个环境
+  let currentUrl = document.location.href.toString();
+  let domainUrl = '';
+
+  if (currentUrl.match('pbpm.hhtdlng.com')) {//演示环境
+    domainUrl = `${prefix}pbpm.hhtdlng.com`;
+  }  else if (currentUrl.match('pbpm.91lng.cn')) {//预发环境
+    domainUrl = `${prefix}pbpm.91lng.cn`;
+  } else if (currentUrl.match(`bpm.hhtdlng.com`) && !currentUrl.match(`devbpm.hhtdlng.com`)) {//测试环境
+    domainUrl = `${prefix}bpm.hhtdlng.com`;
+  } else if (currentUrl.match(`bpm.91lng.cn`) && !currentUrl.match(`pbpm.91lng.cn`)) {//正式环境
+    domainUrl = `${prefix}bpm.91lng.cn`;
+  }else if(currentUrl.match(`devbpm.hhtdlng.com`)){//开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`;
+  } else {
+    domainUrl = `${prefix}bpm.hhtdlng.com`;//本地开发环境
+  }
+
+  return domainUrl;
 }
+
+domainUrl = getDomainUrl('http://');
 
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
@@ -261,7 +275,7 @@ const dealConfig = function(apiName, postData) {
 
 
 /* http请求统一函数 */
-const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
+export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
 
   if (!apiName) return false;
 
@@ -295,5 +309,3 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
   })
   return promise
 }
-
-export default httpServer
