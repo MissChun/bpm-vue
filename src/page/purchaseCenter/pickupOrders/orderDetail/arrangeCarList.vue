@@ -514,17 +514,19 @@ export default {
           });
         }
         this.trueAll_list.forEach(item => {
-          if(vm.canSureStatus.indexOf(item.waybill.status)==-1){
-            var middleCap=[];
-            this.now_capacities.forEach((Nitem)=>{
-              if(Nitem.id!=item.id){
-                middleCap.push(Nitem);
-              }else{
-                item.bindCheckBox=false;
-                item.noCancle=true;
-              }
-            });
-            this.now_capacities=middleCap;
+          if(item.waybill){
+              if(vm.canSureStatus.indexOf(item.waybill.status)==-1){
+              var middleCap=[];
+              this.now_capacities.forEach((Nitem)=>{
+                if(Nitem.id!=item.id){
+                  middleCap.push(Nitem);
+                }else{
+                  item.bindCheckBox=false;
+                  item.noCancle=true;
+                }
+              });
+              this.now_capacities=middleCap;
+            }
           }
         });
         this.bindChekboxFunction(0, this.renderAll_list);

@@ -105,7 +105,10 @@
           <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:{{props.row.actual_fluid_address}}
+                实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.actual_fluid_address" placement="top-start">
+                  <span>{{props.row.actual_fluid_address.slice(0,8)}}....</span>
+                  </el-tooltip>
               </el-col>
               <el-col :span="4">
                 采购价:{{props.row.unit_price}}

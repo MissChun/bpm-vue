@@ -181,7 +181,7 @@
                 </el-tooltip>
               </el-col>
               <el-col :span="4" class="whiteSpan">
-                计划装车时间: {{props.row.pick_active_time}}
+                计划装车时间: {{props.row.delivery_order.plan_time}}
                 </el-tooltip>
               </el-col>
                <el-col :span="4" class="whiteSpan">
