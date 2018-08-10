@@ -447,8 +447,7 @@ export default {
 
     .total-data-item {
       text-align: center;
-      width: 100px;
-      padding-left: 10px;
+      padding: 0 10px;
       border-right: 1px solid #ddd;
       float: left;
       img {

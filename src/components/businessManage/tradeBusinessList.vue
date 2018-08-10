@@ -453,6 +453,7 @@ export default {
       })
     },
     isShowBtn(status) {
+      console.log('status', status);
       switch (status) {
         case 'modify_department_check': //部门修改
           return true;
