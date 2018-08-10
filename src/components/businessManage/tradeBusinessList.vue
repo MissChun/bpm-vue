@@ -376,14 +376,19 @@ export default {
     checkLink(row) {
       this.$router.push({ path: this.detailLink, query: { id: row.id } });
     },
-    getTabs() {
+    getTabs(isSwitch) {
       return new Promise((resolve, reject) => {
         for (let i in this.tabNumPostData) {
           if (i === 'page' || i === 'page_size') {
             delete this.tabNumPostData[i];
           }
         }
-        this.$$http('getBusinessTabsList', this.tabNumPostData).then((results) => {
+        let postData = this.tabNumPostData
+        if ((this.pbFunc.isEmptyObj(this.tabNumPostData) === 1 && this.tabNumPostData.status) || isSwitch) {
+          postData = {};
+        }
+        console.log('是否', this.pbFunc.isEmptyObj(this.tabNumPostData), this.tabNumPostData)
+        this.$$http('getBusinessTabsList', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             console.log('tabs', results.data)
             this.tabs = results.data.data;
@@ -656,14 +661,15 @@ export default {
     },
     handleClick: function(tab, event) {
       this.pageData.currentPage = 1;
-      this.getTabs().then((results) => {
+      this.searchPostData = {};
+      this.searchFilters = {
+        order_assign: '',
+        created_at: '',
+        keyword: '',
+        field: 'consumer_name',
+      };
+      this.getTabs(true).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.searchFilters = {
-            order_assign: '',
-            created_at: '',
-            keyword: '',
-            field: 'consumer_name',
-          };
           for (let i in this.tabList) {
             if (this.tabList[i].key === tab.name) {
               this.statusTabList = this.tabList[i].tabs;
@@ -675,15 +681,16 @@ export default {
       })
     },
     statusClick(tab, event) {
-      this.getTabs().then((results) => {
+      this.searchFilters = {
+        order_assign: '',
+        created_at: '',
+        keyword: '',
+        field: 'consumer_name',
+      };
+      this.searchPostData = {};
+      this.getTabs(true).then((results) => {
         if (results.data && results.data.code == 0) {
           this.pageData.currentPage = 1;
-          this.searchFilters = {
-            order_assign: '',
-            created_at: '',
-            keyword: '',
-            field: 'consumer_name',
-          };
           this.createdAt = []; //下计划日期
           this.planArriveTime = [];
           this.statusActive = tab.name;
@@ -717,7 +724,8 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        status: status === 'all' ? '' : status
+        status: status === 'all' ? '' : status,
+        order_assign: this.searchPostData.order_assign
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.plan_arrive_time_start = this.planArriveTime[0];
