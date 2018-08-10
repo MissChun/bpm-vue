@@ -1,7 +1,12 @@
 <style scoped lang="less">
 
 .el-table {
- 
+   th{
+      background-color: transparent;
+    }
+    tr{
+      background-color: transparent;
+    }
   /deep/ .el-table__body {
 
     .el-table__row {
@@ -58,7 +63,9 @@
     }
   }
 }
+.el-table th, .el-table tr{
 
+}
 .el-button--success {
   color: #67c23a !important;
   background: #f0f9eb !important;
@@ -95,18 +102,19 @@
 .buttonContent>div:nth-child(1){
   margin-top:0px;
 }
+
 </style>
 <template>
   <div style="position:relative;">
     <noData v-if="ListData.length==0"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick"  :cell-click="rowClick">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus"  :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick"  :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
                 实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
-                <el-tooltip v-else class="item" effect="dark" :content="props.row.actual_fluid_address" placement="top-start">
+                <el-tooltip v-else class="item" effect="lightlight" :content="props.row.actual_fluid_address" placement="top-start">
                   <span>{{props.row.actual_fluid_address.slice(0,8)}}....</span>
                   </el-tooltip>
               </el-col>
@@ -115,12 +123,12 @@
               </el-col>
               <el-col :span="4">
                 托运方:<span v-if="props.row.trader.length<10">{{props.row.trader}}</span>
-                <el-tooltip v-else class="item" effect="dark" :content="props.row.trader" placement="top-start">
+                <el-tooltip v-else class="item" effect="light" :content="props.row.trader" placement="top-start">
                   <span>{{props.row.trader.slice(0,8)}}....</span>
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                下单人:{{props.row.creator_name}}
+                下计划人:{{props.row.creator_name}}
               </el-col>
               <el-col :span="4">
                 需求车数:{{props.row.require_car_number}}辆
@@ -143,12 +151,16 @@
               </el-col>
               <el-col :span="4">
                 承运方:<span v-if="props.row.carriers&&props.row.trader.length<10">{{props.row.carriers[0].carrier_name}}</span>
-                <el-tooltip v-else class="item" effect="dark" :content="props.row.carriers[0].carrier_name" placement="top-start">
+                <el-tooltip v-else class="item" effect="light" :content="props.row.carriers[0].carrier_name" placement="top-start">
                   <span>{{props.row.carriers[0].carrier_name.slice(0,8)}}....</span>
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
-                下单时间:{{props.row.created_at}}
+                下计划时间:
+                <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
+                    <span >{{props.row.created_at}}</span>
+                 </el-tooltip>
+                 <span v-else>无</span>
               </el-col>
               <el-col :span="4">
                 提交车数:{{props.row.submit_car_number}}
@@ -188,14 +200,17 @@
       <el-table-column label="供应商" prop="" min-width="150">
         <template slot-scope="props">
               <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" v-if="props.row.supplier_name.length<8"><span>{{props.row.supplier_name}}</span></el-button>
-          <el-tooltip v-else class="item" effect="dark" :content="props.row.supplier_name" placement="top-start">
+          <el-tooltip v-else class="item" effect="light" :content="props.row.supplier_name" placement="top-start">
               <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" ><span>{{props.row.supplier_name.slice(0,6)}}....</span></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.plan_time}}</span>
+          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+                 <span >{{props.row.plan_time}}</span>
+             </el-tooltip>
+           <span v-else>无</span> 
         </template>
       </el-table-column>
 
@@ -237,35 +252,33 @@ export default {
     return {
       showMap: false,
       delayTime: 500,
-      expandStatus: true,
       pageLoading: false,
       expandFalg: false,
       lockFalg: false,
       loadPosition: {},
+      returnId:[]
     };
   },
-  props: {
-    ListData: {
-      type: Array,
-      default: []
-    }
-  },
+  props:['expandStatus','ListData'],
   components: {
     noData: noData
   },
   computed: {
-    expandArr: function() {
-      var returnId = [];
-      if (this.ListData[0]) {
-        returnId.push(this.ListData[0].id);
-      }
-      return returnId;
-    }
+    
   },
-
+ 
   methods: {
     rowClick:function(row, event, column){
       
+    },
+    expandArr: function() {
+      if(this.expandStatus){
+        this.ListData.forEach((item)=>{
+          this.returnId.push(item.id);
+        });
+      }else{
+        this.returnId=[];
+      }
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       
@@ -387,7 +400,21 @@ export default {
     }
   },
   created() {
-
+    if(this.expandStatus){
+      this.ListData.forEach((item)=>{
+        this.returnId.push(item.id)
+      });
+    }
+  },
+  watch: {
+    expandStatus:{
+      handler(val, oldVal) {
+        var vm=this;
+        setTimeout(()=>{
+          vm.expandArr();
+        })
+      },
+    }
   }
 };
 

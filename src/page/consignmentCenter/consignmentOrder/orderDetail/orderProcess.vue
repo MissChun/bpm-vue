@@ -552,22 +552,6 @@
                             </el-col>
                           </el-row>
                         </div>
-                        <div v-if="item.type === 'to_site'">
-                          <el-row :gutter="40">
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作时间:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                              </div>
-                            </el-col>
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作人:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                        </div>
                         <div v-if="item.type === 'already_match'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -903,11 +887,17 @@ export default {
           if (addFlag) {
             var waiting_matchOb = {};
             waiting_matchOb.waiting_matchArr = middleAlone;
+            unloadAddress[middleAlone[0].identify_id]=middleAlone;
             waiting_matchOb.type = middleAlone[middleAlone.length - 1].type;
             middleArr.push(waiting_matchOb);
             middleAlone = [];
           }
-          middleArr.push(allData[i]);
+          if(allData[i].type!="already_match"){
+            middleArr.push(allData[i]);
+          }else{
+            allData[i].already_matchArr=unloadAddress[allData[i].identify];
+            middleArr.push(allData[i]);
+          }
           addFlag = false;
         } else {
           middleAlone.push(allData[i]);

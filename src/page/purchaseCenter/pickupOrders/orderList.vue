@@ -29,8 +29,8 @@
 </style>
 <template>
   <div>
-    <div class="nav-tab-setting">
-      <div class="text-right add-btn">
+    <div class="nav-tab-setting" style="position:relative;">
+      <div class="text-right add-btn" >
         <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
       </div>
       <el-tabs v-model="activeName" @tab-click="clicktabs">
@@ -59,37 +59,40 @@
           </div>
         </el-tab-pane>
       </el-tabs>
+       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+        <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
     </div>
     <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-          <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'" >
             <keep-alive>
-              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList" :expandStatus="expandStatus"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.appoint_count" name="appoint">
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='appoint'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList" :expandStatus="expandStatus"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.determine_count" name="determine">
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='determine'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList" :expandStatus="expandStatus"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='confirmed'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList" :expandStatus="expandStatus"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
+
        <el-tab-pane  name="history">
         <span slot="label">
         <el-popover 
@@ -107,7 +110,7 @@
         </span>
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='history'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList" :expandStatus="expandStatus"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -184,6 +187,7 @@ export default {
       //timeParam: [],
       listFifterData: [],
       activeName: 'first',
+      expandStatus:true,
       thisFifterName: 'all',
       pageData: {
         currentPage: 1,
@@ -215,6 +219,9 @@ export default {
   methods: {
     clicktabs: function(targetName) {
 
+    },
+    changeExtendsStatus:function(){
+      this.expandStatus=!this.expandStatus;
     },
     goAddNewOder: function() {
       this.$router.push({ path: "/purchaseCenter/pickupOrders/addNewPickUpOrder" });
