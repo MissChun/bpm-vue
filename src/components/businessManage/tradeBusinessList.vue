@@ -19,7 +19,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane v-for="(item,index) in tabList" :label="item.title" :name="item.key" :key="index">
+        <el-tab-pane v-for="(item,index) in tabList" :label="item.title+'('+item.num+')'" :name="item.key" :key="index">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
@@ -63,7 +63,7 @@
           <el-button type="primary" plain :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
         </div>
         <el-tabs v-model="statusActive" @tab-click="statusClick">
-          <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title" :name="tab.key">
+          <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title+'('+tab.num+')'" :name="tab.key">
             <div class="table-list">
               <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':!tableData.length}">
                 <el-table-column type="selection" width="55">
@@ -157,7 +157,7 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName: this.$route.query.tabClassifyStatus ? this.$route.query.tabClassifyStatus : 'add',
+      activeName: this.$route.query.tabClassifyStatus ? this.$route.query.tabClassifyStatus : 'all_new',
       statusActive: this.$route.query.businessStatus ? this.$route.query.businessStatus : 'create_department_check',
       planArriveTime: this.$route.query.planArriveTime ? (this.$route.query.planArriveTime).split(',') : [], //计划到站时间
       createdAt: [], //下计划日期
@@ -170,88 +170,107 @@ export default {
       },
       tabList: [{
         title: '新增',
-        key: 'add',
+        key: 'all_new',
+        num: '',
         tabs: [{
           title: '部门审批中',
           key: 'create_department_check',
+          num: '',
         }, {
           title: '经理审批中',
           key: 'create_manager_check',
+          num: '',
         }]
       }, {
         title: '关联',
-        key: 'relation',
+        key: 'all_match',
+        num: '',
         tabs: [{
           title: '待关联',
           key: 'waiting_related',
+          num: '',
         }, {
           title: '待确认',
           key: 'waiting_confirm',
+          num: '',
         }]
       }, {
         title: '卸货',
-        key: 'unloading',
+        key: 'all_unload',
+        num: '',
         tabs: [{
           title: '前往卸货地',
           key: 'to_site',
+          num: '',
         }, {
           title: '已卸货',
           key: 'unloading',
+          num: '',
         }]
       }, {
         title: '结算',
-        key: 'settlement',
+        key: 'all_settlement',
+        num: '',
         tabs: [{
           title: '结算中',
           key: 'in_settlement',
+          num: '',
         }, {
           title: '审批中',
           key: 'settlement_check',
+          num: '',
         }]
       }, {
         title: '修改/取消',
-        key: 'reviseAndCancel',
+        key: 'all_change',
+        num: '',
         tabs: [{
           title: '修改经理审批',
           key: 'modify_manager_check',
+          num: '',
         }, {
           title: '修改部门审批',
           key: 'modify_department_check',
+          num: '',
         }, {
           title: '取消部门审批',
           key: 'cancel_check',
+          num: '',
         }]
       }, {
         title: '历史',
-        key: 'history',
+        key: 'all_finish',
+        num: '',
         tabs: [{
           title: '已取消',
           key: 'canceled',
+          num: '',
         }, {
           title: '已完成',
           key: 'finished',
+          num: '',
         }, {
           title: '新增经理拒绝',
           key: 'manager_check_refused',
+          num: '',
         }, {
           title: '新增部门拒绝',
           key: 'department_check_refused',
+          num: '',
         }]
       }, {
         title: '全部',
-        key: 'all',
+        key: 'all_count',
+        num: '',
         tabs: [{
           title: '全部',
           key: 'all',
+          num: '',
         }]
       }],
-      statusTabList: [{
-        title: '部门审批中',
-        key: 'create_department_check',
-      }, {
-        title: '经理审批中',
-        key: 'create_manager_check',
-      }],
+      // statusTabList: [{ // title: '部门审批中', // key: 'create_department_check', // }, { // title: '经理审批中', // key: 'create_manager_check', // }],
+
+      statusTabList: [],
       selectData: {
         distributionSelect: [
           { id: '', value: '全部' },
@@ -264,6 +283,7 @@ export default {
           { id: 'order_number', value: '业务单号' },
           { id: 'supplier', value: '供应商' },
           { id: 'payer_name', value: '付款方' },
+          { id: 'sale_man_name', value: '下单人' },
         ]
       },
       thTableList: [{
@@ -348,11 +368,56 @@ export default {
         isLoading: false
       },
       exportPostData: {}, //导出参数
+      tabs: [],
+      tabNumPostData: {}
     }
   },
   methods: {
     checkLink(row) {
       this.$router.push({ path: this.detailLink, query: { id: row.id } });
+    },
+    getTabs(isSwitch) {
+      return new Promise((resolve, reject) => {
+        for (let i in this.tabNumPostData) {
+          if (i === 'page' || i === 'page_size') {
+            delete this.tabNumPostData[i];
+          }
+        }
+        let postData = this.tabNumPostData
+        if ((this.pbFunc.isEmptyObj(this.tabNumPostData) === 1 && this.tabNumPostData.status) || isSwitch) {
+          postData = {};
+        }
+        console.log('是否', this.pbFunc.isEmptyObj(this.tabNumPostData), this.tabNumPostData)
+        this.$$http('getBusinessTabsList', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            console.log('tabs', results.data)
+            this.tabs = results.data.data;
+            for (let i in this.tabs) {
+              for (let j in this.tabList) {
+                if (this.tabs[i].label_key === this.tabList[j].key) {
+                  this.tabList[j].num = this.tabs[i].num;
+                  for (let z in this.tabs[i].tabs) {
+                    for (let y in this.tabList[j].tabs) {
+                      if (this.tabs[i].tabs[z].tab_key === this.tabList[j].tabs[y].key) {
+                        this.tabList[j].tabs[y].num = this.tabs[i].tabs[z].num;
+                      }
+                    }
+                  }
+                  // if (i == 0&&isOne) {
+                  //   this.statusTabList = this.tabList[j].tabs;
+                  // }
+                }
+
+              }
+            }
+            resolve(results);
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+      })
     },
     // 导出列表
     exportData() {
@@ -388,6 +453,7 @@ export default {
       })
     },
     isShowBtn(status) {
+      console.log('status', status);
       switch (status) {
         case 'modify_department_check': //部门修改
           return true;
@@ -555,9 +621,12 @@ export default {
                   type: 'success'
                 });
                 done();
-
-                this.pageData.currentPage = 1;
-                this.getList(this.statusActive);
+                this.getTabs().then((results) => {
+                  if (results.data && results.data.code == 0) {
+                    this.pageData.currentPage = 1;
+                    this.getList(this.statusActive);
+                  }
+                });
               }
 
             }).catch((err) => {
@@ -581,40 +650,83 @@ export default {
     closeDialog: function(isSave) {
       this.refuseDialog.isShow = false;
       if (isSave) {
-        this.pageData.currentPage = 1;
-        this.getList(this.statusActive);
+        this.getTabs().then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.pageData.currentPage = 1;
+            this.getList(this.statusActive);
+          }
+        });
         // this.getProcess();
       }
 
     },
     handleClick: function(tab, event) {
       this.pageData.currentPage = 1;
-      for (let i in this.tabList) {
-        if (this.tabList[i].key === tab.name) {
-          this.statusTabList = this.tabList[i].tabs;
-          this.statusActive = this.statusTabList[0].key;
+      this.searchPostData = {};
+      this.searchFilters = {
+        order_assign: '',
+        created_at: '',
+        keyword: '',
+        field: 'consumer_name',
+      };
+      this.getTabs(true).then((results) => {
+        if (results.data && results.data.code == 0) {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === tab.name) {
+              this.statusTabList = this.tabList[i].tabs;
+              this.statusActive = this.statusTabList[0].key;
+            }
+          }
+          this.getList(this.statusActive);
         }
-      }
-      this.getList(this.statusActive);
+      })
     },
     statusClick(tab, event) {
-      this.pageData.currentPage = 1;
-      this.statusActive = tab.name;
-      this.getList(this.statusActive);
+      this.searchFilters = {
+        order_assign: '',
+        created_at: '',
+        keyword: '',
+        field: 'consumer_name',
+      };
+      this.searchPostData = {};
+      this.getTabs(true).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.pageData.currentPage = 1;
+          this.createdAt = []; //下计划日期
+          this.planArriveTime = [];
+          this.statusActive = tab.name;
+          this.getList(this.statusActive);
+
+        }
+      })
+
+
     },
     startSearch() {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
-      if(this.pbFunc.objSize(this.$route.query)){
+      if (this.pbFunc.objSize(this.$route.query)) {
         this.$router.push({ path: this.$route.path })
       }
+      this.getTabs().then((results) => {
+        if (results.data && results.data.code == 0) {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === this.activeName) {
+              this.statusTabList = this.tabList[i].tabs;
+              // this.statusActive = this.statusTabList[0].key;
+            }
+          }
+          this.getList(this.statusActive);
+        }
+      })
     },
     getList(status) {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        status: status === 'all' ? '' : status
+        status: status === 'all' ? '' : status,
+        order_assign: this.searchPostData.order_assign
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.plan_arrive_time_start = this.planArriveTime[0];
@@ -626,7 +738,7 @@ export default {
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-
+      this.tabNumPostData = postData;
       this.pageLoading = true;
       this.exportPostData = postData;
       this.$$http('getBusinessList', postData).then((results) => {
@@ -644,11 +756,30 @@ export default {
   created() {
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
-    for (let i in this.tabList) {
-      if (this.tabList[i].key === this.activeName) {
-        this.statusTabList = this.tabList[i].tabs;
+    this.getTabs().then((results) => {
+      if (results.data && results.data.code == 0) {
+        if (this.activeName === 'all_new') {
+          for (let i in this.tabList) {
+            if (i == 0) {
+              this.statusTabList = this.tabList[i].tabs;
+            }
+          }
+        } else {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === this.activeName) {
+              this.statusTabList = this.tabList[i].tabs;
+            }
+          }
+        }
+
       }
-    }
+
+    });
+    // for (let i in this.tabList) {
+    //   if (this.tabList[i].key === this.activeName) {
+    //     this.statusTabList = this.tabList[i].tabs;
+    //   }
+    // }
   }
 
 }

@@ -50,12 +50,14 @@
 .padds {
   padding: 25px 0 0px 0
 }
-.sealTitle{
+
+.sealTitle {
   text-align: center;
   margin-bottom: 20px;
-  z-index:5000;
-  position:relative;
+  z-index: 5000;
+  position: relative;
 }
+
 </style>
 <template>
   <div>
@@ -64,7 +66,7 @@
         <el-tab-pane label="运单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
-           <div class="detail-main border-top-clear">
+          <div class="detail-main border-top-clear">
             <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
@@ -129,10 +131,10 @@
                         </div>
                         <div v-if="item.type === 'to_fluid'">
                           <el-row :gutter="40">
-                           <el-col :span="8">
+                            <el-col :span="8">
                               <div class="label-list">
                                 <label>司机:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.master_driver)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.master_driver_phone)"></span>
                                 </div>
@@ -141,7 +143,7 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>副驾:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.copilot_name)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.copilot_driver_phone)"></span>
                                 </div>
@@ -150,7 +152,7 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>押运:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.supercargo_name)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.supercargo_phone)"></span>
                                 </div>
@@ -184,7 +186,7 @@
                               <div class="label-list">
                                 <label>操作时间:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                              </div> 
+                              </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
@@ -366,7 +368,7 @@
                             </el-col>
                           </el-row>
                           <el-row :gutter="40">
-                           <el-col :span="8">
+                            <el-col :span="8">
                               <div class="label-list">
                                 <label>离站时间:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.leave_time)"></div>
@@ -384,7 +386,7 @@
                         </div>
                         <div v-if="item.type === 'confirm_match'" style="margin-top:-20px;">
                           <div v-for="(Mitem,Mkey) in item.waiting_matchArr" v-bind:class="{ garyColor: Mitem.status!='new',padds:Mkey==0,borderB:item.waiting_matchArr.length>1&&Mkey!=item.waiting_matchArr.length-1 }" style="border-left:none;border-right:none;">
-                            <el-row :gutter="40" >
+                            <el-row :gutter="40">
                               <el-col :span="22">
                                 <el-row :gutter="40">
                                   <el-col :span="8">
@@ -552,22 +554,6 @@
                             </el-col>
                           </el-row>
                         </div>
-                        <div v-if="item.type === 'to_site'">
-                          <el-row :gutter="40">
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作时间:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                              </div>
-                            </el-col>
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作人:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                        </div>
                         <div v-if="item.type === 'already_match'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -584,7 +570,7 @@
                             </el-col>
                           </el-row>
                         </div>
-                         <div v-if="item.type === 'canceled'">
+                        <div v-if="item.type === 'canceled'">
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -662,7 +648,7 @@
                             </el-col>
                           </el-row>
                         </div>
-                         <div v-if="item.type === 'normal'">
+                        <div v-if="item.type === 'normal'">
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -717,7 +703,7 @@ export default {
   },
   components: {
     imgReview: imgReview,
-    waybillProcess:waybillProcess
+    waybillProcess: waybillProcess
   },
   data() {
     return {
@@ -740,8 +726,8 @@ export default {
         in_settlement: '结算中',
         finished: '已完成',
         canceled: '已取消',
-        abnormal:'运力变更申请',
-        normal:'运力已变更'
+        abnormal: '运力变更申请',
+        normal: '运力已变更'
       },
       lockFalg: false,
       activeName: 'second',
@@ -755,9 +741,9 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
-        title:"",
+        title: "",
       },
-      sealTitle:"",
+      sealTitle: "",
       otherInput: "",
       surePound: {},
       exPound: {},
@@ -776,7 +762,7 @@ export default {
   methods: {
     showImg: function(type, id) {
       var vm = this;
-      this.imgObject.title="";
+      this.imgObject.title = "";
       if (type == 'showPound') {
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
@@ -805,7 +791,7 @@ export default {
         }
       } else if (type == 'showSeal') {
         if (this.sealImgList.length > 0) {
-          vm.imgObject.title=this.sealTitle;
+          vm.imgObject.title = this.sealTitle;
           vm.imgObject.imgList = this.sealImgList;
           vm.imgObject.showPreview = true;
         } else {
@@ -814,18 +800,18 @@ export default {
           sendData.id = id;
           this.$$http("getSeal", sendData).then(results => {
             if (results.data.code == 0) {
-              var poundTitle="铅封号：";
-              if(results.data.data.data[0].seal_no_list){
-                results.data.data.data[0].seal_no_list.forEach((item,index)=>{
-                  if(index!=results.data.data.data[0].seal_no_list.length-1){
-                    poundTitle+=item+"/";
-                  }else{
-                    poundTitle+=item;
+              var poundTitle = "铅封号：";
+              if (results.data.data.data[0].seal_no_list) {
+                results.data.data.data[0].seal_no_list.forEach((item, index) => {
+                  if (index != results.data.data.data[0].seal_no_list.length - 1) {
+                    poundTitle += item + "/";
+                  } else {
+                    poundTitle += item;
                   }
                 });
               }
-              vm.imgObject.title=poundTitle;
-              vm.sealTitle=poundTitle;
+              vm.imgObject.title = poundTitle;
+              vm.sealTitle = poundTitle;
               vm.imgObject.imgList = results.data.data.data[0].image_url_list;
               this.sealImgList = results.data.data.data[0].image_url_list;
               vm.imgObject.showPreview = true;
@@ -839,21 +825,21 @@ export default {
       }
     },
 
-    sureChangeCar:function(rowData){
-      var sendData={};
-      this.pageLoading=true;
-      sendData.id=rowData.interrupt_record_id;
-      sendData.status='success';
-      this.$$http('sureChangeCar',sendData).then(results=>{
-        this.pageLoading=false;
+    sureChangeCar: function(rowData) {
+      var sendData = {};
+      this.pageLoading = true;
+      sendData.id = rowData.interrupt_record_id;
+      sendData.status = 'success';
+      this.$$http('sureChangeCar', sendData).then(results => {
+        this.pageLoading = false;
         this.$router.push({ path: "/consignmentCenter/consignmentOrders/ordersList" });
-        if(results.data.code==0){
+        if (results.data.code == 0) {
           vm.$message({
             type: "success",
             message: "确认变更成功"
           })
         }
-      }).catch(()=>{
+      }).catch(() => {
         vm.$message.error("确认变更失败");
       });
     },
@@ -865,8 +851,8 @@ export default {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${this.setpId}/${this.willId}` });
       }
     },
-    orderOperation: function(type,rowData) {
-      if(type=='sureChangeCar'){
+    orderOperation: function(type, rowData) {
+      if (type == 'sureChangeCar') {
         this.sureChangeCar(rowData);
       }
     },
@@ -898,17 +884,26 @@ export default {
       var middleArr = [];
       var middleAlone = [];
       var addFlag = false;
+      var unloadAddress = {};
+
       for (var i in allData) {
         if (!allData[i].identify_id) {
           if (addFlag) {
             var waiting_matchOb = {};
             waiting_matchOb.waiting_matchArr = middleAlone;
+            unloadAddress[middleAlone[0].identify_id] = middleAlone;
             waiting_matchOb.type = middleAlone[middleAlone.length - 1].type;
             middleArr.push(waiting_matchOb);
             middleAlone = [];
           }
-          middleArr.push(allData[i]);
+          if (allData[i].type != "already_match") {
+            middleArr.push(allData[i]);
+          } else {
+            allData[i].already_matchArr = unloadAddress[allData[i].identify];
+            middleArr.push(allData[i]);
+          }
           addFlag = false;
+
         } else {
           middleAlone.push(allData[i]);
           if (i == allData.length - 1) {
@@ -923,6 +918,8 @@ export default {
         }
       };
       this.detailData = middleArr;
+
+      console.log('this.detailData', this.detailData, middleArr);
     },
   },
 

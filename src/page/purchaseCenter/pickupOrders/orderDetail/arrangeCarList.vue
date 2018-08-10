@@ -210,6 +210,7 @@ export default {
           width: ''
         }
       ],
+      canSureStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_seal','canceled'],
       tableData: [],
       renderPage_list: [],
       lastSearch_list:[],
@@ -286,29 +287,43 @@ export default {
       }
     },
     checkRows: function(selection, row) {
-      var vm = this;
-      var sendJudge = false;
-      selection.forEach(item => {
-        if (item.id == row.id) {
-          sendJudge = true;
-        }
-      });
-      if (sendJudge) {
-        this.now_capacities.push(row);
-      } else {
-        var arr1 = [];
-        this.now_capacities.forEach((items, index) => {
-          if (items.id != row.id) {
-            arr1.push(items);
+      var vm=this;
+      if(row.noCancle){
+        vm.$confirm('当前状态不能确认,请核实', '请注意', {
+          confirmButtonText: '确认',
+          type: 'warning',
+          showCancelButton: false,
+          center: true,
+          closeOnClickModal: false,
+          showClose: false
+        }).then(() => {
+          vm.$refs.multipleTable.toggleRowSelection(row, row.bindCheckBox);
+        })
+      }else{
+        var vm = this;
+        var sendJudge = false;
+        selection.forEach(item => {
+          if (item.id == row.id) {
+            sendJudge = true;
           }
         });
-        this.now_capacities = arr1;
-      }
-      vm.trueAll_list.forEach((Titem) => {
-        if (Titem.id == row.id) {
-          Titem.bindCheckBox = !Titem.bindCheckBox;
+        if (sendJudge) {
+          this.now_capacities.push(row);
+        } else {
+          var arr1 = [];
+          this.now_capacities.forEach((items, index) => {
+            if (items.id != row.id) {
+              arr1.push(items);
+            }
+          });
+          this.now_capacities = arr1;
         }
-      });
+        vm.trueAll_list.forEach((Titem) => {
+          if (Titem.id == row.id) {
+            Titem.bindCheckBox = !Titem.bindCheckBox;
+          }
+        });
+      }
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
@@ -439,6 +454,7 @@ export default {
       });
     },
     sortData: function(status) {
+      var vm=this;
       if (status) {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
@@ -457,7 +473,14 @@ export default {
                   operationArr[i].bindCheckBox = true;
                   newArr.push(operationArr[i]);
                 }
-              } else {
+               }
+              // else if(this.canSureStatus.indexOf(this.delivery_list.trips[j].status)==-1){
+              //     operationArr[i].disableChoose = false;
+              //     addflag = false;
+              //     operationArr[i].bindCheckBox = false;
+              //     newArr.push(operationArr[i]);
+              // } 
+              else {
                 operationArr[i].waybill = this.delivery_list.trips[j];
                 if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
                   operationArr[i].disableChoose = true;
@@ -490,6 +513,22 @@ export default {
             item.disableChoose = true;
           });
         }
+        this.trueAll_list.forEach(item => {
+          if(item.waybill){
+              if(vm.canSureStatus.indexOf(item.waybill.status)==-1){
+              var middleCap=[];
+              this.now_capacities.forEach((Nitem)=>{
+                if(Nitem.id!=item.id){
+                  middleCap.push(Nitem);
+                }else{
+                  item.bindCheckBox=false;
+                  item.noCancle=true;
+                }
+              });
+              this.now_capacities=middleCap;
+            }
+          }
+        });
         this.bindChekboxFunction(0, this.renderAll_list);
       }
 

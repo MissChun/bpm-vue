@@ -12,7 +12,7 @@
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/elementReset';
-@import './assets/css/news.less';//消息通知
+@import './assets/css/news.less'; //消息通知
 
 </style>
 <template>
@@ -44,8 +44,8 @@ export default {
         purchaseDashboard: 'purchaseDashboard',
         serviceCentreDashboard: 'serviceCentreDashboard',
         energyDashboard: 'energyDashboard',
-        salesStatisticsDashboard:'salesStatisticsDashboard',
-        puchaseStatisticsDashboard:'puchaseStatisticsDashboard',
+        salesStatisticsDashboard: 'salesStatisticsDashboard',
+        puchaseStatisticsDashboard: 'puchaseStatisticsDashboard',
         purchaseCenter: 'purchaseCenter',
         pickupOrders: 'pickupOrders',
         supplierManage: 'supplierManage',
@@ -149,7 +149,7 @@ export default {
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
       if (isGoFirstPath) {
-        if (allowedRouter[0] && allowedRouter[0].children) {
+        if (allowedRouter[0] && allowedRouter[0].children && allowedRouter[0].children.length) {
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {
           this.$router.replace({ path: allowedRouter[0].path });
