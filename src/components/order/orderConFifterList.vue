@@ -680,7 +680,7 @@ export default {
         rowDataCopy.gross_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.gross_weight || rowDataCopy.gross_weight;
         rowDataCopy.tare_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.tare_weight || rowDataCopy.tare_weight;
         rowDataCopy.net_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.net_weight || rowDataCopy.net_weight;
-        rowDataCopy.carseal = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.carseal || rowDataCopy.carseal;
+        rowDataCopy.carseal = rowDataCopy.pickup_carseal || rowDataCopy.carseal;
       }
 
       this.isShowSurePound = true;
