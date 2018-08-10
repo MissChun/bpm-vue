@@ -368,7 +368,8 @@ export default {
         isLoading: false
       },
       exportPostData: {}, //导出参数
-      tabs: []
+      tabs: [],
+      tabNumPostData: {}
     }
   },
   methods: {
@@ -377,7 +378,12 @@ export default {
     },
     getTabs() {
       return new Promise((resolve, reject) => {
-        this.$$http('getBusinessTabsList', {}).then((results) => {
+        for (let i in this.tabNumPostData) {
+          if (i === 'page' || i === 'page_size') {
+            delete this.tabNumPostData[i];
+          }
+        }
+        this.$$http('getBusinessTabsList', this.tabNumPostData).then((results) => {
           if (results.data && results.data.code == 0) {
             console.log('tabs', results.data)
             this.tabs = results.data.data;
@@ -652,6 +658,12 @@ export default {
       this.pageData.currentPage = 1;
       this.getTabs().then((results) => {
         if (results.data && results.data.code == 0) {
+          this.searchFilters = {
+            order_assign: '',
+            created_at: '',
+            keyword: '',
+            field: 'consumer_name',
+          };
           for (let i in this.tabList) {
             if (this.tabList[i].key === tab.name) {
               this.statusTabList = this.tabList[i].tabs;
@@ -666,8 +678,17 @@ export default {
       this.getTabs().then((results) => {
         if (results.data && results.data.code == 0) {
           this.pageData.currentPage = 1;
+          this.searchFilters = {
+            order_assign: '',
+            created_at: '',
+            keyword: '',
+            field: 'consumer_name',
+          };
+          this.createdAt = []; //下计划日期
+          this.planArriveTime = [];
           this.statusActive = tab.name;
           this.getList(this.statusActive);
+
         }
       })
 
@@ -680,6 +701,17 @@ export default {
       if (this.pbFunc.objSize(this.$route.query)) {
         this.$router.push({ path: this.$route.path })
       }
+      this.getTabs().then((results) => {
+        if (results.data && results.data.code == 0) {
+          for (let i in this.tabList) {
+            if (this.tabList[i].key === this.activeName) {
+              this.statusTabList = this.tabList[i].tabs;
+              // this.statusActive = this.statusTabList[0].key;
+            }
+          }
+          this.getList(this.statusActive);
+        }
+      })
     },
     getList(status) {
       let postData = {
@@ -697,7 +729,7 @@ export default {
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-
+      this.tabNumPostData = postData;
       this.pageLoading = true;
       this.exportPostData = postData;
       this.$$http('getBusinessList', postData).then((results) => {
