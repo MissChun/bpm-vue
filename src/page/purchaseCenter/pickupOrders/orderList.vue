@@ -158,7 +158,17 @@ export default {
             const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
             picker.$emit('pick', [start, end]);
           }
-        }]
+        },
+        {
+          text: '今明两天',
+          onClick(picker) {
+            const start = new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00");
+            const end=new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00");
+            end.setTime(end.getTime()+3600 * 1000 * 24*2-1000);
+            picker.$emit('pick', [start, end]);
+          }
+        }
+        ]
       },
       searchStatus: false,
       pageLoading: false,
@@ -203,6 +213,7 @@ export default {
           { id: 'order_number', value: '订单号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
+          { id: 'truck_no', value:'车号'}
         ]
       },
     };
