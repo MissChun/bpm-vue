@@ -609,9 +609,12 @@ export default {
                   type: 'success'
                 });
                 done();
-
-                this.pageData.currentPage = 1;
-                this.getList(this.statusActive);
+                this.getTabs().then((results) => {
+                  if (results.data && results.data.code == 0) {
+                    this.pageData.currentPage = 1;
+                    this.getList(this.statusActive);
+                  }
+                });
               }
 
             }).catch((err) => {
@@ -635,8 +638,12 @@ export default {
     closeDialog: function(isSave) {
       this.refuseDialog.isShow = false;
       if (isSave) {
-        this.pageData.currentPage = 1;
-        this.getList(this.statusActive);
+        this.getTabs().then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.pageData.currentPage = 1;
+            this.getList(this.statusActive);
+          }
+        });
         // this.getProcess();
       }
 
