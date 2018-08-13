@@ -849,7 +849,7 @@ export default {
           _this.pageLoading = false;
           /* 如果没有轨迹数据展示提示，并清空轨迹展示 */
           _this.$message({
-            message: '无车辆信息',
+            message: '无轨迹信息',
             type: 'success'
           });
 
