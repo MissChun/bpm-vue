@@ -677,6 +677,7 @@ export default {
               this.statusActive = this.statusTabList[0].key;
             }
           }
+          this.tableData = []
           this.getList(this.statusActive);
         }
       })
@@ -689,6 +690,7 @@ export default {
         field: 'consumer_name',
       };
       this.searchPostData = {};
+      this.tableData = []
       this.getTabs(true).then((results) => {
         if (results.data && results.data.code == 0) {
           this.pageData.currentPage = 1;
