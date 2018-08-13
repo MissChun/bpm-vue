@@ -11,12 +11,14 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <el-row>
+          <el-row style="min-height: 131px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
-              <router-link target="_blank" :to="imgReviewSrc">
-                <img :src="item.url" style='width:100%;max-height:100px'></img>
-              </router-link>
-              <div class="text-center">{{item.title}}{{item.num}}</div>
+              <div>
+                <router-link target="_blank" :to="imgReviewSrc">
+                  <img :src="item.url" style='width:100%;height:100px'></img>
+                </router-link>
+                <div class="text-center">{{item.title}}{{item.num}}</div>
+              </div>
             </el-col>
           </el-row>
           <el-col :span="20" :offset="2">
@@ -92,8 +94,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
             <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.copilot_driver_phone}}</span>
-            <br v-if="(surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name) || surePound.copilot_name">
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
+            <br v-if="(surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name) || surePound.copilot_name"> <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -168,7 +169,6 @@ export default {
             }
           })
         });
-
       }
 
     },

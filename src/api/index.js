@@ -292,7 +292,6 @@ export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErr
       }
     ).catch(
       (response) => {
-        console.log('xxxx111', response);
         //默认使用errorState
         if (defaultErrorCallback === undefined) {
           errorState(response)

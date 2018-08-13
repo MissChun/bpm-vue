@@ -11,7 +11,7 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <el-row>
+          <el-row style="min-height: 110px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
               <router-link target="_blank" :to="imgReviewSrc">
                 <img :src="item" style='width:100%;max-height:100px'></img>
