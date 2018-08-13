@@ -145,9 +145,9 @@
             display: block;
             position: absolute;
             left: 7px;
-            top: 28px;
-            width: 5px;
-            height: 5px;
+            top: 26px;
+            width: 6px;
+            height: 6px;
             border-radius: 10px;
             background-color: #f56c6c;
           }
