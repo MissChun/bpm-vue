@@ -138,7 +138,7 @@
                 </el-col>
                 <el-col :span="4">
                   实际液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
-                  <el-tooltip class="item" effect="light" :content="props.row.delivery_order.actual_fluid_name" placement="top-start">
+                  <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.actual_fluid_name" placement="top-start">
                     <span>{{props.row.delivery_order.actual_fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
@@ -638,11 +638,7 @@ export default {
       changeSatusCarList: [],
       changeSatusPerList: [],
       seletPadding: false,
-
       returnId:[],
-
-
-
       isShowSurePound:false,
       surePoundTitle:'装车磅单审核通过',
       isEditSurePound:true,
@@ -896,6 +892,7 @@ export default {
     },
     ListData: {
       handler(newValue, oldValue) {
+        this.expandArr();
         setTimeout(()=>{
           this.ListDataSearch=true;
         })
