@@ -129,7 +129,11 @@ export default {
   },
   computed: {
     imgReviewSrc: function() {
-      return `/imgReview?imgList=${this.imgList.join(',')}`;
+      let imgListArray = [];
+      for (let i in this.imgList) {
+        imgListArray.push(this.imgList[i].url);
+      }
+      return `/imgReview?imgList=${imgListArray.join(',')}`;
     }
   },
   methods: {
