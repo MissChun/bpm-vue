@@ -341,18 +341,66 @@ export default {
         id: this.id
       }
       this.pageLoading = true;
-      this.$$http("surePickOrder", sendData).then(results => {
-        this.pageLoading = false;
-        if (results.data.code == 0) {
-          vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
-          this.$message({
-            message: '确认计划成功',
-            type: 'success'
-          });
+      let postData4 = {
+        id: vm.id
+      };
+      var needJudge=false;
+      vm.$$http('searchOrderHasPower', postData4).then((results) => {
+        if (results.data && results.data.code == 0 && results.data.data) {
+          var nowAllChangeList = results.data.data.add_capacities.concat(results.data.data.del_capacities);
+          for(var a in vm.allChangeList){
+              if(nowAllChangeList.indexOf(vm.allChangeList[a])==-1){
+                  needJudge=true;
+              }
+          }
+          if(nowAllChangeList.length!=vm.allChangeList.length){
+              needJudge=true;
+          }
+          if(needJudge){
+           vm.$confirm("当前需确认车辆已经发生改变,是否继续确认", '提示', {
+            confirmButtonText: '继续',
+            cancelButtonText: '返回',
+            type: 'warning',
+            center: true,
+            showClose: false,
+            closeOnClickModal: false,
+            closeOnPressEscape:false
+            }).then(() => {
+              this.$$http("surePickOrder", sendData).then(results => {
+              this.pageLoading = false;
+              if (results.data.code == 0) {
+                vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
+                this.$message({
+                  message: '确认计划成功',
+                  type: 'success'
+                });
+              }
+              }).catch(() => {
+                this.pageLoading = false;
+              });
+            }).catch(() => {
+              //
+              vm.$router.go(0)
+              //vm.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${vm.id}/${vm.operationStatus}` });   
+            });
+          }else{
+            this.$$http("surePickOrder", sendData).then(results => {
+            this.pageLoading = false;
+            if (results.data.code == 0) {
+              vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
+              this.$message({
+                message: '确认计划成功',
+                type: 'success'
+              });
+            }
+            }).catch(() => {
+              this.pageLoading = false;
+            });
+          }
         }
-      }).catch(() => {
-        this.pageLoading = false;
       });
+      
+      
     },
     getList: function() {
       var vm = this;

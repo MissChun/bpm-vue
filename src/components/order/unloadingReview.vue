@@ -11,7 +11,7 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <el-row>
+          <el-row style="min-height: 110px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
               <router-link target="_blank" :to="imgReviewSrc">
                 <img :src="item" style='width:100%;max-height:100px'></img>
@@ -110,8 +110,8 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.master_driver_phone}}</span>
-            <br>
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.copilot_driver_phone}}</span>
+            <br v-if="(surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name) || surePound.copilot_name">
             <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
           </el-form-item>
         </el-col>
@@ -162,7 +162,6 @@ export default {
             imageUrlArray.map((img, i) => {
               this.imgList.push(img.image_url);
             })
-            console.log('this.imgList', this.imgList);
           }
         });
       }

@@ -139,7 +139,6 @@ export default {
     font-size: 16px;
     color: #fff;
     text-align: center;
-    ;
 
     a {
       margin-left: 10px;

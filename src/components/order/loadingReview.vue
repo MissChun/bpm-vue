@@ -11,11 +11,14 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <el-row>
+          <el-row style="min-height: 131px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
-              <router-link target="_blank" :to="imgReviewSrc">
-                <img :src="item" style='width:100%;max-height:100px'></img>
-              </router-link>
+              <div>
+                <router-link target="_blank" :to="imgReviewSrc">
+                  <img :src="item.url" style='width:100%;height:100px'></img>
+                </router-link>
+                <div class="text-center">{{item.title}}{{item.num}}</div>
+              </div>
             </el-col>
           </el-row>
           <el-col :span="20" :offset="2">
@@ -90,9 +93,8 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.master_driver_phone}}</span>
-            <br>
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.copilot_driver_phone}}</span>
+            <br v-if="(surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name) || surePound.copilot_name"> <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -132,50 +134,42 @@ export default {
   },
   methods: {
     getImg() { //获取榜单和铅封图片
-      let qustArray = [];
       this.imgList = [];
       //获取装车榜单
       if (this.surePound.weight_note) {
-        let req1 = this.$$http('getPundList', { id: this.surePound.weight_note });
-        qustArray.push(req1);
+        this.$$http('getPundList', { id: this.surePound.weight_note }).then((results) => {
+          if (results.data.code === 0) {
+            let imageUrlArray = results.data.data.data;
+            imageUrlArray.map((item, j) => {
+              if (item.image_url) {
+                this.imgList.push({
+                  url: item.image_url,
+                  title: '磅单'
+                });
+              }
+            })
+          }
+        });
       }
       //获取铅封
       if (this.surePound.carseal) {
-        let req2 = this.$$http('getSeal', { id: this.surePound.carseal });
-        qustArray.push(req2);
-      }
-
-      if (!qustArray.length) return;
-
-      Promise.all(qustArray).then(results => {
-        console.log('results', results);
-        if (results[0].data.code === 0) {
-          results.map((res, i) => {
-            let imageUrlArray;
-
-            if (i === 0) {
-              imageUrlArray = res.data.data.data;
-              imageUrlArray.map((img, j) => {
-                if (img.image_url) {
-                  this.imgList.push(img.image_url);
-                } else {
-                  this.imgList = [...this.imgList, ...img.image_url_list];
-                }
-
-              })
-            }
-            if (i === 1) {
-              imageUrlArray = res.data.data.data;
-              imageUrlArray.map((img, k) => {
-                this.imgList = [...this.imgList, ...img.image_url_list];
+        this.$$http('getSeal', { id: this.surePound.carseal }).then((results) => {
+          let imageUrlArray = results.data.data.data;
+          imageUrlArray.map((item, j) => {
+            if (item.image_url_list) {
+              let imageList = item.image_url_list;
+              let imageNum = item.seal_no_list;
+              imageList.map((imgItem, k) => {
+                this.imgList.push({
+                  url: imgItem,
+                  title: '铅封号：',
+                  num: imageNum[k]
+                });
               })
             }
           })
-        }
-      }).catch(err => {
-
-      })
-
+        });
+      }
 
     },
     sendRe() { //审核通过
