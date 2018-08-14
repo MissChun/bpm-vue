@@ -19,7 +19,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane v-for="(item,index) in tabList" :label="item.title+'('+item.num+')'" :name="item.key" :key="index">
+        <el-tab-pane v-for="(item,index) in tabList" :label="item.title+'('+(item.num>100?'99+':item.num)+')'" :name="item.key" :key="index">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
@@ -63,7 +63,7 @@
           <el-button type="primary" plain :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
         </div>
         <el-tabs v-model="statusActive" @tab-click="statusClick">
-          <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title+'('+tab.num+')'" :name="tab.key">
+          <el-tab-pane v-for="(tab,key) in statusTabList" :key="key" :label="tab.title+'('+(tab.num>100?'99+':tab.num)+')'" :name="tab.key">
             <div class="table-list">
               <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':!tableData.length}">
                 <el-table-column type="selection" width="55">
@@ -171,101 +171,101 @@ export default {
       tabList: [{
         title: '新增',
         key: 'all_new',
-        num: '',
+        num: 0,
         tabs: [{
           title: '部门审批中',
           key: 'create_department_check',
-          num: '',
+          num: 0,
         }, {
           title: '经理审批中',
           key: 'create_manager_check',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '关联',
         key: 'all_match',
-        num: '',
+        num: 0,
         tabs: [{
           title: '待关联',
           key: 'waiting_related',
-          num: '',
+          num: 0,
         }, {
           title: '待确认',
           key: 'waiting_confirm',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '卸货',
         key: 'all_unload',
-        num: '',
+        num: 0,
         tabs: [{
           title: '前往卸货地',
           key: 'to_site',
-          num: '',
+          num: 0,
         }, {
           title: '已卸货',
           key: 'unloading',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '结算',
         key: 'all_settlement',
-        num: '',
+        num: 0,
         tabs: [{
           title: '结算中',
           key: 'in_settlement',
-          num: '',
+          num: 0,
         }, {
           title: '审批中',
           key: 'settlement_check',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '修改/取消',
         key: 'all_change',
-        num: '',
+        num: 0,
         tabs: [{
           title: '修改经理审批',
           key: 'modify_manager_check',
-          num: '',
+          num: 0,
         }, {
           title: '修改部门审批',
           key: 'modify_department_check',
-          num: '',
+          num: 0,
         }, {
           title: '取消部门审批',
           key: 'cancel_check',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '历史',
         key: 'all_finish',
-        num: '',
+        num: 0,
         tabs: [{
           title: '已取消',
           key: 'canceled',
-          num: '',
+          num: 0,
         }, {
           title: '已完成',
           key: 'finished',
-          num: '',
+          num: 0,
         }, {
           title: '新增经理拒绝',
           key: 'manager_check_refused',
-          num: '',
+          num: 0,
         }, {
           title: '新增部门拒绝',
           key: 'department_check_refused',
-          num: '',
+          num: 0,
         }]
       }, {
         title: '全部',
         key: 'all_count',
-        num: '',
+        num: 0,
         tabs: [{
           title: '全部',
           key: 'all',
-          num: '',
+          num: 0,
         }]
       }],
       // statusTabList: [{ // title: '部门审批中', // key: 'create_department_check', // }, { // title: '经理审批中', // key: 'create_manager_check', // }],
