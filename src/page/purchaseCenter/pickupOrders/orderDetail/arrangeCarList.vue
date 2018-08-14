@@ -368,7 +368,7 @@ export default {
             }).then(() => {
               vm.$router.go(0);
             }).catch(() => {
-              
+              vm.$router.go(0);
               //vm.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${vm.id}/${vm.operationStatus}` });   
             });
           }else{
