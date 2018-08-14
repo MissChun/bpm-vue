@@ -157,7 +157,7 @@
               </el-col>
               <el-col :span="4">
                 下计划时间:
-                <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
+                <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
                     <span >{{props.row.created_at}}</span>
                  </el-tooltip>
                  <span v-else>无</span>
@@ -207,7 +207,7 @@
       </el-table-column>
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time}}</span>
              </el-tooltip>
            <span v-else>无</span> 

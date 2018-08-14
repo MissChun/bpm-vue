@@ -186,14 +186,14 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   计划装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                     <span>{{props.row.delivery_order.plan_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
                     <span>{{props.row.pick_active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
@@ -228,7 +228,7 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
                     <span>{{props.row.pick_active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
@@ -263,21 +263,21 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
                     <span>{{props.row.active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
                     <span>{{props.row.arrival_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   离站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.weight_audit_time" placement="top-start" v-if="props.row.weight_audit_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.weight_audit_time" placement="top-start" v-if="props.row.weight_audit_time">
                     <span>{{props.row.weight_audit_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
@@ -319,7 +319,7 @@
       </el-table-column>
       <el-table-column label="业务单号" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
                  <span >{{props.row.business_order.order_number}}</span>
             </el-tooltip>
            <span v-else>无</span>
@@ -338,7 +338,7 @@
       <el-table-column label="计划装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
           <div class="whiteSpan">
-            <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
+            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                  <span >{{props.row.delivery_order.plan_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -352,7 +352,7 @@
       </el-table-column>
       <el-table-column label="计划到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -367,7 +367,7 @@
 
       <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
                  <span >{{props.row.pick_active_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -381,7 +381,7 @@
 
        <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
                  <span >{{props.row.arrival_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
