@@ -357,30 +357,18 @@ export default {
               needJudge=true;
           }
           if(needJudge){
-           vm.$confirm("当前需确认车辆已经发生改变,是否继续确认", '提示', {
-            confirmButtonText: '继续',
-            cancelButtonText: '返回',
+           vm.$confirm("当前需确认车辆已经发生改变,请重新确认", '提示', {
+            cancelButtonText: '确认',
+            showConfirmButton:false,
             type: 'warning',
             center: true,
             showClose: false,
             closeOnClickModal: false,
             closeOnPressEscape:false
             }).then(() => {
-              this.$$http("surePickOrder", sendData).then(results => {
-              this.pageLoading = false;
-              if (results.data.code == 0) {
-                vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
-                this.$message({
-                  message: '确认计划成功',
-                  type: 'success'
-                });
-              }
-              }).catch(() => {
-                this.pageLoading = false;
-              });
+              vm.$router.go(0);
             }).catch(() => {
-              //
-              vm.$router.go(0)
+              vm.$router.go(0);
               //vm.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${vm.id}/${vm.operationStatus}` });   
             });
           }else{
@@ -515,12 +503,13 @@ export default {
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity)){
+                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity)==-1){
                   operationArr[i].disableChoose = true;
                   addflag = false;
                   operationArr[i].bindCheckBox = true;
                   newArr.push(operationArr[i]);
                 }
+                break;
                }
               // else if(this.canSureStatus.indexOf(this.delivery_list.trips[j].status)==-1){
               //     operationArr[i].disableChoose = false;
