@@ -174,7 +174,7 @@ export default {
       pageLoading: false,
       fifterParam: {
         keyword: "",
-        field: "",
+        field: "truck_no",
       },
       statusName: {
         all_count: '全部',
