@@ -102,7 +102,6 @@ export default {
     },
 
     searchSupplierList: function(query) {
-      console.log('this.searchFilters.supplier', this.searchFilters.supplier);
       let postData = {
         page_size: 100,
         page: 1,
@@ -136,7 +135,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getFluidsList', postData).then((results) => {
-          console.log('results', results.data.data.results);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.fluidList = results.data.data;

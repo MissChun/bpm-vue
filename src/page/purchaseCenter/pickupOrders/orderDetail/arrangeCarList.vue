@@ -166,7 +166,7 @@ export default {
           title: '变更',
           param: 'waybill.waybill_change_status_display',
           width: ''
-        }, 
+        },
         {
           title: '变更前',
           param: 'waybill.abnormal_plate_number',
@@ -210,10 +210,10 @@ export default {
           width: ''
         }
       ],
-      canSureStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_seal','canceled'],
+      canSureStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_seal', 'canceled'],
       tableData: [],
       renderPage_list: [],
-      lastSearch_list:[],
+      lastSearch_list: [],
       trueAll_list: [],
       delivery_list: { status: {} },
       tractor_semitrailers_List: [],
@@ -240,16 +240,15 @@ export default {
         filename: '用车计划导出表',
         tractor_list: []
       };
-      for(let i in this.lastSearch_list){
-        var addflag=true;
-        if(this.lastSearch_list[i].waybill&&this.lastSearch_list[i].waybill.status=='canceled'){
-          addflag=false;
+      for (let i in this.lastSearch_list) {
+        var addflag = true;
+        if (this.lastSearch_list[i].waybill && this.lastSearch_list[i].waybill.status == 'canceled') {
+          addflag = false;
         }
-        if(addflag){
+        if (addflag) {
           postData.tractor_list.push(this.lastSearch_list[i].id);
         }
       }
-      console.log('postData',postData)
       // this.exportPostData = this.postDataFilter(this.exportPostData);
       // let newPostData = Object.assign(this.exportPostData, postData);
       this.exportBtn = {
@@ -287,8 +286,8 @@ export default {
       }
     },
     checkRows: function(selection, row) {
-      var vm=this;
-      if(row.noCancle){
+      var vm = this;
+      if (row.noCancle) {
         vm.$confirm('当前状态不能确认,请核实', '请注意', {
           confirmButtonText: '确认',
           type: 'warning',
@@ -299,7 +298,7 @@ export default {
         }).then(() => {
           vm.$refs.multipleTable.toggleRowSelection(row, row.bindCheckBox);
         })
-      }else{
+      } else {
         var vm = this;
         var sendJudge = false;
         selection.forEach(item => {
@@ -344,51 +343,51 @@ export default {
       let postData4 = {
         id: vm.id
       };
-      var needJudge=false;
+      var needJudge = false;
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
           var nowAllChangeList = results.data.data.add_capacities.concat(results.data.data.del_capacities);
-          for(var a in vm.allChangeList){
-              if(nowAllChangeList.indexOf(vm.allChangeList[a])==-1){
-                  needJudge=true;
-              }
+          for (var a in vm.allChangeList) {
+            if (nowAllChangeList.indexOf(vm.allChangeList[a]) == -1) {
+              needJudge = true;
+            }
           }
-          if(nowAllChangeList.length!=vm.allChangeList.length){
-              needJudge=true;
+          if (nowAllChangeList.length != vm.allChangeList.length) {
+            needJudge = true;
           }
-          if(needJudge){
-           vm.$confirm("当前需确认车辆已经发生改变,请重新确认", '提示', {
-            cancelButtonText: '确认',
-            showConfirmButton:false,
-            type: 'warning',
-            center: true,
-            showClose: false,
-            closeOnClickModal: false,
-            closeOnPressEscape:false
+          if (needJudge) {
+            vm.$confirm("当前需确认车辆已经发生改变,请重新确认", '提示', {
+              cancelButtonText: '确认',
+              showConfirmButton: false,
+              type: 'warning',
+              center: true,
+              showClose: false,
+              closeOnClickModal: false,
+              closeOnPressEscape: false
             }).then(() => {
               vm.$router.go(0);
             }).catch(() => {
               vm.$router.go(0);
-              //vm.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${vm.id}/${vm.operationStatus}` });   
+              //vm.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${vm.id}/${vm.operationStatus}` });
             });
-          }else{
+          } else {
             this.$$http("surePickOrder", sendData).then(results => {
-            this.pageLoading = false;
-            if (results.data.code == 0) {
-              vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
-              this.$message({
-                message: '确认计划成功',
-                type: 'success'
-              });
-            }
+              this.pageLoading = false;
+              if (results.data.code == 0) {
+                vm.$router.push({ path: "/purchaseCenter/pickupOrders?goTo=confirmed" });
+                this.$message({
+                  message: '确认计划成功',
+                  type: 'success'
+                });
+              }
             }).catch(() => {
               this.pageLoading = false;
             });
           }
         }
       });
-      
-      
+
+
     },
     getList: function() {
       var vm = this;
@@ -426,7 +425,6 @@ export default {
       };
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
-          console.log("已经添加列表上面的数据", results.data);
           getDataNum++;
           vm.alreadyList = results.data.data;
           vm.allChangeList = results.data.data.add_capacities.concat(results.data.data.del_capacities);
@@ -442,7 +440,6 @@ export default {
       vm.$$http('getPickOrderDetail', postData1).then((results) => {
         getDataNum++;
         if (results.data && results.data.code == 0) {
-          console.log("当前订单数据", results.data.data);
           var list = [];
           results.data.data.trips.forEach((item, index) => {
             // if(item.status!='canceled'){
@@ -490,7 +487,7 @@ export default {
       });
     },
     sortData: function(status) {
-      var vm=this;
+      var vm = this;
       if (status) {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
@@ -503,20 +500,20 @@ export default {
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
-                if(this.allChangeList.indexOf(this.delivery_list.trips[j].capacity)==-1){
+                if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) == -1) {
                   operationArr[i].disableChoose = true;
                   addflag = false;
                   operationArr[i].bindCheckBox = true;
                   newArr.push(operationArr[i]);
                 }
                 break;
-               }
+              }
               // else if(this.canSureStatus.indexOf(this.delivery_list.trips[j].status)==-1){
               //     operationArr[i].disableChoose = false;
               //     addflag = false;
               //     operationArr[i].bindCheckBox = false;
               //     newArr.push(operationArr[i]);
-              // } 
+              // }
               else {
                 operationArr[i].waybill = this.delivery_list.trips[j];
                 if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) < 0) {
@@ -551,18 +548,18 @@ export default {
           });
         }
         this.trueAll_list.forEach(item => {
-          if(item.waybill){
-              if(vm.canSureStatus.indexOf(item.waybill.status)==-1){
-              var middleCap=[];
-              this.now_capacities.forEach((Nitem)=>{
-                if(Nitem.id!=item.id){
+          if (item.waybill) {
+            if (vm.canSureStatus.indexOf(item.waybill.status) == -1) {
+              var middleCap = [];
+              this.now_capacities.forEach((Nitem) => {
+                if (Nitem.id != item.id) {
                   middleCap.push(Nitem);
-                }else{
-                  item.bindCheckBox=false;
-                  item.noCancle=true;
+                } else {
+                  item.bindCheckBox = false;
+                  item.noCancle = true;
                 }
               });
-              this.now_capacities=middleCap;
+              this.now_capacities = middleCap;
             }
           }
         });
@@ -572,28 +569,28 @@ export default {
     },
     searchThisByData: function(searchPage, type) {
       //if (this.delivery_list.status.key != "confirmed") {
-        var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
-        var value = this.searchFilters.keyword;
-        var newArr = [];
-        if (keyArr.length == 0) {
-          newArr = this.trueAll_list;
-        } else {
-          for (let i = 0; i < this.trueAll_list.length; i++) {
-            var searchParam = this.pbFunc.deepcopy(this.trueAll_list[i]);
-            for (let j = 0; j < keyArr.length; j++) {
-              searchParam = searchParam[keyArr[j]];
-            }
-            if (searchParam.indexOf(value) > -1) {
-              newArr.push(this.trueAll_list[i]);
-            }
+      var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
+      var value = this.searchFilters.keyword;
+      var newArr = [];
+      if (keyArr.length == 0) {
+        newArr = this.trueAll_list;
+      } else {
+        for (let i = 0; i < this.trueAll_list.length; i++) {
+          var searchParam = this.pbFunc.deepcopy(this.trueAll_list[i]);
+          for (let j = 0; j < keyArr.length; j++) {
+            searchParam = searchParam[keyArr[j]];
+          }
+          if (searchParam.indexOf(value) > -1) {
+            newArr.push(this.trueAll_list[i]);
           }
         }
-        if (type == 'pageChange') {
-          newArr = this.lastSearch_list;
-        }
+      }
+      if (type == 'pageChange') {
+        newArr = this.lastSearch_list;
+      }
 
-        this.renderAll_list = newArr;
-        this.bindChekboxFunction(searchPage, newArr);
+      this.renderAll_list = newArr;
+      this.bindChekboxFunction(searchPage, newArr);
       //}
     },
     bindChekboxFunction: function(page, list) {

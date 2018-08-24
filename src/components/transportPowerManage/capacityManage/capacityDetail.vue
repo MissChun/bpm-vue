@@ -66,7 +66,7 @@
                 </el-col>
               </el-row>
             </div>
-             <el-row :gutter="40">
+            <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="挂车牌:">
                   <div class="detail-form-item">{{headData.semitrailer.plate_number}}</div>
@@ -218,10 +218,10 @@ export default {
     }
   },
   filters: {
-    formatBindStatus: function (value) {
+    formatBindStatus: function(value) {
       return value ? '已绑定' : '未绑定'
     },
-    formatStatus: function (value) {
+    formatStatus: function(value) {
       return value ? '已完善' : '未完善'
     }
   },
@@ -241,14 +241,14 @@ export default {
       })
 
     },
-    unbindTruck: function () {
-      console.log('解绑挂车')
+    unbindTruck: function() {
+
     },
-    unbindStaff: function () {
-      console.log('解绑人员')
+    unbindStaff: function() {
+
     },
     goEditDetail: function(number, data) {
-      this.$router.push({ name: 'editCapacity', params: {capacityInfo: data, activeStep: number} });
+      this.$router.push({ name: 'editCapacity', params: { capacityInfo: data, activeStep: number } });
     },
   }
 }

@@ -558,7 +558,6 @@ export default {
     if (this.id) {
       this.getDetail();
     }
-    console.log('this', this, typeof null, typeof undefined, typeof '', null === null);
   },
   methods: {
     returnToPage: function() {
@@ -569,7 +568,7 @@ export default {
       }
     },
     chooseProvincecopy: function() {
-      console.log('this.address', this.userForm.address)
+
     },
     dealIdNumber: function() {
       if (this.userForm.id_number.match(/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/)) {
@@ -597,14 +596,14 @@ export default {
       this.userForm.carrier_driver_trainings.push(newTraining);
     },
     delTraining: function(index) {
-      console.log('index', index, this.userForm.carrier_driver_trainings[index]);
+
       if (this.userForm.carrier_driver_trainings[index].isDefault) {
         this.userForm.carrier_driver_trainings[index].isLoading = true;
         this.userForm.carrier_driver_trainings[index].isDisabled = true;
         this.$$http('deleteDriverTraining', { id: this.id, carrier_driver_training_id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
           this.userForm.carrier_driver_trainings[index].isLoading = false;
           this.userForm.carrier_driver_trainings[index].isDisabled = false;
-          console.log('results', results);
+
           if (results.data && results.data.code == 0 && results.data.data) {
             this.$message({
               message: '删除成功',
@@ -619,7 +618,7 @@ export default {
       } else {
         this.userForm.carrier_driver_trainings.splice(index, 1);
       }
-      console.log('index', index);
+
     },
     saveTrainingAndReview: function() {
       let btnObject = this.saveBasicAndReviewBtn;
@@ -632,7 +631,7 @@ export default {
         carrier_driver_trainings_add: [],
       }
 
-      console.log('this.userForm.carrier_driver_trainings', this.userForm.carrier_driver_trainings)
+
       for (let i in this.userForm.carrier_driver_trainings) {
         let keyArray = ['entry_training_content', 'entry_training_date', 'entry_training_exam', 'entry_training_exam_result', 'entry_training_remark'];
         let carrier_driver_trainings = this.pbFunc.fifterbyArr(this.userForm.carrier_driver_trainings[i], keyArray);
@@ -655,13 +654,13 @@ export default {
       btnObject.btnText = '正在提交';
       btnObject.isLoading = true;
 
-      console.log('postData', postData);
+
       //postData = this.pbFunc.fifterObjIsNull(postData);
       this.$$http(apiName, postData).then((results) => {
         btnObject.btnText = btnTextCopy;
         btnObject.isLoading = false;
         btnObject.isDisabled = false;
-        console.log('results', results);
+
         if (results.data && results.data.code == 0 && results.data.data) {
           this.$message({
             message: '提交成功',
@@ -707,7 +706,7 @@ export default {
           this.detailData.address.city = (areaCopy && areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
           this.detailData.address.area = (areaCopy && areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
           this.userForm = this.detailData;
-          console.log('this.detailDta', results.data.data, this.detailData.address);
+
         }
       })
     },
@@ -725,15 +724,13 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview(file) {
-      console.log(file);
+
     },
     addPersonAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      console.log('btnTextCopy', btnTextCopy);
-      console.log('postData', postData);
       let apiName = 'addDrivers';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
@@ -753,7 +750,7 @@ export default {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
-            console.log('results', results);
+
             if (results.data && results.data.code == 0 && results.data.data) {
               this.$message({
                 message: '提交成功',
@@ -777,7 +774,7 @@ export default {
       });
     },
     goAddDriverLicense() {
-      console.log('this.userForm', this.userForm.birthday);
+
 
       let formName = 'addClientFormSetpOne';
       let btnObject = this.nextStepBtn;
@@ -820,7 +817,6 @@ export default {
       let stepNum = 4;
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      console.log('this.detailData.work_type.key', this.detailData.work_type.key);
       if (this.detailData.work_type === 'DRIVER') {
         stepNum = 5;
       }

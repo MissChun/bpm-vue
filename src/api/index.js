@@ -103,7 +103,6 @@ axios.interceptors.response.use(response => {
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
-  console.log('error', error);
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {

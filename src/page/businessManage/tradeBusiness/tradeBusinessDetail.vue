@@ -11,7 +11,6 @@
 
 </style>
 <template>
-
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
       <el-tab-pane label="贸易单详情" name="detail">
@@ -30,7 +29,7 @@ export default {
   name: 'tradeBusinessDetail',
   components: {
     tradeProcess: tradeProcess,
-    tradeDetail:tradeDetail
+    tradeDetail: tradeDetail
   },
   data() {
     return {
@@ -45,10 +44,10 @@ export default {
   },
   methods: {
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

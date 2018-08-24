@@ -199,7 +199,6 @@ export default {
     },
 
     chooseFluid: function() {
-      console.log('this.userForm.fluid', this.userForm.fluid);
       for (let i in this.fluidFactorySelect) {
         if (this.userForm.fluid === this.fluidFactorySelect[i].id) {
           this.fluidAddress = this.fluidFactorySelect[i].actual_fluid_address;
@@ -228,14 +227,12 @@ export default {
         apiName = 'patchStandardMileDetail';
         postData.id = this.id;
       }
-      console.log('postData', postData)
       this.saveAndReviewBtn.isDisabled = true;
       this.$refs['editForm'].validate((valid) => {
         if (valid) {
           this.saveAndReviewBtn.btnText = '提交中';
           this.saveAndReviewBtn.isLoading = true;
           this.$$http(apiName, postData).then((results) => {
-            console.log('results', results);
             this.saveAndReviewBtn.btnText = '保存并退出';
             this.saveAndReviewBtn.isLoading = false;
             this.saveAndReviewBtn.isDisabled = false;
@@ -263,7 +260,6 @@ export default {
       //postData[this.searchFilters.field] = this.searchFilters.keyword;
       this.pageLoading = true;
       this.$$http('getStandardMileDetail', postData).then((results) => {
-        console.log('results', results.data.data);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
@@ -274,7 +270,6 @@ export default {
             carriers: [],
             isActiveName: this.detailData.is_active.key === 'effective' ? true : false,
           }
-          console.log('编辑', this.userForm);
           for (let i in this.detailData.carriers) {
             this.userForm.carriers.push(this.detailData.carriers[i].id);
           }

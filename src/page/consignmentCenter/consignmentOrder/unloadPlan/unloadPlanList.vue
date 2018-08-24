@@ -10,11 +10,13 @@
     text-align: center;
   }
 }
+
 .go-return {
   width: 32px;
   height: 32px;
   margin-top: 14px;
 }
+
 .el-header p {
   height: 60px;
 
@@ -23,6 +25,7 @@
 
   text-align: center;
 }
+
 </style>
 <template>
   <div class="tab-screen">
@@ -53,9 +56,9 @@
                       <el-button slot="append" icon="el-icon-search" @click="getSearchLIst"></el-button>
                     </el-input>
                   </el-col>
-                   <el-col :span="10" :offset="2">
+                  <el-col :span="10" :offset="2">
                     <el-form-item label="计划到站时间:" label-width="105px">
-                      <el-date-picker v-model="searchTimeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" @change="getSearchLIst">
+                      <el-date-picker v-model="searchTimeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']" @change="getSearchLIst">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -63,9 +66,9 @@
               </el-form>
             </div>
             <el-row :gutter="10" style="margin:10px 0;">
-                  <el-col :span="2" :offset="22">
-                    <el-button type="primary" @click="operation('upMatchList')">提交卸货单</el-button>
-                  </el-col>
+              <el-col :span="2" :offset="22">
+                <el-button type="primary" @click="operation('upMatchList')">提交卸货单</el-button>
+              </el-col>
             </el-row>
             <div class="table-list">
               <el-table :data="renderList" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
@@ -97,7 +100,7 @@ export default {
     return {
       activeName: 'first',
       pageLoading: false,
-      needNum:0,
+      needNum: 0,
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -108,8 +111,8 @@ export default {
         field: 'short_name',
         orderStateList: '',
       },
-      searchFilters:{},
-      searchStatus:false,
+      searchFilters: {},
+      searchStatus: false,
       searchTimeParam: [],
       selectData: {
         fieldSelect: [{
@@ -133,8 +136,8 @@ export default {
       trueAllList: [],
       upMatchList: [],
       hasList: [],
-      cancel_order_list : [],
-      match_order_list : [],
+      cancel_order_list: [],
+      match_order_list: [],
       thTableList: [{
         title: '业务单号',
         param: 'order_number',
@@ -194,14 +197,14 @@ export default {
   methods: {
     pageChange: function() {
       setTimeout(() => {
-        this.searchStatus=true;
+        this.searchStatus = true;
         this.getSearchLIst();
       })
     },
     startSearch: function() {
 
     },
-    checkRows:function(selection, row) {
+    checkRows: function(selection, row) {
 
     },
     operation: function(type, row) {
@@ -215,8 +218,8 @@ export default {
             item.orderMatch = 'NoMatch';
           }
         });
-        var match_order_list=[];
-        var cancel_order_list=[];
+        var match_order_list = [];
+        var cancel_order_list = [];
         vm.upMatchList.forEach(Uitem => {
           var addFalg = true;
           vm.hasList.forEach(item => {
@@ -235,17 +238,17 @@ export default {
               cancleFalg = false;
             }
           });
-            if (cancleFalg) {
-              cancel_order_list.push(item);
-            } 
+          if (cancleFalg) {
+            cancel_order_list.push(item);
+          }
         });
-        this.cancel_order_list=cancel_order_list;
-        this.match_order_list=match_order_list;
+        this.cancel_order_list = cancel_order_list;
+        this.match_order_list = match_order_list;
       } else if (type == 'cancleMatch') {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;
         vm.$$http("judgeIsCancle", sendData).then(judgeResults => {
-          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == 1||judgeResults.data.code == -1) {
+          if (judgeResults.data.code == 0 && judgeResults.data.data.whether_cancel || judgeResults.data.code == 1 || judgeResults.data.code == -1) {
             var newArr = [];
             vm.upMatchList.forEach((item, index) => {
               if (item != row.id) {
@@ -258,8 +261,8 @@ export default {
               }
             });
             vm.upMatchList = newArr;
-            var cancel_order_list=[];
-            var match_order_list=[];
+            var cancel_order_list = [];
+            var match_order_list = [];
             vm.hasList.forEach(item => {
               var cancleFalg = true;
               vm.upMatchList.forEach(Uitem => {
@@ -269,7 +272,7 @@ export default {
               });
               if (cancleFalg) {
                 cancel_order_list.push(item);
-              } 
+              }
             });
             vm.upMatchList.forEach(Uitem => {
               var addFalg = true;
@@ -281,9 +284,9 @@ export default {
               if (addFalg) {
                 match_order_list.push(Uitem);
               }
-            });           
-            this.cancel_order_list=cancel_order_list;
-            this.match_order_list=match_order_list;
+            });
+            this.cancel_order_list = cancel_order_list;
+            this.match_order_list = match_order_list;
           } else {
             vm.$confirm('当前状态不能取消匹配,请核实', '请注意', {
               confirmButtonText: '确认',
@@ -299,7 +302,6 @@ export default {
         sendData.cancel_order_list = this.cancel_order_list;
         vm.$$http("upMatchList", sendData).then(results => {
           if (results.data.code == 0) {
-            console.log("成功");
             vm.$message({
               type: "success",
               message: "匹配卸货地成功"
@@ -309,7 +311,7 @@ export default {
         });
       }
     },
-    getSearchLIst:function(){
+    getSearchLIst: function() {
       var vm = this;
       var sendData = {};
       if (this.fifterParam.field) {
@@ -318,8 +320,8 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
-      }else{
-        this.pageData.currentPage=1;
+      } else {
+        this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
       if (this.searchTimeParam instanceof Array && this.searchTimeParam.length > 0) {
@@ -332,10 +334,10 @@ export default {
         vm.saveSendData = sendData;
         vm.needNum++;
         vm.searchStatus = false;
-        if (results.data.code == 0) {    
-          if(results.data.data){
+        if (results.data.code == 0) {
+          if (results.data.data) {
             vm.trueAllList = results.data.data.data
-            vm.pageData.totalPage=Math.ceil(results.data.data.count/vm.pageData.pageSize);
+            vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           }
           if (vm.needNum >= 2) {
             vm.sortParam(true);
@@ -372,7 +374,7 @@ export default {
     },
     sortParam: function(falag) {
       if (falag) {
-        var vm=this;
+        var vm = this;
         this.trueAllList.forEach((item) => {
           if (item.status == 'waiting_related') {
             item.orderMatch = 'Match';
@@ -385,14 +387,14 @@ export default {
             });
           }
 
-          this.match_order_list.forEach((Mitem)=>{
-            if(item.id==Mitem){
+          this.match_order_list.forEach((Mitem) => {
+            if (item.id == Mitem) {
               item.orderMatch = 'NoMatch';
             }
           });
 
-          this.cancel_order_list.forEach((Citem)=>{
-            if(item.id==Citem){
+          this.cancel_order_list.forEach((Citem) => {
+            if (item.id == Citem) {
               item.orderMatch = 'Match';
             }
           });

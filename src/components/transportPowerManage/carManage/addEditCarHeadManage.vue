@@ -592,8 +592,6 @@ export default {
           //sendData.carrier = sendData.carrier.id ? sendData.carrier.id : null;
           delete sendData.carrier;
 
-
-          console.log('sendData', sendData.attributes, vm.headCarFormStep1)
           vm.$$http('creatHeadFrom', sendData).then(function(result) {
             vm.pageLoading = false;
             if (result.data.code == 0) {

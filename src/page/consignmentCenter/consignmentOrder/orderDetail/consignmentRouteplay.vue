@@ -1047,7 +1047,6 @@ export default {
             };
 
             this.fluidStationList.push(fluidDetail);
-            console.log('this.fluidStationList', this.fluidStationList);
             resolve(results)
           } else {
             reject(results);
@@ -1074,7 +1073,6 @@ export default {
               let resultsData = results.data.data.results;
               this.fluidStationList = [...this.fluidStationList, ...resultsData];
             }
-            console.log('this.fluidStationList', this.fluidStationList);
             resolve(results)
           } else {
             reject(results);

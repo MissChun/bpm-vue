@@ -16,7 +16,7 @@
       <el-header>
         <el-row>
           <el-col :span="2" class="left-arrow-d">
-             <div class="go-return icon-back" @click="returnToPage"></div>
+            <div class="go-return icon-back" @click="returnToPage"></div>
             <!-- <span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span> -->
           </el-col>
           <el-col :span="20">
@@ -264,17 +264,15 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview(file) {
-      console.log(file);
+
     },
     getDetail: function() {
-      console.log('sdfhdjksfhks')
       this.$$http('getCarrierDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
 
           this.editMsgForm = {
 
@@ -298,8 +296,6 @@ export default {
     },
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      console.log('btnTextCopy', btnTextCopy);
-      console.log('postData', postData);
       let apiName = 'addCarrier';
       // postData.company = 'cacf2c4d-9290-4f88-bfa0-be842df32e3b';
       btnObject.isDisabled = true;
@@ -315,12 +311,11 @@ export default {
           btnObject.isLoading = true;
 
           //postData = this.pbFunc.fifterObjIsNull(postData);
-          console.log('参数', postData, formName, btnObject, stepNum, isReview)
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
-            console.log('results', results);
+
             if (results.data && results.data.code == 0 && results.data.data) {
               this.$message({
                 message: '提交成功',
@@ -349,7 +344,6 @@ export default {
       });
     },
     editBasics(btn, btnType) {
-      console.log('this.userForm', this.editMsgForm);
 
       let formName = 'addFormSetpOne';
       let btnObject = btn;
@@ -369,9 +363,7 @@ export default {
         keyArray.push('organization_code');
       }
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      console.log('postData', postData);
 
-      console.log('postDataNew', postData);
       if (btnType === 'next') {
         this.editAjax(postData, formName, btnObject, 2);
       } else if (btnType === 'out') {
@@ -379,7 +371,6 @@ export default {
       }
     },
     editUnload(btn) {
-      console.log('this.userForm', this.editMsgForm);
 
       let formName = 'addFormSetpTwo';
       let btnObject = btn;
