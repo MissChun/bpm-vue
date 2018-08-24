@@ -150,15 +150,6 @@ export default {
       }
 
     },
-    msgBtnText(times) {
-      if (this.msgBtn.isBtnLoading) {
-        return '发送中...';
-      } else if (this.msgBtn.sendStatus) {
-        return times + "s";
-      } else if (!this.msgBtn.sendStatus && !this.msgBtn.isBtnLoading) {
-        return "发送验证码";
-      }
-    },
     loginLink() {
       let times = this.loginTime;
       let intCountdown;
@@ -219,14 +210,14 @@ export default {
           if (times >= 1) {
             times--;
           } else {
-            this.msgBtn.getCodeText = this.msgBtnText();
+            this.msgBtn.getCodeText = '发送验证码';
             this.msgBtn.isDisabled = false;
             clearInterval(intCountdown);
           }
         }
         this.msgBtn.isLoading = true;
         this.msgBtn.isDisabled = true;
-        this.msgBtn.getCodeText = this.msgBtnText();
+        this.msgBtn.getCodeText = '发送中...';
         this.$$http('messageVerifyCode', {
           phone: this.ruleForm.phone,
           method_type: 'reset_password'

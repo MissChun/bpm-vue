@@ -171,13 +171,12 @@ export default {
   methods: {
 
     initMap: function() {
-
       this.map = new AMap.Map('map-container', { //初始化地图
         zoom: 5
       });
-
+      //初始简单标注SimpleMarker，简单信息窗口SimpleInfoWindow
       AMapUI.loadUI(['overlay/SimpleInfoWindow', 'overlay/SimpleMarker'], (SimpleInfoWindow, SimpleMarker) => {
-        //初始化起点icon
+        //初始化新增marker
         this.addMark = new SimpleMarker({
           map: this.map,
           iconStyle: {
@@ -192,12 +191,13 @@ export default {
           visible: false
         });
 
+        //给marker绑定点击事件，点击时放大地图
         this.addMark.on('click', () => {
           this.map.zoomIn();
         })
 
         if (this.id) {
-          //初始化终点icon
+          //初始化编辑的站点marker
           this.oldMarker = new SimpleMarker({
             map: this.map,
             iconStyle: {
@@ -211,6 +211,7 @@ export default {
             visible: false
           });
 
+          //给marker绑定点击事件，点击时放大地图
           this.oldMarker.on('click', () => {
             this.map.zoomIn();
           })
@@ -218,7 +219,7 @@ export default {
 
       });
 
-      /*初始化类*/
+      /*初始化输入提示类，逆地理编码，地点查询类*/
       AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
 
         let autoOptions = {
@@ -246,81 +247,7 @@ export default {
       });
 
     },
-    inputChangeFun: function() { //输入搜索
-      this.placeSearch.search(this.keyword, (status, result) => {
-
-        if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
-
-          this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
-
-        } else {
-          this.mapMessage = '无法获取位置'
-        }
-
-      });
-    },
-    setMapZoom: function() {
-      let mapZoom = this.map.getZoom();
-
-      if (mapZoom < this.zoomBoundary) {
-        this.map.setZoom(this.zoomBoundary);
-      }
-    },
-    setMapPosition: function(lnglat) {
-
-      this.addMark.setPosition(lnglat);
-      this.showLeftWindow = true;
-      this.addMark.show();
-
-      this.map.setCenter(lnglat);
-
-    },
-    getAddress: function(lnglat, isMapClickCallback) {
-      this.geocoder.getAddress(lnglat, (status, result) => { //逆地理查询地址
-        if (status == 'complete' && result.regeocode && result.regeocode.addressComponent) {
-
-          this.setMapPosition(lnglat);
-          this.setMapZoom();
-
-          if (isMapClickCallback) {
-            this.keyword = result.regeocode.formattedAddress;
-          }
-
-          this.addressDetail = {
-            address: result.regeocode.formattedAddress,
-            longitude: lnglat[0],
-            latitude: lnglat[1],
-            province: result.regeocode.addressComponent.province,
-            city: result.regeocode.addressComponent.city,
-            county: result.regeocode.addressComponent.district,
-          }
-
-          this.formData.address = result.regeocode.formattedAddress;
-
-          this.mapMessage = '';
-
-        } else {
-          this.mapMessage = '无法获取地址';
-        }
-      })
-    },
-    mapClickFun: function(e) { //点击地图回调
-      this.getAddress([e.lnglat.lng, e.lnglat.lat], true);
-    },
-
-    editLandmark: function() {
-      this.$refs['addLandmarkForm'].validate((valid) => {
-        if (valid) {
-
-          let apiName = this.id ? 'patchLandMarkDetail' : 'addLandmark';
-
-          this.addEditLandmarkAjax(apiName);
-
-        } else {
-          this.submitBtn.isDisabled = false;
-        }
-      });
-    },
+    //编辑地标时获取地标详情
     getLandmarkDetail: function() {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -350,9 +277,6 @@ export default {
               county: this.detailData.county && this.detailData.county.area_name ? this.detailData.county.area_name : '',
             }
 
-
-
-
             resolve(results);
           } else {
             reject(results);
@@ -363,6 +287,121 @@ export default {
         })
       })
     },
+    setCenter: function() {
+
+      this.setMapZoom();
+      this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+
+      this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
+      this.oldMarker.show();
+
+    },
+    /* 判断地图对象是否初始化完成，有时地图初始化比较耗时，需要先判断是否已经初始化完成。*/
+    isInitMarkerList: function(markerList) {
+      return new Promise((resolve, reject) => {
+        let limitCount = 10; //limitCount设置重复调用的限制次数，防止无限调用。
+        let timeoutObject = null;
+        let isInitOverviewMarkerListFnc = () => {
+          if (this[markerList]) {
+            if (timeoutObject) {
+              clearTimeout(timeoutObject);
+            }
+            return resolve();
+          } else {
+            if (limitCount > 0) {
+              limitCount--;
+              timeoutObject = setTimeout(() => {
+                isInitOverviewMarkerListFnc();
+              }, 500)
+            } else {
+              clearTimeout(timeoutObject);
+              return resolve();
+            }
+          }
+        }
+        isInitOverviewMarkerListFnc();
+      })
+    },
+    //点击地图回调
+    mapClickFun: function(e) {
+      this.getAddress([e.lnglat.lng, e.lnglat.lat], true);
+    },
+    //逆地理查询地址
+    getAddress: function(lnglat, isMapClickCallback) {
+      this.geocoder.getAddress(lnglat, (status, result) => {
+        if (status == 'complete' && result.regeocode && result.regeocode.addressComponent) {
+
+          this.setMapPosition(lnglat);
+          this.setMapZoom();
+
+          if (isMapClickCallback) {
+            this.keyword = result.regeocode.formattedAddress;
+          }
+
+          this.addressDetail = {
+            address: result.regeocode.formattedAddress,
+            longitude: lnglat[0],
+            latitude: lnglat[1],
+            province: result.regeocode.addressComponent.province,
+            city: result.regeocode.addressComponent.city,
+            county: result.regeocode.addressComponent.district,
+          }
+
+          this.formData.address = result.regeocode.formattedAddress;
+
+          this.mapMessage = '';
+
+        } else {
+          this.mapMessage = '无法获取地址';
+        }
+      })
+    },
+    //输入搜索
+    inputChangeFun: function() {
+      this.placeSearch.search(this.keyword, (status, result) => {
+
+        if (status == 'complete' && result.poiList && result.poiList.pois && result.poiList.pois.length) {
+
+          this.getAddress([result.poiList.pois[0].location.lng, result.poiList.pois[0].location.lat]);
+
+        } else {
+          this.mapMessage = '无法获取位置'
+        }
+
+      });
+    },
+    setMapZoom: function() {
+      let mapZoom = this.map.getZoom();
+
+      if (mapZoom < this.zoomBoundary) {
+        this.map.setZoom(this.zoomBoundary);
+      }
+    },
+    //展示新增地标marker并置为地图中心
+    setMapPosition: function(lnglat) {
+
+      this.addMark.setPosition(lnglat);
+      this.showLeftWindow = true;
+      this.addMark.show();
+
+      this.map.setCenter(lnglat);
+
+    },
+    //点击保存按钮
+    editLandmark: function() {
+      this.$refs['addLandmarkForm'].validate((valid) => {
+        if (valid) {
+
+          let apiName = this.id ? 'patchLandMarkDetail' : 'addLandmark';
+
+          this.addEditLandmarkAjax(apiName);
+
+        } else {
+          this.submitBtn.isDisabled = false;
+        }
+      });
+    },
+    //新增保存或者编辑ajax
     addEditLandmarkAjax: function(apiName) {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -408,30 +447,21 @@ export default {
           } else {
             reject(results);
           }
+
           this.submitBtn.btnText = '保存并退出';
           this.submitBtn.isLoading = false;
           this.submitBtn.isDisabled = false;
+
         }).catch((err) => {
+
           this.submitBtn.btnText = '保存并退出';
           this.submitBtn.isLoading = false;
           this.submitBtn.isDisabled = false;
+
           reject(results);
         })
 
       })
-    },
-    setCenter: function() {
-      if (this.map && this.oldMarker) {
-        this.setMapZoom();
-        this.setMapPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
-
-        this.oldMarker.setPosition([this.addressDetail.longitude, this.addressDetail.latitude]);
-        this.oldMarker.show();
-      } else {
-        setTimeout(() => {
-          this.setCenter();
-        }, 500)
-      }
     },
 
   },
@@ -443,10 +473,16 @@ export default {
     this.initMap();
     if (this.id) {
       this.getLandmarkDetail().then(() => {
-        this.setCenter();
+        this.isInitMarkerList('oldMarker').then(() => {
+          this.setCenter();
+        })
       });
     }
+  },
+  beforeDestroy() {
+    this.map && this.map.destroy(); //组件摧毁时，清空map，防止内存溢出
   }
+
 
 }
 
@@ -492,7 +528,7 @@ export default {
 
 .side-alert-traggle {
   position: absolute;
-  top: 280px;
+  top: 360px;
 
   width: 26px;
   height: 50px;

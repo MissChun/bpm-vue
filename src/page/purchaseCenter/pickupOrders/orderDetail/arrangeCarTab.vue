@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     clicktabs: function(targetName) {
-      console.log('this', this.id);
       if (targetName.name == 'first') {
         this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${this.id}/${this.operationStatus}` });
       }

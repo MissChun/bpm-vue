@@ -259,10 +259,10 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview(file) {
-      console.log(file);
+
     },
     selectAddType() {
       if (this.addType !== 'PLAT') {
@@ -309,7 +309,7 @@ export default {
         page: 1
       };
       this.$$http('getCustomerList', postData).then((results) => {
-        console.log('results', results.data.data.results);
+
         if (results.data && results.data.code == 0) {
           this.customerList = results.data.data.results;
 
@@ -318,11 +318,10 @@ export default {
 
     },
     getDetail: function() {
-      console.log('sdfhdjksfhks')
+
       this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-          console.log('form555', this.detail);
 
           this.customerMsgForm = {
             name: this.detail.name,
@@ -343,8 +342,6 @@ export default {
     },
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      console.log('btnTextCopy', btnTextCopy);
-      console.log('postData', postData);
       let apiName = 'addCustomer';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
@@ -366,7 +363,6 @@ export default {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
-            console.log('results', results);
             if (results.data && results.data.code == 0 && results.data.data) {
               this.$message({
                 message: '提交成功',
@@ -390,13 +386,11 @@ export default {
       });
     },
     editBasics(btn, btnType) {
-      console.log('this.userForm', this.customerMsgForm);
 
       let formName = 'addFormSetpOne';
       let btnObject = btn;
       let keyArray = ['name', 'contact_name', 'contact_phone', 'detail_address', 'deficiency_standard', 'code', 'codeMsg'];
       let postData = this.pbFunc.fifterbyArr(this.customerMsgForm, keyArray);
-      console.log('postData', postData);
       if (postData.code === 'license3in1_code') {
         postData.license3in1_code = postData.codeMsg;
       } else if (postData.code === 'license_code') {
@@ -408,7 +402,6 @@ export default {
       } else {
         postData.customer_type = 'OWN'
       }
-      console.log('postDataNew', postData);
       if (btnType === 'next') {
         this.editAjax(postData, formName, btnObject, 2);
       } else if (btnType === 'out') {
@@ -416,7 +409,6 @@ export default {
       }
     },
     editUnload(btn) {
-      console.log('this.userForm', this.customerMsgForm);
 
       let formName = 'addFormSetpTwo';
       let btnObject = btn;

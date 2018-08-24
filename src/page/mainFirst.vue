@@ -75,12 +75,12 @@
   float: right;
   padding: 0 2em;
   color: black;
-  .notice{
-    display:inline-block;
+  .notice {
+    display: inline-block;
     position: relative;
   }
-  /deep/ .el-badge__content{
-    &.is-fixed{
+  /deep/ .el-badge__content {
+    &.is-fixed {
       top: 18px;
       right: 16px;
     }
@@ -197,65 +197,64 @@
 }
 
 // 消息通知
-.notice-temp{
+.notice-temp {
   background-color: #fff;
   width: 386px;
   height: 422px;
-  box-shadow:0px 0px 7px 0px rgba(107,107,107,0.5);
+  box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5);
   position: absolute;
   font-size: 14px;
   top: 52px;
   right: -100px;
-  .notice-temp-title{
+  .notice-temp-title {
     height: 50px;
     text-align: center;
     line-height: 54px;
     border-bottom: 1px solid #e4e7ed;
   }
-  .notice-temp-content{
+  .notice-temp-content {
     margin: 10px 0;
-    ul{
+    ul {
       list-style-type: none;
-      li{
+      li {
         position: relative;
 
         height: 40px;
         line-height: 20px;
         padding: 10px 20px;
         color: #606266;
-        text-align:justify;
-        span{
-          color:#B8B8B8;
+        text-align: justify;
+        span {
+          color: #B8B8B8;
         }
-        &:hover{
+        &:hover {
           background: #F4F6F9;
         }
-        &.is-unread{
-          &:before{
-            content:' ';
-            display:block;
+        &.is-unread {
+          &:before {
+            content: ' ';
+            display: block;
             position: absolute;
             left: 7px;
             top: 28px;
             width: 5px;
             height: 5px;
             border-radius: 10px;
-            background-color:#f56c6c;
-
+            background-color: #f56c6c;
           }
         }
       }
     }
-
   }
-  .notice-temp-footer{
+  .notice-temp-footer {
     height: 50px;
-    border-top:  1px solid #e4e7ed;
+    border-top: 1px solid #e4e7ed;
     line-height: 50px;
     color: #9E9E9E;
     padding: 0 22px;
   }
 }
+
 </style>
 <template>
   <el-container>
@@ -312,7 +311,7 @@ export default {
     return {
       user: {},
       menus: [],
-      showNotice:false
+      showNotice: false
     };
   },
   components: {
@@ -329,13 +328,13 @@ export default {
   },
   methods: {
     // 展示消息浮窗
-    isShowNotice(){
+    isShowNotice() {
       this.showNotice = true;
     },
-    signRead(isShow){
-      if(isShow){
+    signRead(isShow) {
+      if (isShow) {
 
-      }else{
+      } else {
         this.showNotice = false;
         this.$router.push({ path: '/news/systemNotice/systemNoticeList' });
       }
@@ -393,8 +392,6 @@ export default {
     let user = this.pbFunc.getLocalData('user', true);
     if (user) {
       this.user = user.profile;
-    } else {
-      console.log(user);
     }
     let menus = this.$store.state.common.menuData;
     if (menus) {

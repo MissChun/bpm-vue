@@ -919,7 +919,6 @@ export default {
       };
       this.detailData = middleArr;
 
-      console.log('this.detailData', this.detailData, middleArr);
     },
   },
 

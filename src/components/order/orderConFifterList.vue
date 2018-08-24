@@ -521,7 +521,7 @@ export default {
       tableHeadConfig:{
          'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
+        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' },{ key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
         'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
         'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
@@ -540,6 +540,7 @@ export default {
         'reach_site':'unloadExtend',
         'unloading_waiting_audit':'unloadExtend',
         'unloading_audit_failed':'unloadExtend',
+        'unload_driver_pending_confirmation':'unloadExtend',
         'waiting_seal':'loadExtend',
         'waiting_settlement':'unloadExtend',
         'in_settlement':'unloadExtend',
@@ -661,7 +662,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.nowHead);
+
   },
   methods: {
     showPound:function(rowData){
@@ -707,7 +708,6 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      console.log('rowData', rowData);
       this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
@@ -721,12 +721,9 @@ export default {
       sendData.desc = this.changeStatusParam.changeSatusDesc;
       sendData.sectiontrip = this.changeStatusParam.sectiontrip;
       this.$$http("upStatus", sendData).then((results) => {
-        console.log('results', results)
         //vm.$emit("changeTabs", 'fifth');
         //vm.changeSatusShow = false;
-      }).catch((err) => {
-        console.log('errs', err);
-      });
+      })
     },
     getRowKeys: function(row) {
       return row.id;
@@ -820,7 +817,7 @@ export default {
           })
 
         }).catch((err) => {
-          console.log('errs', err);
+
         });
       } else if (type == 'matchUnload') { //匹配卸货单
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
@@ -843,7 +840,6 @@ export default {
 
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
-      console.log('rowData', rowData);
       this.changeSatusShow = true;
     }
   },
@@ -867,10 +863,9 @@ export default {
             if (results.data.code == 0) {
               vm.changeSatusCarList = results.data.data;
             }
-            console.log('carList', results);
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs', err);
+
           });
         }
         if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
@@ -881,10 +876,10 @@ export default {
             if (results.data.code == 0) {
               vm.changeSatusPerList = results.data.data;
             }
-            console.log('PerList', results);
+
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs', err);
+
           });
         }
       },

@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
     domainUrl = `${prefix}testbpm.91lng.cn`;
   } else {
-    domainUrl = `${prefix}bpm.hhtdlng.com`; //本地开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }
@@ -103,7 +103,6 @@ axios.interceptors.response.use(response => {
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
-  console.log('error', error);
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {

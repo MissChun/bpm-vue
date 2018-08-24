@@ -68,9 +68,7 @@ export default {
 
     },
     pageChange: function() {
-      setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
-      })
+
 
     }
   },

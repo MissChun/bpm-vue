@@ -118,7 +118,6 @@ export default {
       //postData[this.searchFilters.field] = this.searchFilters.keyword;
       this.pageLoading = true;
       this.$$http('getStandardMileList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
