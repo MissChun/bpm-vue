@@ -208,20 +208,11 @@ export default {
         key: '',
         verbose: '全部'
       }, {
-        "key": "LNG",
-        "verbose": "LNG加气站"
-      }, {
         "key": "DELIVER_POSITION",
         "verbose": "卸货站"
       }, {
         "key": "LNG_FACTORY",
         "verbose": "气源液厂"
-      }, {
-        "key": "GAS_STATION",
-        "verbose": "加油站"
-      }, {
-        "key": "REST_AREA",
-        "verbose": "食宿停"
       }],
       isSynchronizeSelect: [{
         key: '',
