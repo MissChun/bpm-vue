@@ -69,7 +69,7 @@
             </el-col>
           </el-row>
           <el-row>
-             <el-col :span="8">
+            <el-col :span="8">
               <div class="label-list">
                 <label>采购优惠:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.business_price}}</div>
@@ -262,7 +262,6 @@
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.sale_man_name)"></div>
                 </div>
               </el-col>
-
               <el-col :span="8">
                 <div class="label-list">
                   <label>下单人电话:</label>
@@ -270,7 +269,6 @@
                 </div>
               </el-col>
             </el-row>
-
             <el-row :gutter="40">
               <el-col :span="8">
                 <div class="label-list">
@@ -291,7 +289,6 @@
                 </div>
               </el-col>
             </el-row>
-
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -439,7 +436,7 @@
 import imgReview from '@/components/common/imgReview';
 export default {
   name: 'uWaybillDetail',
-  props: ['backLink','isCheck'],
+  props: ['backLink', 'isCheck'],
   components: {
     imgReview: imgReview
   },
@@ -515,7 +512,6 @@ export default {
       }
       this.$$http('getConOrderDetail', postData).then((results) => {
         this.pageLoading = false;
-        console.log('results', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.detailData = results.data.data;
           /* 获取运力 */
@@ -553,10 +549,8 @@ export default {
         tractor_list: [id]
       }
       this.$$http('getTransPowerInfo', postData).then((results) => {
-        //console.log('getTransPowerInfo', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.transPowerData = results.data.data.results[0];
-          //console.log('this.transPowerData', this.transPowerData);
         } else {
           this.$message({
             message: results.data.msg,
@@ -572,7 +566,6 @@ export default {
     this.activeName = 'first';
   },
   created: function() {
-    console.log('this.$route', this.$route.params.id, this.id);
     this.getOrderDetail();
   }
 }

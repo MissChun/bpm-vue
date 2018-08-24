@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="nav-tab">
@@ -14,7 +13,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import waybillDetail from '@/components/consignmentCenter/waybillDetail';
 export default {
@@ -36,7 +34,7 @@ export default {
     }
   },
   methods: {
-   clicktabs: function(targetName) {
+    clicktabs: function(targetName) {
       if (targetName.name == 'second') {
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${this.setpId}/${this.willId}` });
       }
@@ -52,7 +50,6 @@ export default {
       }
       this.$$http('getConOrderDetail', postData).then((results) => {
         this.pageLoading = false;
-        console.log('results', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.detailData = results.data.data;
           /* 获取运力 */
@@ -60,7 +57,7 @@ export default {
             loadArr = [];
 
           for (var i = 0; i < vm.detailData.trips.length; i++) {
-            if (vm.detailData.trips[i].section_type.key== 'unload') {
+            if (vm.detailData.trips[i].section_type.key == 'unload') {
               unloadArr.push(vm.detailData.trips[i]);
             } else {
               loadArr.push(this.detailData.trips[i]);
@@ -86,10 +83,8 @@ export default {
         id: id
       }
       this.$$http('getTransPowerInfo', postData).then((results) => {
-        console.log('getTransPowerInfo', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.transPowerData = results.data.data;
-          console.log('this.transPowerData', this.transPowerData);
         } else {
           this.$message({
             message: results.data.msg,
@@ -98,8 +93,8 @@ export default {
         }
       }).catch((err) => {})
 
-  }
-},
+    }
+  },
   activated: function() {
     this.activeName = 'first';
   },
@@ -113,4 +108,5 @@ export default {
 .detail-main {
   min-height: 500px;
 }
+
 </style>

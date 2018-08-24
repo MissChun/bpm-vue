@@ -141,12 +141,10 @@ export default {
   },
   methods: {
     agreeProtocol: function() {
-      console.log('this.dialogUserProtocol', this.dialogUserProtocol);
       this.dialogUserProtocol = false;
       this.checked = true;
     },
     onSubmit() {
-      console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id
       this.registerForm.area = this.address.area
       this.$refs['registerForm'].validate((valid) => {
@@ -156,7 +154,7 @@ export default {
             this.submitBtn.btnText = '注册中';
             this.submitBtn.isLoading = true;
             this.$$http('addCarrier', this.registerForm).then((results) => {
-              console.log('注册成功', results.data);
+
               // this.pageLoading = false;
               this.submitBtn.btnText = '注册';
               this.submitBtn.isLoading = false;
@@ -167,7 +165,7 @@ export default {
                   type: 'success'
                 });
                 setTimeout(() => {
-                  this.$router.push({ path: "registerSuccess"});
+                  this.$router.push({ path: "registerSuccess" });
                 }, 3000)
 
               }

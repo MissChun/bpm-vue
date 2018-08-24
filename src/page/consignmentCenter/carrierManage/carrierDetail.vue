@@ -10,6 +10,7 @@
 .detail-main {
   border-top: 0;
 }
+
 </style>
 <template>
   <div class="nav-tab">
@@ -169,10 +170,10 @@ export default {
 
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

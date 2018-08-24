@@ -110,7 +110,6 @@ export default {
       //postData[this.searchFilters.field] = this.searchFilters.keyword;
       this.pageLoading = true;
       this.$$http('getStandardMileDetail', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;

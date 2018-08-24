@@ -133,7 +133,7 @@ export default {
       this.$router.push({ path: '/consignmentCenter/carrierManage/editCarrier' });
     },
     handleClick: function(tab, event) {
-      console.log('tabhandleClick', tab);
+
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -150,14 +150,13 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getCarrierList', postData).then((results) => {
-        console.log('results', results.data.data.results);
+
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
 
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

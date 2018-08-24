@@ -48,7 +48,7 @@ export default {
   name: 'privateClientManage',
   computed: {
     employmentTypeSelect: function() {
-      console.log('this.$store.getters.getIncludeAllSelect', this.$store.state.common.selectData.carrier_driver_work_type);
+
       return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
     }
   },
@@ -122,14 +122,13 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getCustomerList', postData).then((results) => {
-        console.log('results', results.data.data.results);
+
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -137,7 +136,7 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab', tab);
+
     },
     handleMenuClick: function(command) {
       this.$router.push({ path: "/clientManage/clientDetail", query: { id: command.id } });
@@ -156,7 +155,7 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
+
         this.getList();
       })
     }

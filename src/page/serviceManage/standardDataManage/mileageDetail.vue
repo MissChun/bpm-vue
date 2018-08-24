@@ -81,7 +81,6 @@
                       <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active?detailData.is_active.verbose:'')"></div>
                     </div>
                   </el-col>
-
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="8">
@@ -133,7 +132,7 @@ export default {
       };
       this.pageLoading = true;
       this.$$http('getStandardMileDetail', postData).then((results) => {
-        console.log('results', results.data.data.results);
+
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
@@ -144,10 +143,10 @@ export default {
       })
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

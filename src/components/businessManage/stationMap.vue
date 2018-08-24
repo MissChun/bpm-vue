@@ -274,7 +274,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
@@ -338,7 +337,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -483,7 +481,6 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               src = _this.getIconSrc(dataItem);
-              console.log('src', src);
               if (recycledMarker) {
                 recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
@@ -526,12 +523,10 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 

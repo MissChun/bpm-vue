@@ -387,10 +387,8 @@ export default {
         if ((this.pbFunc.isEmptyObj(this.tabNumPostData) === 1 && this.tabNumPostData.status) || isSwitch) {
           postData = {};
         }
-        console.log('是否', this.pbFunc.isEmptyObj(this.tabNumPostData), this.tabNumPostData)
         this.$$http('getBusinessTabsList', postData).then((results) => {
           if (results.data && results.data.code == 0) {
-            console.log('tabs', results.data)
             this.tabs = results.data.data;
             for (let i in this.tabs) {
               for (let j in this.tabList) {
@@ -453,7 +451,6 @@ export default {
       })
     },
     isShowBtn(status) {
-      console.log('status', status);
       switch (status) {
         case 'modify_department_check': //部门修改
           return true;

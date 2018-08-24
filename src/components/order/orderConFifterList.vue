@@ -662,7 +662,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.nowHead);
+
   },
   methods: {
     showPound:function(rowData){
@@ -708,7 +708,6 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      console.log('rowData', rowData);
       this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
@@ -722,12 +721,9 @@ export default {
       sendData.desc = this.changeStatusParam.changeSatusDesc;
       sendData.sectiontrip = this.changeStatusParam.sectiontrip;
       this.$$http("upStatus", sendData).then((results) => {
-        console.log('results', results)
         //vm.$emit("changeTabs", 'fifth');
         //vm.changeSatusShow = false;
-      }).catch((err) => {
-        console.log('errs', err);
-      });
+      })
     },
     getRowKeys: function(row) {
       return row.id;
@@ -821,7 +817,7 @@ export default {
           })
 
         }).catch((err) => {
-          console.log('errs', err);
+
         });
       } else if (type == 'matchUnload') { //匹配卸货单
         this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
@@ -844,7 +840,6 @@ export default {
 
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
-      console.log('rowData', rowData);
       this.changeSatusShow = true;
     }
   },
@@ -868,10 +863,9 @@ export default {
             if (results.data.code == 0) {
               vm.changeSatusCarList = results.data.data;
             }
-            console.log('carList', results);
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs', err);
+
           });
         }
         if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
@@ -882,10 +876,10 @@ export default {
             if (results.data.code == 0) {
               vm.changeSatusPerList = results.data.data;
             }
-            console.log('PerList', results);
+
           }).catch((err) => {
             vm.seletPadding = false;
-            console.log('errs', err);
+
           });
         }
       },
