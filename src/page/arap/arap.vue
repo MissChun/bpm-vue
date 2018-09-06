@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'setting',
+  name: 'arap',
   data() {
     return {
 
@@ -18,4 +18,3 @@ export default {
 
 
 </style>
-

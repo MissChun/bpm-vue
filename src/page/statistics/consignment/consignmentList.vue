@@ -63,7 +63,10 @@
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
-              <div v-else>{{scope.row[item.param]}}</div>
+              <div v-else>
+                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                {{scope.row[item.param]}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="是否对账" align="center" width="100">
@@ -73,7 +76,10 @@
           </el-table-column>
           <el-table-column label="运费合计" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <div>{{scope.row.waiting_charges}}</div>
+              <div>
+                <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+                {{scope.row.waiting_charges}}
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="140" fixed="right">
@@ -81,6 +87,9 @@
               <div v-if="scope.row.is_reconciliation.key==='unfinished'">
                 <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
                 <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              </div>
+              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
+                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
               </div>
             </template>
           </el-table-column>
@@ -92,12 +101,16 @@
         </el-pagination>
       </div>
     </div>
+    <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
   </div>
 </template>
 <script>
-
+import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
 export default {
-  name: 'salesList',
+  name: 'consignmentList',
+  components: {
+    consignmentAdjustmentDialog: consignmentAdjustmentDialog
+  },
   computed: {
 
   },
@@ -118,9 +131,9 @@ export default {
         keyword: '',
         field: 'waybill',
       },
-      exportType:{
-        filename:'托运数据',
-        type:'logistic'
+      exportType: {
+        filename: '托运数据',
+        type: 'logistic'
       },
       selectData: {
         isReconciliationsSelect: [
@@ -146,7 +159,9 @@ export default {
       }, {
         title: '承运商',
         param: 'carrier',
-        width: '200'
+        width: '200',
+        isAdjust: true,
+        adjustParam: 'carrier_adjust'
       }, {
         title: '车号',
         param: 'plate_number',
@@ -186,12 +201,16 @@ export default {
       }, {
         title: '核算吨位',
         param: 'check_quantity',
-        width: ''
+        width: '',
+        isAdjust: true,
+        adjustParam: 'check_quantity_dvalue'
       }, {
         title: '标准里程',
         param: 'stand_mile',
-        width: ''
-      },{
+        width: '',
+        isAdjust: true,
+        adjustParam: 'stand_mile_dvalue'
+      }, {
         title: '实际里程',
         param: 'actual_mile',
         width: ''
@@ -231,6 +250,8 @@ export default {
       multipleSelection: [], //所选数据   
       reconciliationList: [], //
       exportPostData: {}, //导出筛选
+      accountAdjustIsShow: false, //调账弹窗
+      adjustRow: {}, //调账信息
     }
   },
   methods: {
@@ -250,6 +271,17 @@ export default {
       } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
       }
+    },
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    accountAdjust(row) {
+      this.accountAdjustIsShow = true;
+      this.adjustRow = row;
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -293,10 +325,10 @@ export default {
       for (let i in this.multipleSelection) {
         if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           ids.push(this.multipleSelection[i].id);
-          price += parseFloat(this.multipleSelection[i].waiting_charges)*100;
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
         }
       }
-      this.reconciliations(true, ids, price/100);
+      this.reconciliations(true, ids, price / 100);
     },
     // 批量/单个  对账
     reconciliations(isAll, ids, price) {
@@ -366,6 +398,20 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.data) {
+            this.tableData.data.data[i].check_quantity_dvalue = '';
+            this.tableData.data.data[i].stand_mile_dvalue = '';
+            this.tableData.data.data[i].waiting_charges_dvalue = '';
+            if (this.tableData.data.data[i].check_quantity_adjust) {
+              this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
+            }
+            if (this.tableData.data.data[i].stand_mile_adjust) {
+              this.tableData.data.data[i].stand_mile_dvalue = (parseFloat(this.tableData.data.data[i].stand_mile_adjust) * 10 - parseFloat(this.tableData.data.data[i].stand_mile) * 10) / 10;
+            }
+            if (this.tableData.data.data[i].waiting_charges_adjust) {
+              this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
+            }
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

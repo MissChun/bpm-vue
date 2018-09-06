@@ -79,51 +79,67 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
-                <span v-else>{{scope.row[item.param]}}</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="待时后总额" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>{{scope.row.waiting_charges}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="业务员" align="center" width="150" fixed="right">
-            <template slot-scope="scope">
-              <div>{{scope.row.sale_man}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="140" fixed="right">
-            <template slot-scope="scope">
-              <!--  -->
-              <div v-if="scope.row.waybill_status.key==='is_loading'">
-                <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
-                  <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
-                </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
-                  <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
-                </el-tooltip>
-              </div>
-              <div v-else>
-                <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-                <el-button type="success" size="mini" v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-                <el-button type="primary" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+                <span v-else>
+                  <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                  {{scope.row[item.param]}}
+              </span>
       </div>
-      <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-        </el-pagination>
-      </div>
+      </template>
+      </el-table-column>
+      <el-table-column label="待时后总额" align="center" width="100" fixed="right">
+        <template slot-scope="scope">
+          <div>
+            <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            {{scope.row.waiting_charges}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="业务员" align="center" width="150" fixed="right">
+        <template slot-scope="scope">
+          <div>{{scope.row.sale_man}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="140" fixed="right">
+        <template slot-scope="scope">
+          <!--  -->
+          <div v-if="scope.row.waybill_status.key==='is_loading'">
+            <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
+              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
+              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
+            </el-tooltip>
+          </div>
+          <div v-else>
+            <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+              <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="success" size="mini" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+            </div>
+            <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+              <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      </el-table>
+      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
     </div>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+      </el-pagination>
+    </div>
+  </div>
+  <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></sales-adjustment-dialog>
   </div>
 </template>
 <script>
+import salesAdjustmentDialog from '@/components/statistics/salesAdjustmentDialog';
 export default {
   name: 'salesList',
+  components: {
+    salesAdjustmentDialog: salesAdjustmentDialog
+  },
   computed: {
 
   },
@@ -187,7 +203,9 @@ export default {
       }, {
         title: '客户简称',
         param: 'short_name',
-        width: ''
+        width: '',
+        isAdjust: true,
+        adjustParam: 'short_name_adjust'
       }, {
         title: '客户名称',
         param: 'consumer_name',
@@ -195,7 +213,9 @@ export default {
       }, {
         title: '付款方',
         param: 'payer_name',
-        width: '200'
+        width: '200',
+        isAdjust: true,
+        adjustParam: 'payer_name_adjust'
       }, {
         title: '车号',
         param: 'plate_number',
@@ -247,15 +267,21 @@ export default {
       }, {
         title: '核算吨位',
         param: 'check_quantity',
-        width: ''
+        width: '',
+        isAdjust: true,
+        adjustParam: 'check_quantity_dvalue'
       }, {
         title: '结算价格',
         param: 'unit_price',
-        width: ''
+        width: '',
+        isAdjust: true,
+        adjustParam: 'unit_price_dvalue'
       }, {
         title: '卸车数',
         param: 'unload_nums',
-        width: ''
+        width: '',
+        isAdjust: true,
+        adjustParam: 'waiting_charges_dvalue'
       }, {
         title: '卸车待时金额',
         param: 'waiting_price',
@@ -280,6 +306,8 @@ export default {
       tableData: [],
       multipleSelection: [], //所选数据 
       exportPostData: {}, //导出筛选
+      accountAdjustIsShow: false, //调账弹窗
+      adjustRow: {}, //调账信息
     }
   },
   methods: {
@@ -299,6 +327,17 @@ export default {
       } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
       }
+    },
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    accountAdjust(row) {
+      this.accountAdjustIsShow = true;
+      this.adjustRow = row;
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -390,6 +429,24 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.data) {
+            this.tableData.data.data[i].check_quantity_dvalue = '';
+            this.tableData.data.data[i].unit_price_dvalue = '';
+            this.tableData.data.data[i].unload_nums_dvalue = '';
+            this.tableData.data.data[i].waiting_charges_dvalue = '';
+            if (this.tableData.data.data[i].check_quantity_adjust) {
+              this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
+            }
+            if (this.tableData.data.data[i].unit_price_adjust) {
+              this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
+            }
+            if (this.tableData.data.data[i].unload_nums_adjust) {
+              this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums_price) * 1000) / 1000;
+            }
+            if (this.tableData.data.data[i].waiting_charges_adjust) {
+              this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
+            }
+          }
 
           this.pageData.totalCount = results.data.data.count;
 

@@ -72,6 +72,11 @@ export default {
         consignment: 'consignment',
         income: 'income',
 
+        arap: 'arap',//应收应付
+        supplierMeetManage: 'supplierMeetManage',//供应商
+        carrierMeetManage: 'carrierMeetManage',//承运商
+        payerMeetManage:'payerMeetManage',//付款方
+
         setting: 'setting',
         organizationalStructure: 'organizationalStructure',
         staffsManage: 'staffsManage',
