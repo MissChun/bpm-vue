@@ -1,4 +1,3 @@
-
 <style scoped lang="less">
 
 
@@ -36,7 +35,6 @@
           <div class="table-list mt-25">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
-
               </el-table-column>
             </el-table>
             <no-data v-if="!pageLoading && !tableData.length"></no-data>
@@ -52,8 +50,10 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'supplierMeetList',
+
   computed: {
 
   },
@@ -127,7 +127,8 @@ export default {
         param: 'created_at',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+
     }
   },
   methods: {
@@ -135,6 +136,7 @@ export default {
       this.pageData.currentPage = 1;
       this.getList();
     },
+
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
@@ -192,7 +194,7 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab222',tab);
+      console.log('tab222', tab);
       if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/supplierMeetManage/paymentManage" });
       }

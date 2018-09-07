@@ -1,4 +1,3 @@
-
 <style scoped lang="less">
 
 
@@ -11,19 +10,20 @@
         <el-tab-pane label="付款管理" name="payment">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-              <el-row :gutter="30">
-                <el-col :span="6">
-                  <el-form-item label="承运商:">
-                    <el-select v-model="searchFilters.agreements__carrier" @change="startSearch" clearable filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.carrierSelect" :key="key" :label="item.carrier_name" :value="item.id"></el-option>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
-                  </el-form-item>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
                 </el-col>
-                <el-col :span="6">
-                  <el-form-item label="液厂:">
-                    <el-select v-model="searchFilters.agreements__fluid" clearable filterable @change="startSearch" placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
-                    </el-select>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="8">
+                  <el-form-item label="付款日期:">
+                    <el-date-picker v-model="payerTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -32,12 +32,11 @@
           <div class="operation-btn text-right">
             <el-button type="primary" plain @click="">导入</el-button>
             <!-- <el-button type="primary">导出</el-button> -->
-            <el-button type="success" @click="">新增</el-button>
+            <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -54,11 +53,16 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <payment-manage-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></payment-manage-dialog>
   </div>
 </template>
 <script>
+import paymentManageDialog from '@/components/arap/paymentManageDialog';
 export default {
   name: 'paymentManage',
+  components: {
+    paymentManageDialog: paymentManageDialog
+  },
   computed: {
 
   },
@@ -71,47 +75,63 @@ export default {
         pageSize: 10,
       },
       activeName: 'payment',
+      searchPostData: {}, //搜索参数
       searchFilters: {
-        agreements__carrier: '',
-        agreements__fluid: '',
-        // keyword: '',
-        // field: 'name',
+        field: 'supplier',
       },
+      payerTime:[],//付款时间
       selectData: {
-        carrierSelect: [{
-          id: '',
-          carrier_name: '全部'
-        }], //承运商
-        liquidSelect: [{
-          id: '',
-          actual_fluid_name: '全部'
-        }] //液厂
+        fieldSelect: [
+          { id: 'supplier', value: '供应商' },
+        ]
       },
       thTableList: [{
         title: '供应商',
-        param: 'start_mileage',
+        param: 'supplier',
         width: '200'
       }, {
         title: '付款金额',
-        param: 'fluid_name',
+        param: 'amount',
         width: ''
       }, {
         title: '付款日期',
-        param: 'effective_time',
+        param: 'payment_datetime',
         width: ''
       }, {
         title: '备注',
-        param: 'dead_time',
+        param: 'desc',
         width: ''
       }, {
         title: '添加时间',
         param: 'created_at',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      arapDialog: {
+        isShow: false,
+        type: 'add'
+      }, //弹窗
+      arapRow: {} //内容
     }
   },
   methods: {
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    arapDialogEdit(type, row) {
+      this.arapDialog = {
+        isShow: true,
+        type: type
+      };
+      if (row) {
+        this.arapRow = row;
+      }
+
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
@@ -173,7 +193,7 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab',tab);
+      console.log('tab', tab);
       if (tab.name === 'meet') {
         this.$router.push({ path: "/arap/supplierMeetManage/supplierMeetList" });
       }
