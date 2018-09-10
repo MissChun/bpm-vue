@@ -155,7 +155,7 @@
                   <span>{{props.row.carriers[0].carrier_name.slice(0,8)}}....</span>
                 </el-tooltip>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="4" class="whiteSpan">
                 下计划时间:
                 <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
                     <span >{{props.row.created_at}}</span>

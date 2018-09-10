@@ -2316,6 +2316,54 @@ const api = {
     param: {
 
     }
+  },
+  searchOutSaleOrder: {
+    url: '/api/v1/outsale_order/',
+    method: 'get',
+    desc: "获取外销单列表",
+    param: {
+
+    }
+  },
+  getOutsidePickCount: {
+    url: '/api/v1/outsale_order/count/',
+    method: 'get',
+    desc: "外销单数量",
+    param: {
+
+    }
+  },
+  upDepartemntPass: {
+    url: '/api/v1/outsale_order/:id/',
+    method: 'PATCH',
+    desc: "更新外销单",
+    param: {
+
+    }
+  },
+  upDepartemntcancle: {
+    url: '/api/v1/outsale_order/check/',
+    method: 'POST',
+    desc: "业务单审批",
+    param: {
+
+    }
+  },
+  outsidePickDetalis: {
+    url: '/api/v1/outsale_order/:id/',
+    method: 'get',
+    desc: "外销单详情",
+    param: {
+
+    }
+  },
+  outsidePickProcess: {
+    url: '/api/v1/outsale_order/record/',
+    method: 'get',
+    desc: "外销单进程",
+    param: {
+
+    }
   }
 }
 

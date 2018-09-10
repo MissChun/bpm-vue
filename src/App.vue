@@ -51,6 +51,9 @@ export default {
         supplierManage: 'supplierManage',
         purchasePriceManage: 'purchasePriceManage',
 
+        outsideBuy: 'outsideBuy',
+        outsidePick: 'outsidePick',
+        
         consignmentCenter: 'consignmentCenter',
         consignmentOrders: 'consignmentOrders',
         carrierManage: 'carrierManage',
