@@ -7,8 +7,8 @@
     <el-dialog title="调账" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
-          <el-form-item label="供应商:" prop="supplier_id">
-            <el-select v-model="formRules.supplier_id" :loading="supplierLoading" filterable clearable placeholder="请输入选择">
+          <el-form-item label="供应商:" prop="supplier">
+            <el-select v-model="formRules.supplier" :loading="supplierLoading" filterable clearable placeholder="请输入选择">
               <el-option v-for="(item,key) in supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -48,13 +48,13 @@ export default {
   data: function() {
     return {
       formRules: {
-        supplier_id: '', //供应商
+        supplier: '', //供应商
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
       },
       rules: {
-        supplier_id: [
+        supplier: [
           { required: true, message: '请选择供应商', trigger: 'blur' },
         ],
         payment_datetime: [
@@ -62,7 +62,7 @@ export default {
         ],
         amount: [
           { required: true, message: '请输入付款金额', trigger: 'blur' },
-          { pattern: /^([0-9])+(.[0-9]{0,2})?$/, message: '请输入最多两位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         desc: [
           { min: 0, max: 50, message: '备注不超过50字', trigger: 'blur' }
@@ -70,7 +70,7 @@ export default {
       },
       submitBtn: {
         btnText: '保存',
-        isDisabled: true,
+        isDisabled: false,
         isLoading: false
       },
       supplierSelect: [], //供应商列表
@@ -83,9 +83,7 @@ export default {
     }
   },
   computed: {
-    waybillId() {
-      return this.$route.params.waybillId;
-    }
+
   },
   methods: {
     closeBtn: function() {
@@ -112,31 +110,32 @@ export default {
       this.$refs['formRules'].validate((valid) => {
         if (valid) {
           this.submitBtn = {
-            btnText: '调账中',
+            btnText: '保存中',
             isDisabled: true,
             isLoading: true
           }
           let postData = this.formRules;
-          postData.id = this.purchaseRow.id;
-          let times = new Date();
-          postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          // for (let i in this.formRules) {
-          //   if (this.formRules[i]) {
-          //     postData.is_adjust = 'yes';
-          //     break;
-          //   }
-          // }
-          postData.is_adjust = 'yes';
+          let apiName = 'addSupplierPayment';
+          postData.payment_datetime = postData.payment_datetime + ' 00:00:00'
+          if (this.arapDialog.type === 'update') {
+            postData.id = this.arapRow.id;
+            apiName = 'updateSupplierPayment';
+          } else {
+            apiName = 'addSupplierPayment';
+          }
+
+          // let times = new Date();
+          // postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
           postData = this.pbFunc.fifterObjIsNull(postData);
-          this.$$http('updatePurchaseStatistics', postData).then((results) => {
+          this.$$http(apiName, postData).then((results) => {
             this.submitBtn = {
-              btnText: '确认调账',
+              btnText: '保存',
               isDisabled: false,
               isLoading: false
             }
             if (results.data && results.data.code == 0) {
               this.$message({
-                message: '调账成功',
+                message: this.arapDialog.type === 'add' ? '新增成功' : '修改成功',
                 type: 'success'
               });
               this.$emit('closeDialogBtn', true);
@@ -144,11 +143,11 @@ export default {
 
           }).catch((err) => {
             this.submitBtn = {
-              btnText: '确认调账',
+              btnText: '保存',
               isDisabled: false,
               isLoading: false
             }
-            this.$message.error('调账失败');
+            this.$message.error(this.arapDialog.type === 'add' ? '新增失败' : '修改失败');
           })
 
         } else {
@@ -160,12 +159,19 @@ export default {
   watch: {
     arapDialog(curVal, oldVal) {　
       this.formRules = {
-        supplier_adjust: '', //供应商
-        active_tonnage_adjust: '', //实际装车吨位
-        unit_price_adjust: '', //采购价格
-        adjust_time: '', //调账时间
-        remark_adjust: '', //调账备注
-      };　　　　　　　　
+        supplier: '', //供应商
+        payment_datetime: '', //付款日期
+        amount: '', //付款金额
+        desc: '', //调账备注
+      };　　
+      if (curVal.type === 'update') {
+        this.formRules = {
+          supplier: this.arapRow.supplier, //供应商
+          payment_datetime: this.arapRow.payment_datetime, //付款日期
+          amount: this.arapRow.amount, //付款金额
+          desc: this.arapRow.desc, //调账备注
+        };
+      }　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　

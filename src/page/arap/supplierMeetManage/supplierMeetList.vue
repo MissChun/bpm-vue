@@ -11,17 +11,16 @@
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="30">
                 <el-col :span="6">
-                  <el-form-item label="承运商:">
-                    <el-select v-model="searchFilters.agreements__carrier" @change="startSearch" clearable filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.carrierSelect" :key="key" :label="item.carrier_name" :value="item.id"></el-option>
+                  <el-form-item label="供应商:">
+                    <el-select v-model="searchFilters.supplier_id" @change="startSearch" clearable filterable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="液厂:">
-                    <el-select v-model="searchFilters.agreements__fluid" clearable filterable @change="startSearch" placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
-                    </el-select>
+                  <el-form-item label="开始日期:" label-width="105px">
+                    <el-date-picker v-model="startTime" type="month" placeholder="选择月">
+                    </el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -33,7 +32,7 @@
             <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
           <div class="table-list mt-25">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
               </el-table-column>
             </el-table>
@@ -50,7 +49,6 @@
   </div>
 </template>
 <script>
-
 export default {
   name: 'supplierMeetList',
 
@@ -67,64 +65,55 @@ export default {
       },
       activeName: 'meet',
       searchFilters: {
-        agreements__carrier: '',
-        agreements__fluid: '',
-        // keyword: '',
-        // field: 'name',
+        supplier_id: '',
       },
       selectData: {
-        carrierSelect: [{
-          id: '',
-          carrier_name: '全部'
-        }], //承运商
-        liquidSelect: [{
-          id: '',
-          actual_fluid_name: '全部'
-        }] //液厂
+        supplierSelect: [] //供应商
       },
+      startTime: [], //开始日期
       thTableList: [{
         title: '供应商',
-        param: 'start_mileage',
+        param: 'supplier_name',
         width: '200'
       }, {
         title: '期初金额',
-        param: 'end_mileage',
+        param: 'first_amount',
         width: ''
       }, {
         title: '装车数',
-        param: 'initial_price',
+        param: 'car_no',
         width: ''
       }, {
         title: '装车吨位',
-        param: 'change_rate',
+        param: 'active_tonnage',
         width: ''
       }, {
         title: '采购优惠后总额',
-        param: 'change_number',
+        param: 'discounts_sum_price',
         width: ''
       }, {
         title: '调账金额',
-        param: 'carrier_name',
+        param: 'change_amount',
         width: ''
       }, {
         title: '付款金额',
-        param: 'fluid_name',
+        param: 'total_amount',
         width: ''
       }, {
         title: '期末金额',
-        param: 'effective_time',
+        param: 'last_amount',
         width: ''
       }, {
         title: '期初欠票金额',
-        param: 'dead_time',
+        param: 'first_debt_amount',
         width: ''
       }, {
         title: '收票金额',
-        param: 'created_at',
+        param: 'receive_amount',
         width: ''
       }, {
         title: '期末欠票金额',
-        param: 'created_at',
+        param: 'last_detb_amount',
         width: ''
       }],
       tableData: [],
@@ -141,8 +130,8 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        agreements__carrier: this.searchFilters.agreements__carrier,
-        agreements__fluid: this.searchFilters.agreements__fluid
+        // agreements__carrier: this.searchFilters.agreements__carrier,
+        // agreements__fluid: this.searchFilters.agreements__fluid
       };
       postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -150,7 +139,7 @@ export default {
 
       this.pageLoading = true;
 
-      this.$$http('getFreightList', postData).then((results) => {
+      this.$$http('getSupplierMeetList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -169,29 +158,15 @@ export default {
       })
 
     },
-    getCarrierList: function() {
+    getSupplier: function() {
       let postData = {
-        need_all: true
-      };
-
-      this.$$http('getCarrierList', postData).then((results) => {
+        need_all: true,
+      }
+      this.$$http('searchSupplierList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.selectData.carrierSelect = this.selectData.carrierSelect.concat(results.data.data);
+          this.selectData.supplierSelect = results.data.data;
         }
       }).catch((err) => {})
-
-    },
-    getFluidList: function() {
-      let postData = {
-        need_all: true
-      };
-
-      this.$$http('getFluidList', postData).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.selectData.liquidSelect = this.selectData.liquidSelect.concat(results.data.data);
-        }
-      }).catch((err) => {})
-
     },
     handleClick: function(tab, event) {
       console.log('tab222', tab);
@@ -211,8 +186,7 @@ export default {
   },
   created: function() {
     this.getList();
-    this.getCarrierList();
-    this.getFluidList();
+    this.getSupplier();
   }
 }
 

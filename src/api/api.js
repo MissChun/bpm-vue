@@ -9,6 +9,38 @@
  */
 
 const api = {
+  updateSupplierPayment: {
+    url: '/api/v1/supplier-pay/:id/',
+    method: 'patch',
+    desc: '更新供应商付款',
+    param: {
+
+    }
+  },
+  addSupplierPayment: {
+    url: '/api/v1/supplier-pay/',
+    method: 'post',
+    desc: '付款新增',
+    param: {
+
+    }
+  },
+  getSupplierPaymentList: {
+    url: '/api/v1/supplier-pay/',
+    method: 'get',
+    desc: '付款列表',
+    param: {
+
+    }
+  },
+  getSupplierMeetList: {
+    url: '/api/v1/inout-supplier-pay/',
+    method: 'get',
+    desc: '供应商应付列表',
+    param: {
+
+    }
+  },
   getBusinessTabsList: {
     url: '/api/v1/business_order/count/',
     method: 'get',

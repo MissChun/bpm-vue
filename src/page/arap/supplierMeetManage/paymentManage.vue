@@ -35,12 +35,12 @@
             <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" size="mini" @click="arapDialogEdit('update',scope.row)">修改</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -87,7 +87,7 @@ export default {
       },
       thTableList: [{
         title: '供应商',
-        param: 'supplier',
+        param: 'supplier_name',
         width: '200'
       }, {
         title: '付款金额',
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     closeDialog: function(isSave) {
-      this.accountAdjustIsShow = false;
+      this.arapDialog.isShow = false;
       if (isSave) {
         this.getList();
       }
@@ -134,22 +134,22 @@ export default {
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        agreements__carrier: this.searchFilters.agreements__carrier,
-        agreements__fluid: this.searchFilters.agreements__fluid
+        // agreements__carrier: this.searchFilters.agreements__carrier,
+        // agreements__fluid: this.searchFilters.agreements__fluid
       };
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-
-      // postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
 
-      this.$$http('getFreightList', postData).then((results) => {
+      this.$$http('getSupplierPaymentList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
