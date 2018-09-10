@@ -85,10 +85,10 @@ export default {
       },
       rules: {
         active_tonnage_adjust: [
-          { pattern: /^([0-9])+(.[0-9]{0,3})?$/, message: '请输入最多三位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
         unit_price_adjust: [
-          { pattern: /^([0-9])+(.[0-9]{0,2})?$/, message: '请输入最多两位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
       },
       submitBtn: {
@@ -101,6 +101,10 @@ export default {
       differenceValue: { //差价
         active_tonnage: '', //实际装车吨位
         unit_price: '' //单价
+      },
+      priceReg: /^\d+(\.\d{1,2})?$/,
+      changeForm: {
+
       }
 
     }
@@ -128,7 +132,9 @@ export default {
         this.supplierLoading = false;
       })
     },
-    isValue(type) {
+    isValue(type, error) {
+      console.log('error', type);
+
       this.submitBtn.isDisabled = true;
       for (let i in this.formRules) {
         if (this.formRules[i]) {
@@ -137,13 +143,13 @@ export default {
         }
       }
       if (type === 'activeTonnage') {
-        if (isNaN(this.formRules.active_tonnage_adjust) || !this.formRules.active_tonnage_adjust) {
+        if (isNaN(this.formRules.active_tonnage_adjust) || !this.$store.state.common.regular.tonnage.match.test(this.formRules.active_tonnage_adjust) || !this.formRules.active_tonnage_adjust) {
           this.differenceValue.active_tonnage = '';
         } else {
           this.differenceValue.active_tonnage = (parseFloat(this.formRules.active_tonnage_adjust) * 1000 - parseFloat(this.purchaseRow.active_tonnage) * 1000) / 1000;
         }
       } else if (type === 'unitPrice') {
-        if (isNaN(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
+        if (isNaN(this.formRules.unit_price_adjust)|| !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
           this.differenceValue.unit_price = '';
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.purchaseRow.unit_price) * 100) / 100;
@@ -213,7 +219,10 @@ export default {
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
-
+      this.differenceValue = { //差价
+        active_tonnage: '', //实际装车吨位
+        unit_price: '' //单价
+      }
     },
   },
   created: function() {

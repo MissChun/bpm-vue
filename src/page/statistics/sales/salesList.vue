@@ -302,6 +302,14 @@ export default {
         title: '销售总额',
         param: 'sell_rental',
         width: ''
+      },{
+        title: '调账备注',
+        param: 'remark_adjust',
+        width: '180'
+      },{
+        title: '调账时间',
+        param: 'adjust_time',
+        width: '180'
       }],
       tableData: [],
       multipleSelection: [], //所选数据 

@@ -238,6 +238,14 @@ export default {
         title: '卸车待时金额',
         param: 'waiting_price',
         width: ''
+      },{
+        title: '调账备注',
+        param: 'remark_adjust',
+        width: '180'
+      },{
+        title: '调账时间',
+        param: 'adjust_time',
+        width: '180'
       }],
       tableData: [],
          

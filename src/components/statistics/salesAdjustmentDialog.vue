@@ -111,13 +111,13 @@ export default {
       },
       rules: {
         check_quantity_adjust: [
-          { pattern: /^([0-9])+(.[0-9]{0,3})?$/, message: '请输入最多三位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
         unit_price_adjust: [
-          { pattern: /^([0-9])+(.[0-9]{0,2})?$/, message: '请输入最多两位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         unload_nums_adjust: [
-          { pattern: /^([0-9])+(.[0-9]{0,3})?$/, message: '请输入最多三位小数的数值', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
       },
       submitBtn: {
@@ -210,19 +210,19 @@ export default {
         }
       }
       if (type === 'checkQuantity') {
-        if (isNaN(this.formRules.check_quantity_adjust) || !this.formRules.check_quantity_adjust) {
+        if (isNaN(this.formRules.check_quantity_adjust) || !this.$store.state.common.regular.tonnage.match.test(this.formRules.check_quantity_adjust) || !this.formRules.check_quantity_adjust) {
           this.differenceValue.check_quantity = '';
         } else {
           this.differenceValue.check_quantity = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
         }
       } else if (type === 'unitPrice') {
-        if (isNaN(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
+        if (isNaN(this.formRules.unit_price_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
           this.differenceValue.unit_price = '';
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.adjustRow.unit_price) * 100) / 100;
         }
       } else if (type === 'unloadNums') {
-        if (isNaN(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
+        if (isNaN(this.formRules.unload_nums_adjust) || !this.$store.state.common.regular.tonnage.match.test(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
           this.differenceValue.unload_nums = '';
         } else {
           this.differenceValue.unload_nums = (parseFloat(this.formRules.unload_nums_adjust) * 1000 - parseFloat(this.adjustRow.unload_nums) * 1000) / 1000;
@@ -284,7 +284,12 @@ export default {
         unload_nums_adjust: '', //卸车数
         adjust_time: '', //调账时间
         remark_adjust: '', //调账备注
-      };　　　　　　　　
+      };　
+      this.differenceValue = { //差价
+        check_quantity: '', //核算吨位
+        unit_price: '', //结算单价
+        unload_nums: '' //卸车数
+      }　　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
