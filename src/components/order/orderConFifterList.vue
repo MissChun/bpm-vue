@@ -263,8 +263,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
-                    <span>{{props.row.active_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.work_end_time" placement="top-start" v-if="props.row.work_end_time">
+                    <span>{{props.row.work_end_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
