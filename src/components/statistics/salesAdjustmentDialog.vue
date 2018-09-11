@@ -117,7 +117,8 @@ export default {
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         unload_nums_adjust: [
-          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.vehicle.match, message: this.$store.state.common.regular.vehicle.tips, trigger: 'blur' },
+          // { min: 0, max: 1, message: '备注不超过50字', trigger: 'blur' }
         ],
       },
       submitBtn: {
@@ -221,8 +222,8 @@ export default {
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.adjustRow.unit_price) * 100) / 100;
         }
-      } else if (type === 'unloadNums') {
-        if (isNaN(this.formRules.unload_nums_adjust) || !this.$store.state.common.regular.tonnage.match.test(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
+      } else if (type === 'unloadNums') {//
+        if (isNaN(this.formRules.unload_nums_adjust) || !this.$store.state.common.regular.vehicle.match.test(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
           this.differenceValue.unload_nums = '';
         } else {
           this.differenceValue.unload_nums = (parseFloat(this.formRules.unload_nums_adjust) * 1000 - parseFloat(this.adjustRow.unload_nums) * 1000) / 1000;
@@ -289,7 +290,12 @@ export default {
         check_quantity: '', //核算吨位
         unit_price: '', //结算单价
         unload_nums: '' //卸车数
-      }　　　　　　　
+      }　　
+      if (curVal) {
+        this.getCustomer();
+        this.getPayer();
+      }
+      this.submitBtn.isDisabled = true;
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
@@ -298,8 +304,8 @@ export default {
   },
   created: function() {
     this.pbFunc.format();
-    this.getCustomer();
-    this.getPayer();
+    // this.getCustomer();
+    // this.getPayer();
   }
 }
 

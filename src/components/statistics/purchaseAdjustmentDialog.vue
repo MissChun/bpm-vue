@@ -219,6 +219,7 @@ export default {
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
+      this.submitBtn.isDisabled = true;
       this.differenceValue = { //差价
         active_tonnage: '', //实际装车吨位
         unit_price: '' //单价

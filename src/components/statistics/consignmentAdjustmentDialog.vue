@@ -132,9 +132,9 @@ export default {
       let postData = {
         need_all: true
       }
-      if (carrier) {
-        postData.short_name = carrier;
-      }
+      // if (carrier) {
+      //   postData.short_name = carrier;
+      // }
       this.carrierLoading = true;
       this.$$http('getCarrierList', postData).then((results) => {
         this.carrierLoading = false;
@@ -233,7 +233,8 @@ export default {
         check_quantity: '', //核算吨位
         stand_mile: '', //标准里程
         waiting_charges: '', //运费合计
-      };　　　　　　　　
+      };　　
+      this.submitBtn.isDisabled = true;　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
