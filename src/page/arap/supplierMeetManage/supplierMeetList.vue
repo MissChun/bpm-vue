@@ -17,10 +17,18 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="10">
                   <el-form-item label="开始日期:" label-width="105px">
-                    <el-date-picker v-model="startTime" type="month" placeholder="选择月">
-                    </el-date-picker>
+                    <el-row :gutter="0">
+                      <el-col :span="11">
+                        <el-date-picker v-model="startTime" type="month" placeholder="选择开始月" :clearable="false" @change="startSearch"></el-date-picker>
+                      </el-col>
+                      <el-col :span="2" class="text-center">-</el-col>
+                      <el-col :span="11">
+                        <el-date-picker v-model="endTime" type="month" placeholder="选择结束月" :clearable="false">
+                        </el-date-picker>
+                      </el-col>
+                    </el-row>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -70,7 +78,8 @@ export default {
       selectData: {
         supplierSelect: [] //供应商
       },
-      startTime: [], //开始日期
+      startTime: '', //开始日期
+      endTime: '', //结束日期
       thTableList: [{
         title: '供应商',
         param: 'supplier_name',
@@ -179,12 +188,20 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    payerDate() {
+      let payDate = new Date();
+      let days = new Date(payDate.getFullYear(), payDate.getMonth() + 1, 0);
+      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + '01 00:00:00';
+      this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 00:00:00';
     }
   },
   activated() {
     this.activeName = 'meet'
   },
   created: function() {
+    this.payerDate();
+    // this.pbFunc.format();
     this.getList();
     this.getSupplier();
   }
