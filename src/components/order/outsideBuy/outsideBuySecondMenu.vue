@@ -66,7 +66,7 @@ export default {
   name: 'outsidePickSecondMenu',
   components: {
     outsidePickListRender: () =>
-      import ("./outsidePickListRender.vue")
+      import ("./outsideBuyListRender.vue")
   },
   data() {
     return {
@@ -153,7 +153,7 @@ export default {
       this.pageLoading = true;
       if (this.fifterName == 'all') {
         sendData.all_search = this.status ;
-      }else if(this.fifterName=='all_cancel'){
+      }else if(this.fifterName=='canceled'){
         sendData.all_search = 'all_cancel' ;
       }
       else{

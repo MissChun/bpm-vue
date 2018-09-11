@@ -242,10 +242,12 @@
       </el-table-column>
        <el-table-column label="销售单价" prop="" min-width="150">
         <template slot-scope="props">
+          <template slot-scope="props">
             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.unit_price" placement="top-start" v-if="props.row.unit_price">
                 <span >{{props.row.unit_price}}</span>
             </el-tooltip>
             <span v-else>无</span>
+       </template>
        </template>
       </el-table-column>
        <el-table-column label="意向液厂" prop="" min-width="150">
@@ -286,16 +288,24 @@
             <span v-if="props.row.status.verbose&&props.row.status.verbose.length<10">{{props.row.status.verbose}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.status.verbose" placement="top-start">
                     <span v-if="props.row.status.verbose">{{props.row.status.verbose.slice(0,8)}}....</span>
+
                   </el-tooltip>
        </template>
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">  
-          <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" >
-              <el-col v-if="key==0">
-                <el-button  :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+          <el-row v-for="(items,keys) in buttonAll[props.row.status.key]" :key="keys" >
+              <el-col>
+                <el-button  :type="items.type" :plan="items.attrPlan" size="mini" @click="operation(items.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
-            </el-row>   
+          </el-row>
+
+        <!--    <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key"  style="margin-top:10px;">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row> -->
+
         </template>
       </el-table-column>
     </el-table>
