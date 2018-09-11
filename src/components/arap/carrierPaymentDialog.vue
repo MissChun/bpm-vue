@@ -7,13 +7,13 @@
     <el-dialog title="调账" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
-          <el-form-item label="供应商:" prop="supplier">
-            <el-select v-model="formRules.supplier" :loading="supplierLoading" filterable clearable placeholder="请输入选择">
-              <el-option v-for="(item,key) in supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+          <el-form-item label="承运商:" prop="carrier">
+            <el-select v-model="formRules.carrier" :loading="carrierLoading" filterable clearable placeholder="请输入选择">
+              <el-option v-for="(item,key) in carrierSelect" :key="key" :label="item.carrier_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="付款日期:" prop="payment_datetime">
-            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="付款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
@@ -32,7 +32,7 @@
 </template>
 <script>
 export default {
-  name: 'paymentManageDialog',
+  name: 'carrierPaymentDialog',
   props: {
     arapDialog: {
       type: Object,
@@ -48,14 +48,14 @@ export default {
   data: function() {
     return {
       formRules: {
-        supplier: '', //供应商
+        carrier: '', //承运商
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
       },
       rules: {
-        supplier: [
-          { required: true, message: '请选择供应商', trigger: 'blur' },
+        carrier: [
+          { required: true, message: '请选择承运商', trigger: 'blur' },
         ],
         payment_datetime: [
           { required: true, message: '请选择日期', trigger: 'blur' },
@@ -73,13 +73,8 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      supplierSelect: [], //供应商列表
-      supplierLoading: false,
-      differenceValue: { //差价
-        active_tonnage: '', //实际装车吨位
-        unit_price: '' //单价
-      }
-
+      carrierSelect: [], //承运商列表
+      carrierLoading: false,
     }
   },
   computed: {
@@ -89,24 +84,21 @@ export default {
     closeBtn: function() {
       this.$emit('closeDialogBtn', false);
     },
-    getSupplier: function() {
+    getCarrier: function(carrier) {
       let postData = {
-        need_all: true,
+        need_all: true
       }
-      this.supplierLoading = true;
-      this.$$http('searchSupplierList', postData).then((results) => {
-        this.supplierLoading = false;
+      this.carrierLoading = true;
+      this.$$http('getCarrierList', postData).then((results) => {
+        this.carrierLoading = false;
         if (results.data && results.data.code == 0) {
-          this.supplierSelect = results.data.data;
+          this.carrierSelect = results.data.data;
         }
       }).catch((err) => {
-        this.supplierLoading = false;
+        this.carrierLoading = false;
       })
     },
-
     adjustBtn: function() {
-
-      // console.log('调账', this.formRules)
       this.$refs['formRules'].validate((valid) => {
         if (valid) {
           this.submitBtn = {
@@ -115,12 +107,12 @@ export default {
             isLoading: true
           }
           let postData = this.formRules;
-          let apiName = 'addSupplierPayment';
+          let apiName = 'addCarrierPayment';
           if (this.arapDialog.type === 'update') {
             postData.id = this.arapRow.id;
-            apiName = 'updateSupplierPayment';
+            apiName = 'updateCarrierPayment';
           } else {
-            apiName = 'addSupplierPayment';
+            apiName = 'addCarrierPayment';
           }
 
           // let times = new Date();
@@ -158,14 +150,14 @@ export default {
   watch: {
     arapDialog(curVal, oldVal) {　
       this.formRules = {
-        supplier: '', //供应商
+        carrier: '', //承运商
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
       };　　
       if (curVal.type === 'update') {
         this.formRules = {
-          supplier: this.arapRow.supplier, //供应商
+          carrier: this.arapRow.carrier, //供应商
           payment_datetime: this.arapRow.payment_datetime, //付款日期
           amount: this.arapRow.amount, //付款金额
           desc: this.arapRow.desc, //调账备注
@@ -179,7 +171,7 @@ export default {
   },
   created: function() {
     this.pbFunc.format();
-    this.getSupplier();
+    this.getCarrier();
   }
 }
 

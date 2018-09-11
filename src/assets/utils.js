@@ -49,6 +49,7 @@ export const fifterbyArr = ARROBJ.fifterbyArr
 export const dealNullData = ARROBJ.dealNullData
 export const format = ARROBJ.format
 export const formatDate = ARROBJ.formatDate
+export const compareDate = ARROBJ.compareDate
 
 /* 字符串相关 */
 export const paddingZero = STR.paddingZero

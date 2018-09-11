@@ -4,18 +4,24 @@
 </style>
 <template>
   <div>
-    <el-dialog title="调账" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
-          <el-form-item label="供应商:" prop="supplier">
-            <el-select v-model="formRules.supplier" :loading="supplierLoading" filterable clearable placeholder="请输入选择">
-              <el-option v-for="(item,key) in supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+          <el-form-item label="客户简称:" prop="consumer">
+            <el-select v-model="formRules.consumer" :loading="customerLoading" filterable clearable placeholder="请输入选择" @change="selectCustomer">
+              <el-option v-for="(item,key) in customerSelect" :key="key" :label="item.consumer_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="付款日期:" prop="payment_datetime">
-            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+          <el-form-item label="客户名称:">
+            <div>{{customerObj.name}}</div>
           </el-form-item>
-          <el-form-item label="付款金额:" prop="amount">
+          <el-form-item label="业务员:">
+            <div>{{customerObj.man}}</div>
+          </el-form-item>
+          <el-form-item label="回款日期:" prop="payment_datetime">
+            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="回款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
           </el-form-item>
           <el-form-item label="备注:" prop="desc">
@@ -32,7 +38,7 @@
 </template>
 <script>
 export default {
-  name: 'paymentManageDialog',
+  name: 'customerReceivableDialog',
   props: {
     arapDialog: {
       type: Object,
@@ -48,20 +54,20 @@ export default {
   data: function() {
     return {
       formRules: {
-        supplier: '', //供应商
+        consumer: '', //客户
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
       },
       rules: {
-        supplier: [
-          { required: true, message: '请选择供应商', trigger: 'blur' },
+        consumer: [
+          { required: true, message: '请选择付款方', trigger: 'blur' },
         ],
         payment_datetime: [
           { required: true, message: '请选择日期', trigger: 'blur' },
         ],
         amount: [
-          { required: true, message: '请输入付款金额', trigger: 'blur' },
+          { required: true, message: '请输入回款金额', trigger: 'blur' },
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         desc: [
@@ -73,13 +79,13 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      supplierSelect: [], //供应商列表
-      supplierLoading: false,
-      differenceValue: { //差价
-        active_tonnage: '', //实际装车吨位
-        unit_price: '' //单价
+      customerSelect: [], //付款方列表
+      customer: false,
+      title: '新增回款事项',
+      customerObj: {
+        name: '',
+        man: ''
       }
-
     }
   },
   computed: {
@@ -89,24 +95,40 @@ export default {
     closeBtn: function() {
       this.$emit('closeDialogBtn', false);
     },
-    getSupplier: function() {
+    getCustomer: function() {
       let postData = {
-        need_all: true,
+        need_all: true
       }
-      this.supplierLoading = true;
-      this.$$http('searchSupplierList', postData).then((results) => {
-        this.supplierLoading = false;
+      this.customerLoading = true;
+      this.$$http('searchCustomerList', postData).then((results) => {
+        this.customerLoading = false;
         if (results.data && results.data.code == 0) {
-          this.supplierSelect = results.data.data;
+          this.customerSelect = results.data.data.data;
         }
       }).catch((err) => {
-        this.supplierLoading = false;
+        this.customerLoading = false;
       })
     },
+    selectCustomer(value) {
+      if (value) {
+        for (let i in this.customerSelect) {
+          if (this.customerSelect[i].id === value) {
+            this.customerObj = {
+              name: this.customerSelect[i].short_name,
+              man: this.customerSelect[i].sale_man_name
+            }
+            break;
+          }
+        }
+      } else {
+        this.customerObj = {
+          name: '',
+          man: ''
+        }
+      }
 
+    },
     adjustBtn: function() {
-
-      // console.log('调账', this.formRules)
       this.$refs['formRules'].validate((valid) => {
         if (valid) {
           this.submitBtn = {
@@ -115,12 +137,12 @@ export default {
             isLoading: true
           }
           let postData = this.formRules;
-          let apiName = 'addSupplierPayment';
+          let apiName = 'addCustomerReceivable';
           if (this.arapDialog.type === 'update') {
             postData.id = this.arapRow.id;
-            apiName = 'updateSupplierPayment';
+            apiName = 'updateCustomerReceivable';
           } else {
-            apiName = 'addSupplierPayment';
+            apiName = 'addCustomerReceivable';
           }
 
           // let times = new Date();
@@ -158,19 +180,26 @@ export default {
   watch: {
     arapDialog(curVal, oldVal) {　
       this.formRules = {
-        supplier: '', //供应商
+        consumer: '', //付款方
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
       };　　
       if (curVal.type === 'update') {
         this.formRules = {
-          supplier: this.arapRow.supplier, //供应商
+          consumer: this.arapRow.consumer, //付款方
           payment_datetime: this.arapRow.payment_datetime, //付款日期
           amount: this.arapRow.amount, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
-      }　　　　　　
+        this.customerObj = {
+          name: this.arapRow.short_name,
+          man: this.arapRow.sale_man_name
+        }
+        this.title = '修改打款事项';
+      } else {
+        this.title = '新增打款事项';
+      }　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
@@ -179,7 +208,7 @@ export default {
   },
   created: function() {
     this.pbFunc.format();
-    this.getSupplier();
+    this.getCustomer();
   }
 }
 

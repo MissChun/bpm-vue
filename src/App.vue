@@ -26,6 +26,13 @@ import noData from '@/components/common/noData';
 import exportButton from '@/components/common/exportButton';
 Vue.component("noData", noData);
 Vue.component("exportButton", exportButton);
+Vue.filter('dateFilter', function(value) {
+  let dates = [];
+  if (value) {
+    dates = value.split(' ');
+  }
+  return dates.length ? dates[0] : value;
+})
 export default {
   name: 'App',
   components: {
@@ -53,7 +60,7 @@ export default {
 
         outsideBuy: 'outsideBuy',
         outsidePick: 'outsidePick',
-        
+
         consignmentCenter: 'consignmentCenter',
         consignmentOrders: 'consignmentOrders',
         carrierManage: 'carrierManage',
@@ -75,10 +82,10 @@ export default {
         consignment: 'consignment',
         income: 'income',
 
-        arap: 'arap',//应收应付
-        supplierMeetManage: 'supplierMeetManage',//供应商
-        carrierMeetManage: 'carrierMeetManage',//承运商
-        payerMeetManage:'payerMeetManage',//付款方
+        arap: 'arap', //应收应付
+        supplierMeetManage: 'supplierMeetManage', //供应商
+        payerMeetManage: 'payerMeetManage', //付款方
+        carrierMeetManage: 'carrierMeetManage', //承运商
 
         setting: 'setting',
         organizationalStructure: 'organizationalStructure',

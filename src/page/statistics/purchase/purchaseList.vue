@@ -99,7 +99,6 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="140" fixed="right">
         <template slot-scope="scope">
-
           <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
             <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
             <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
@@ -108,7 +107,6 @@
             <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
             <el-button type="primary" size="mini" @click="handleMenuClick({operator:'edit',id:scope.row.id})">编辑</el-button>
           </div>
-
         </template>
       </el-table-column>
       </el-table>
@@ -412,13 +410,14 @@ export default {
             this.tableData.data.data[i].unit_price_dvalue = '';
             this.tableData.data.data[i].discounts_sum_dvalue = '';
             if (this.tableData.data.data[i].active_tonnage_adjust) {
-              this.tableData.data.data[i].active_tonnage_dvalue = (parseFloat(this.tableData.data.data[i].active_tonnage_adjust) * 1000-parseFloat(this.tableData.data.data[i].active_tonnage) * 1000) / 1000;
+              this.tableData.data.data[i].active_tonnage_dvalue = (parseFloat(this.tableData.data.data[i].active_tonnage_adjust) * 1000 - parseFloat(this.tableData.data.data[i].active_tonnage) * 1000) / 1000;
             }
             if (this.tableData.data.data[i].unit_price_adjust) {
-              this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100-parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
+              this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
             }
             if (this.tableData.data.data[i].discounts_sum_adjust) {
-              this.tableData.data.data[i].discounts_sum_dvalue = (parseFloat(this.tableData.data.data[i].discounts_sum_adjust) * 100-parseFloat(this.tableData.data.data[i].discounts_sum_price) * 100) / 100;
+              this.tableData.data.data[i].discounts_sum_dvalue = (parseFloat(this.tableData.data.data[i].discounts_sum_adjust) * 100 - parseFloat(this.tableData.data.data[i].discounts_sum_price) * 100) / 100;
+              this.tableData.data.data[i].discounts_sum_dvalue = (this.tableData.data.data[i].discounts_sum_dvalue).toFixed(2);
             }
             this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
           }

@@ -6,7 +6,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="供应商应付账款" name="meet"></el-tab-pane>
+        <el-tab-pane label="承运商应付报表" name="meet"></el-tab-pane>
         <el-tab-pane label="付款管理" name="payment">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
@@ -57,15 +57,15 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <payment-manage-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></payment-manage-dialog>
+    <carrier-payment-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></carrier-payment-dialog>
   </div>
 </template>
 <script>
-import paymentManageDialog from '@/components/arap/paymentManageDialog';
+import carrierPaymentDialog from '@/components/arap/carrierPaymentDialog';
 export default {
   name: 'paymentManage',
   components: {
-    paymentManageDialog: paymentManageDialog
+    carrierPaymentDialog: carrierPaymentDialog
   },
   computed: {
 
@@ -81,17 +81,17 @@ export default {
       activeName: 'payment',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        field: 'supplier',
+        field: 'carrier',
       },
       payerTime: [], //付款时间
       selectData: {
         fieldSelect: [
-          { id: 'supplier', value: '供应商' },
+          { id: 'carrier', value: '承运商' },
         ]
       },
       thTableList: [{
-        title: '供应商',
-        param: 'supplier_name',
+        title: '承运商',
+        param: 'carrier_name',
         width: '200'
       }, {
         title: '付款金额',
@@ -145,19 +145,14 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        // agreements__carrier: this.searchFilters.agreements__carrier,
-        // agreements__fluid: this.searchFilters.agreements__fluid
+
       };
-      if (this.payerTime.length) {
-        postData.payment_datetime_start = this.payerTime[0];
-        postData.payment_datetime_end = this.payerTime[1];
-      }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
 
-      this.$$http('getSupplierPaymentList', postData).then((results) => {
+      this.$$http('getCarrierPaymentList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -179,9 +174,11 @@ export default {
     handleClick: function(tab, event) {
       console.log('tab', tab);
       if (tab.name === 'meet') {
-        this.$router.push({ path: "/arap/supplierMeetManage/supplierMeetList" });
+        this.$router.push({ path: "/arap/carrierMeetManage/carrierMeetList" });
       }
     },
+
+
     pageChange: function() {
       setTimeout(() => {
         this.getList();

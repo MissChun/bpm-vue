@@ -1,4 +1,5 @@
 import order from './order'
+import arap from './arap'
 export default [{
   path: '',
   name: 'index',
@@ -9,6 +10,7 @@ export default [{
   },
   children: [
     order,
+    arap,
     {
       path: 'dashboard',
       name: 'dashboard',
@@ -693,45 +695,7 @@ export default [{
         }]
       }]
     },
-    {
-      path: 'arap',
-      name: 'arap',
 
-      meta: {
-        isVerificationL: false,
-        title: '应收应付',
-        iconName: 'icon-setting',
-      },
-      component: (resolve) => require(['../page/arap/arap'], resolve),
-      children: [{
-          path: 'supplierMeetManage',
-          name: "supplierMeetManage",
-          redirect: '/arap/supplierMeetManage/supplierMeetList',
-          meta: {
-            title: '供应商应付管理',
-            isVerificationL: true
-          },
-          component: (resolve) => require(['../page/arap/supplierMeetManage/supplierMeetManage'], resolve),
-          children: [{
-            path: 'supplierMeetList',
-            name: "supplierMeetList",
-            meta: {
-              title: '供应商应付账款',
-              isVerificationL: false
-            },
-            component: (resolve) => require(['../page/arap/supplierMeetManage/supplierMeetList'], resolve)
-          },{
-            path: 'paymentManage',
-            name: "paymentManage",
-            meta: {
-              title: '付款管理',
-              isVerificationL: false
-            },
-            component: (resolve) => require(['../page/arap/supplierMeetManage/paymentManage'], resolve)
-          }]
-        },
-      ]
-    },
     {
       path: 'setting',
       name: 'setting',

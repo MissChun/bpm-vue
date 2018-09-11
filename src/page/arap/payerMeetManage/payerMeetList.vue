@@ -6,19 +6,22 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="供应商应付账款" name="meet">
+        <el-tab-pane label="付款方应收报表" name="meet">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-              <el-row :gutter="30">
-                <el-col :span="6">
-                  <el-form-item label="供应商:">
-                    <el-select v-model="searchFilters.supplier_id" @change="startSearch" clearable filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
-                  </el-form-item>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
                 </el-col>
+              </el-row>
+              <el-row :gutter="30">
                 <el-col :span="10">
-                  <el-form-item label="开始日期:" label-width="105px">
+                  <el-form-item label="开始日期:">
                     <el-row :gutter="0">
                       <el-col :span="11">
                         <el-date-picker v-model="startTime" type="month" placeholder="选择开始月" :clearable="false" value-format="yyyy-MM-dd HH:mm:ss" @change="dateSelect"></el-date-picker>
@@ -51,14 +54,15 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="付款管理" name="payment"></el-tab-pane>
+        <el-tab-pane label="客户应收报表" name="customer"></el-tab-pane>
+        <el-tab-pane label="回款管理" name="receivable"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'supplierMeetList',
+  name: 'payerMeetList',
 
   computed: {
 
@@ -72,45 +76,50 @@ export default {
         pageSize: 10,
       },
       activeName: 'meet',
+      searchPostData: {}, //搜索参数
       searchFilters: {
         supplier_id: '',
+        field: 'payer_name',
       },
       selectData: {
-        supplierSelect: [] //供应商
+        fieldSelect: [
+          { id: 'payer_name', value: '付款客户' },
+        ],
+        supplierSelect: [], //供应商
       },
       startTime: '', //开始日期
       endTime: '', //结束日期
       thTableList: [{
-        title: '供应商',
-        param: 'supplier_name',
+        title: '付款方客户',
+        param: 'payer',
         width: '200'
       }, {
         title: '期初金额',
         param: 'first_amount',
         width: ''
       }, {
-        title: '装车数',
-        param: 'car_no',
+        title: '待时后总额',
+        param: 'waiting_charges_sum',
         width: ''
-      }, {
-        title: '装车吨位',
-        param: 'active_tonnage',
-        width: ''
-      }, {
-        title: '采购优惠后总额',
-        param: 'discounts_sum_price',
-        width: ''
-      }, {
+      },{
         title: '调账金额',
         param: 'change_amount',
         width: ''
       }, {
-        title: '付款金额',
+        title: '回款金额',
         param: 'total_amount',
         width: ''
-      }, {
+      },  {
         title: '期末金额',
         param: 'last_amount',
+        width: ''
+      },{
+        title: '能源利润',
+        param: 'energy_profit',
+        width: ''
+      }, {
+        title: '卸车数',
+        param: 'car_no',
         width: ''
       }, {
         title: '期初欠票金额',
@@ -132,6 +141,7 @@ export default {
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
     dateSelect(type) {
@@ -154,15 +164,11 @@ export default {
         page_size: this.pageData.pageSize,
         active_time_start: this.startTime,
         active_time_end: this.endTime,
-        supplier_id: this.searchFilters.supplier_id
       };
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      console.log('日期', this.startTime, this.endTime)
-      // postData[this.searchFilters.field] = this.searchFilters.keyword;
-
       this.pageLoading = true;
-
-      this.$$http('getSupplierMeetList', postData).then((results) => {
+      this.$$http('getPayerMeetList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -184,9 +190,10 @@ export default {
       }).catch((err) => {})
     },
     handleClick: function(tab, event) {
-      console.log('tab222', tab);
-      if (tab.name === 'payment') {
-        this.$router.push({ path: "/arap/supplierMeetManage/paymentManage" });
+      if (tab.name === 'customer') {
+        this.$router.push({ path: "/arap/payerMeetManage/customerMeetList" });
+      }else if(tab.name === 'receivable') {
+        this.$router.push({ path: "/arap/payerMeetManage/payerReceivableList" });
       }
     },
 

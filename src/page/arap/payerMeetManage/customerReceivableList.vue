@@ -1,5 +1,18 @@
 <style scoped lang="less">
-
+.nav-tab-setting {
+  position: relative;
+  .business-btn {
+    right: 0;
+    position: absolute;
+    top: -15px;
+    z-index: 2;
+  }
+  .operation-btn-list {
+    span+span {
+      margin-left: 10px;
+    }
+  }
+}
 
 </style>
 <template>
@@ -7,7 +20,8 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="供应商应付账款" name="meet"></el-tab-pane>
-        <el-tab-pane label="付款管理" name="payment">
+        <el-tab-pane label="客户应收报表" name="customer"></el-tab-pane>
+        <el-tab-pane label="回款管理" name="receivable">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
@@ -29,11 +43,18 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
-            <el-button type="primary" plain @click="">导入</el-button>
-            <!-- <el-button type="primary">导出</el-button> -->
-            <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
-          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="nav-tab-setting mt-25">
+      <div class="business-btn">
+        <el-button type="primary" plain @click="">导入</el-button>
+        <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
+      </div>
+      <el-tabs v-model="receivableActive" @tab-click="receivableClick">
+        <el-tab-pane label="付款方回款" name="paymentReceivable">
+        </el-tab-pane>
+        <el-tab-pane label="客户回款" name="customerReceivable">
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
@@ -57,15 +78,15 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <payment-manage-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></payment-manage-dialog>
+    <customer-receivable-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></customer-receivable-dialog>
   </div>
 </template>
 <script>
-import paymentManageDialog from '@/components/arap/paymentManageDialog';
+import customerReceivableDialog from '@/components/arap/customerReceivableDialog';
 export default {
-  name: 'paymentManage',
+  name: 'customerReceivableList',
   components: {
-    paymentManageDialog: paymentManageDialog
+    customerReceivableDialog: customerReceivableDialog
   },
   computed: {
 
@@ -78,27 +99,36 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName: 'payment',
+      activeName: 'receivable',
+      receivableActive: 'customerReceivable',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        field: 'supplier',
+        field: 'sonsumer',
       },
       payerTime: [], //付款时间
       selectData: {
         fieldSelect: [
-          { id: 'supplier', value: '供应商' },
+          { id: 'sonsumer', value: '客户简称' },
         ]
       },
       thTableList: [{
-        title: '供应商',
-        param: 'supplier_name',
-        width: '200'
-      }, {
-        title: '付款金额',
-        param: 'amount',
+        title: '客户简称',
+        param: 'short_name',
         width: ''
       }, {
-        title: '付款日期',
+        title: '客户名称',
+        param: 'consumer_name',
+        width: '200'
+      }, {
+        title: '业务员',
+        param: 'payment_datetime',
+        width: ''
+      },{
+        title: '回款金额',
+        param: 'amount',
+        width: ''
+      },{
+        title: '回款日期',
         param: 'payment_datetime',
         width: ''
       }, {
@@ -145,8 +175,6 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        // agreements__carrier: this.searchFilters.agreements__carrier,
-        // agreements__fluid: this.searchFilters.agreements__fluid
       };
       if (this.payerTime.length) {
         postData.payment_datetime_start = this.payerTime[0];
@@ -157,7 +185,7 @@ export default {
 
       this.pageLoading = true;
 
-      this.$$http('getSupplierPaymentList', postData).then((results) => {
+      this.$$http('getCustomerReceivableList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
@@ -177,9 +205,15 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'meet') {
-        this.$router.push({ path: "/arap/supplierMeetManage/supplierMeetList" });
+        this.$router.push({ path: "/arap/payerMeetManage/payerMeetList" });
+      } else if (tab.name === 'customer') {
+        this.$router.push({ path: "/arap/payerMeetManage/customerMeetList" });
+      }
+    },
+    receivableClick(tab, event) {
+      if (tab.name === 'paymentReceivable') {
+        this.$router.push({ path: "/arap/payerMeetManage/payerReceivableList" });
       }
     },
     pageChange: function() {
@@ -189,7 +223,8 @@ export default {
     }
   },
   activated() {
-    this.activeName = 'payment'
+    this.activeName = 'receivable';
+    this, receivableActive = 'customerReceivable';
   },
   created: function() {
     this.getList();

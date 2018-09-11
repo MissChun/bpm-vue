@@ -9,6 +9,102 @@
  */
 
 const api = {
+  updateCustomerReceivable: {
+    url: 'api/v1/payer-pay-c/:id/',
+    method: 'patch',
+    desc: '更新客户回款',
+    param: {
+
+    }
+  },
+  addCustomerReceivable: {
+    url: 'api/v1/payer-pay-c/',
+    method: 'post',
+    desc: '客户回款新增',
+    param: {
+
+    }
+  },
+  getCustomerReceivableList: {
+    url: '/api/v1/payer-pay-c/',
+    method: 'get',
+    desc: '客户回款列表',
+    param: {
+
+    }
+  },
+  updatePayerReceivable: {
+    url: 'api/v1/payer-pay-p/:id/',
+    method: 'patch',
+    desc: '更新付款方回款',
+    param: {
+
+    }
+  },
+  addPayerReceivable: {
+    url: 'api/v1/payer-pay-p/',
+    method: 'post',
+    desc: '付款方回款新增',
+    param: {
+
+    }
+  },
+  getPayerReceivableList: {
+    url: '/api/v1/payer-pay-p/',
+    method: 'get',
+    desc: '付款方回款列表',
+    param: {
+
+    }
+  },
+  getCustomerMeetList: {
+    url: '/api/v1/inout-consumer-pay/',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+
+    }
+  },
+  getPayerMeetList: {
+    url: '/api/v1/inout-payer-pay/',
+    method: 'get',
+    desc: '付款方应收列表',
+    param: {
+
+    }
+  },
+  updateCarrierPayment: {
+    url: '/api/v1/carrier-pay/:id/',
+    method: 'patch',
+    desc: '更新承运商付款',
+    param: {
+
+    }
+  },
+  addCarrierPayment: {
+    url: '/api/v1/carrier-pay/',
+    method: 'post',
+    desc: '承运商付款新增',
+    param: {
+
+    }
+  },
+  getCarrierPaymentList: {
+    url: '/api/v1/carrier-pay/',
+    method: 'get',
+    desc: '承运商付款列表',
+    param: {
+
+    }
+  },
+  getCarrierMeetList: {
+    url: '/api/v1/inout-carrier-pay/',
+    method: 'get',
+    desc: '承运商应付列表',
+    param: {
+
+    }
+  },
   updateSupplierPayment: {
     url: '/api/v1/supplier-pay/:id/',
     method: 'patch',
