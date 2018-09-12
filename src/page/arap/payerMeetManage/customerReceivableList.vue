@@ -37,7 +37,7 @@
               <el-row :gutter="10">
                 <el-col :span="8">
                   <el-form-item label="付款日期:">
-                    <el-date-picker v-model="payerTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
+                    <el-date-picker v-model="payerTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -113,7 +113,7 @@ export default {
       },
       thTableList: [{
         title: '客户简称',
-        param: 'short_name',
+        param: 'consumer_shortname',
         width: ''
       }, {
         title: '客户名称',
@@ -121,13 +121,13 @@ export default {
         width: '200'
       }, {
         title: '业务员',
-        param: 'payment_datetime',
+        param: 'consumer_saleman',
         width: ''
-      },{
+      }, {
         title: '回款金额',
         param: 'amount',
         width: ''
-      },{
+      }, {
         title: '回款日期',
         param: 'payment_datetime',
         width: ''
@@ -176,7 +176,7 @@ export default {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
       };
-      if (this.payerTime.length) {
+      if (this.payerTime && this.payerTime.length) {
         postData.payment_datetime_start = this.payerTime[0];
         postData.payment_datetime_end = this.payerTime[1];
       }

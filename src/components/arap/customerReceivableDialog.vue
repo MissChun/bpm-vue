@@ -196,9 +196,9 @@ export default {
           name: this.arapRow.short_name,
           man: this.arapRow.sale_man_name
         }
-        this.title = '修改打款事项';
+        this.title = '修改回款事项';
       } else {
-        this.title = '新增打款事项';
+        this.title = '新增回款事项';
       }　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　

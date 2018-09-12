@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <el-dialog title="调账" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
           <el-form-item label="供应商:" prop="supplier">
@@ -78,7 +78,8 @@ export default {
       differenceValue: { //差价
         active_tonnage: '', //实际装车吨位
         unit_price: '' //单价
-      }
+      },
+      title: '新增打款事项'
 
     }
   },
@@ -170,7 +171,10 @@ export default {
           amount: this.arapRow.amount, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
-      }　　　　　　
+        this.title = '修改打款事项';
+      } else {
+        this.title = '新增打款事项';
+      }　　　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　

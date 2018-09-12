@@ -182,7 +182,6 @@ export default {
       }).catch((err) => {})
     },
     handleClick: function(tab, event) {
-      console.log('tab222', tab);
       if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/carrierMeetManage/paymentManage" });
       }

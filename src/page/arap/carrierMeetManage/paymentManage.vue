@@ -23,7 +23,7 @@
               <el-row :gutter="10">
                 <el-col :span="8">
                   <el-form-item label="付款日期:">
-                    <el-date-picker v-model="payerTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
+                    <el-date-picker v-model="payerTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -145,8 +145,11 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-
       };
+      if (this.payerTime && this.payerTime.length) {
+        postData.payment_datetime_start = this.payerTime[0];
+        postData.payment_datetime_end = this.payerTime[1];
+      }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -156,14 +159,6 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-          for (let i in this.tableData) {
-            this.tableData[i].carrierListStr = '';
-            this.tableData[i].fluidListStr = '';
-            for (let j in this.tableData[i].agreements) {
-              // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
-              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
-            }
-          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
