@@ -49,7 +49,7 @@
         <el-tab-pane v-for="(item,index) in sendMenuData[status]" :label="item.countLable" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <outsidePickListRender :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsidePickListRender>
+              <!-- <outsideBuyListRender :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsideBuyListRender> -->
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -65,7 +65,7 @@
 export default {
   name: 'outsidePickSecondMenu',
   components: {
-    outsidePickListRender: () =>
+    outsideBuyListRender: () =>
       import ("./outsideBuyListRender.vue")
   },
   data() {
@@ -103,7 +103,9 @@ export default {
       fifterName: "all",
       sendMenuData: {
         'all_new': [{ key: 'all', value: '全部',countLable:"全部"}, { key: 'create_manager_check', value: '待经理审批',countLable:"待经理审批"},{ key: 'create_department_check', value: '待部门审批',countLable:"待部门审批"}],
-        'all_pickup': [{ key: 'all', value: '全部',countLable:"全部"}],
+        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_related', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'waiting_confirm', value: '已匹配待确认',countLable:"已匹配待确认"}],
+        'all_unload': [{ key: 'all', value: '全部',countLable:"全部"}],
+        'all_settle': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_change': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_finish': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'finished', value: '已完成',countLable:"已完成"},{ key: 'all_cancel', value: '已经取消',countLable:"已经取消"}],
         'all_count': [{ key: 'all', value: '全部',countLable:"全部"}],
@@ -115,6 +117,7 @@ export default {
         fieldSelect: [
           { id: 'truck_no', value: '车号' },
           { id: 'plan_fluid_name', value: '液厂名' },
+          { id: 'waybill_number', value: '业务单号' },
         ],
       },
       searchStatus: false,
@@ -178,7 +181,7 @@ export default {
       }
       sendData.pageSize = this.pageData.pageSize;
 
-      this.$$http("searchOutSaleOrder", sendData).then((results) => {
+      this.$$http("searchOutbuyOrder", sendData).then((results) => {
         if(results.data.code==0){
           this.listFifterData=results.data.data.data;
         }

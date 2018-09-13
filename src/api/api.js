@@ -2492,7 +2492,25 @@ const api = {
     param: {
 
     }
+  },
+  /*外采单接口*/
+  getOutsideBuyCount: {
+    url: '/api/v1/outbuy_order/count/',
+    method: 'get',
+    desc: "外采单数量",
+    param: {
+
+    }
+  },
+  searchOutbuyOrder: {
+    url: '/api/v1/outbuy_order/',
+    method: 'get',
+    desc: "外采单列表",
+    param: {
+
+    }
   }
+  /*--------*/
 }
 
 

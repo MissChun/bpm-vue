@@ -209,6 +209,22 @@
                   </el-tooltip>
                 </el-col> 
               </el-row>
+
+              <el-row style="margin-top:5px;">
+                <el-col :span="4" class="whiteSpan">
+                  下单人: 
+                  <el-tooltip  class="item" effect="light" :content="props.row.sale_man_name" placement="top-start">
+                    <span>{{props.row.sale_man_name}}</span>
+                  </el-tooltip>
+                </el-col> 
+
+                <el-col :span="4">
+                  下单人电话: <span v-if="props.row.sale_man_phone&&props.row.sale_man_phone.length<15">{{props.row.sale_man_phone}}</span>
+                  <el-tooltip v-else class="item" effect="light" :content="props.row.sale_man_phone" placement="top-start">
+                    <span v-if="props.row.sale_man_phone">{{props.row.sale_man_phone.slice(0,8)}}....</span>
+                  </el-tooltip>
+                </el-col> 
+              </el-row>
             </div>
             <div style="clear:both"></div>
           </div>

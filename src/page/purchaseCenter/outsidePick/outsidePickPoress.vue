@@ -104,12 +104,15 @@ export default {
         'create_department_check':{title:"新增部门审核",valueArr:[
           {key:'部门审核时间',valueKey:'operated_at'},{key:'部门审核结果',valueKey:'operation'},{key:'操作人',valueKey:'operator'}
         ]},
-        'canceled':{title:"外销单取消",valueArr:[
-          {key:'取消时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
-        ]},
         'waiting_pickup':{title:"装车完成",valueArr:[
           {key:'填写装车信息时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
-        ]}
+        ]},
+         'cancel':{title:"申请取消",valueArr:[
+          {key:'申请取消时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+        ]},
+         'cancel_check':{title:"申请取消通过",valueArr:[
+          {key:'通过时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+        ]},
       }
     }
   },

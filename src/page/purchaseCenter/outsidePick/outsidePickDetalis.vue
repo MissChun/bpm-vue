@@ -125,6 +125,27 @@
                         <div class="detail-form-item">{{outsidePickDetalisData.total_price}}</div>
                       </div>
                     </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>下单人:</label>
+                        <div class="detail-form-item">{{outsidePickDetalisData.sale_man_name}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>下单人电话:</label>
+                        <div class="detail-form-item">{{outsidePickDetalisData.sale_man_phone}}</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+
+                  <el-row :gutter="40">
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>备注:</label>
+                        <div class="detail-form-item">{{outsidePickDetalisData.mark}}</div>
+                      </div>
+                    </el-col>
                   </el-row>
                 </div>
                 <div class="detail-list detail-form">

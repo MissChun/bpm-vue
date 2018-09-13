@@ -36,15 +36,19 @@ export default {
       },
       firstMenuData:[
         {key:'all_new',label:"新增",countLable:"新增",secondCount:[]},
-        {key:'all_pickup',label:"装车",countLable:"装车",secondCount:[]},
-        {key:'all_change',label:"变更中",countLable:"变更中",secondCount:[]},
-        {key:'all_finish',label:"历史",countLable:"历史",secondCount:[]},
+        {key:'all_match',label:"匹配卸车",countLable:"装车",secondCount:[]},
+        {key:'all_unload',label:"卸车",countLable:"变更中",secondCount:[]},
+        {key:'all_settle',label:"结算",countLable:"历史",secondCount:[]},
+        {key:'all_change',label:"变更中",countLable:"全部",secondCount:[]},
+        {key:'all_finish',label:"历史",countLable:"全部",secondCount:[]},
         {key:'all_count',label:"全部",countLable:"全部",secondCount:[]}
       ],
       show:true,
       defaultSecond:{
         all_new:'all',
-        all_pickup:'all',
+        all_match:'all',
+        all_unload:'all',
+        all_settle:'all',
         all_change:'all',
         all_finish:'all',
         all_count:'all',
@@ -63,6 +67,7 @@ export default {
         fieldSelect: [
           { id: 'truck_no', value: '车号' },
           { id: 'fluid_name', value: '液厂名' },
+          { id: 'waybill_number', value: '业务单号' },
         ]
       },
     };
@@ -79,11 +84,11 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       var defaultTabls=this.defaultSecond[targetName.name];
-      this.$router.push({ path: "/purchaseCenter/outsidePick/outsidePickList?goTo="+targetName.name+"&secondActiveName="+defaultTabls });
+      this.$router.push({ path: "/purchaseCenter/outsideBuy/outsideBuyList?goTo="+targetName.name+"&secondActiveName="+defaultTabls });
       this.reshCount();
     },
     reshCount:function(){
-      this.$$http("getOutsidePickCount",{}).then((results)=>{
+      this.$$http("getOutsideBuyCount",{}).then((results)=>{
         if(results.data.code==0){
           let countData=results.data.data;
           this.firstMenuData.forEach((item,index)=>{
