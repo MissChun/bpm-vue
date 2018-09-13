@@ -79,11 +79,13 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         supplier_id: '',
-        field: 'customer_name',
+        field: 'short_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'customer_name', value: '客户简称' },
+          { id: 'short_name', value: '客户简称' },
+          { id: 'customer_name', value: '客户名称' },
+          { id: 'sale_man', value: '业务员' },
         ],
         supplierSelect: [], //供应商
       },
@@ -93,11 +95,11 @@ export default {
         title: '客户简称',
         param: 'short_name',
         width: ''
-      },{
+      }, {
         title: '客户名称',
         param: 'consumer_name',
         width: '200'
-      },{
+      }, {
         title: '付款方式',
         param: 'settlement_cycle',
         width: ''
@@ -105,7 +107,7 @@ export default {
         title: '期初余额',
         param: 'first_amount',
         width: ''
-      },{
+      }, {
         title: '核算吨位',
         param: 'check_quantity_sum',
         width: ''
@@ -113,7 +115,7 @@ export default {
         title: '待时后总额',
         param: 'waiting_charges_sum',
         width: ''
-      },  {
+      }, {
         title: '回款金额',
         param: 'total_amount',
         width: ''
@@ -121,7 +123,7 @@ export default {
         title: '调账金额',
         param: 'change_amount',
         width: ''
-      },{
+      }, {
         title: '期末余额',
         param: 'last_amount',
         width: ''
@@ -196,7 +198,7 @@ export default {
     handleClick: function(tab, event) {
       if (tab.name === 'meet') {
         this.$router.push({ path: "/arap/payerMeetManage/payerMeetList" });
-      }else if(tab.name === 'receivable') {
+      } else if (tab.name === 'receivable') {
         this.$router.push({ path: "/arap/payerMeetManage/payerReceivableList" });
       }
     },
@@ -210,15 +212,16 @@ export default {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth() + 1, 0)).getDate();
       this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + '01 00:00:00';
-      this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
+      // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
+      this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
     }
   },
   activated() {
     this.activeName = 'customer'
   },
   created: function() {
+    this.pbFunc.format();
     this.payerDate();
-    // this.pbFunc.format();
     this.getList();
     this.getSupplier();
   }

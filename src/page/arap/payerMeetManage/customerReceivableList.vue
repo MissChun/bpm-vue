@@ -103,12 +103,14 @@ export default {
       receivableActive: 'customerReceivable',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        field: 'sonsumer',
+        field: 'shortname',
       },
       payerTime: [], //付款时间
       selectData: {
         fieldSelect: [
-          { id: 'sonsumer', value: '客户简称' },
+          { id: 'shortname', value: '客户简称' },
+          { id: 'sonsumer', value: '客户名称' },
+          { id: 'saleman', value: '业务员' },
         ]
       },
       thTableList: [{

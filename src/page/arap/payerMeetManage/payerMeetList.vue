@@ -205,15 +205,16 @@ export default {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth() + 1, 0)).getDate();
       this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + '01 00:00:00';
-      this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
+      // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
+      this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
     }
   },
   activated() {
     this.activeName = 'meet'
   },
   created: function() {
+    this.pbFunc.format();
     this.payerDate();
-    // this.pbFunc.format();
     this.getList();
     this.getSupplier();
   }
