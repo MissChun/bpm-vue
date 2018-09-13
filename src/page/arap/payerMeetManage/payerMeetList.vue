@@ -78,7 +78,6 @@ export default {
       activeName: 'meet',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        supplier_id: '',
         field: 'payer_name',
       },
       selectData: {

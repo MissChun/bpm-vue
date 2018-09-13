@@ -33,7 +33,7 @@
           <el-form-item label="标准里程:" prop="stand_mile_adjust">
             <el-row>
               <el-col :span="8">
-                <div class="dialog-row-font">{{adjustRow.stand_mile}} 元</div>
+                <div class="dialog-row-font">{{adjustRow.stand_mile}} 公里</div>
               </el-col>
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.stand_mile_adjust" @change="isValue('standMile')"></el-input>
@@ -44,7 +44,7 @@
           <el-form-item label="运费合计:" prop="waiting_charges_adjust">
             <el-row>
               <el-col :span="8">
-                <div class="dialog-row-font">{{adjustRow.waiting_charges}} 车</div>
+                <div class="dialog-row-font">{{adjustRow.waiting_charges}} 元</div>
               </el-col>
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.waiting_charges_adjust" @change="isValue('waitingCharges')"></el-input>

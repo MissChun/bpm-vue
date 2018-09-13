@@ -64,7 +64,9 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                <span>
+                  <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                </span>
                 {{scope.row[item.param]}}
               </div>
             </template>
@@ -77,7 +79,7 @@
           <el-table-column label="运费合计" align="center" width="100" fixed="right">
             <template slot-scope="scope">
               <div>
-                <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+                <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
                 {{scope.row.waiting_charges}}
               </div>
             </template>
@@ -420,6 +422,7 @@ export default {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             }
           }
+          console.log('ces ',this.tableData.data.data)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

@@ -9,16 +9,19 @@
         <el-tab-pane label="供应商应付账款" name="meet">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-              <el-row :gutter="30">
-                <el-col :span="6">
-                  <el-form-item label="供应商:">
-                    <el-select v-model="searchFilters.supplier_id" @change="startSearch" clearable filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.supplierSelect" :key="key" :label="item.supplier_name" :value="item.id"></el-option>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
-                  </el-form-item>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
                 </el-col>
+              </el-row>
+              <el-row :gutter="30">
                 <el-col :span="10">
-                  <el-form-item label="开始日期:" label-width="105px">
+                  <el-form-item label="开始日期:">
                     <el-row :gutter="0">
                       <el-col :span="11">
                         <el-date-picker v-model="startTime" type="month" placeholder="选择开始月" :clearable="false" value-format="yyyy-MM-dd HH:mm:ss" @change="dateSelect"></el-date-picker>
@@ -31,6 +34,7 @@
                     </el-row>
                   </el-form-item>
                 </el-col>
+              </el-row>
               </el-row>
             </el-form>
           </div>
@@ -72,10 +76,14 @@ export default {
         pageSize: 10,
       },
       activeName: 'meet',
+      searchPostData: {}, //搜索参数
       searchFilters: {
-        supplier_id: '',
+        field: 'supplier_name',
       },
       selectData: {
+        fieldSelect: [
+          { id: 'supplier_name', value: '供应商' },
+        ],
         supplierSelect: [] //供应商
       },
       startTime: '', //开始日期
@@ -132,6 +140,7 @@ export default {
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
     dateSelect(type) {
@@ -154,8 +163,8 @@ export default {
         page_size: this.pageData.pageSize,
         active_time_start: this.startTime,
         active_time_end: this.endTime,
-        supplier_id: this.searchFilters.supplier_id
       };
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       console.log('日期', this.startTime, this.endTime)
       // postData[this.searchFilters.field] = this.searchFilters.keyword;

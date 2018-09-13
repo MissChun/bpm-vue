@@ -432,16 +432,22 @@ export default {
           isLoading: false,
           isDisabled: false,
         }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.down_url);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
+
+        if (results.data && results.status == 200) {
+          console.log('导出4', results, results.data);
+          // window.open(results.data);
         }
+        // if (results.data && results.data.code == 0) {
+        //   window.open(results.data.data.down_url);
+        //   this.$message({
+        //     message: '导出成功',
+        //     type: 'success'
+        //   });
+        // } else {
+        //   this.$message.error('导出失败');
+        // }
       }).catch((err) => {
+        console.log('导出', err)
         this.$message.error('导出失败');
         this.exportBtn = {
           text: '导出',

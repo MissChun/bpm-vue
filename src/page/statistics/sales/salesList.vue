@@ -80,7 +80,7 @@
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
-                  <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                  <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
                   {{scope.row[item.param]}}
               </span>
       </div>
@@ -89,7 +89,7 @@
       <el-table-column label="待时后总额" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
             {{scope.row.waiting_charges}}
           </div>
         </template>
@@ -281,7 +281,7 @@ export default {
         param: 'unload_nums',
         width: '',
         isAdjust: true,
-        adjustParam: 'waiting_charges_dvalue'
+        adjustParam: 'unload_nums_dvalue'
       }, {
         title: '卸车待时金额',
         param: 'waiting_price',
@@ -449,7 +449,7 @@ export default {
               this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
             }
             if (this.tableData.data.data[i].unload_nums_adjust) {
-              this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums_price) * 1000) / 1000;
+              this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums) * 1000) / 1000;
             }
             if (this.tableData.data.data[i].waiting_charges_adjust) {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;

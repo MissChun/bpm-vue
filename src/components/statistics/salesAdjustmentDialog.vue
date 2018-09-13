@@ -26,7 +26,7 @@
                 <div class="dialog-row-font">{{adjustRow.payer_name}}</div>
               </el-col>
               <el-col :span="11">
-                <el-select v-model="formRules.payer_name_id" :loading="payerLoading" filterable remote clearable @change="searchPayer" :remote-method="getPayer" placeholder="请输入选择">
+                <el-select v-model="formRules.payer_id_adjust" :loading="payerLoading" filterable remote clearable @change="searchPayer" :remote-method="getPayer" placeholder="请输入选择">
                   <el-option v-for="(item,key) in payerSelect" :key="key" :label="item.payer" :value="item.id"></el-option>
                 </el-select>
               </el-col>
@@ -100,8 +100,8 @@ export default {
     return {
       formRules: {
         short_name_adjust: '', //客户简称
-        payer_name: '', //付款方
-        payer_name_id: '',
+        payer_name_adjust: '', //付款方
+        payer_id_adjust: '',
         check_quantity_adjust: '', //核算吨位
         unit_price_adjust: '', //结算价格
         unload_nums_adjust: '', //卸车数
@@ -174,15 +174,15 @@ export default {
         for (let i in this.payerSelect) {
           console.log(value, this.payerSelect[i].id)
           if (value === this.payerSelect[i].id) {
-            this.formRules.payer_name = this.payerSelect[i].payer;
+            this.formRules.payer_name_adjust = this.payerSelect[i].payer;
             break;
           }
         }
       } else {
-        this.formRules.payer_name = '';
+        this.formRules.payer_name_adjust = '';
       }
       this.isValue();
-      this.getPayer(this.formRules.payer_name);
+      this.getPayer(this.formRules.payer_name_adjust);
     },
     getPayer: function(payer) {
       let postData = {
@@ -279,7 +279,7 @@ export default {
       this.formRules = {
         short_name_adjust: '', //客户简称
         payer_name: '', //付款方
-        payer_name_id: '',
+        payer_id_adjust: '',
         check_quantity_adjust: '', //核算吨位
         unit_price_adjust: '', //结算价格
         unload_nums_adjust: '', //卸车数
