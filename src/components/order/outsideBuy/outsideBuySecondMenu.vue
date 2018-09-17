@@ -112,7 +112,7 @@ export default {
       showPlanArrTime:['all_unload','all_settle','all_change','all_finish','all_count'],
       sendMenuData: {
         'all_new': [{ key: 'all', value: '全部',countLable:"全部"}, { key: 'create_manager_check', value: '待经理审批',countLable:"待经理审批"},{ key: 'create_department_check', value: '待部门审批',countLable:"待部门审批"}],
-        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_match', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'confirm_match', value: '以匹配待确认',countLable:"已匹配待确认"},{ key: 'already_match', value: '已匹配已确认',countLable:"以匹配已确认"}],
+        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_match', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'confirm_match', value: '已匹配待确认',countLable:"已匹配待确认"},{ key: 'already_match', value: '已匹配已确认',countLable:"已匹配已确认"}],
         'all_unload': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_settle': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_change': [{ key: 'all', value: '全部',countLable:"全部"}],

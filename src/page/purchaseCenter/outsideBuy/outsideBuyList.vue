@@ -36,11 +36,11 @@ export default {
       },
       firstMenuData:[
         {key:'all_new',label:"新增",countLable:"新增",secondCount:[]},
-        {key:'all_match',label:"匹配卸车",countLable:"装车",secondCount:[]},
-        {key:'all_unload',label:"卸车",countLable:"变更中",secondCount:[]},
-        {key:'all_settle',label:"结算",countLable:"历史",secondCount:[]},
-        {key:'all_change',label:"变更中",countLable:"全部",secondCount:[]},
-        {key:'all_finish',label:"历史",countLable:"全部",secondCount:[]},
+        {key:'all_match',label:"匹配卸车",countLable:"匹配卸车",secondCount:[]},
+        {key:'all_unload',label:"卸车",countLable:"卸车",secondCount:[]},
+        {key:'all_settle',label:"结算",countLable:"结算",secondCount:[]},
+        {key:'all_change',label:"变更中",countLable:"变更中",secondCount:[]},
+        {key:'all_finish',label:"历史",countLable:"历史",secondCount:[]},
         {key:'all_count',label:"全部",countLable:"全部",secondCount:[]}
       ],
       show:true,
