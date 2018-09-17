@@ -126,6 +126,7 @@
 </template>
 <script>
 import refuseDialog from '@/components/businessManage/refuseDialog';
+import axios from 'axios';
 export default {
   name: 'tradeBusinessList',
   props: ['detailLink', 'isToExamine'],
@@ -419,42 +420,55 @@ export default {
     },
     // 导出列表
     exportData() {
-
+      for (let i in this.exportPostData) {
+        if (i === 'page' || i === 'page_size') {
+          delete this.exportPostData[i];
+        }
+      }
       this.exportPostData.export_excel = 'export';
       this.exportBtn = {
         text: '导出中',
         isLoading: true,
         isDisabled: true,
       }
-      this.$$http('getBusinessList', this.exportPostData).then((results) => {
+      let url = 'http://bpm.hhtdlng.com';
+      axios.get('/api/v1/business_order/', {
+        method: 'get',
+        responseType: 'blob',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          'Authorization': 'jwt ' + this.pbFunc.getLocalData('token', true)
+        },
+        params: this.exportPostData,
+      }).then((res) => {
+        // let fileName = res.headers['content-disposition'].match(/fushun(\S*)xls/)[0];
+        // fileDownload(res.data, fileName);
+        //如果用方法一 ，这里需要安装 npm install js-file-download --save ,然后引用 var fileDownload = require('js-file-download')，使用详情见github;
         this.exportBtn = {
           text: '导出',
           isLoading: false,
           isDisabled: false,
+        }　　　　
+        if (res.data && res.status == 200) {
+          // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
+          let objectUrl = URL.createObjectURL(res.data);
+          console.log('objectUrl', objectUrl);　
+          let link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = objectUrl;
+          link.setAttribute('download', '业务单.xlsx');
+          document.body.appendChild(link);
+          link.click()　　　　　
         }
-
-        if (results.data && results.status == 200) {
-          console.log('导出4', results, results.data);
-          // window.open(results.data);
-        }
-        // if (results.data && results.data.code == 0) {
-        //   window.open(results.data.data.down_url);
-        //   this.$message({
-        //     message: '导出成功',
-        //     type: 'success'
-        //   });
-        // } else {
-        //   this.$message.error('导出失败');
-        // }
-      }).catch((err) => {
-        console.log('导出', err)
-        this.$message.error('导出失败');
+      }).catch(function(res) {
         this.exportBtn = {
           text: '导出',
           isLoading: false,
           isDisabled: false,
-        }
-      })
+        }　　
+      });
     },
     isShowBtn(status) {
       switch (status) {

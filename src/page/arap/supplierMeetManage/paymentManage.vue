@@ -30,16 +30,21 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain @click="">导入</el-button>
+            <!-- <el-button type="primary" plain @click="" >导入</el-button> -->
             <!-- <el-button type="primary">导出</el-button> -->
             <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
                 <template slot-scope="scope">
                   <div v-if="item.param==='payment_datetime'">{{scope.row[item.param]|dateFilter}}</div>
-                  <div v-else>{{scope.row[item.param]}}</div>
+                  <div v-else>
+                    <div v-if="item.param==='desc'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                    <div v-else>
+                      {{scope.row[item.param]}}
+                    </div>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center">
@@ -104,7 +109,7 @@ export default {
       }, {
         title: '备注',
         param: 'desc',
-        width: ''
+        width: '170'
       }, {
         title: '添加时间',
         param: 'created_at',

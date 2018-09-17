@@ -90,7 +90,7 @@ export default {
         need_all: true
       }
       this.payerLoading = true;
-      this.$$http('searchCustomerPayList', postData).then((results) => {
+      this.$$http('getPayerSimpleAll', postData).then((results) => {
         this.payerLoading = false;
         if (results.data && results.data.code == 0) {
           this.payerSelect = results.data.data;

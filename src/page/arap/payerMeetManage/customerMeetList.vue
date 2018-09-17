@@ -154,7 +154,7 @@ export default {
       let dates = this.endTime.split('-');
       let days = (new Date(dates[0], dates[1], 0)).getDate();
       if (type === 'end') {
-        this.endTime = this.endTime + '-' + days + ' 23:23:59';
+        this.endTime = this.endTime + '-' + days + ' 23:59:59';
       }
       let endDate = this.pbFunc.compareDate(this.startTime, this.endTime);
       if (endDate) {

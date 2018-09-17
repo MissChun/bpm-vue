@@ -93,7 +93,7 @@ export default {
         param: 'payer',
         width: '200'
       }, {
-        title: '期初金额',
+        title: '期初余额',
         param: 'first_amount',
         width: ''
       }, {
@@ -109,7 +109,7 @@ export default {
         param: 'total_amount',
         width: ''
       },  {
-        title: '期末金额',
+        title: '期末余额',
         param: 'last_amount',
         width: ''
       },{
@@ -147,7 +147,7 @@ export default {
       let dates = this.endTime.split('-');
       let days = (new Date(dates[0], dates[1], 0)).getDate();
       if (type === 'end') {
-        this.endTime = this.endTime + '-' + days + ' 23:23:59';
+        this.endTime = this.endTime + '-' + days + ' 23:59:59';
       }
       let endDate = this.pbFunc.compareDate(this.startTime, this.endTime);
       if (endDate) {

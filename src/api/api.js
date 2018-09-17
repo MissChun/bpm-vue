@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getPayerSimpleAll: {
+    url: '/api/v1/payer_simple/',
+    method: 'get',
+    desc: '获取付款方全部列表',
+    param: {
+
+    }
+  },
   updateCustomerReceivable: {
     url: 'api/v1/payer-pay-c/:id/',
     method: 'patch',
