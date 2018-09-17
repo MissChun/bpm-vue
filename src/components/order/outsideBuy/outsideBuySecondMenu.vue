@@ -34,11 +34,19 @@
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
-            <el-form-item align="right" label="计划装货时间:" label-width="105px">
-              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+            <el-form-item align="right" label="实际装货时间:" label-width="105px">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.actual_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
+
+           <el-col :span="8" class="searchSection" v-if="showPlanArrTime.indexOf(status)>-1">
+            <el-form-item align="right" label="计划到站时间:" label-width="105px">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.plan_arrive_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+
         </el-row>
       </el-form>
       <el-button type="primary" style="position:absolute;right:25px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
@@ -101,9 +109,10 @@ export default {
       pageLoading: false,
       exportLoading:false,
       fifterName: "all",
+      showPlanArrTime:['all_unload','all_settle','all_change','all_finish','all_count'],
       sendMenuData: {
         'all_new': [{ key: 'all', value: '全部',countLable:"全部"}, { key: 'create_manager_check', value: '待经理审批',countLable:"待经理审批"},{ key: 'create_department_check', value: '待部门审批',countLable:"待部门审批"}],
-        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_match', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'confirm_match', value: '以匹配待确认',countLable:"以匹配待确认"},{ key: 'already_match', value: '以匹配已确认',countLable:"以匹配已确认"}],
+        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_match', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'confirm_match', value: '以匹配待确认',countLable:"已匹配待确认"},{ key: 'already_match', value: '已匹配已确认',countLable:"以匹配已确认"}],
         'all_unload': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_settle': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_change': [{ key: 'all', value: '全部',countLable:"全部"}],
@@ -111,7 +120,8 @@ export default {
         'all_count': [{ key: 'all', value: '全部',countLable:"全部"}],
       },
       timeParam: {
-        load_plan_time: []
+        actual_time: [],
+        plan_arrive_time:[]
       },
       selectData: {
         fieldSelect: [
@@ -163,9 +173,13 @@ export default {
         sendData.status=this.fifterName;
       }
      
-      if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
-        sendData.plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
-        sendData.plan_time_end = this.timeParam.load_plan_time[1];
+      if (this.timeParam.actual_time instanceof Array && this.timeParam.actual_time.length > 0) {
+        sendData.actual_time_start = this.timeParam.actual_time[0]; //计划装车
+        sendData.actual_time_end = this.timeParam.actual_time[1];
+      }
+      if (this.timeParam.plan_arrive_time instanceof Array && this.timeParam.plan_arrive_time.length > 0) {
+        sendData.plan_arrive_time_start = this.timeParam.plan_arrive_time[0]; //计划装车
+        sendData.plan_arrive_time_end = this.timeParam.plan_arrive_time[1];
       }
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;

@@ -62,18 +62,36 @@
           
         </el-tab-pane>
         <el-tab-pane label="外销单进程" name="second" style="width:80%; padding:25px 20px;">
-          <el-collapse  v-if="outsidePickDetalisData.length>=1"  v-model="activeNames">
-               <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsidePickDetalisData" :key="key" v-if="statusType[item.type]">
-                  <el-row v-for="n in Math.ceil(statusType[item.type].valueArr.length/4)" :gutter="40">
-                    <el-col v-for="(Kitem,index) in statusType[item.type].valueArr" v-if="index<((n+1)*4)" :span="8">
-                      <div class="label-list">
-                         <label style="margin-left:10px;">{{Kitem.key}} :</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(item[Kitem.valueKey])"></div>
-                      </div>
-                    </el-col>
-                  </el-row>
-               </el-collapse-item>
-          </el-collapse>
+          <div class="detail-main border-top-clear">
+            <el-container v-show="!pageLoading" style="min-height:200px;">
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/purchaseCenter/outsidePick/outsidePickList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>外销单进程</p>
+                  </el-col>
+                </el-row>
+              </el-header>
+              <el-main class="mt-30">
+                <el-collapse  v-if="outsidePickDetalisData.length>=1"  v-model="activeNames">
+                     <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsidePickDetalisData" :key="key" v-if="statusType[item.type]">
+                        <el-row v-for="n in Math.ceil(statusType[item.type].valueArr.length/4)" :gutter="40">
+                          <el-col v-for="(Kitem,index) in statusType[item.type].valueArr" v-if="index<((n+1)*4)" :span="8">
+                            <div class="label-list">
+                               <label style="margin-left:10px;">{{Kitem.key}} :</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item[Kitem.valueKey])"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                     </el-collapse-item>
+                </el-collapse>
+              </el-main>
+            </el-container>
+          </div>
         </el-tab-pane>
 
       </el-tabs>

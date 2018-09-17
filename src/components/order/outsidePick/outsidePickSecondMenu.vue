@@ -34,7 +34,7 @@
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
-            <el-form-item align="right" label="计划装货时间:" label-width="105px">
+            <el-form-item align="right" label="计划采购时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
@@ -115,6 +115,7 @@ export default {
         fieldSelect: [
           { id: 'truck_no', value: '车号' },
           { id: 'plan_fluid_name', value: '液厂名' },
+          { id: 'order_number', value: '业务单号' },
         ],
       },
       searchStatus: false,

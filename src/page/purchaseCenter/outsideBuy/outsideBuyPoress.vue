@@ -64,32 +64,49 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="外销单详情" name="first">
+        <el-tab-pane label="外采单单详情" name="first">
           
         </el-tab-pane>
-        <el-tab-pane label="外销单进程" name="second" style="width:80%; padding:25px 20px;">
-          <el-collapse  v-if="outsideBuyDetalisData.length>=1"  v-model="activeNames">
-               <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsideBuyDetalisData" :key="key" v-if="statusType[item.type]">
-                  <el-row  :gutter="40">
-                    <el-col v-for="(Kitem,index) in statusType[item.type].valueArr"  :span="8">
-                      <div class="label-list">
-                         <label style="margin-left:10px;">{{Kitem.key}} :</label>
-                         <div v-if="Kitem.url" class="detail-form-item">
+        <el-tab-pane label="外采单进程" name="second" style="width:80%; padding:25px 20px;">
+          <div class="detail-main border-top-clear">
+            <el-container v-show="!pageLoading" style="min-height:200px;">
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/purchaseCenter/outsideBuy/outsideBuyList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>外采单进程</p>
+                  </el-col>
+                </el-row>
+              </el-header>
+              <el-main class="mt-30">
+                <el-collapse  v-if="outsideBuyDetalisData.length>=1"  v-model="activeNames">
+                  <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsideBuyDetalisData" :key="key" v-if="statusType[item.type]">
+                    <el-row  :gutter="40">
+                      <el-col v-for="(Kitem,index) in statusType[item.type].valueArr"  :span="8">
+                        <div class="label-list">
+                           <label style="margin-left:10px;">{{Kitem.key}} :</label>
+                           <div v-if="Kitem.url" class="detail-form-item">
+                              <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
+                               <router-link target="_blank" :to="'/imgReview?imgList='+item[Kitem.imgUrl]">
+                                  <span style="color:#409EFF">{{Kitem.urlText}}</span>
+                               </router-link>
+                           </div>
+                          <div class="detail-form-item whiteSpan" v-else>
                             <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
-                             <router-link target="_blank" :to="'/imgReview?imgList='+item[Kitem.imgUrl]">
-                                <span style="color:#409EFF">{{Kitem.urlText}}</span>
-                             </router-link>
-                         </div>
-                        <div class="detail-form-item whiteSpan" v-else>
-                          <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
+                          </div>
                         </div>
-                      </div>
-                    </el-col>
-                  </el-row>
-               </el-collapse-item>
-          </el-collapse>
+                      </el-col>
+                    </el-row>
+                 </el-collapse-item>
+                </el-collapse>
+              </el-main>
+            </el-container>
+          </div>
         </el-tab-pane>
-
       </el-tabs>
     </div>
   </div>

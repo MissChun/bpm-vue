@@ -412,12 +412,7 @@ export default {
 
           methods_type: "matchUnload",
         }],
-        confirm_match:[{
-          text: "变更卸货单",
-          type: "primary",
-          methods_type: "changeUnload",
-          attrPlan: true
-        }],
+        confirm_match:[],
         already_match:[{
           text: "变更卸货单",
           type: "primary",
@@ -431,13 +426,6 @@ export default {
         fluidList:[]
       },
       
-      passParam:{
-        buy_price:"",
-        actual_fluid:"",
-        supplier_id:"",
-        id:"",
-        fluid_name:""
-      },
       refuseParam:{
         approval_mark:"",
         action:"denied",
@@ -463,13 +451,6 @@ export default {
   methods: {
     changeExpand:function(){
 
-    },
-    bindFluidName:function(){
-      this.selectData.fluidList.forEach((item,index)=>{
-        if(item.actual_fluid==this.passParam.actual_fluid){
-          this.passParam.fluid_name=item.fluid_name;
-        }
-      });
     },
     expandArr: function() {
       if(this.expandStatus){
@@ -502,6 +483,7 @@ export default {
             this.loadingArr.departemntCancleLoading=false;
             if(results.data.code==0){
               this.dialogParam.departemntCancleShow=false;
+              this.refuseParam={approval_mark:"",action:"denied",order_id:""};
               this.$message({
                 message: '审核拒绝成功',
                 type: 'success'

@@ -193,6 +193,9 @@
                   <el-tooltip v-else class="item" effect="light" :content="props.row.actual_quantity" placement="top-start">
                     <span v-if="props.row.actual_quantity">{{props.row.actual_quantity.slice(0,8)}}....</span>
                   </el-tooltip>
+                  <router-link target="_blank" :to="'/imgReview?imgList='+props.row.weight_note_image_url" v-if="props.row.weight_note_image_url">
+                      <span style="color:#409EFF">(磅单)</span>
+                  </router-link>
                 </el-col> 
 
                 <el-col :span="4">
@@ -317,9 +320,9 @@
     </el-table>
 
   <el-dialog title="外销单审核通过" :visible.sync="dialogParam.departemntPassShow" v-loading="loadingArr.departemntPassLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%">
+      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="rules" :model="tailCarFormStep">
         <el-form-item label="供应商名称:" label-width="120px">
-          <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="loadingArr.supplierLoading" >
+          <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="passParam" >
               <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
               </el-option>
           </el-select>
@@ -330,7 +333,7 @@
               </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="采购单价:" label-width="120px">
+        <el-form-item label="采购单价:" label-width="120px" prop="buy_price">
           <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元</span>
         </el-form-item>
       </el-form>
@@ -362,6 +365,13 @@ export default {
     noData,
   },
   data() {
+    var onlyNum = (rule, value, callback) => {
+      if ((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null) {
+        callback();
+      } else {
+        callback(new Error("只能是数字"));
+      }
+    };
     return {
       noDataObj:{
         imgUrl:require("../../../assets/img/tms_no_data.png")
@@ -370,6 +380,9 @@ export default {
         fluidLoading:false,
         departemntPassLoading:false,
         departemntCancleLoading:false
+      },
+      rules: {
+        buy_price:[{ validator: onlyNum, trigger: 'blur' }],
       },
       lockFalg: false,
       delayTime:500,
@@ -471,6 +484,7 @@ export default {
         this.loadingArr.departemntCancleLoading=false;
         if(results.data.code==0){
           this.dialogParam.departemntCancleShow=false;
+          this.refuseParam={approval_mark:"",action:"denied",order_id:""};
           this.$message({
             message: '审核拒绝成功',
             type: 'success'
@@ -488,6 +502,7 @@ export default {
         this.loadingArr.departemntPassLoading=false;
         if(results.data.code==0){
           this.dialogParam.departemntPassShow=false;
+          this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
           this.$message({
             message: '审核通过成功',
             type: 'success'
