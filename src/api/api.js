@@ -2495,7 +2495,7 @@ const api = {
   },
   /*外采单接口*/
   getOutsideBuyCount: {
-    url: '/api/v1/outbuy_order/count/',
+    url: '/api/v1/outbuy_trip/count/',
     method: 'get',
     desc: "外采单数量",
     param: {
@@ -2503,9 +2503,57 @@ const api = {
     }
   },
   searchOutbuyOrder: {
-    url: '/api/v1/outbuy_order/',
+    url: '/api/v1/outbuy_trip/',
     method: 'get',
     desc: "外采单列表",
+    param: {
+
+    }
+  },
+  outsideBuyDetalis: {
+    url: '/api/v1/outbuy_order/:id/',
+    method: 'get',
+    desc: "外采单详情",
+    param: {
+
+    }
+  },
+  upDepartemntBuyCheck: {
+    url: '/api/v1/outbuy_trip/check/',
+    method: 'POST',
+    desc: "外采单审批",
+    param: {
+
+    }
+  },
+  getMatchBusiness: {
+    url: '/api/v1/outbuy-helpers/check-order/',
+    method: 'POST',
+    desc: "检查运单下卸货单",
+    param: {
+
+    }
+  },
+  upMatchUnloadList: {
+    url: '/api/v1/outbuy_match/match-business-order/',
+    method: 'POST',
+    desc: "匹配卸货单",
+    param: {
+
+    }
+  },
+  outsideBuyProcess: {
+    url: '/api/v1/outbuy_trip/record',
+    method: 'GET',
+    desc: "外采单分段进程记录",
+    param: {
+
+    }
+  },
+  outBuyStepDetalis: {
+    url: '/api/v1/outbuy_trip/:trip_id/',
+    method: 'GET',
+    desc: "分段详情",
     param: {
 
     }

@@ -41,15 +41,15 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:25px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:25px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
     </div>
     <div class="nav-tab-setting mt-25" >
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
         <el-tab-pane v-for="(item,index) in sendMenuData[status]" :label="item.countLable" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <!-- <outsideBuyListRender :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsideBuyListRender> -->
+              <outsideBuyListRender :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsideBuyListRender>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -103,7 +103,7 @@ export default {
       fifterName: "all",
       sendMenuData: {
         'all_new': [{ key: 'all', value: '全部',countLable:"全部"}, { key: 'create_manager_check', value: '待经理审批',countLable:"待经理审批"},{ key: 'create_department_check', value: '待部门审批',countLable:"待部门审批"}],
-        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_related', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'waiting_confirm', value: '已匹配待确认',countLable:"已匹配待确认"}],
+        'all_match': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'waiting_match', value: '待匹配卸货单',countLable:"待匹配卸货单"},{ key: 'confirm_match', value: '以匹配待确认',countLable:"以匹配待确认"},{ key: 'already_match', value: '以匹配已确认',countLable:"以匹配已确认"}],
         'all_unload': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_settle': [{ key: 'all', value: '全部',countLable:"全部"}],
         'all_change': [{ key: 'all', value: '全部',countLable:"全部"}],
@@ -115,9 +115,9 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'truck_no', value: '车号' },
-          { id: 'plan_fluid_name', value: '液厂名' },
-          { id: 'waybill_number', value: '业务单号' },
+          { id: 'tractor_plate_number', value: '车号' },
+          { id: 'actual_fluid_name', value: '液厂名' },
+          { id: 'order_number', value: '业务单号' },
         ],
       },
       searchStatus: false,
@@ -130,7 +130,7 @@ export default {
       saveSendData: {},
       fifterParam: {
         keyword: "",
-        field: "plan_fluid_name",
+        field: "actual_fluid_name",
       },
     };
   },
@@ -156,7 +156,7 @@ export default {
       this.pageLoading = true;
       if (this.fifterName == 'all') {
         sendData.all_search = this.status ;
-      }else if(this.fifterName=='canceled'){
+      }else if(this.fifterName=='all_cancel'){
         sendData.all_search = 'all_cancel' ;
       }
       else{

@@ -116,100 +116,69 @@
 .unloadList {
   margin-top: 30px;
 }
-
+.marginleft{
+  margin-left:8px;
+}
 </style>
 <template>
   <div style="position:relative;font-size: 10px;">
     <noData v-if="ListData.length==0&&ListDataSearch"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
+    <el-table claas="listTableAll" :data="buyListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div style="width:90%;float:left;font-size:13px;padding:10px 0 10px 45px;">
-            <div  style="margin:10px 0;">
-              <el-row style="margin-top:5px;">
-
-                <el-col :span="4">
-                  客户简称: <span v-if="props.row.short_name&&props.row.short_name.length<10">{{props.row.short_name}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.short_name" placement="top-start">
-                    <span>{{props.row.short_name.slice(0,8)}}....</span>
+            <!-- 装车模块的信息-->
+            <div  style="margin:5px 0;">
+              <div>
+              <el-row  style="position:relative;margin-top:5px;" :gutter="20">
+                <!-- <el-col :span="4" style="position:absolute;left:-20px;margin-top:15px;" ><span>{{props.$index+1}}.</span></el-col> -->
+                <el-col v-for="(loadItem,loadIndex) in loadRender" :span="4" class="whiteSpan" >
+                   {{loadItem.tltle}}: 
+                  <el-tooltip v-if="!loadRender.keyMore" class="item" effect="light" :content="props.row.waybill[loadItem.valueKey]" placement="top-start" :open-delay="1500">
+                    <span v-if="props.row.waybill[loadItem.valueKey]">
+                      {{props.row.waybill[loadItem.valueKey]}}
+                      <router-link target="_blank" :to="'/imgReview?imgList='+props.row.waybill[loadItem.poundUrl]" v-if="loadItem.pound">
+                          <span style="color:#409EFF">(磅单)</span>
+                      </router-link>
+                    </span>
                   </el-tooltip>
-                </el-col> 
+                  <span v-if="loadItem.keyMore">
+                    <span v-for="(valueKey,valuindex) in loadItem.valueKey" v-bind:class="{'marginleft':valuindex>0}">{{props.row.waybill[valueKey]}}</span>
+                  </span>
 
-                <el-col :span="4">
-                  付款方客户简称: <span v-if="props.row.payer_name&&props.row.payer_name.length<8">{{props.row.payer_name}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.payer_name" placement="top-start">
-                    <span>{{props.row.payer_name.slice(0,5)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4" class="whiteSpan">
-                  计划采购时间: 
-                  <el-tooltip  class="item" effect="light" :content="props.row.plan_time" placement="top-start">
-                    <span>{{props.row.plan_time.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  车号:  <span v-if="props.row.tractor_plate_number&&props.row.tractor_plate_number.length<10">{{props.row.tractor_plate_number}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.tractor_plate_number" placement="top-start">
-                    <span>{{props.row.tractor_plate_number.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  主驾: <span v-if="props.row.driver&&props.row.driver.length<10">{{props.row.driver}} </span>
-                </el-col> 
-
-                 <el-col :span="4">
-                  联系方式: <span v-if="props.row.driver_phone">{{props.row.driver_phone}}</span>
-                </el-col> 
-
-              </el-row>
-
-              <el-row style="margin-top:5px;">
-                <el-col :span="4" class="whiteSpan">
-                  实际装车时间: 
-                  <el-tooltip  class="item" effect="light" :content="props.row.actual_time" placement="top-start">
-                    <span>{{props.row.actual_time}}</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  液厂名称: <span v-if="props.row.fluid_name&&props.row.fluid_name.length<10">{{props.row.fluid_name}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.fluid_name" placement="top-start">
-                    <span v-if="props.row.fluid_name">{{props.row.fluid_name.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  实际液厂: <span v-if="props.row.actual_fluid_name&&props.row.actual_fluid_name.length<10">{{props.row.actual_fluid_name}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.actual_fluid_name" placement="top-start">
-                    <span v-if="props.row.actual_fluid_name">{{props.row.actual_fluid_name.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  实际装车吨位: <span v-if="props.row.actual_quantity&&props.row.actual_quantity.length<10">{{props.row.actual_quantity}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.actual_quantity" placement="top-start">
-                    <span v-if="props.row.actual_quantity">{{props.row.actual_quantity.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  最终售价: <span v-if="props.row.sale_price &&props.row.sale_price .length<10">{{props.row.sale_price }}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.sale_price " placement="top-start">
-                    <span v-if="props.row.sale_price ">{{props.row.sale_price .slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
-
-                <el-col :span="4">
-                  销售总额: <span v-if="props.row.total_price&&props.row.total_price.length<10">{{props.row.total_price}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.total_price" placement="top-start">
-                    <span v-if="props.row.total_price">{{props.row.total_price.slice(0,8)}}....</span>
-                  </el-tooltip>
-                </el-col> 
+                </el-col>
               </el-row>
             </div>
+            <!-- 匹配的模块信息 -->
+            <div style="margin-top:5px;" v-if="matchStatusArr.indexOf(props.row.status.key)>-1">
+                <el-row style="position:relative;margin-top:5px;" v-for="(uitem,uindex) in props.row.unload_trips"  :gutter="20" >
+                    <el-col :span="4" style="position:absolute;left:-20px;"><span>{{uindex+1}}.</span></el-col>
+                   <el-col :span="4" class="whiteSpan" v-for="(Ritem,Rindex) in unloadTripsRender">
+                    {{Ritem.tltle}}:
+                    <el-tooltip  class="item" effect="light" :content="uitem.business_order[Ritem.valueKey]" placement="top-start" :open-delay="1500">
+                      <span>{{uitem.business_order[Ritem.valueKey]}}</span>
+                    </el-tooltip>
+                  </el-col> 
+                </el-row> 
+            </div>
+
+            <!-- 卸车模块的信息 -->
+            <div style="margin-top:5px;" v-if="unloadStatusArr.indexOf(props.row.status.key)>-1&&props.row.section_type.key=='unload'">
+              <el-row  style="position:relative;margin-top:5px;"  :gutter="20">
+                <!-- <el-col :span="4" style="position:absolute;left:-20px;margin-top:15px;" ><span>{{props.$index+1}}.</span></el-col> -->
+                <el-col v-for="(unloadItem,unloadIndex) in unloadStationRender" :span="4" class="whiteSpan" style="margin-top:10px;">
+                   {{unloadItem.tltle}}: 
+                  <el-tooltip v-if="!unloadItem.keyMore" class="item" effect="light" :content="props.row.unloadInfo[unloadItem.valueKey]" placement="top-start" :open-delay="1500">
+                    <span v-if="props.row.unloadInfo[unloadItem.valueKey]">{{props.row.unloadInfo[unloadItem.valueKey]}}</span>
+                  </el-tooltip>
+                  <span v-if="unloadItem.keyMore">
+                    <span v-for="(valueKey,valuindex) in unloadItem.valueKey" v-bind:class="{'marginleft':valuindex>0}">{{props.row.unloadInfo[valueKey]}}</span>
+                  </span>
+                </el-col>
+              </el-row>
+            </div>
+
+            </div>  
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
@@ -222,46 +191,36 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="业务单号" prop="" min-width="150">
+      <el-table-column label="运单号" prop="" min-width="150">
         <template slot-scope="props" >
-           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.order_number" placement="top-start" v-if="props.row.order_number">
-                 <el-button @click="gotoDetalis(props.row)" style="line-height: 0;height: 0;padding-left: 0;"  type="text" >{{props.row.order_number}}</el-button>
+           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.waybill_number" placement="top-start" v-if="props.row.waybill.waybill_number">
+                 <el-button @click="gotoDetalis(props.row)" style="line-height: 0;height: 0;padding-left: 0;"  type="text" >{{props.row.waybill.waybill_number}}</el-button>
             </el-tooltip>
            <span v-else>无</span>
        </template>
       </el-table-column>
-       <el-table-column label="计划采购时间" prop="" min-width="150">
+       <el-table-column label="液厂" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan"> 
-             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
-                 <span >{{props.row.plan_time}}</span>
+             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_fluid_name" placement="top-start" v-if="props.row.waybill.actual_fluid_name">
+                 <span >{{props.row.waybill.actual_fluid_name}}</span>
             </el-tooltip>
            <span v-else>无</span>
           </div>
        </template>
       </el-table-column>
-       <el-table-column label="销售单价" prop="" min-width="150">
-        <template slot-scope="props">
+       <el-table-column label="采购单价" prop="" min-width="150">
           <template slot-scope="props">
-            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.unit_price" placement="top-start" v-if="props.row.unit_price">
-                <span >{{props.row.unit_price}}</span>
-            </el-tooltip>
-            <span v-else>无</span>
-       </template>
-       </template>
-      </el-table-column>
-       <el-table-column label="意向液厂" prop="" min-width="150">
-        <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_fluid_name" placement="top-start" v-if="props.row.plan_fluid_name">
-                <span >{{props.row.plan_fluid_name}}</span>
+            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.buy_price" placement="top-start" v-if="props.row.waybill.buy_price">
+                <span >{{props.row.waybill.buy_price}}</span>
             </el-tooltip>
             <span v-else>无</span>
        </template>
       </el-table-column>
        <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
-            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.tractor_plate_number" placement="top-start" v-if="props.row.tractor_plate_number">
-                <span >{{props.row.tractor_plate_number}}</span>
+            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.tractor_plate_number" placement="top-start" v-if="props.row.waybill.tractor_plate_number">
+                <span >{{props.row.waybill.tractor_plate_number}}</span>
             </el-tooltip>
             <span v-else>无</span>
        </template>
@@ -269,17 +228,48 @@
        <el-table-column label="实际装车时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
-            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.actual_time" placement="top-start" v-if="props.row.actual_time">
-                <span >{{props.row.actual_time}}</span>
+            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_time" placement="top-start" v-if="props.row.waybill.actual_time">
+                <span >{{props.row.waybill.actual_time}}</span>
             </el-tooltip>
             <span v-else>无</span>
         </div>
        </template>
       </el-table-column>
-       <el-table-column label="实际装车吨位" prop="" min-width="150">
-        
+
+      <el-table-column label="实际装车吨位" prop="" min-width="150">
+        <template slot-scope="props">
+          <div class="whiteSpan">
+            <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_quantity" placement="top-start" v-if="props.row.waybill.actual_quantity">
+                <span >{{props.row.waybill.actual_quantity}}</span>
+            </el-tooltip>
+            <span v-else>无</span>
+        </div>
+       </template>
+      </el-table-column>
+
+       <el-table-column label="卸货信息" prop="" min-width="150">
        <template slot-scope="props">
-         <span >{{props.row.actual_quantity}}</span>
+         <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_quantity" placement="top-start" v-if="props.row.waybill.actual_quantity">
+              <div slot="content" style="width:130px;">
+                <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" v-bind:class="{unloadList:Uindex!=0}">
+                  <el-col style="margin-top:10px;">站点:{{Uitem.business_order.station}}</el-col>
+                  <el-col style="margin-top:10px;" >计划吨位:<span v-if="Uitem.business_order.plan_tonnage">{{Uitem.business_order.plan_tonnage}}吨</span></el-col>
+                  <el-col style="margin-top:10px;" class="whiteSpan">
+                    计划到站时间:
+                    <el-tooltip class="item" effect="light" :open-delay="1000"  :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
+                      <span >{{Uitem.business_order.plan_arrive_time}}</span>
+                    </el-tooltip>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="whiteSpan">
+                <span v-for="(unloadTripStep,stepIndex) in props.row.unload_trips">
+                  <span v-if="stepIndex!=props.row.unload_trips.length-1">{{unloadTripStep.business_order&&unloadTripStep.business_order.station}}/</span>
+                   <span v-else>{{unloadTripStep.business_order&&unloadTripStep.business_order.station}}</span>
+                </span>
+            </div>
+        </el-tooltip>
+         <!-- <span >{{props.row.business_order&&props.row.business_order.station}}</span> -->
         </template>
       </el-table-column>
 
@@ -288,51 +278,28 @@
             <span v-if="props.row.status.verbose&&props.row.status.verbose.length<10">{{props.row.status.verbose}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.status.verbose" placement="top-start">
                     <span v-if="props.row.status.verbose">{{props.row.status.verbose.slice(0,8)}}....</span>
-
                   </el-tooltip>
        </template>
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">  
-          <el-row v-for="(items,keys) in buttonAll[props.row.status.key]" :key="keys" >
+          <!-- <el-row v-for="(items,keys) in buttonAll[props.row.status.key]" :key="keys" >
               <el-col>
                 <el-button  :type="items.type" :plan="items.attrPlan" size="mini" @click="operation(items.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
-          </el-row>
+          </el-row> -->
 
-        <!--    <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key"  style="margin-top:10px;">
-              <el-col>
+           <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" >
+              <el-col v-if="key==0">
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
-            </el-row> -->
+            </el-row>
 
         </template>
       </el-table-column>
     </el-table>
 
-  <el-dialog title="外销单审核通过" :visible.sync="dialogParam.departemntPassShow" v-loading="loadingArr.departemntPassLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%">
-        <el-form-item label="供应商名称:" label-width="120px">
-          <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="loadingArr.supplierLoading" >
-              <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
-              </el-option>
-          </el-select>
-        </el-form-item>
-       <el-form-item label="液厂名称:" prop="fluid" abel-width="120px">
-          <el-select v-model="passParam.actual_fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindFluidName">
-              <el-option v-for="(item,key) in selectData.fluidList" :key="item.actual_fluid" :label="item.fluid_name" :value="item.actual_fluid">
-              </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="采购单价:" label-width="120px">
-          <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元</span>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer" style="text-align: center;">
-       <el-button @click="dialogParam.departemntPassShow = false">取 消</el-button>
-       <el-button type="primary" @click="upDepartemntPass">确 定</el-button>
-      </span>
-    </el-dialog>
+
 
     <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%">
@@ -373,6 +340,57 @@ export default {
         departemntPassShow:false,
         departemntCancleShow:false
       },
+      buyListData:[],
+      matchStatusArr:['confirm_match','already_match'],
+      unloadStatusArr:['waiting_settlement','in_settlement','to_unloading','canceled','finished','cancel_check'],
+      loadRender:[
+        {'tltle':"供应商名称",valueKey:"supplier_name"},
+        {'tltle':"液厂",valueKey:"actual_fluid_name"},
+        {'tltle':"实际装车时间",valueKey:"actual_time"},
+        {'tltle':"装车吨位",valueKey:"actual_quantity","pound":true,'poundUrl':"weight_note_image_url"},
+        {'tltle':"车号",valueKey:"tractor_plate_number"},
+        {'tltle':"主驾",valueKey:['driver','driver_phone'],keyMore:true},
+      ],
+      unloadTripsRender:[
+        {'tltle':"卸货站",valueKey:"station"},
+        {'tltle':"卸货站地址",valueKey:"station_address"},
+        {'tltle':"计划到站时间",valueKey:"plan_arrive_time"},
+        {'tltle':"计划卸车",valueKey:"plan_tonnage"},
+        {'tltle':"收货人",valueKey:"consignee"},
+        {'tltle':"收货人电话",valueKey:"consignee_phone"},
+      ],
+      unloadStationRender:[
+        {'tltle':"卸货站",valueKey:"station"},
+        {'tltle':"卸货站地址",valueKey:"station_address"},
+        {'tltle':"计划到站时间",valueKey:"plan_arrive_time"},
+        {'tltle':"计划卸车",valueKey:"plan_tonnage"},
+        {'tltle':"收货人",valueKey:"consignee"},
+        {'tltle':"收货人电话",valueKey:"consignee_phone"},
+
+        {'tltle':"实际卸车吨位",valueKey:"active_tonnage"},
+        {'tltle':"离站时间",valueKey:"leave_time"},
+        {'tltle':"实际到站时间",valueKey:"arrival_time"},
+        {'tltle':"外采单下单人",valueKey:"sale_man_name"},
+        {'tltle':"外采单下单人电话",valueKey:"sale_man_phone"},
+        {'tltle':"业务单下单人",valueKey:['sale_name','sale_phone'],keyMore:true},
+      ],
+
+       unloadStationFiFter:{
+        station:['business_order'],
+        active_tonnage:['business_order'],
+        station_address:['business_order'],
+        plan_arrive_time:['business_order'],
+        plan_tonnage:['business_order'],
+        consignee:['business_order'],
+        consignee_phone:['business_order'],
+        active_tonnage:[],
+        leave_time:[],
+        arrival_time:[],
+        sale_man_name:['waybill'],
+        sale_man_phone:['waybill'],
+        sale_name:['business_order'],
+        sale_phone:['business_order'],
+      },
       buttonAll: {
         create_department_check:[{
           text: "通过",
@@ -387,6 +405,23 @@ export default {
           text: "通过",
           type: "success",
           methods_type: "canclePass",
+        }],
+        waiting_match:[{
+          text: "匹配卸货单",
+          type: "primary",
+
+          methods_type: "matchUnload",
+        }],
+        confirm_match:[{
+          text: "变更卸货单",
+          type: "primary",
+          methods_type: "changeUnload",
+          attrPlan: true
+        }],
+        already_match:[{
+          text: "变更卸货单",
+          type: "primary",
+          methods_type: "changeUnload",
         }]
       },
       seletPadding: false,
@@ -446,7 +481,7 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}` });
+      this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}` });
     },
     
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
@@ -459,82 +494,112 @@ export default {
       return row.id;
     },
     upDepartemntCancle:function(){
-      var sendData=this.refuseParam;
-      this.loadingArr.departemntCancleLoading=true;
-      this.$$http("upDepartemntcancle",sendData).then((results)=>{
-        this.loadingArr.departemntCancleLoading=false;
-        if(results.data.code==0){
-          this.dialogParam.departemntCancleShow=false;
-          this.$message({
-            message: '审核拒绝成功',
-            type: 'success'
+      this.judgeStatus('create_department_check',this.refuseParam.order_id,(isJudge)=>{
+        if(isJudge){
+          var sendData=this.refuseParam;
+          this.loadingArr.departemntCancleLoading=true;
+          this.$$http("upDepartemntBuyCheck",sendData).then((results)=>{
+            this.loadingArr.departemntCancleLoading=false;
+            if(results.data.code==0){
+              this.dialogParam.departemntCancleShow=false;
+              this.$message({
+                message: '审核拒绝成功',
+                type: 'success'
+              });
+              this.$emit('searchList');
+            }
+          }).catch((err)=>{
+            this.loadingArr.departemntCancleLoading=false;
           });
-          this.$emit('searchList');
         }
-      }).catch((err)=>{
-        this.loadingArr.departemntCancleLoading=false;
-      });
-    },
-    upDepartemntPass:function(){
-      var sendData=this.passParam;
-      this.loadingArr.departemntPassLoading=true;
-      this.$$http("upDepartemntPass",sendData).then((results)=>{
-        this.loadingArr.departemntPassLoading=false;
-        if(results.data.code==0){
-          this.dialogParam.departemntPassShow=false;
-          this.$message({
-            message: '审核通过成功',
-            type: 'success'
-          });
-          this.$emit('searchList');
-        }
-      }).catch((err)=>{
-        this.loadingArr.departemntPassLoading=false;
       });
     },
     operation: function(type, rowData) {
       if (type == 'departemntPass') {
-        this.dialogParam.departemntPassShow=true;
-        this.passParam.id=rowData.id;
+        this.judgeStatus('create_department_check',rowData.id,(isJudge)=>{
+          if(isJudge){
+            this.$$http("upDepartemntBuyCheck",{order_id:rowData.id,action:'pass'}).then((results)=>{
+            if(results.data.code==0){
+              this.$message({
+                message: '审核通过成功',
+                type: 'success'
+              });
+              this.$emit('searchList');
+            }
+            }).catch((err)=>{
+              
+            });
+          }
+        });
       } else if(type == 'cancle'){
         this.dialogParam.departemntCancleShow=true;
         this.refuseParam.order_id=rowData.id;
       } else if(type=='canclePass'){
-        this.$$http("upDepartemntcancle",{order_id:rowData.id,action:"pass"}).then((results)=>{
-        if(results.data.code==0){
-          this.$message({
-            message: '审核通过',
-            type: 'success'
-          });
-          this.$emit('searchList');
-        }
-      }).catch((err)=>{
-      });
+        this.judgeStatus('cancel_check',rowData.id,(isJudge)=>{
+          this.$$http("upDepartemntBuyCheck",{order_id:rowData.id,action:"pass"}).then((results)=>{
+          if(results.data.code==0){
+            this.$message({
+              message: '取消审核通过',
+              type: 'success'
+            });
+            this.$emit('searchList');
+          }
+        }).catch((err)=>{
+
+        });
+      }); 
+      }else if(type=='matchUnload'){
+        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+      }else if(type=='changeUnload'){
+        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
       }
     },
-    supplierChange:function(){
-      var sendData = {};
-      sendData.supplier = this.passParam.supplier_id;
-      this.loadingArr.fluidLoading = true;
-      this.$$http("getFulid", sendData).then((results) => {
-        this.loadingArr.fluidLoading = false;
-        if (results.data.code == 0) {
-          var dataBody = results.data.data;
-          this.selectData.fluidList = dataBody;
+    judgeStatus:function(status,trip_id,callBack){
+      this.$$http("outBuyStepDetalis",{trip_id:trip_id}).then((results)=>{
+        if(results.data.code==0){
+          if(status==results.data.data.status.key){
+            callBack(true);
+          }else{
+            this.uptip();
+            callBack(false);
+          }
+        }else{
+          callBack(true);
         }
-      }).catch(() => {
-        this.loadingArr.fluidLoading = false;
+      }).catch(()=>{
+        this.uptip();
+        callBack(false);
       });
     },
-    getSupplier:function(){
-      this.$$http("getSupplier", {need_all:'true'}).then((results) => {
-        this.loadingArr.supplierLoading = false;
-        if (results.data.code == 0) {
-          var dataBody = results.data.data;
-          this.selectData.supplierList = dataBody;
+    uptip:function(){
+      this.$confirm('当前状态已经改变', '请核实', {
+        confirmButtonText: '确认',
+        showCancelButton: false,
+        type: 'warning',
+        center: true,
+        closeOnClickModal: false,
+        showClose: false,
+        closeOnPressEscape: false
+      }).then(() => {
+        this.$router.go(0);
+      })
+    },
+    handleData:function(){
+      var vm=this;
+      this.buyListData=this.pbFunc.deepcopy(this.ListData);
+      this.buyListData.forEach((item,index)=>{ //遍历整个数据源
+        if(this.unloadStatusArr.indexOf(item.status.key)>-1){//如果当前状态为需要展示卸货信息
+          var unloadInfoMiddle={};//定一个临时装卸货地信息的
+
+          for(let unloadKey in this.unloadStationFiFter){
+            var middleValue=item;//拿到第一层
+            this.unloadStationFiFter[unloadKey].forEach((undefined,hierarchyIndex)=>{//根据层数取数据
+              middleValue=middleValue[vm.unloadStationFiFter[unloadKey][hierarchyIndex]];
+            });
+            unloadInfoMiddle[unloadKey]=middleValue[unloadKey];//给临时的装数据的对象复制上key和value
+          }
+          item.unloadInfo=unloadInfoMiddle;
         }
-      }).catch(() => {
-        this.loadingArr.supplierLoading = false;
       });
     }
   },
@@ -544,13 +609,16 @@ export default {
         this.returnId.push(item.id)
       });
     }
-    this.getSupplier();
+    if(this.ListData.length>0){
+      this.handleData();
+    }
   },
   watch: {
     ListData:{
       handler(val, oldVal) {
         this.expandArr();
         setTimeout(()=>{
+          this.handleData();
           this.ListDataSearch=true;
         })
       },

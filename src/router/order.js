@@ -282,12 +282,12 @@ let outsideBuy = {
       name: 'outsideBuyDetalisTab',
       meta: {
         isVerificationL: false,
-        title: '外提单列表',
+        title: '外提单详情',
       },
       component: (resolve) => require(['../page/purchaseCenter/outsideBuy/outsideBuyDetalisTab'], resolve),
       redirect: "/purchaseCenter/outsideBuy/outsideBuyDetalis",
       children: [{
-        path: 'outsideBuyDetalis/:id/',
+        path: 'outsideBuyDetalis/:waybillId/:setpId',
         name: 'outsideBuyDetalis',
         meta: {
           isVerificationL: false,
@@ -295,7 +295,7 @@ let outsideBuy = {
         },
         component: (resolve) => require(['../page/purchaseCenter/outsideBuy/outsideBuyDetalis'], resolve),
       }, {
-        path: 'outsideBuyPoress/:id/',
+        path: 'outsideBuyPoress/:waybillId/:setpId',
         name: 'outsideBuyPoress',
         meta: {
           isVerificationL: false,
@@ -304,6 +304,25 @@ let outsideBuy = {
         component: (resolve) => require(['../page/purchaseCenter/outsideBuy/outsideBuyPoress'], resolve),
       }]
     },
+    {
+      path: 'outsideUnloadMatchTabs',
+      name: 'outsideUnloadMatchTabs',
+      meta: {
+        isVerificationL: false,
+        title: '匹配',
+      },
+      component: (resolve) => require(['../page/purchaseCenter/outsideBuy/outsideUnloadMatchTabs'], resolve),
+      //redirect: "/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList",
+      children: [{
+        path: 'outsideUnloadMatchList/:id/:setpId',
+        name: 'outsideUnloadMatchList',
+        meta: {
+          isVerificationL: false,
+          title: '匹配卸货单',
+        },
+        component: (resolve) => require(['../page/purchaseCenter/outsideBuy/outsideUnloadMatchList'], resolve),
+      }]
+    }
   ]
 }
 let purchaseCenter = {

@@ -53,6 +53,12 @@
 .label-list label {
   width: 125px;
 }
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
 </style>
 <template>
   <div>
@@ -62,13 +68,21 @@
           
         </el-tab-pane>
         <el-tab-pane label="外销单进程" name="second" style="width:80%; padding:25px 20px;">
-          <el-collapse  v-if="outsidePickDetalisData.length>=1"  v-model="activeNames">
-               <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsidePickDetalisData" :key="key" v-if="statusType[item.type]">
-                  <el-row v-for="n in Math.ceil(statusType[item.type].valueArr.length/4)" :gutter="40">
-                    <el-col v-for="(Kitem,index) in statusType[item.type].valueArr" v-if="index<((n+1)*4)" :span="8">
+          <el-collapse  v-if="outsideBuyDetalisData.length>=1"  v-model="activeNames">
+               <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsideBuyDetalisData" :key="key" v-if="statusType[item.type]">
+                  <el-row  :gutter="40">
+                    <el-col v-for="(Kitem,index) in statusType[item.type].valueArr"  :span="8">
                       <div class="label-list">
                          <label style="margin-left:10px;">{{Kitem.key}} :</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(item[Kitem.valueKey])"></div>
+                         <div v-if="Kitem.url" class="detail-form-item">
+                            <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
+                             <router-link target="_blank" :to="'/imgReview?imgList='+item[Kitem.imgUrl]">
+                                <span style="color:#409EFF">{{Kitem.urlText}}</span>
+                             </router-link>
+                         </div>
+                        <div class="detail-form-item whiteSpan" v-else>
+                          <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
+                        </div>
                       </div>
                     </el-col>
                   </el-row>
@@ -84,34 +98,50 @@
 export default {
   name: 'outsideBuyPoress',
   computed: {
-    outsidePickId: function() {
-      return this.$route.params.id;
+    outsideBuyWaybillId: function() {
+      return this.$route.params.waybillId;
+    },
+    outsideBuyStedpId:function(){
+      return this.$route.params.setpId;
     },
   },
   data() {
     return {
       activeName: 'second',
       pageLoading:false,
-      outsidePickDetalisData:[],
+      outsideBuyDetalisData:[],
       activeNames: [],
       statusType:{
-        'new_order':{title:"外销单生成",valueArr:[
-          {key:'外销单号',valueKey:'order_number'},{key:'外销单生成时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+        'new_order':{title:"外采单生成",valueArr:[
+          {key:'外采单单号',valueKey:'waybill_number'},{key:'外采单生成时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'},
+          {key:'实际装车时间',valueKey:'actual_time'},{key:'采购时间',valueKey:'buy_time'},{key:'实际装车吨位',valueKey:'actual_quantity',url:true,urlText:"(磅)",
+          imgUrl:"weight_note_image_url",unit:"吨"},
+          {key:'供应商',valueKey:'supplier_name'},{key:'液厂',valueKey:'operated_at'}
         ]},
         'create_manager_check':{title:"新增经理审核",valueArr:[
-          {key:'经理审核时间',valueKey:'operated_at'},{key:'经理审核结果',valueKey:'operation'},{key:'操作人',valueKey:'operator'}
+          {key:'经理审核时间',valueKey:'operated_at'},{key:'经理审核结果',valueKey:'operation'},{key:'操作人',valueKey:'operator'},
         ]},
         'create_department_check':{title:"新增部门审核",valueArr:[
           {key:'部门审核时间',valueKey:'operated_at'},{key:'部门审核结果',valueKey:'operation'},{key:'操作人',valueKey:'operator'}
         ]},
-        'waiting_pickup':{title:"装车完成",valueArr:[
-          {key:'填写装车信息时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+        'confirm_match':{title:"待确认卸货单",valueArr:[
+          {key:'卸货站点',valueKey:'station'},{key:'收货人',valueKey:'consignee'},{key:'计划卸货吨位',valueKey:'plan_tonnage'},
+          {key:'卸货站地址',valueKey:'station_address'},{key:'联系方式',valueKey:'consignee_phone'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
         ]},
-        'cancle':{title:"申请取消",valueArr:[
+        'already_match':{title:"前往卸货地",valueArr:[
           {key:'申请取消时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
         ]},
-         'cancle_check':{title:"申请取消通过",valueArr:[
-          {key:'通过时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+         'to_unloading':{title:"已到卸货地",valueArr:[
+          {key:'站点',valueKey:'station'},{key:'站点地址',valueKey:'station_address'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
+          {key:'收货人',valueKey:'consignee'},{key:'收货人电话',valueKey:'consignee_phone'},{key:'实际到站时间',valueKey:'arrival_time'},
+          {key:'离站时间',valueKey:'leave_time'},
+          {key:'卸车磅单审核',valueKey:'',url:true,urlText:"点击查看卸车磅单",imgUrl:"weight_note_image_url"}
+        ]},
+        'in_settlement':{title:"结算中",valueArr:[
+          {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+        ]},
+        'finished':{title:"已完成",valueArr:[
+          {key:'完成时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
         ]},
       }
     }
@@ -119,17 +149,17 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${this.outsidePickId}` });
+        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${this.outsideBuyWaybillId}/${this.outsideBuyStedpId}` });
       }
     },
-    outsidePickProcess:function(){
+    outsideBuyProcess:function(){
       this.pageLoading=true;
-      this.$$http("outsidePickProcess",{id:this.outsidePickId}).then((result)=>{
+      this.$$http("outsideBuyProcess",{id:this.outsideBuyStedpId}).then((result)=>{
         this.pageLoading=false;
         if(result.data.code==0){
-          this.outsidePickDetalisData=result.data.data;
-          if(this.outsidePickDetalisData.length>1){
-            this.activeNames.push(parseInt(this.outsidePickDetalisData.length-1));
+          this.outsideBuyDetalisData=result.data.data;
+          if(this.outsideBuyDetalisData.length>1){
+            this.activeNames.push(parseInt(this.outsideBuyDetalisData.length-1));
           }
         }
       }).catch(()=>{
@@ -141,7 +171,7 @@ export default {
     this.activeName = 'second';
   },
   created: function() {
-     this.outsidePickProcess();
+     this.outsideBuyProcess();
   }
 }
 

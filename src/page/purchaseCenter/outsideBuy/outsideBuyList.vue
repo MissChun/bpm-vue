@@ -111,12 +111,12 @@ export default {
     },
     changeTabs: function(fifterName) {
       //this.activeName = fifterName;
-      this.$router.push({ path: "/purchaseCenter/outsidePick/outsidePickList?goTo="+fifterName+"&secondActiveName=all" });
+      this.$router.push({ path: "/purchaseCenter/outsideBuy/outsideBuyList?goTo="+fifterName+"&secondActiveName=all" });
       this.reshCount();
     },
      childchangeTabs:function(tabsObj){
       //this.activeName = tabsObj.first;
-      this.$router.push({ path: "/purchaseCenter/outsidePick/outsidePickList?goTo="+tabsObj.first+"&secondActiveName="+tabsObj.second });
+      this.$router.push({ path: "/purchaseCenter/outsideBuy/outsideBuyList?goTo="+tabsObj.first+"&secondActiveName="+tabsObj.second });
       this.reshCount();
     },
   },
