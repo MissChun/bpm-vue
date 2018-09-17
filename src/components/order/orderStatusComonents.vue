@@ -282,12 +282,6 @@ export default {
       }).catch(function(res) {
         this.exportLoading = false;　　
       });
-      // this.$$http("exportOrder", sendData).then((results) => {
-      //   this.exportLoading = false;
-      //   if(results.data&&results.data.code==0){
-      //     window.open(results.data.data.down_url);
-      //   }
-      // });
     },
     searchList: function(targetName) {
       //

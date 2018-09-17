@@ -13,7 +13,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="付款日期:" prop="payment_datetime">
-            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+            <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" :picker-options="pickerOptionsDate" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
           <el-form-item label="付款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
@@ -52,6 +52,11 @@ export default {
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
+      },
+      pickerOptionsDate: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6;
+        }
       },
       rules: {
         carrier: [
