@@ -570,7 +570,7 @@ export default {
       var vm=this;
       this.buyListData=this.pbFunc.deepcopy(this.ListData);
       this.buyListData.forEach((item,index)=>{ //遍历整个数据源
-        if(this.unloadStatusArr.indexOf(item.status.key)>-1){//如果当前状态为需要展示卸货信息
+        if(this.unloadStatusArr.indexOf(item.status.key)>-1&&item.section_type.key=='unload'){//如果当前状态为需要展示卸货信息
           var unloadInfoMiddle={};//定一个临时装卸货地信息的
 
           for(let unloadKey in this.unloadStationFiFter){
