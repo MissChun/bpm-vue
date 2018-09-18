@@ -146,7 +146,7 @@ export default {
           {key:'卸货站地址',valueKey:'station_address'},{key:'联系方式',valueKey:'consignee_phone'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
         ]},
         'already_match':{title:"前往卸货地",valueArr:[
-          {key:'申请取消时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
+          {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
         ]},
          'to_unloading':{title:"已到卸货地",valueArr:[
           {key:'站点',valueKey:'station'},{key:'站点地址',valueKey:'station_address'},{key:'计划到站时间',valueKey:'plan_arrive_time'},

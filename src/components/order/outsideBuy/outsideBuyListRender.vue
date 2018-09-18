@@ -169,7 +169,11 @@
                 <el-col v-for="(unloadItem,unloadIndex) in unloadStationRender" :span="4" class="whiteSpan" style="margin-top:10px;">
                    {{unloadItem.tltle}}: 
                   <el-tooltip v-if="!unloadItem.keyMore" class="item" effect="light" :content="props.row.unloadInfo[unloadItem.valueKey]" placement="top-start" :open-delay="1500">
-                    <span v-if="props.row.unloadInfo[unloadItem.valueKey]">{{props.row.unloadInfo[unloadItem.valueKey]}}</span>
+                    <span v-if="props.row.unloadInfo[unloadItem.valueKey]">{{props.row.unloadInfo[unloadItem.valueKey]}}
+                       <router-link target="_blank" :to="'/imgReview?imgList='+props.row.unloadInfo[unloadItem.poundKey]" v-if="unloadItem.pound&&props.row.unloadInfo[unloadItem.poundKey]">
+                          <span style="color:#409EFF">(磅单)</span>
+                      </router-link>
+                    </span>
                   </el-tooltip>
                   <span v-if="unloadItem.keyMore">
                     <span v-for="(valueKey,valuindex) in unloadItem.valueKey" v-bind:class="{'marginleft':valuindex>0}">{{props.row.unloadInfo[valueKey]}}</span>
@@ -367,7 +371,7 @@ export default {
         {'tltle':"收货人",valueKey:"consignee"},
         {'tltle':"收货人电话",valueKey:"consignee_phone"},
 
-        {'tltle':"实际卸车吨位",valueKey:"active_tonnage"},
+        {'tltle':"实际卸车吨位",valueKey:"active_tonnage",'pound':true,'poundKey':'weight_note_image_url'},
         {'tltle':"离站时间",valueKey:"leave_time"},
         {'tltle':"实际到站时间",valueKey:"arrival_time"},
         {'tltle':"外采单下单人",valueKey:"sale_man_name"},
@@ -390,6 +394,7 @@ export default {
         sale_man_phone:['waybill'],
         sale_name:['business_order'],
         sale_phone:['business_order'],
+        weight_note_image_url:[],
       },
       buttonAll: {
         create_department_check:[{

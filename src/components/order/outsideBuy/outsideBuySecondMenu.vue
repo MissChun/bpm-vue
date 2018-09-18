@@ -198,6 +198,7 @@ export default {
       this.$$http("searchOutbuyOrder", sendData).then((results) => {
         if(results.data.code==0){
           this.listFifterData=results.data.data.data;
+          vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
         }
         setTimeout(() => {
           vm.pageLoading = false;
