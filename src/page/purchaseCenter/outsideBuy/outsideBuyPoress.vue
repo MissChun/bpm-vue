@@ -59,6 +59,14 @@
   white-space: nowrap;
   font-size: 13px;
 }
+.processAll{
+      border: 1px solid #ebeef5;
+    border-top: none;
+    border-bottom: none;
+    overflow-y: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+}
 </style>
 <template>
   <div>
@@ -69,7 +77,7 @@
         </el-tab-pane>
         <el-tab-pane label="外采单进程" name="second" style="width:80%; padding:25px 20px;">
           <div class="detail-main border-top-clear">
-            <el-container v-show="!pageLoading" style="min-height:200px;">
+            <el-container v-show="!pageLoading" style="min-height:200px;background-color:white">
               <el-header>
                 <el-row>
                   <el-col :span="3">
@@ -83,8 +91,9 @@
                 </el-row>
               </el-header>
               <el-main class="mt-30">
+              <div class="processAll">
                 <el-collapse  v-if="outsideBuyDetalisData.length>=1"  v-model="activeNames">
-                  <el-collapse-item :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsideBuyDetalisData" :key="key" v-if="statusType[item.type]">
+                  <el-collapse-item  :title="statusType[item.type].title" :name="key" v-for="(item,key) in outsideBuyDetalisData" :key="key" v-if="statusType[item.type]">
                     <el-row  :gutter="40">
                       <el-col v-for="(Kitem,index) in statusType[item.type].valueArr"  :span="8">
                         <div class="label-list">
@@ -103,6 +112,7 @@
                     </el-row>
                  </el-collapse-item>
                 </el-collapse>
+              </div>
               </el-main>
             </el-container>
           </div>
