@@ -4,7 +4,7 @@
   meta: {
     isVerificationL: false,
     title: '应收应付',
-    iconName: 'icon-setting',
+    iconName: 'icon-wallet',
   },
   component: (resolve) => require(['../page/arap/arap'], resolve),
   children: [{

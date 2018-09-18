@@ -289,7 +289,12 @@ export default {
             overtime_price: this.detail.overtime_price
 
           }
-
+          console.log('this.editMsgForm.code', this.editMsgForm.code)
+          if (this.editMsgForm.code === 'credit_code') {
+            this.rules.codeMsg = this.sociology;
+          } else {
+            this.rules.codeMsg = this.structure;
+          }
         }
       })
 

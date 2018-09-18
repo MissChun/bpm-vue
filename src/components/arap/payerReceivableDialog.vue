@@ -168,9 +168,9 @@ export default {
           amount: this.arapRow.amount, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
-        this.title = '修改打款事项';
+        this.title = '修改回款事项';
       } else {
-        this.title = '新增打款事项';
+        this.title = '新增回款事项';
       }　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　

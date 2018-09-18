@@ -116,7 +116,7 @@ export default {
         ]
       },
       thTableList: [{
-        title: '付款客户',
+        title: '付款方',
         param: 'payer_name',
         width: '200'
       }, {

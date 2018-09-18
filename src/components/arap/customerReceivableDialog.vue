@@ -189,7 +189,11 @@ export default {
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
-      };　　
+      };　
+      this.customerObj = {
+        name: '',
+        man: ''
+      }　
       if (curVal.type === 'update') {
         this.formRules = {
           consumer: this.arapRow.consumer, //付款方
@@ -204,6 +208,7 @@ export default {
         this.title = '修改回款事项';
       } else {
         this.title = '新增回款事项';
+
       }　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
