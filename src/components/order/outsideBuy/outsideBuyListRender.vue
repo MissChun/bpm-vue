@@ -176,7 +176,11 @@
                     </span>
                   </el-tooltip>
                   <span v-if="unloadItem.keyMore">
-                    <span v-for="(valueKey,valuindex) in unloadItem.valueKey" v-bind:class="{'marginleft':valuindex>0}">{{props.row.unloadInfo[valueKey]}}</span>
+                      <span v-for="(valueKey,valuindex) in unloadItem.valueKey" v-bind:class="{'marginleft':valuindex>0}">
+                        <el-tooltip class="item" effect="light" :content="props.row.unloadInfo[valueKey]" placement="top-start" :open-delay="1500">
+                        <span>{{props.row.unloadInfo[valueKey]}}</span>
+                        </el-tooltip>
+                      </span>
                   </span>
                 </el-col>
               </el-row>
@@ -203,6 +207,16 @@
            <span v-else>无</span>
        </template>
       </el-table-column>
+
+      <el-table-column label="业务单号" prop="" min-width="150">
+        <template slot-scope="props" >
+           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.business_order&&props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order&&props.row.business_order.order_number">
+                 <span>{{props.row.business_order.order_number}}</span>
+            </el-tooltip>
+           <span v-else>无</span>
+       </template>
+      </el-table-column>
+
        <el-table-column label="液厂" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan"> 
@@ -305,9 +319,9 @@
 
 
 
-    <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%">
-        <el-form-item label="拒绝原因:" label-width="120px">
+    <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" >
+      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
+        <el-form-item label="拒绝原因:" label-width="120px" :prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
        
@@ -344,6 +358,9 @@ export default {
         departemntPassShow:false,
         departemntCancleShow:false
       },
+      cancleRules: {
+        approval_mark:[{ min: 1, max: 100, message: '字数为1~100', trigger: 'blur' }],
+      },
       buyListData:[],
       matchStatusArr:['confirm_match','already_match'],
       unloadStatusArr:['waiting_settlement','in_settlement','to_unloading','canceled','finished','cancel_check'],
@@ -374,8 +391,7 @@ export default {
         {'tltle':"实际卸车吨位",valueKey:"active_tonnage",'pound':true,'poundKey':'weight_note_image_url'},
         {'tltle':"离站时间",valueKey:"leave_time"},
         {'tltle':"实际到站时间",valueKey:"arrival_time"},
-        {'tltle':"外采单下单人",valueKey:"sale_man_name"},
-        {'tltle':"外采单下单人电话",valueKey:"sale_man_phone"},
+        {'tltle':"外采单下单人",valueKey:["sale_man_name","sale_man_phone"],keyMore:true},
         {'tltle':"业务单下单人",valueKey:['sale_name','sale_phone'],keyMore:true},
       ],
 

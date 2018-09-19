@@ -322,7 +322,7 @@
   <el-dialog title="外销单审核通过" :visible.sync="dialogParam.departemntPassShow" v-loading="loadingArr.departemntPassLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="rules" :model="tailCarFormStep">
         <el-form-item label="供应商名称:" label-width="120px">
-          <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="passParam" >
+          <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="loadingArr.supplierLoading" >
               <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
               </el-option>
           </el-select>
@@ -344,8 +344,8 @@
     </el-dialog>
 
     <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%">
-        <el-form-item label="拒绝原因:" label-width="120px">
+      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
+        <el-form-item label="拒绝原因:" label-width="120px" :prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
        
@@ -383,6 +383,9 @@ export default {
       },
       rules: {
         buy_price:[{ validator: onlyNum, trigger: 'blur' }],
+      },
+      cancleRules: {
+        approval_mark:[{ min: 1, max: 100, message: '字数为1~100', trigger: 'blur' }],
       },
       lockFalg: false,
       delayTime:500,
@@ -548,6 +551,7 @@ export default {
       });
     },
     getSupplier:function(){
+      this.loadingArr.supplierLoading = true;
       this.$$http("getSupplier", {need_all:'true'}).then((results) => {
         this.loadingArr.supplierLoading = false;
         if (results.data.code == 0) {

@@ -105,7 +105,8 @@
                                </router-link>
                            </div>
                           <div class="detail-form-item whiteSpan" v-else>
-                            <span>{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
+                            <span v-if="Kitem.changeChinese">{{Kitem.changeChinese[item[Kitem.valueKey]]}}</span>
+                            <span v-else >{{item[Kitem.valueKey]}}</span><span style="margin-left:3px;">{{Kitem.unit}}</span>
                           </div>
                         </div>
                       </el-col>
@@ -154,6 +155,7 @@ export default {
         'confirm_match':{title:"待确认卸货单",valueArr:[
           {key:'卸货站点',valueKey:'station'},{key:'收货人',valueKey:'consignee'},{key:'计划卸货吨位',valueKey:'plan_tonnage'},
           {key:'卸货站地址',valueKey:'station_address'},{key:'联系方式',valueKey:'consignee_phone'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
+          {key:'状态',valueKey:'status',changeChinese:{'cancel':'待取消','new':'待确认'}},
         ]},
         'already_match':{title:"前往卸货地",valueArr:[
           {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}

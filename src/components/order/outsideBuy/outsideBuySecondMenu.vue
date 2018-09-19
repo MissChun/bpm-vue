@@ -128,6 +128,7 @@ export default {
           { id: 'tractor_plate_number', value: '车号' },
           { id: 'actual_fluid_name', value: '液厂名' },
           { id: 'order_number', value: '业务单号' },
+          { id: 'waybill_number', value: '运单号' },
         ],
       },
       searchStatus: false,
