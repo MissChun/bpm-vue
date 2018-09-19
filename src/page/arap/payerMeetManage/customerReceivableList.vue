@@ -114,7 +114,7 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'shortname', value: '客户简称' },
-          { id: 'sonsumer', value: '客户名称' },
+          { id: 'consumer', value: '客户名称' },
           { id: 'saleman', value: '业务员' },
         ]
       },
