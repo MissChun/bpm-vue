@@ -319,15 +319,15 @@
       </el-table-column>
     </el-table>
 
-  <el-dialog title="外销单审核通过" :visible.sync="dialogParam.departemntPassShow" v-loading="loadingArr.departemntPassLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="rules" :model="passParam">
-        <el-form-item label="供应商名称:" label-width="120px">
+  <el-dialog title="外销单审核通过" :visible.sync="dialogParam.departemntPassShow" v-loading="loadingArr.departemntPassLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :before-close="handleClose">
+      <el-form class="change_Status" label-width="120px" ref="upSuccessForm" style="width:80%;margin-left:10%" :rules="rules" :model="passParam">
+        <el-form-item label="供应商名称:" label-width="120px" prop="supplier_id">
           <el-select v-model="passParam.supplier_id" filterable placeholder="请选择" @change="supplierChange" v-loading="loadingArr.supplierLoading" >
               <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
               </el-option>
           </el-select>
         </el-form-item>
-       <el-form-item label="液厂名称:" prop="fluid" abel-width="120px">
+       <el-form-item label="液厂名称:" abel-width="120px" prop="actual_fluid">
           <el-select v-model="passParam.actual_fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindFluidName">
               <el-option v-for="(item,key) in selectData.fluidList" :key="item.actual_fluid" :label="item.fluid_name" :value="item.actual_fluid">
               </el-option>
@@ -338,20 +338,20 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
-       <el-button @click="dialogParam.departemntPassShow = false">取 消</el-button>
+       <el-button @click="handleClose">取 消</el-button>
        <el-button type="primary" @click="upDepartemntPass">确 定</el-button>
       </span>
     </el-dialog>
 
-    <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
+    <el-dialog title="外销单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :before-close="handleClose">
+      <el-form class="change_Status" label-width="120px" ref="upCancelFrom" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
         <el-form-item label="拒绝原因:" label-width="120px" prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
        
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
-       <el-button @click="dialogParam.departemntCancleShow = false">取 消</el-button>
+       <el-button @click="handleClose">取 消</el-button>
        <el-button type="primary" @click="upDepartemntCancle">确 定</el-button>
       </span>
     </el-dialog>
@@ -382,10 +382,21 @@ export default {
         departemntCancleLoading:false
       },
       rules: {
-        buy_price:[{ validator: onlyNum, trigger: 'blur' }],
+        actual_fluid:[
+          { required: true, message: '请选择供应商', trigger: 'blur' },
+        ],
+        supplier_id:[
+          { required: true, message: '请选择液厂', trigger: 'blur' },
+        ],
+        buy_price:[
+          { required: true, message: '采购价必填', trigger: 'blur' },
+        ],
       },
       cancleRules: {
-        approval_mark:[{ min: 1, max: 100, message: '请输入1~100字拒绝原因', trigger: 'blur' }],
+        approval_mark:[
+          { min: 1, max: 100, message: '请输入1~100字拒绝原因', trigger: 'blur' },
+          { required: true, message: '拒绝原因必填', trigger: 'blur' },
+        ],
       },
       lockFalg: false,
       delayTime:500,
@@ -451,6 +462,12 @@ export default {
     changeExpand:function(){
 
     },
+    handleClose:function(done){
+      this.dialogParam.departemntPassShow = false;
+      this.dialogParam.departemntCancleShow = false;
+      this.refuseParam={approval_mark:"",action:"denied",order_id:""};
+      this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
+    },
     bindFluidName:function(){
       this.selectData.fluidList.forEach((item,index)=>{
         if(item.actual_fluid==this.passParam.actual_fluid){
@@ -481,39 +498,51 @@ export default {
       return row.id;
     },
     upDepartemntCancle:function(){
-      var sendData=this.refuseParam;
-      this.loadingArr.departemntCancleLoading=true;
-      this.$$http("upDepartemntcancle",sendData).then((results)=>{
-        this.loadingArr.departemntCancleLoading=false;
-        if(results.data.code==0){
-          this.dialogParam.departemntCancleShow=false;
-          this.refuseParam={approval_mark:"",action:"denied",order_id:""};
-          this.$message({
-            message: '审核拒绝成功',
-            type: 'success'
+      this.$refs['upCancelFrom'].validate((valid) => {
+        if(valid){
+           var sendData=this.refuseParam;
+          this.loadingArr.departemntCancleLoading=true;
+          this.$$http("upDepartemntcancle",sendData).then((results)=>{
+            this.loadingArr.departemntCancleLoading=false;
+            if(results.data.code==0){
+              this.dialogParam.departemntCancleShow=false;
+              this.refuseParam={approval_mark:"",action:"denied",order_id:""};
+              this.$message({
+                message: '审核拒绝成功',
+                type: 'success'
+              });
+              this.$emit('searchList');
+            }
+          }).catch((err)=>{
+            this.loadingArr.departemntCancleLoading=false;
           });
-          this.$emit('searchList');
+        }else{
+          return false
         }
-      }).catch((err)=>{
-        this.loadingArr.departemntCancleLoading=false;
       });
     },
     upDepartemntPass:function(){
-      var sendData=this.passParam;
-      this.loadingArr.departemntPassLoading=true;
-      this.$$http("upDepartemntPass",sendData).then((results)=>{
-        this.loadingArr.departemntPassLoading=false;
-        if(results.data.code==0){
-          this.dialogParam.departemntPassShow=false;
-          this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
-          this.$message({
-            message: '审核通过成功',
-            type: 'success'
+      this.$refs['upSuccessForm'].validate((valid) => {
+         if(valid){
+          var sendData=this.passParam;
+          this.loadingArr.departemntPassLoading=true;
+          this.$$http("upDepartemntPass",sendData).then((results)=>{
+            this.loadingArr.departemntPassLoading=false;
+            if(results.data.code==0){
+              this.dialogParam.departemntPassShow=false;
+              this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
+              this.$message({
+                message: '审核通过成功',
+                type: 'success'
+              });
+              this.$emit('searchList');
+            }
+          }).catch((err)=>{
+            this.loadingArr.departemntPassLoading=false;
           });
-          this.$emit('searchList');
-        }
-      }).catch((err)=>{
-        this.loadingArr.departemntPassLoading=false;
+         }else{
+          return false;
+         }
       });
     },
     operation: function(type, rowData) {

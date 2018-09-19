@@ -319,15 +319,15 @@
 
 
 
-    <el-dialog title="外采单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" >
-      <el-form class="change_Status" label-width="120px" ref="changeStatusForm" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
+    <el-dialog title="外采单审核拒绝" :visible.sync="dialogParam.departemntCancleShow" v-loading="loadingArr.departemntCancleLoading"  width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :before-close="handleClose">
+      <el-form class="change_Status" label-width="120px" ref="upCancelFrom" style="width:80%;margin-left:10%" :rules="cancleRules" :model="refuseParam">
         <el-form-item label="拒绝原因:" label-width="120px" prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
        
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
-       <el-button @click="dialogParam.departemntCancleShow = false">取 消</el-button>
+       <el-button @click="handleClose">取 消</el-button>
        <el-button type="primary" @click="upDepartemntCancle">确 定</el-button>
       </span>
     </el-dialog>
@@ -359,7 +359,10 @@ export default {
         departemntCancleShow:false
       },
       cancleRules: {
-        approval_mark:[{ min: 1, max: 100, message: '请输入1~100字拒绝原因', trigger: 'blur' }],
+        approval_mark:[
+          { min: 1, max: 100, message: '请输入1~100字拒绝原因', trigger: 'blur' },
+          { required: true, message: '拒绝原因必填', trigger: 'blur' },
+        ],
       },
       buyListData:[],
       matchStatusArr:['confirm_match','already_match'],
@@ -473,6 +476,10 @@ export default {
     changeExpand:function(){
 
     },
+    handleClose:function(done){
+      this.dialogParam.departemntCancleShow = false;
+      this.refuseParam={approval_mark:"",action:"denied",order_id:""};
+    },
     expandArr: function() {
       if(this.expandStatus){
         this.ListData.forEach((item)=>{
@@ -496,26 +503,33 @@ export default {
       return row.id;
     },
     upDepartemntCancle:function(){
-      this.judgeStatus('create_department_check',this.refuseParam.order_id,(isJudge)=>{
-        if(isJudge){
-          var sendData=this.refuseParam;
-          this.loadingArr.departemntCancleLoading=true;
-          this.$$http("upDepartemntBuyCheck",sendData).then((results)=>{
-            this.loadingArr.departemntCancleLoading=false;
-            if(results.data.code==0){
-              this.dialogParam.departemntCancleShow=false;
-              this.refuseParam={approval_mark:"",action:"denied",order_id:""};
-              this.$message({
-                message: '审核拒绝成功',
-                type: 'success'
+      this.$refs['upCancelFrom'].validate((valid) => {
+        if(valid){
+            this.judgeStatus('create_department_check',this.refuseParam.order_id,(isJudge)=>{
+            if(isJudge){
+              var sendData=this.refuseParam;
+              this.loadingArr.departemntCancleLoading=true;
+              this.$$http("upDepartemntBuyCheck",sendData).then((results)=>{
+                this.loadingArr.departemntCancleLoading=false;
+                if(results.data.code==0){
+                  this.dialogParam.departemntCancleShow=false;
+                  this.refuseParam={approval_mark:"",action:"denied",order_id:""};
+                  this.$message({
+                    message: '审核拒绝成功',
+                    type: 'success'
+                  });
+                  this.$emit('searchList');
+                }
+              }).catch((err)=>{
+                this.loadingArr.departemntCancleLoading=false;
               });
-              this.$emit('searchList');
             }
-          }).catch((err)=>{
-            this.loadingArr.departemntCancleLoading=false;
           });
+        }else{
+          return false;
         }
       });
+      
     },
     operation: function(type, rowData) {
       if (type == 'departemntPass') {
