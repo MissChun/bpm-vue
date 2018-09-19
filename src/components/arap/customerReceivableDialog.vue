@@ -202,8 +202,8 @@ export default {
           desc: this.arapRow.desc, //调账备注
         };
         this.customerObj = {
-          name: this.arapRow.short_name,
-          man: this.arapRow.sale_man_name
+          name: this.arapRow.consumer_shortname,
+          man: this.arapRow.consumer_saleman
         }
         this.title = '修改回款事项';
       } else {
