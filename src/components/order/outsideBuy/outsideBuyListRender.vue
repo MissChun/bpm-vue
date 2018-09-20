@@ -192,7 +192,7 @@
           <div style="width:100px;float:right;padding-left:10px;">
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key"  style="margin-top:10px;">
               <el-col>
-                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+                <el-button v-if="!(props.row.status.key=='cancel_check'&&props.row.section_type.key=='unload')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
           </div>
@@ -309,7 +309,8 @@
 
            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" >
               <el-col v-if="key==0">
-                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+
+                <el-button v-if="!(props.row.status.key=='cancel_check'&&props.row.section_type.key=='unload')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
 
@@ -429,6 +430,7 @@ export default {
           text: "通过",
           type: "success",
           methods_type: "canclePass",
+
         }],
         waiting_match:[{
           text: "匹配卸货单",
