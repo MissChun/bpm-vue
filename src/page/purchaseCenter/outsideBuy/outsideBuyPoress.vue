@@ -156,6 +156,7 @@ export default {
           {key:'卸货站点',valueKey:'station'},{key:'收货人',valueKey:'consignee'},{key:'计划卸货吨位',valueKey:'plan_tonnage'},
           {key:'卸货站地址',valueKey:'station_address'},{key:'联系方式',valueKey:'consignee_phone'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
           {key:'状态',valueKey:'status',changeChinese:{'cancel':'待取消','new':'待确认'}},
+          {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
         ]},
         'already_match':{title:"前往卸货地",valueArr:[
           {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
@@ -164,7 +165,8 @@ export default {
           {key:'站点',valueKey:'station'},{key:'站点地址',valueKey:'station_address'},{key:'计划到站时间',valueKey:'plan_arrive_time'},
           {key:'收货人',valueKey:'consignee'},{key:'收货人电话',valueKey:'consignee_phone'},{key:'实际到站时间',valueKey:'arrival_time'},
           {key:'离站时间',valueKey:'leave_time'},
-          {key:'卸车磅单审核',valueKey:'',url:true,urlText:"点击查看卸车磅单",imgUrl:"weight_note_image_url"}
+          {key:'卸车磅单审核',valueKey:'',url:true,urlText:"点击查看卸车磅单",imgUrl:"weight_note_image_url"},
+          {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}
         ]},
         'in_settlement':{title:"结算中",valueArr:[
           {key:'操作时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'}

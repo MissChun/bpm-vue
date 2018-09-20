@@ -390,6 +390,7 @@ export default {
         ],
         buy_price:[
           { required: true, message: '采购价必填', trigger: 'blur' },
+          { validator: onlyNum, trigger: 'blur' }
         ],
       },
       cancleRules: {
