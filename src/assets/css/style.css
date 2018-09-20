@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?cc40yc');
-  src:  url('fonts/icomoon.eot?cc40yc#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?cc40yc') format('truetype'),
-    url('fonts/icomoon.woff?cc40yc') format('woff'),
-    url('fonts/icomoon.svg?cc40yc#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?x2yos5');
+  src:  url('fonts/icomoon.eot?x2yos5#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?x2yos5') format('truetype'),
+    url('fonts/icomoon.woff?x2yos5') format('woff'),
+    url('fonts/icomoon.svg?x2yos5#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -26,7 +26,95 @@
 
 .icon-wallet:before {
   content: "\e900";
-  color: #7c8f9f;
+  color: #7c8fa0;
+}
+.icon-coin1:before {
+  content: "\e917";
+  color: #7c8fa0;
+}
+.icon-customer1:before {
+  content: "\e918";
+  color: #7c8fa0;
+}
+.icon-dashboard1:before {
+  content: "\e919";
+  color: #7c8fa0;
+}
+.icon-map1:before {
+  content: "\e91a";
+  color: #7c8fa0;
+}
+.icon-plane1:before {
+  content: "\e91b";
+  color: #7c8fa0;
+}
+.icon-road1:before {
+  content: "\e91c";
+  color: #7c8fa0;
+}
+.icon-service1:before {
+  content: "\e91d";
+  color: #7c8fa0;
+}
+.icon-setting1:before {
+  content: "\e91e";
+  color: #7c8fa0;
+}
+.icon-shopping1:before {
+  content: "\e91f";
+  color: #7c8fa0;
+}
+.icon-statistics1:before {
+  content: "\e920";
+  color: #7c8fa0;
+}
+.icon-track1:before {
+  content: "\e921";
+  color: #7c8fa0;
+}
+.icon-calendar1:before {
+  content: "\e922";
+  color: #b3c6d6;
+}
+.icon-data1:before {
+  content: "\e923";
+  color: #7c8fa0;
+}
+.icon-down-arrow1:before {
+  content: "\e924";
+  color: #b3c6d6;
+}
+.icon-gas1:before {
+  content: "\e925";
+  color: #21335d;
+}
+.icon-lng1:before {
+  content: "\e926";
+  color: #21335d;
+}
+.icon-location1:before {
+  content: "\e927";
+  color: #7c8fa0;
+}
+.icon-notice1:before {
+  content: "\e928";
+  color: #7c8fa0;
+}
+.icon-parking1:before {
+  content: "\e929";
+  color: #21335d;
+}
+.icon-site1:before {
+  content: "\e92a";
+  color: #21335d;
+}
+.icon-transport1:before {
+  content: "\e92b";
+  color: #7c8fa0;
+}
+.icon-user1:before {
+  content: "\e92c";
+  color: #7c8fa0;
 }
 .icon-coin:before {
   content: "\e901";
