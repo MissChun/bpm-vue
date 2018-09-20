@@ -2,13 +2,10 @@
 
 </style>
 <template>
-
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="外采单详情" name="first">
-
-          <outside-buy-detali :back-link="'/statistics/purchase/purchaseList'"></outside-buy-detali>
-
+        <el-tab-pane label="外销单详情" name="first">
+          <outside-pick-detali :back-link="'/statistics/sales/salesList'"></outside-pick-detali>
         </el-tab-pane>
 
       </el-tabs>
@@ -16,11 +13,11 @@
 
 </template>
 <script>
-import outsideBuyDetali from '@/components/purchaseCenter/outsideBuyDetali';
+import outsidePickDetali from '@/components/purchaseCenter/outsidePickDetali';
 export default {
-  name: 'purchaseOutsideBuyDetali',
+  name: 'salesOutsidePickDetali',
   components: {
-    outsideBuyDetali: outsideBuyDetali
+    outsidePickDetali: outsidePickDetali
   },
   computed: {
 
@@ -45,3 +42,7 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+.detail-main {
+  min-height: 500px;
+}

@@ -19,7 +19,7 @@
               <el-header>
                 <el-row>
                   <el-col :span="3">
-                    <router-link :to="{path: '/purchaseCenter/outsideBuy/outsideBuyList'}">
+                    <router-link :to="{path: backLink}">
                       <div class="go-return icon-back"></div>
                     </router-link>
                   </el-col>
@@ -274,6 +274,7 @@
 <script>
 export default {
   name: 'outsideBuyDetali',
+  props: ['backLink'],
   computed: {
     outsideBuyWaybillId: function() {
       return this.$route.params.waybillId;

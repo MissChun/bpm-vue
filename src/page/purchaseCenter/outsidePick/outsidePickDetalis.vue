@@ -1,19 +1,12 @@
 <style scoped lang="less">
-
-.whiteSpan {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
-}
 </style>
 <template>
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="外销单详情" name="first">
-
-          <div class="detail-main" v-loading="pageLoading">
+          <outside-pick-detali :back-link="'/purchaseCenter/outsidePick/outsidePickList'"></outside-pick-detali>
+          <!-- <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
@@ -37,7 +30,7 @@
                     </el-row>
                   </div>
                   <el-row :gutter="40">
-                    <el-col :span="6" >
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>业务单号:</label>
                         <div class="detail-form-item">{{outsidePickDetalisData.order_number}}</div>
@@ -48,7 +41,7 @@
                         <label>意向液厂:</label>
                         <div class="detail-form-item whiteSpan">
                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.plan_fluid_name" placement="top-start" v-if="outsidePickDetalisData.plan_fluid_name">
-                              <span>{{outsidePickDetalisData.plan_fluid_name}}</span>
+                            <span>{{outsidePickDetalisData.plan_fluid_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -58,32 +51,29 @@
                         <label>计划采购时间:</label>
                         <div class="detail-form-item whiteSpan">
                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.plan_time" placement="top-start" v-if="outsidePickDetalisData.plan_time">
-                              <span>{{outsidePickDetalisData.plan_time}}</span>
+                            <span>{{outsidePickDetalisData.plan_time}}</span>
                           </el-tooltip>
                         </div>
                       </div>
-
-                      
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
                         <label>客户简称:</label>
                         <div class="detail-form-item whiteSpan">
                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.short_name" placement="top-start" v-if="outsidePickDetalisData.short_name">
-                              <span>{{outsidePickDetalisData.short_name}}</span>
+                            <span>{{outsidePickDetalisData.short_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
                     </el-col>
                   </el-row>
-
                   <el-row :gutter="40">
-                    <el-col :span="6" >
-                      <div class="label-list " >
+                    <el-col :span="6">
+                      <div class="label-list ">
                         <label>付款方名称:</label>
                         <div class="detail-form-item whiteSpan">
-                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.payer_name" placement="top-start" v-if="outsidePickDetalisData.payer_name">
-                              <span>{{outsidePickDetalisData.payer_name}}</span>
+                          <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.payer_name" placement="top-start" v-if="outsidePickDetalisData.payer_name">
+                            <span>{{outsidePickDetalisData.payer_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -93,7 +83,7 @@
                         <label>实际装车时间:</label>
                         <div class="detail-form-item whiteSpan">
                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.actual_time" placement="top-start" v-if="outsidePickDetalisData.actual_time">
-                              <span>{{outsidePickDetalisData.actual_time}}</span>
+                            <span>{{outsidePickDetalisData.actual_time}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -111,7 +101,6 @@
                       </div>
                     </el-col>
                   </el-row>
-
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
@@ -138,7 +127,6 @@
                       </div>
                     </el-col>
                   </el-row>
-
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
@@ -156,14 +144,13 @@
                       </el-col>
                     </el-row>
                   </div>
-                  
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>供应商名称:</label>
                         <div class="detail-form-item whiteSpan">
-                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.supplier_name" placement="top-start" v-if="outsidePickDetalisData.supplier_name">
-                              <span>{{outsidePickDetalisData.supplier_name}}</span>
+                          <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.supplier_name" placement="top-start" v-if="outsidePickDetalisData.supplier_name">
+                            <span>{{outsidePickDetalisData.supplier_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -172,8 +159,8 @@
                       <div class="label-list">
                         <label>液厂名称:</label>
                         <div class="detail-form-item whiteSpan">
-                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.fluid_name" placement="top-start" v-if="outsidePickDetalisData.fluid_name">
-                              <span>{{outsidePickDetalisData.fluid_name}}</span>
+                          <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.fluid_name" placement="top-start" v-if="outsidePickDetalisData.fluid_name">
+                            <span>{{outsidePickDetalisData.fluid_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -182,8 +169,8 @@
                       <div class="label-list">
                         <label>实际液厂:</label>
                         <div class="detail-form-item whiteSpan">
-                           <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.actual_fluid_name" placement="top-start" v-if="outsidePickDetalisData.actual_fluid_name">
-                              <span>{{outsidePickDetalisData.actual_fluid_name}}</span>
+                          <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.actual_fluid_name" placement="top-start" v-if="outsidePickDetalisData.actual_fluid_name">
+                            <span>{{outsidePickDetalisData.actual_fluid_name}}</span>
                           </el-tooltip>
                         </div>
                       </div>
@@ -227,7 +214,7 @@
                 </div>
               </el-main>
             </el-container>
-          </div>
+          </div> -->
         </el-tab-pane>
         <el-tab-pane label="外销单进程" name="second">
         </el-tab-pane>
@@ -236,18 +223,22 @@
   </div>
 </template>
 <script>
+import outsidePickDetali from '@/components/purchaseCenter/outsidePickDetali';
 export default {
   name: 'outsidePickDetalis',
+  components: {
+    outsidePickDetali: outsidePickDetali
+  },
   computed: {
-    outsidePickId: function() {
-      return this.$route.params.id;
-    },
+    // outsidePickId: function() {
+    //   return this.$route.params.id;
+    // },
   },
   data() {
     return {
       activeName: 'first',
-      pageLoading:false,
-      outsidePickDetalisData:{}
+      pageLoading: false,
+      outsidePickDetalisData: {}
     }
   },
   methods: {
@@ -256,24 +247,24 @@ export default {
         this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickPoress/${this.outsidePickId}` });
       }
     },
-    outsidePickDetalis:function(){
-      this.pageLoading=true;
-      this.$$http("outsidePickDetalis",{id:this.outsidePickId}).then((result)=>{
-        this.pageLoading=false;
-        if(result.data.code==0){
-          this.outsidePickDetalisData=result.data.data;
-        }
-      }).catch(()=>{
-        this.pageLoading=false;
-      });
-    }
+    // outsidePickDetalis: function() {
+    //   this.pageLoading = true;
+    //   this.$$http("outsidePickDetalis", { id: this.outsidePickId }).then((result) => {
+    //     this.pageLoading = false;
+    //     if (result.data.code == 0) {
+    //       this.outsidePickDetalisData = result.data.data;
+    //     }
+    //   }).catch(() => {
+    //     this.pageLoading = false;
+    //   });
+    // }
   },
   activated: function() {
     this.activeName = 'first';
   },
 
   created: function() {
-     this.outsidePickDetalis();
+    // this.outsidePickDetalis();
   }
 }
 

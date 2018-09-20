@@ -6,9 +6,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="外采单详情" name="first">
-
-          <outside-buy-detali :back-link="'/statistics/purchase/purchaseList'"></outside-buy-detali>
-
+          <outside-buy-detali :back-link="'/statistics/consignment/consignmentList'"></outside-buy-detali>
         </el-tab-pane>
 
       </el-tabs>
@@ -18,7 +16,7 @@
 <script>
 import outsideBuyDetali from '@/components/purchaseCenter/outsideBuyDetali';
 export default {
-  name: 'purchaseOutsideBuyDetali',
+  name: 'consignmentOutsideBuyDetali',
   components: {
     outsideBuyDetali: outsideBuyDetali
   },

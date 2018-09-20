@@ -73,13 +73,14 @@
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'">
-                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id})">{{scope.row.waybill}}</span>
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick({operator:'check',id:scope.row.waybill_id,waybill:scope.row.waybill})">{{scope.row.waybill}}</span>
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              <span v-html="scope.row[item.param]"></span>
+                  <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                  <span v-else v-html="scope.row[item.param]"></span>
               </span>
       </div>
       </template>
@@ -272,8 +273,15 @@ export default {
       this.multipleSelection = val;
     },
     handleMenuClick(row) {
+      console.log(row)
       if (row.operator === 'check') {
-        this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
+        if (row.waybill.indexOf("TE") != -1) {
+          this.$router.push({ path: `/statistics/purchase/purchaseOutsideBuyDetali/${row.id}` });
+        } else if (row.waybill.indexOf("TSE") != -1) {
+
+        } else {
+          this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
+        }
       } else if (row.operator === 'edit') {
         this.$router.push({ path: `/statistics/purchase/editPurchase`, query: { id: row.id } });
       }

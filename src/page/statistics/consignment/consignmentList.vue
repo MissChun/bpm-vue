@@ -67,7 +67,8 @@
                 <span>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
                 </span>
-                {{scope.row[item.param]}}
+                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
               </div>
             </template>
           </el-table-column>
@@ -275,9 +276,20 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+        if (row.waybill.indexOf("TE") != -1) {
+          this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
+        } else if (row.waybill.indexOf("TSE") != -1) {
+
+        } else {
+          this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+        }
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+        if (row.business_order.indexOf("SE") != -1) {
+          this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
+        } else {
+          this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+        }
+
       } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
       }

@@ -7,7 +7,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="外采单详情" name="first">
-          <outside-buy-detali></outside-buy-detali>
+          <outside-buy-detali :back-link="'/purchaseCenter/outsideBuy/outsideBuyList'"></outside-buy-detali>
           <!-- <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-header>

@@ -1,5 +1,6 @@
 import order from './order'
 import arap from './arap'
+import statistics from './statistics'
 export default [{
   path: '',
   name: 'index',
@@ -11,6 +12,7 @@ export default [{
   children: [
     order,
     arap,
+    statistics,
     {
       path: 'dashboard',
       name: 'dashboard',
@@ -532,169 +534,7 @@ export default [{
         }
       ]
     },
-    {
-      path: 'statistics',
-      name: 'statistics',
-      meta: {
-        isVerificationL: false,
-        title: '数据统计',
-        iconName: 'icon-data',
-      },
-      component: (resolve) => require(['../page/statistics/statistics'], resolve),
-      children: [{
-        path: 'purchase',
-        name: "purchase",
-        redirect: '/statistics/purchase/purchaseList',
-        meta: {
-          title: '采购数据',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/purchase/purchase'], resolve),
-        children: [{
-          path: 'purchaseList',
-          name: "purchaseList",
-          meta: {
-            title: '采购数据列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/purchase/purchaseList'], resolve)
-        }, {
-          path: 'purchaseWaybillDetail/:willId',
-          name: "waybillDetail",
-          meta: {
-            title: '采购数据详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/purchase/purchaseWaybillDetail'], resolve)
-        }, {
-          path: 'editPurchase',
-          name: "editPurchase",
-          meta: {
-            title: '采购数据编辑',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/purchase/editPurchase'], resolve)
-        }]
-      }, {
-        path: 'sales',
-        name: "sales",
-        redirect: '/statistics/sales/salesList',
-        meta: {
-          title: '销售数据',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/sales/sales'], resolve),
-        children: [{
-          path: 'salesList',
-          name: "salesList",
-          meta: {
-            title: '销售数据列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/sales/salesList'], resolve)
-        }, {
-          path: 'salesWaybillDetail/:willId/:orderId/',
-          name: "salesWaybillDetail",
-          meta: {
-            title: '运力单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/sales/salesWaybillDetail'], resolve)
-        }, {
-          path: 'salesBusinessDetail',
-          name: "salesBusinessDetail",
-          meta: {
-            title: '业务单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/sales/salesBusinessDetail'], resolve)
-        }, {
-          path: 'editSales',
-          name: "editSales",
-          meta: {
-            title: '销售数据编辑',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/sales/editSales'], resolve)
-        }]
-      }, {
-        path: 'consignment',
-        name: "consignment",
-        redirect: '/statistics/consignment/consignmentList',
-        meta: {
-          title: '托运数据',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/consignment/consignment'], resolve),
-        children: [{
-          path: 'consignmentList',
-          name: "consignmentList",
-          meta: {
-            title: '托运数据列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/consignment/consignmentList'], resolve)
-        }, {
-          path: 'consignmentWaybillDetail/:willId/:orderId/',
-          name: "consignmentWaybillDetail",
-          meta: {
-            title: '运力单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/consignment/consignmentWaybillDetail'], resolve)
-        }, {
-          path: 'consignmentBusinessDetail',
-          name: "consignmentBusinessDetail",
-          meta: {
-            title: '业务单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/consignment/consignmentBusinessDetail'], resolve)
-        }, {
-          path: 'editConsignment',
-          name: "editConsignment",
-          meta: {
-            title: '托运数据编辑',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/consignment/editConsignment'], resolve)
-        }]
-      }, {
-        path: 'income',
-        name: "income",
-        redirect: '/statistics/income/incomeList',
-        meta: {
-          title: '业务台账',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/income/income'], resolve),
-        children: [{
-          path: 'incomeList',
-          name: "incomeList",
-          meta: {
-            title: '业务台账列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeList'], resolve)
-        }, {
-          path: 'incomeWaybillDetail/:willId/:orderId/',
-          name: "incomeWaybillDetail",
-          meta: {
-            title: '运力单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeWaybillDetail'], resolve)
-        }, {
-          path: 'incomeBusinessDetail',
-          name: "incomeBusinessDetail",
-          meta: {
-            title: '业务单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/income/incomeBusinessDetail'], resolve)
-        }]
-      }]
-    },
+    ,
 
     {
       path: 'setting',
