@@ -253,7 +253,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际到站时间:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.arrival_time)"></div>
                 </div>
               </el-col>
               <el-col :span="8">

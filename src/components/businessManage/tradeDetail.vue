@@ -203,7 +203,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-if="!detailData.is_out_buy">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -293,7 +293,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-if="!detailData.is_out_buy">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -340,6 +340,147 @@
               <div class="label-list">
                 <label>押运员:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tms_tractor&&detailData.tms_tractor.escort_staff&&detailData.tms_tractor.escort_staff.name+' '+detailData.tms_tractor.escort_staff.mobile_phone)"></div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="detail-list detail-form" v-if="detailData.is_out_buy">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                装货信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+              </el-col>
+            </el-row>
+          </div>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>运单号:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>运单生成时间:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.created_at)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>承运商:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>卸货区域:</label>
+                <!-- <div class="detail-form-item" v-if="detailData.deliver_order&&detailData.deliver_order.destination">
+                  <span v-for="item in detailData.deliver_order.destination">{{item}}<span v-if="item">、</span></span>
+                </div> -->
+                <div class="detail-form-item"><span class="text-stance">无</span></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>液厂:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.actual_fluid_name)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>液厂地址:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.actual_fluid_address)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>计划装车时间:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>实际装车时间:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.actual_time)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>计划装车吨位:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>实际装车吨位:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order &&detailData.deliver_order.actual_quantity)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="24">
+              <div class="label-list">
+                <label>备注:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.mark)"></div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="detail-list detail-form" v-if="detailData.is_out_buy">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                车辆信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+              </el-col>
+            </el-row>
+          </div>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>车牌号:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.tractor_plate_number)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>燃油类型:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>挂车号:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>驾驶员:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.driver+' '+detailData.deliver_order.driver_phone)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>副驾驶:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>押运员:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(null)"></div>
               </div>
             </el-col>
           </el-row>

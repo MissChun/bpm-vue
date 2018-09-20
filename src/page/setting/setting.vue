@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'carBaseInfo',
+  name: 'setting',
   data() {
     return {
 

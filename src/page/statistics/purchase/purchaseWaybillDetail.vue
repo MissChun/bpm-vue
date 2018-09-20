@@ -1,4 +1,3 @@
-<!-- purchaseDetail.vue -->
 <style type="text/css"  scoped lang="less">
   .detail-main{
     border-top: 0;
@@ -9,8 +8,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运单详情" name="first">
-          <waybill-detail :back-link="'/statistics/purchase/purchaseList'" :is-check="true"></waybill-detail>
-
+         <waybill-detail :back-link="'/statistics/purchase/purchaseList'" :is-check="true"></waybill-detail>
         </el-tab-pane>
 
       </el-tabs>
@@ -57,7 +55,3 @@ export default {
 }
 
 </script>
-<style scoped lang="less">
-.detail-main {
-  min-height: 500px;
-}

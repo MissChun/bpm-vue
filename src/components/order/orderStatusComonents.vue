@@ -92,6 +92,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
   name: 'orderStatusComonents',
   components: {
@@ -251,11 +252,35 @@ export default {
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel='export'
-      this.$$http("exportOrder", sendData).then((results) => {
-        this.exportLoading = false;
-        if(results.data&&results.data.code==0){
-          window.open(results.data.data.down_url);
+      let url = 'http://bpm.hhtdlng.com';
+      axios.get('/api/v1/section-trips/', {
+        method: 'get',
+        responseType: 'blob',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          'Authorization': 'jwt ' + this.pbFunc.getLocalData('token', true)
+        },
+        params: sendData,
+      }).then((res) => {
+        // let fileName = res.headers['content-disposition'].match(/fushun(\S*)xls/)[0];
+        // fileDownload(res.data, fileName);
+        //如果用方法一 ，这里需要安装 npm install js-file-download --save ,然后引用 var fileDownload = require('js-file-download')，使用详情见github;
+        this.exportLoading = false;　　　
+        if (res.data && res.status == 200) {
+          // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
+          let objectUrl = URL.createObjectURL(res.data);
+          console.log('objectUrl', objectUrl);　
+          let link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = objectUrl;
+          link.setAttribute('download', '托运订单.xlsx');
+          document.body.appendChild(link);
+          link.click()　　　　　
         }
+      }).catch(function(res) {
+        this.exportLoading = false;　　
       });
     },
     searchList: function(targetName) {

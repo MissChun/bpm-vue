@@ -49,7 +49,7 @@
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-                <span class="text-blue" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+                <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>{{scope.row[item.param]}}</div>
             </template>
@@ -135,7 +135,7 @@ export default {
         title: '客户名称',
         param: 'consumer_name',
         width: ''
-      },{
+      }, {
         title: '付款方',
         param: 'payer_name',
         width: '200'
@@ -155,11 +155,11 @@ export default {
         title: '实际装车时间',
         param: 'active_time',
         width: '180'
-      },{
+      }, {
         title: '采购单价',
         param: 'buy_price',
         width: ''
-      },{
+      }, {
         title: '实际装车吨位',
         param: 'active_tonnage',
         width: ''
@@ -167,11 +167,11 @@ export default {
         title: '采购优惠',
         param: 'discount_price',
         width: ''
-      },{
+      }, {
         title: '业务优惠',
         param: 'business_price',
         width: ''
-      },{
+      }, {
         title: '采购总额',
         param: 'discounts_sum_price',
         width: ''
@@ -179,7 +179,7 @@ export default {
         title: '采购优惠后总额',
         param: 'unit_sum_price',
         width: ''
-      },{
+      }, {
         title: '卸货站',
         param: 'station',
         width: ''
@@ -187,11 +187,11 @@ export default {
         title: '实际离站时间',
         param: 'leave_time',
         width: '180'
-      },{
+      }, {
         title: '销售单价',
         param: 'sale_price',
         width: ''
-      },{
+      }, {
         title: '实收吨位',
         param: 'actual_quantity',
         width: ''
@@ -199,15 +199,15 @@ export default {
         title: '亏吨',
         param: 'deficiency',
         width: ''
-      },{
+      }, {
         title: '核算吨位',
         param: 'check_quantity',
         width: ''
-      },{
+      }, {
         title: '卸车待时金额',
         param: 'waiting_price',
         width: ''
-      },{
+      }, {
         title: '销售总额',
         param: 'sell_rental',
         width: ''
@@ -215,23 +215,23 @@ export default {
         title: '销售待时后总额',
         param: 'waiting_charges',
         width: ''
-      },{
+      }, {
         title: '卸车数',
         param: 'unload_nums',
         width: ''
-      },{
+      }, {
         title: '业务员',
         param: 'sale_man',
         width: ''
-      },{
+      }, {
         title: '标准里程',
         param: 'stand_mile',
         width: ''
-      },{
+      }, {
         title: '起步价',
         param: 'initial_price',
         width: ''
-      },{
+      }, {
         title: '运输费率',
         param: 'change_rate',
         width: ''
@@ -239,11 +239,11 @@ export default {
         title: '标准运费',
         param: 'freight_value',
         width: ''
-      },{
+      }, {
         title: '气差金额',
         param: 'difference_value',
         width: ''
-      },{
+      }, {
         title: '分卸费',
         param: 'lcl_cost',
         width: ''
@@ -260,9 +260,19 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/income/incomeWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+        if (row.waybill.indexOf("TE") != -1) {
+          this.$router.push({ path: `/statistics/income/incomeOutsideBuyDetali/${row.waybill_id}` });
+        } else if (row.waybill.indexOf("TSE") != -1) {
+
+        } else {
+          this.$router.push({ path: `/statistics/income/incomeWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+        }
       } else if (tpye === 'business_order') {
-        this.$router.push({ path: `/statistics/income/incomeBusinessDetail/`, query: { id: row.business_order_id } });
+        if (row.business_order.indexOf("SE") != -1) {
+          this.$router.push({ path: `/statistics/income/incomeOutsidePickDetali/${row.business_order_id}` });
+        } else {
+          this.$router.push({ path: `/statistics/income/incomeBusinessDetail/`, query: { id: row.business_order_id } });
+        }
       }
     },
     startSearch() {

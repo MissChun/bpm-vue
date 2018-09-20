@@ -43,7 +43,7 @@ export default {
         'truck_count':[
           {title:"地区",width:'',param:'area'},
           {title:"卸车计划数",width:'',param:'plan_no',showDetalis:true},
-          {title:"未安排计划数",width:'',param:'unplan_no',goTopage:"/businessManage/tradeBusiness/?tabClassifyStatus=relation&businessStatus=waiting_related",timeParam:"planArriveTime"},
+          {title:"未安排计划数",width:'',param:'unplan_no',goTopage:"/businessManage/tradeBusiness/?tabClassifyStatus=all_match&businessStatus=waiting_related",timeParam:"planArriveTime"},
         ],
         //采购中心
         'work_end_time_count':[

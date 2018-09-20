@@ -9,6 +9,142 @@
  */
 
 const api = {
+  getPayerSimpleAll: {
+    url: '/api/v1/payer_simple/',
+    method: 'get',
+    desc: '获取付款方全部列表',
+    param: {
+
+    }
+  },
+  updateCustomerReceivable: {
+    url: 'api/v1/payer-pay-c/:id/',
+    method: 'patch',
+    desc: '更新客户回款',
+    param: {
+
+    }
+  },
+  addCustomerReceivable: {
+    url: 'api/v1/payer-pay-c/',
+    method: 'post',
+    desc: '客户回款新增',
+    param: {
+
+    }
+  },
+  getCustomerReceivableList: {
+    url: '/api/v1/payer-pay-c/',
+    method: 'get',
+    desc: '客户回款列表',
+    param: {
+
+    }
+  },
+  updatePayerReceivable: {
+    url: 'api/v1/payer-pay-p/:id/',
+    method: 'patch',
+    desc: '更新付款方回款',
+    param: {
+
+    }
+  },
+  addPayerReceivable: {
+    url: 'api/v1/payer-pay-p/',
+    method: 'post',
+    desc: '付款方回款新增',
+    param: {
+
+    }
+  },
+  getPayerReceivableList: {
+    url: '/api/v1/payer-pay-p/',
+    method: 'get',
+    desc: '付款方回款列表',
+    param: {
+
+    }
+  },
+  getCustomerMeetList: {
+    url: '/api/v1/inout-consumer-pay/',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+
+    }
+  },
+  getPayerMeetList: {
+    url: '/api/v1/inout-payer-pay/',
+    method: 'get',
+    desc: '付款方应收列表',
+    param: {
+
+    }
+  },
+  updateCarrierPayment: {
+    url: '/api/v1/carrier-pay/:id/',
+    method: 'patch',
+    desc: '更新承运商付款',
+    param: {
+
+    }
+  },
+  addCarrierPayment: {
+    url: '/api/v1/carrier-pay/',
+    method: 'post',
+    desc: '承运商付款新增',
+    param: {
+
+    }
+  },
+  getCarrierPaymentList: {
+    url: '/api/v1/carrier-pay/',
+    method: 'get',
+    desc: '承运商付款列表',
+    param: {
+
+    }
+  },
+  getCarrierMeetList: {
+    url: '/api/v1/inout-carrier-pay/',
+    method: 'get',
+    desc: '承运商应付列表',
+    param: {
+
+    }
+  },
+  updateSupplierPayment: {
+    url: '/api/v1/supplier-pay/:id/',
+    method: 'patch',
+    desc: '更新供应商付款',
+    param: {
+
+    }
+  },
+  addSupplierPayment: {
+    url: '/api/v1/supplier-pay/',
+    method: 'post',
+    desc: '付款新增',
+    param: {
+
+    }
+  },
+  getSupplierPaymentList: {
+    url: '/api/v1/supplier-pay/',
+    method: 'get',
+    desc: '付款列表',
+    param: {
+
+    }
+  },
+  getSupplierMeetList: {
+    url: '/api/v1/inout-supplier-pay/',
+    method: 'get',
+    desc: '供应商应付列表',
+    param: {
+
+    }
+  },
   getBusinessTabsList: {
     url: '/api/v1/business_order/count/',
     method: 'get',
@@ -2316,7 +2452,121 @@ const api = {
     param: {
 
     }
+  },
+  searchOutSaleOrder: {
+    url: '/api/v1/outsale_order/',
+    method: 'get',
+    desc: "获取外销单列表",
+    param: {
+
+    }
+  },
+  getOutsidePickCount: {
+    url: '/api/v1/outsale_order/count/',
+    method: 'get',
+    desc: "外销单数量",
+    param: {
+
+    }
+  },
+  upDepartemntPass: {
+    url: '/api/v1/outsale_order/:id/',
+    method: 'PATCH',
+    desc: "更新外销单",
+    param: {
+
+    }
+  },
+  upDepartemntcancle: {
+    url: '/api/v1/outsale_order/check/',
+    method: 'POST',
+    desc: "业务单审批",
+    param: {
+
+    }
+  },
+  outsidePickDetalis: {
+    url: '/api/v1/outsale_order/:id/',
+    method: 'get',
+    desc: "外销单详情",
+    param: {
+
+    }
+  },
+  outsidePickProcess: {
+    url: '/api/v1/outsale_order/record/',
+    method: 'get',
+    desc: "外销单进程",
+    param: {
+
+    }
+  },
+  /*外采单接口*/
+  getOutsideBuyCount: {
+    url: '/api/v1/outbuy_trip/count/',
+    method: 'get',
+    desc: "外采单数量",
+    param: {
+
+    }
+  },
+  searchOutbuyOrder: {
+    url: '/api/v1/outbuy_trip/',
+    method: 'get',
+    desc: "外采单列表",
+    param: {
+
+    }
+  },
+  outsideBuyDetalis: {
+    url: '/api/v1/outbuy_order/:id/',
+    method: 'get',
+    desc: "外采单详情",
+    param: {
+
+    }
+  },
+  upDepartemntBuyCheck: {
+    url: '/api/v1/outbuy_trip/check/',
+    method: 'POST',
+    desc: "外采单审批",
+    param: {
+
+    }
+  },
+  getMatchBusiness: {
+    url: '/api/v1/outbuy-helpers/check-order/',
+    method: 'POST',
+    desc: "检查运单下卸货单",
+    param: {
+
+    }
+  },
+  upMatchUnloadList: {
+    url: '/api/v1/outbuy_match/match-business-order/',
+    method: 'POST',
+    desc: "匹配卸货单",
+    param: {
+
+    }
+  },
+  outsideBuyProcess: {
+    url: '/api/v1/outbuy_trip/record',
+    method: 'GET',
+    desc: "外采单分段进程记录",
+    param: {
+
+    }
+  },
+  outBuyStepDetalis: {
+    url: '/api/v1/outbuy_trip/:trip_id/',
+    method: 'GET',
+    desc: "分段详情",
+    param: {
+
+    }
   }
+  /*--------*/
 }
 
 

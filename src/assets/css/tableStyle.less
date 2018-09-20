@@ -4,6 +4,20 @@
     border: 1px solid @tms-border-two-level;
 
     position: relative;
+    .adjust{
+      margin-bottom: 10px;
+       min-height: 18px;
+       text-align: left;
+      span{
+        float: right;
+        background: @tms-blue;
+        padding: 1px 6px;
+        border-radius: 4px;
+        color: @tms-white;
+        line-height: 16px;
+        .font-size(12px);
+      }
+    }
     .el-table--mini {
         th {
             padding: 10px 0;
@@ -15,6 +29,11 @@
             .font-size(14px);
         }
         td {
+            .td-hover{
+              overflow:hidden;
+              text-overflow:ellipsis;
+              white-space:nowrap
+            }
             .font-size(13px);
             // min-height: 24px;
             // padding: 0 6px;
