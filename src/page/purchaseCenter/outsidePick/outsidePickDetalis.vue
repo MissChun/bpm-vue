@@ -230,9 +230,9 @@ export default {
     outsidePickDetali: outsidePickDetali
   },
   computed: {
-    // outsidePickId: function() {
-    //   return this.$route.params.id;
-    // },
+    outsidePickId: function() {
+      return this.$route.params.id;
+    },
   },
   data() {
     return {
