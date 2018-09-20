@@ -1,14 +1,20 @@
 <style scoped lang="less">
-
-
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.detail-main {
+  border-top: 0;
+}
 </style>
 <template>
   <div>
-    <div class="nav-tab">
+<!--     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="外采单详情" name="first">
-          <outside-buy-detali></outside-buy-detali>
-          <!-- <div class="detail-main" v-loading="pageLoading">
+        <el-tab-pane label="外采单详情" name="first"> -->
+          <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
@@ -257,60 +263,44 @@
                 </div>
               </el-main>
             </el-container>
-          </div> -->
-        </el-tab-pane>
+          </div>
+     <!--    </el-tab-pane>
         <el-tab-pane label="外采单进程" name="second">
         </el-tab-pane>
-      </el-tabs>
+      </el-tabs> -->
     </div>
   </div>
 </template>
 <script>
-import outsideBuyDetali from '@/components/purchaseCenter/outsideBuyDetali';
 export default {
-  name: 'outsideBuyDetalis',
-  components: {
-    outsideBuyDetali: outsideBuyDetali
-  },
+  name: 'outsideBuyDetali',
   computed: {
     outsideBuyWaybillId: function() {
       return this.$route.params.waybillId;
     },
-    outsideBuyStedpId: function() {
-      return this.$route.params.setpId;
-    }
   },
   data() {
     return {
       activeName: 'first',
-      // pageLoading: false,
-      // outsideBuyDetalisData: {}
+      pageLoading: false,
+      outsideBuyDetalisData: {}
     }
   },
   methods: {
-    clicktabs: function(targetName) {
-      if (targetName.name == 'second') {
-        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyPoress/${this.outsideBuyWaybillId}/${this.outsideBuyStedpId}` });
-      }
-    },
-    // outsideBuyDetalis: function() {
-    //   this.pageLoading = true;
-    //   this.$$http("outsideBuyDetalis", { id: this.outsideBuyWaybillId }).then((result) => {
-    //     this.pageLoading = false;
-    //     if (result.data.code == 0) {
-    //       this.outsideBuyDetalisData = result.data.data;
-    //     }
-    //   }).catch(() => {
-    //     this.pageLoading = false;
-    //   });
-    // }
+    outsideBuyDetalis: function() {
+      this.pageLoading = true;
+      this.$$http("outsideBuyDetalis", { id: this.outsideBuyWaybillId }).then((result) => {
+        this.pageLoading = false;
+        if (result.data.code == 0) {
+          this.outsideBuyDetalisData = result.data.data;
+        }
+      }).catch(() => {
+        this.pageLoading = false;
+      });
+    }
   },
-  activated: function() {
-    this.activeName = 'first';
-  },
-
   created: function() {
-    // this.outsideBuyDetalis();
+    this.outsideBuyDetalis();
   }
 }
 

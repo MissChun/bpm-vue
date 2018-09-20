@@ -79,8 +79,8 @@
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                  {{scope.row[item.param]}}
-                </span>
+              <span v-html="scope.row[item.param]"></span>
+              </span>
       </div>
       </template>
       </el-table-column>

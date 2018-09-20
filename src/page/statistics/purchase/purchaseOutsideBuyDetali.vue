@@ -1,7 +1,5 @@
 <style type="text/css"  scoped lang="less">
-  .detail-main{
-    border-top: 0;
-  }
+
 </style>
 <template>
 
@@ -19,17 +17,12 @@
 <script>
 import waybillDetail from '@/components/consignmentCenter/waybillDetail';
 export default {
-  name: 'purchaseWaybillDetail',
+  name: 'purchaseOutsideBuyDetali',
   components: {
     waybillDetail: waybillDetail
   },
   computed: {
-    // setpId: function() {
-    //   return this.$route.params.setpId;
-    // },
-    // willId: function() {
-    //   return this.$route.params.willId;
-    // },
+
   },
   data() {
     return {
@@ -38,12 +31,7 @@ export default {
   },
   methods: {
     clicktabs: function(targetName) {
-      // if (targetName.name == 'second') {
-      //   this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${this.setpId}/${this.willId}` });
-      // }
-      // if (targetName.name == 'third') {
-      //   this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${this.setpId}/${this.willId}` });
-      // }
+
     },
 
   },
