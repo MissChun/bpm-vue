@@ -79,8 +79,8 @@
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                  <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                  <span v-else v-html="scope.row[item.param]"></span>
+              <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <span v-else v-html="scope.row[item.param]"></span>
               </span>
       </div>
       </template>
@@ -153,7 +153,7 @@ export default {
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       exportType: {
         type: 'procurement',

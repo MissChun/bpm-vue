@@ -161,7 +161,7 @@ export default {
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
         waybill_status: '',
-        field: 'business_order',
+        field: 'short_name',
       },
       exportType: {
         type: 'sale',
