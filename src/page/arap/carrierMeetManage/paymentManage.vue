@@ -39,10 +39,12 @@
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
                 <template slot-scope="scope">
                   <div v-if="item.param==='payment_datetime'">{{scope.row[item.param]|dateFilter}}</div>
-                  <div v-if="item.param==='desc'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                  <div v-else>
+                    <div v-if="item.param==='desc'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
                     <div v-else>
                       {{scope.row[item.param]}}
                     </div>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center">
