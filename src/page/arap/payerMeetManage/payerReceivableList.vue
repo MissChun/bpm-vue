@@ -48,7 +48,7 @@
     </div>
     <div class="nav-tab-setting mt-25">
       <div class="business-btn">
-        <!-- <el-button type="primary" plain @click="">导入</el-button> -->
+        <el-button type="primary" plain @click="importList">导入</el-button>
         <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
       </div>
       <el-tabs v-model="receivableActive" @tab-click="receivableClick">
@@ -185,20 +185,15 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-          for (let i in this.tableData) {
-            this.tableData[i].carrierListStr = '';
-            this.tableData[i].fluidListStr = '';
-            for (let j in this.tableData[i].agreements) {
-              // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
-              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
-            }
-          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
 
+    },
+    importList: function() {
+      this.$router.push({ path: `/imports/importData/${'payer'}` });
     },
     handleClick: function(tab, event) {
       if (tab.name === 'meet') {
@@ -220,7 +215,7 @@ export default {
   },
   activated() {
     this.activeName = 'receivable';
-    this, receivableActive = 'paymentReceivable';
+    this.receivableActive = 'paymentReceivable';
   },
   created: function() {
     this.getList();

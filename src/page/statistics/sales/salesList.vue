@@ -58,8 +58,8 @@
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportSaleData'"></export-button>
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('sale')">{{exportBtn.text}}</el-button> -->
+            <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportSaleData'"></export-button> -->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('sale')">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -81,8 +81,8 @@
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                  <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                <span v-else v-html="scope.row[item.param]"></span>
+              <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <span v-else v-html="scope.row[item.param]"></span>
               </span>
       </div>
       </template>
@@ -303,11 +303,11 @@ export default {
         title: '销售总额',
         param: 'sell_rental',
         width: ''
-      },{
+      }, {
         title: '调账备注',
         param: 'remark_adjust',
         width: '180'
-      },{
+      }, {
         title: '调账时间',
         param: 'adjust_time',
         width: '180'
@@ -317,9 +317,60 @@ export default {
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData(type) {
+      let postData = {
+        filename: '销售统计',
+        page_arg: type,
+        ids: [16, 17, 20, 21, 39, 18, 19, 24, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 111]
+      };
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportSaleData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          console.log('data',results)
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();

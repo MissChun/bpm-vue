@@ -48,7 +48,7 @@
     </div>
     <div class="nav-tab-setting mt-25">
       <div class="business-btn">
-        <!-- <el-button type="primary" plain @click="">导入</el-button> -->
+        <el-button type="primary" plain @click="importList">导入</el-button>
         <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
       </div>
       <el-tabs v-model="receivableActive" @tab-click="receivableClick">
@@ -210,6 +210,9 @@ export default {
         this.pageLoading = false;
       })
 
+    },
+    importList: function() {
+      this.$router.push({ path: `/imports/importData/${'customerReturn'}` });
     },
     handleClick: function(tab, event) {
       if (tab.name === 'meet') {

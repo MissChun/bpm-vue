@@ -9,6 +9,62 @@
  */
 
 const api = {
+  exportsTemplate: {
+    url: '/export/cost/',
+    method: 'post',
+    desc: '下载模板',
+    param: {
+
+    }
+  },
+  deleteCustomerReturnDataList: {
+    url: '/imports/bulk_consumer_destroy/',
+    method: 'delete',
+    desc: '清空客户回款临时列表',
+    param: {
+
+    }
+  },
+  exportCustomerReturnData: {
+    url: '/imports/export-consumer/',
+    method: 'POST',
+    desc: '客户回款导入系统',
+    param: {
+
+    }
+  },
+  getCustomerReturnImportList: {
+    url: '/imports/consumer/',
+    method: 'get',
+    desc: '客户回款临时表',
+    param: {
+
+    }
+  },
+  deletePayerDataList: {
+    url: '/imports/bulk_payer_destroy/',
+    method: 'delete',
+    desc: '清空付款方临时列表',
+    param: {
+
+    }
+  },
+  exportPayerData: {
+    url: '/imports/export-payer/',
+    method: 'POST',
+    desc: '付款方导入系统',
+    param: {
+
+    }
+  },
+  getPayerImportList: {
+    url: '/imports/payer/',
+    method: 'get',
+    desc: '付款方临时表',
+    param: {
+
+    }
+  },
   getPayerSimpleAll: {
     url: '/api/v1/payer_simple/',
     method: 'get',
