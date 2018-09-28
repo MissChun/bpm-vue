@@ -148,7 +148,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际装车时间:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].active_time)"></div>
+                  <div class="detail-form-item" >
+                    <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="detailData.last_active_time">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col><span >原数据:</span>{{loadArr[0].active_time}}</el-col>
+                          <el-col >新数据:{{detailData.last_active_time}}</el-col>
+                        </el-row>
+                      </div>
+                    <div v-if="loadArr[0].active_time">{{loadArr[0].active_time}}<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
+                    <div v-else>无<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
+                  </el-tooltip>
+                  <span v-else>{{loadArr[0].active_time}}</span>
+                  </div>
                 </div>
               </el-col>
             </el-row>
@@ -156,7 +168,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际装车吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(loadArr.length&&loadArr[0].active_tonnage)"></div>
+                  <div class="detail-form-item">
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="detailData.last_active_tonnage">
+                        <div slot="content" style="width:120px;">
+                          <el-row>
+                            <el-col><span v-if="detailData.last_active_tonnage">原数据:</span>{{loadArr[0].active_tonnage}}吨</el-col>
+                            <el-col >新数据:{{detailData.last_active_tonnage}}吨</el-col>
+                          </el-row>
+                        </div>
+                      <span v-if="loadArr[0].active_tonnage">{{loadArr[0].active_tonnage}}<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                      <span v-else>无<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    </el-tooltip>
+                    <span v-else>{{loadArr[0].active_tonnage}}</span>
+                  </div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -245,7 +269,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_tonnage)"></div>
+                  <div class="detail-form-item" >
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="item.last_actual_quantity">
+                        <div slot="content" style="width:120px;">
+                          <el-row>
+                            <el-col><span >原数据:</span>{{item.active_tonnage}}吨</el-col>
+                            <el-col v-if="item.last_actual_quantity">新数据:{{item.last_actual_quantity}}吨</el-col>
+                          </el-row>
+                        </div>
+                      <span v-if="item.active_tonnage">{{item.active_tonnage}}<img style="margin-left:5px;vertical-align:top" v-if="item.last_actual_quantity" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                      <span v-else>无<img style="margin-left:5px;vertical-align:top" v-if="item.last_actual_quantity" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    </el-tooltip>
+                    <span v-else>{{item.active_tonnage}}</span>
+                  </div>
                 </div>
               </el-col>
             </el-row>
@@ -285,7 +321,25 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>离站时间:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_audit_time)"></div>
+                  <div class="detail-form-item" >
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="item.last_weight_audit_time">
+                        <div slot="content" style="width:180px;">
+                          <el-row>
+                            <el-col><span >原数据:</span>{{item.weight_audit_time}}</el-col>
+                            <el-col v-if="item.last_weight_audit_time">新数据:{{item.last_weight_audit_time}}</el-col>
+                          </el-row>
+                        </div>
+                      <div v-if="item.weight_audit_time">
+                        <span>{{item.weight_audit_time}}</span>
+                        <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_audit_time" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                      <div v-if="!item.weight_audit_time">无
+                         <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_audit_time" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                     
+                    </el-tooltip>
+                    <span v-else>{{item.weight_audit_time}}</span>
+                  </div>
                 </div>
               </el-col>
             </el-row>
