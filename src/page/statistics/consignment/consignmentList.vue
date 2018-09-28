@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="实际装车时间:" label-width="105px">
+              <el-form-item label="实际到厂时间:" label-width="105px">
                 <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
@@ -126,7 +126,7 @@ export default {
         pageSize: 10,
       },
       leaveTime: [], //实际离站时间
-      activeTime: [], //实际装车时间
+      activeTime: [], //实际到厂时间
       selectMenus: [], //批量勾选
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -182,8 +182,12 @@ export default {
         param: 'plan_loading_time',
         width: '180'
       }, {
-        title: '实际装车时间',
+        title: '实际到厂时间',
         param: 'active_time',
+        width: '180'
+      }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
         width: '180'
       }, {
         title: '实际离站时间',

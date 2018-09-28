@@ -43,8 +43,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="客户名称:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.consumer_name"></el-input>
@@ -60,11 +58,14 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="实际装车时间:">
+                  <el-form-item label="实际到厂时间:">
                     <el-date-picker v-model="editMsgForm.active_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="装车完成时间:">
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -77,8 +78,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.station"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="离站时间:">
                     <el-date-picker v-model="editMsgForm.leave_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
@@ -94,8 +93,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_mile"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实收吨位:" prop="actual_quantity">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
@@ -111,8 +108,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="采购单价:" prop="discount_price">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.discount_price"></el-input>
@@ -128,8 +123,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sale_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="结算价格:" prop="unit_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
@@ -145,8 +138,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="销售总额:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sell_rental"></el-input>
@@ -162,8 +153,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.sale_man"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运单状态:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waybill_status"></el-input>
@@ -179,8 +168,6 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_invoice"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -248,6 +235,7 @@ export default {
         is_invoice: '', //是否开票
         is_reconciliation: '', //是否对账
         remark: '', //备注,
+        work_end_time:'',
         waybill_status: '' //运单状态
       },
 
@@ -341,6 +329,7 @@ export default {
             waiting_charges: this.detail.waiting_charges, //待时总额
             sale_man: this.detail.sale_man, //业务员
             active_time: this.detail.active_time, //实际装车时间
+            work_end_time:this.detail.work_end_time,
             is_invoice: this.detail.is_invoice.verbose,
             is_reconciliation: this.detail.is_reconciliation.verbose,
             remark: '',
@@ -383,7 +372,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'work_end_time','check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

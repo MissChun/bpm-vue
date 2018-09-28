@@ -23,11 +23,11 @@ export default {
         deleteDataApi: 'deleteCustomerReturnDataList' //清空临时表apiName
       },
       postData: {
-        exportType: 'consumer"' //导出模板类型参数
+        exportType: 'consumer' //导出模板类型参数
       },
       thTableList: [{
         title: '客户简称',
-        param: 'consumer_shortname',
+        param: 'consumer',
         width: ''
       }, {
         title: '回款日期',

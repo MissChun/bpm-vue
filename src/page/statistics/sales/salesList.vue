@@ -222,8 +222,12 @@ export default {
         param: 'plate_number',
         width: ''
       }, {
-        title: '实际装车时间',
+        title: '实际到厂时间',
         param: 'active_time',
+        width: '200'
+      },  {
+        title: '装车完成时间',
+        param: 'work_end_time',
         width: '200'
       }, {
         title: '实际液厂',
