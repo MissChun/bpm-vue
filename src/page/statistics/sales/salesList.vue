@@ -225,7 +225,7 @@ export default {
         title: '实际到厂时间',
         param: 'active_time',
         width: '200'
-      },  {
+      }, {
         title: '装车完成时间',
         param: 'work_end_time',
         width: '200'
@@ -341,7 +341,7 @@ export default {
       let postData = {
         filename: '销售统计',
         page_arg: type,
-        ids: [16, 17, 20, 21, 39, 18, 19, 24, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 111]
+        ids: [16, 17, 20, 21, 39, 18, 19, 24, 125, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 111]
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);
@@ -357,7 +357,7 @@ export default {
           isDisabled: false,
         }
         if (results.data && results.data.code == 0) {
-          console.log('data',results)
+          console.log('data', results)
           window.open(results.data.data.filename);
           this.$message({
             message: '导出成功',

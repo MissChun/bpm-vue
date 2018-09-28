@@ -160,7 +160,7 @@ export default {
         title: '装车完成时间',
         param: 'work_end_time',
         width: '180'
-      },{
+      }, {
         title: '采购单价',
         param: 'buy_price',
         width: ''
@@ -275,7 +275,7 @@ export default {
       let postData = {
         filename: '业务台账',
         page_arg: type,
-        ids: [76,77,81,82,90,113,84,78,79,91,92,94,93,83,108,85,80,95,97,96,98,101,100,86,99,102,88,103,104,105,87,106,107,89]
+        ids: [76, 77, 81, 82, 90, 113, 84, 127, 78, 79, 91, 92, 94, 93, 83, 108, 85, 80, 95, 97, 96, 98, 101, 100, 86, 99, 102, 88, 103, 104, 105, 87, 106, 107, 89]
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);
@@ -284,14 +284,14 @@ export default {
         isLoading: true,
         isDisabled: true,
       }
-      this.$$http('exportSaleData', newPostData).then((results) => {
+      this.$$http('exportLedgerData', newPostData).then((results) => {
         this.exportBtn = {
           text: '导出',
           isLoading: false,
           isDisabled: false,
         }
         if (results.data && results.data.code == 0) {
-          console.log('data',results)
+          console.log('data', results)
           window.open(results.data.data.filename);
           this.$message({
             message: '导出成功',
