@@ -60,7 +60,7 @@
         <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:(tableList.length>6?140:'')">
           <template slot-scope="scope">
             <div v-if="item.dateType==='date'">{{scope.row[item.param]|dateFilter}}</div>
-            <div :class="item.isEllipsis?'td-hover':''" v-else>{{scope.row[item.param]}}</div>
+            <div :class="item.isEllipsis?'td-hover':''" v-else :title="item.isEllipsis?scope.row[item.param]:''">{{scope.row[item.param]}}</div>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center" width="100" fixed="right">
