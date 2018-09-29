@@ -142,7 +142,7 @@ export default {
       statusType:{
         'new_order':{title:"外采单生成",valueArr:[
           {key:'外采单单号',valueKey:'waybill_number'},{key:'外采单生成时间',valueKey:'operated_at'},{key:'操作人',valueKey:'operator'},
-          {key:'实际装车时间',valueKey:'actual_time'},{key:'采购时间',valueKey:'buy_time'},{key:'实际装车吨位',valueKey:'actual_quantity',url:true,urlText:"(磅)",
+          {key:'实际到厂时间',valueKey:'actual_time'},{key:'采购时间',valueKey:'buy_time'},{key:'实际装车吨位',valueKey:'actual_quantity',url:true,urlText:"(磅)",
           imgUrl:"weight_note_image_url",unit:"吨"},
           {key:'供应商',valueKey:'supplier_name'},{key:'液厂',valueKey:'operated_at'}
         ]},

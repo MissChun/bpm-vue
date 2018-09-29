@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="实际装车时间:" label-width="105px">
+              <el-form-item label="实际到厂时间:" label-width="105px">
                 <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
@@ -79,8 +79,8 @@
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                  <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                  <span v-else v-html="scope.row[item.param]"></span>
+              <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <span v-else v-html="scope.row[item.param]"></span>
               </span>
       </div>
       </template>
@@ -153,7 +153,7 @@ export default {
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       exportType: {
         type: 'procurement',
@@ -208,10 +208,14 @@ export default {
         param: 'plate_number',
         width: ''
       }, {
-        title: '实际装车时间',
+        title: '实际到厂时间',
         param: 'active_time',
         width: '200'
       }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
+        width: '200'
+      },{
         title: '实际装车吨位（吨）',
         param: 'active_tonnage',
         width: '150',

@@ -43,8 +43,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.carrier"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="车号:">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
@@ -60,16 +58,19 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.station"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="计划装车时间:" prop="plan_loading_time">
                     <el-date-picker v-model="editMsgForm.plan_loading_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际装车时间:">
+                  <el-form-item label="实际到厂时间:">
                     <el-date-picker v-model="editMsgForm.active_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="装车完成时间:">
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -77,8 +78,6 @@
                     <el-date-picker v-model="editMsgForm.leave_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="装车吨位:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.plan_tonnage"></el-input>
@@ -94,8 +93,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="核算吨位:" prop="check_quantity">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
@@ -111,9 +108,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_mile"></el-input>
                   </el-form-item>
                 </el-col>
-
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="起步价:" prop="initial_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.initial_price"></el-input>
@@ -129,8 +123,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="气差金额:" prop="difference_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.difference_value"></el-input>
@@ -146,8 +138,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运费合计:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.waiting_charges"></el-input>
@@ -207,12 +197,12 @@ export default {
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         stand_mile: '', //标准里程
-        actual_mile:'',//实际里程
+        actual_mile: '', //实际里程
         initial_price: '', //起步价
         change_rate: '', //运输费率
         difference_value: '', //气差金额
         freight_value: '', //标准运费
-        change_rate:'',//运输费率
+        change_rate: '', //运输费率
         lcl_cost: '', //分卸费
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
@@ -223,6 +213,7 @@ export default {
         plate_number: '', //车牌号
         is_reconciliation: '', //是否对账
         station: '', //站点
+        work_end_time: '',
         remark: '' //备注
       },
 
@@ -302,12 +293,12 @@ export default {
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
             stand_mile: this.detail.stand_mile, //标准里程
-            actual_mile:this.detail.actual_mile,//实际里程
+            actual_mile: this.detail.actual_mile, //实际里程
             initial_price: this.detail.initial_price, //起步价
             change_rate: this.detail.change_rate, //运输费率
             difference_value: this.detail.difference_value, //气差金额
             freight_value: this.detail.freight_value, //标准运费
-            change_rate:this.detail.change_rate,//运输费率
+            change_rate: this.detail.change_rate, //运输费率
             lcl_cost: this.detail.lcl_cost, //分卸费
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
@@ -318,6 +309,7 @@ export default {
             plate_number: this.detail.plate_number, //车牌号
             is_reconciliation: this.detail.is_reconciliation, //是否对账
             station: this.detail.station, //站点
+            work_end_time: this.detail.work_end_time,
             remark: '' //备注
           }
         }
@@ -357,7 +349,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile','actual_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value','freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['check_quantity', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'work_end_time', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

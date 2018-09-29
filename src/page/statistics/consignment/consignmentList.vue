@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="实际装车时间:" label-width="105px">
+              <el-form-item label="实际到厂时间:" label-width="105px">
                 <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
@@ -66,45 +66,45 @@
               <div v-else>
                 <span>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                </span>
-                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                <span v-else v-html="scope.row[item.param]"></span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="运费合计" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>
-                <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
-                {{scope.row.waiting_charges}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="140" fixed="right">
-            <template slot-scope="scope">
-              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-                <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-              </div>
-              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
-                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+              </span>
+              <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <span v-else v-html="scope.row[item.param]"></span>
       </div>
-      <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-        </el-pagination>
-      </div>
+      </template>
+      </el-table-column>
+      <el-table-column label="是否对账" align="center" width="100">
+        <template slot-scope="scope">
+          <div>{{scope.row.is_reconciliation.verbose}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="运费合计" align="center" width="100" fixed="right">
+        <template slot-scope="scope">
+          <div>
+            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            {{scope.row.waiting_charges}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="140" fixed="right">
+        <template slot-scope="scope">
+          <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+            <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
+            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+          </div>
+          <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
+            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+          </div>
+        </template>
+      </el-table-column>
+      </el-table>
+      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
     </div>
-    <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+      </el-pagination>
+    </div>
+  </div>
+  <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
   </div>
 </template>
 <script>
@@ -126,13 +126,13 @@ export default {
         pageSize: 10,
       },
       leaveTime: [], //实际离站时间
-      activeTime: [], //实际装车时间
+      activeTime: [], //实际到厂时间
       selectMenus: [], //批量勾选
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       exportType: {
         filename: '托运数据',
@@ -182,8 +182,12 @@ export default {
         param: 'plan_loading_time',
         width: '180'
       }, {
-        title: '实际装车时间',
+        title: '实际到厂时间',
         param: 'active_time',
+        width: '180'
+      }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
         width: '180'
       }, {
         title: '实际离站时间',
@@ -241,11 +245,11 @@ export default {
         title: '卸车待时金额',
         param: 'waiting_price',
         width: ''
-      },{
+      }, {
         title: '调账备注',
         param: 'remark_adjust',
         width: '180'
-      },{
+      }, {
         title: '调账时间',
         param: 'adjust_time',
         width: '180'
@@ -434,7 +438,7 @@ export default {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             }
           }
-          console.log('ces ',this.tableData.data.data)
+          console.log('ces ', this.tableData.data.data)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

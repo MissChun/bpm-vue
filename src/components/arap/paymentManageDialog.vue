@@ -131,7 +131,7 @@ export default {
 
           // let times = new Date();
           // postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          postData = this.pbFunc.fifterObjIsNull(postData);
+          // postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
             this.submitBtn = {
               btnText: '保存',

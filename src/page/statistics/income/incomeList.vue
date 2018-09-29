@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="实际装车时间:" label-width="105px">
+              <el-form-item label="实际到厂时间:" label-width="105px">
                 <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
               </el-form-item>
             </el-col>
@@ -39,7 +39,8 @@
             一共{{tableData.waybill?tableData.waybill:0}}单，采购优惠后总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，销售待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，运费合计{{tableData.summati?tableData.summati:0}}元，能源利润{{tableData.energy_prof?tableData.energy_prof:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
-            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button>
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('ledger')">{{exportBtn.text}}</el-button>
+            <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button> -->
           </el-col>
         </el-row>
       </div>
@@ -99,12 +100,12 @@ export default {
         filename: '业务台账'
       },
       leaveTime: [], //实际离站时间
-      activeTime: [], //实际装车时间
+      activeTime: [], //实际到厂时间
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
         fieldSelect: [
@@ -152,8 +153,12 @@ export default {
         param: 'fluid',
         width: ''
       }, {
-        title: '实际装车时间',
+        title: '实际到厂时间',
         param: 'active_time',
+        width: '180'
+      }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
         width: '180'
       }, {
         title: '采购单价',
@@ -250,9 +255,60 @@ export default {
       }],
       tableData: [],
       exportPostData: {}, //导出筛选
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData(type) {
+      let postData = {
+        filename: '业务台账',
+        page_arg: type,
+        ids: [76, 77, 81, 82, 90, 113, 84, 127, 78, 79, 91, 92, 94, 93, 83, 108, 85, 80, 95, 97, 96, 98, 101, 100, 86, 99, 102, 88, 103, 104, 105, 87, 106, 107, 89]
+      };
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportLedgerData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          console.log('data', results)
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();

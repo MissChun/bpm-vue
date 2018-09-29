@@ -265,7 +265,7 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>实际装车时间:</label>
+                <label>实际到厂时间:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.active_time)"></div>
               </div>
             </el-col>
@@ -406,7 +406,7 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>实际装车时间:</label>
+                <label>实际到厂时间:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.deliver_order&&detailData.deliver_order.actual_time)"></div>
               </div>
             </el-col>

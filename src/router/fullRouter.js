@@ -1,6 +1,7 @@
 import order from './order'
 import arap from './arap'
 import statistics from './statistics'
+import importData from './imports'
 export default [{
   path: '',
   name: 'index',
@@ -13,6 +14,7 @@ export default [{
     order,
     arap,
     statistics,
+    importData,
     {
       path: 'dashboard',
       name: 'dashboard',

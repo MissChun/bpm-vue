@@ -9,7 +9,7 @@
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
           <el-form-item label="客户简称:" prop="consumer">
             <el-select v-model="formRules.consumer" :loading="customerLoading" filterable clearable placeholder="请输入选择" @change="selectCustomer">
-              <el-option v-for="(item,key) in customerSelect" :key="key" :label="item.consumer_name" :value="item.id"></el-option>
+              <el-option v-for="(item,key) in customerSelect" :key="key" :label="item.short_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="客户名称:">
@@ -119,7 +119,7 @@ export default {
         for (let i in this.customerSelect) {
           if (this.customerSelect[i].id === value) {
             this.customerObj = {
-              name: this.customerSelect[i].short_name,
+              name: this.customerSelect[i].consumer_name,
               man: this.customerSelect[i].sale_man_name
             }
             break;
@@ -152,7 +152,7 @@ export default {
 
           // let times = new Date();
           // postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          postData = this.pbFunc.fifterObjIsNull(postData);
+          // postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
             this.submitBtn = {
               btnText: '保存',
@@ -202,7 +202,7 @@ export default {
           desc: this.arapRow.desc, //调账备注
         };
         this.customerObj = {
-          name: this.arapRow.consumer_shortname,
+          name: this.arapRow.consumer_name,
           man: this.arapRow.consumer_saleman
         }
         this.title = '修改回款事项';
