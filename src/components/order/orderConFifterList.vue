@@ -776,6 +776,7 @@ export default {
 		},
 		expandArr: function() {
 			if(this.expandStatus){
+				this.returnId=[];
 				this.ListData.forEach((item)=>{
 					this.returnId.push(item.id);
 				});

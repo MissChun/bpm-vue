@@ -62,7 +62,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="status!='first'&&status!='second'">
-            <el-form-item label="实际卸货时间:" label-width="105px">
+            <el-form-item label="实际到站时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
@@ -263,6 +263,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
+      sendData.carrier_type = this.carrier_type;
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel = 'export'
