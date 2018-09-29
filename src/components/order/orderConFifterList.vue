@@ -193,7 +193,7 @@
 									<span v-else>无</span>
 								</el-col>
 								<el-col :span="4" class="whiteSpan">
-			                  实际装车时间:
+			                  实际到厂时间:
 			                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
 			                      <div slot="content" style="width:180px;">
 			                        <el-row>
@@ -246,7 +246,7 @@
 									液厂: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
 								</el-col>
 								<el-col :span="4" class="whiteSpan">
-					                  实际装车时间:
+					                  实际到厂时间:
 					                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
 					                      <div slot="content" style="width:180px;">
 					                        <el-row>
@@ -441,7 +441,7 @@
 				</template>
 			</el-table-column>
 
-			<el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
+			<el-table-column label="实际到厂时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
 				<template slot-scope="props">
 					<el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
 								 <span >{{props.row.pick_active_time}}</span>

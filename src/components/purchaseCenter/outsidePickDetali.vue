@@ -87,7 +87,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="label-list">
-                  <label>实际装车时间:</label>
+                  <label>实际到厂时间:</label>
                   <div class="detail-form-item whiteSpan">
                     <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.actual_time" placement="top-start" v-if="outsidePickDetalisData.actual_time">
                       <span>{{outsidePickDetalisData.actual_time}}</span>

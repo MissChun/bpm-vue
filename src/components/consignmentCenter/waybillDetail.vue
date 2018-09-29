@@ -150,7 +150,7 @@
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>实际装车时间:</label>
+                  <label>实际到厂时间:</label>
                   <div class="detail-form-item" >
                     <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="loadArr[0].last_active_time">
                       <div slot="content" style="width:180px;">

@@ -243,7 +243,7 @@
             <span v-else>无</span>
        </template>
       </el-table-column>
-       <el-table-column label="实际装车时间" prop="" min-width="150">
+       <el-table-column label="实际到厂时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_time" placement="top-start" v-if="props.row.waybill.actual_time">
@@ -371,7 +371,7 @@ export default {
       loadRender:[
         {'tltle':"供应商名称",valueKey:"supplier_name"},
         {'tltle':"液厂",valueKey:"actual_fluid_name"},
-        {'tltle':"实际装车时间",valueKey:"actual_time"},
+        {'tltle':"实际到厂时间",valueKey:"actual_time"},
         {'tltle':"装车吨位",valueKey:"actual_quantity","pound":true,'poundUrl':"weight_note_image_url"},
         {'tltle':"车号",valueKey:"tractor_plate_number"},
         {'tltle':"主驾",valueKey:['driver','driver_phone'],keyMore:true},

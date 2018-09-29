@@ -168,7 +168,7 @@
 
               <el-row style="margin-top:5px;">
                 <el-col :span="4" class="whiteSpan">
-                  实际装车时间: 
+                  实际到厂时间: 
                   <el-tooltip  class="item" effect="light" :content="props.row.actual_time" placement="top-start">
                     <span>{{props.row.actual_time}}</span>
                   </el-tooltip>
@@ -283,7 +283,7 @@
             <span v-else>无</span>
        </template>
       </el-table-column>
-       <el-table-column label="实际装车时间" prop="" min-width="150">
+       <el-table-column label="实际到厂时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.actual_time" placement="top-start" v-if="props.row.actual_time">
