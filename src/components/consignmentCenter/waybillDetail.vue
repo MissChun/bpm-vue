@@ -128,7 +128,10 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>液厂地址:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.fluid_address)"></div>
+                  <div class="detail-form-item"><span v-if="detailData.delivery_order&&detailData.delivery_order.fluid_address.length<13">{{detailData.delivery_order.fluid_address}}</span>
+                  <el-tooltip v-else class="item" effect="light" :content="detailData.delivery_order.fluid_address" placement="top-start">
+                    <a>{{detailData.delivery_order.fluid_address.slice(0,10)}}....</a>
+                  </el-tooltip></div>
                 </div>
               </el-col>
             </el-row>
@@ -149,15 +152,15 @@
                 <div class="label-list">
                   <label>实际装车时间:</label>
                   <div class="detail-form-item" >
-                    <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="detailData.last_active_time">
-                      <div slot="content" style="width:120px;">
+                    <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="loadArr[0].last_active_time">
+                      <div slot="content" style="width:180px;">
                         <el-row>
                           <el-col><span >原数据:</span>{{loadArr[0].active_time}}</el-col>
-                          <el-col >新数据:{{detailData.last_active_time}}</el-col>
+                          <el-col >新数据:{{loadArr[0].last_active_time}}</el-col>
                         </el-row>
                       </div>
-                    <div v-if="loadArr[0].active_time">{{loadArr[0].active_time}}<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
-                    <div v-else>无<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
+                    <div v-if="loadArr[0].active_time">{{loadArr[0].active_time}}<img style="margin-left:5px;vertical-align:top" v-if="loadArr[0].last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
+                    <div v-else>无<img style="margin-left:5px;vertical-align:top" v-if="loadArr[0].last_active_time" src="@/assets/img/tipGroup_4.png" alt="" ></div>
                   </el-tooltip>
                   <span v-else>{{loadArr[0].active_time}}</span>
                   </div>
@@ -169,15 +172,15 @@
                 <div class="label-list">
                   <label>实际装车吨位:</label>
                   <div class="detail-form-item">
-                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="detailData.last_active_tonnage">
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="loadArr[0].last_active_tonnage">
                         <div slot="content" style="width:120px;">
                           <el-row>
-                            <el-col><span v-if="detailData.last_active_tonnage">原数据:</span>{{loadArr[0].active_tonnage}}吨</el-col>
-                            <el-col >新数据:{{detailData.last_active_tonnage}}吨</el-col>
+                            <el-col><span v-if="loadArr[0].last_active_tonnage">原数据:</span>{{loadArr[0].active_tonnage}}吨</el-col>
+                            <el-col >新数据:{{loadArr[0].last_active_tonnage}}吨</el-col>
                           </el-row>
                         </div>
-                      <span v-if="loadArr[0].active_tonnage">{{loadArr[0].active_tonnage}}<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                      <span v-else>无<img style="margin-left:5px;vertical-align:top" v-if="detailData.last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                      <span v-if="loadArr[0].active_tonnage">{{loadArr[0].active_tonnage}}<img style="margin-left:5px;vertical-align:top" v-if="loadArr[0].last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                      <span v-else>无<img style="margin-left:5px;vertical-align:top" v-if="loadArr[0].last_active_tonnage" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     </el-tooltip>
                     <span v-else>{{loadArr[0].active_tonnage}}</span>
                   </div>
@@ -237,7 +240,10 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>站点地址:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.station_address)"></div>
+                  <div class="detail-form-item"><span v-if="item.business_order&&item.business_order.station_address.length<13">{{item.business_order.station_address}}</span>
+                  <el-tooltip v-else class="item" effect="light" :content="item.business_order.station_address" placement="top-start">
+                    <a>{{item.business_order.station_address.slice(0,10)}}....</a>
+                  </el-tooltip></div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -309,7 +315,25 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际里程:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_active_mile)"></div>
+                   <div class="detail-form-item" >
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="item.last_weight_active_mile">
+                        <div slot="content" style="width:120px;">
+                          <el-row>
+                            <el-col><span >原数据:</span>{{item.weight_active_mile}}km</el-col>
+                            <el-col v-if="item.last_weight_active_mile">新数据:{{item.last_weight_active_mile}}km</el-col>
+                          </el-row>
+                        </div>
+                      <div v-if="item.weight_active_mile">
+                        <span>{{item.weight_active_mile}}km</span>
+                        <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_active_mile" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                      <div v-if="!item.weight_active_mile">无
+                         <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_active_mile" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                     
+                    </el-tooltip>
+                    <span v-else>{{item.weight_active_mile}}km</span>
+                  </div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -421,11 +445,29 @@
               </div>
             </el-col>
             <el-col :span="8">
-              <div class="label-list">
-                <label>标准里程:</label>
-                <div class="detail-form-item">{{item.standard_mile}}KM</div>
-              </div>
-            </el-col>
+                <div class="label-list">
+                  <label>标准里程:</label>
+                   <div class="detail-form-item" >
+                      <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="item.standard_mile">
+                        <div slot="content" style="width:120px;">
+                          <el-row>
+                            <el-col><span >原数据:</span>{{item.weight_active_mile}}km</el-col>
+                            <el-col v-if="item.last_standard_mile">新数据:{{item.last_standard_mile}}km</el-col>
+                          </el-row>
+                        </div>
+                      <div v-if="item.standard_mile">
+                        <span>{{item.standard_mile}}km</span>
+                        <img style="margin-left:5px;vertical-align:top" v-if="item.last_standard_mile" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                      <div v-if="!item.standard_mile">无
+                         <img style="margin-left:5px;vertical-align:top" v-if="item.last_standard_mile" src="@/assets/img/tipGroup_4.png" alt="" >
+                      </div>
+                     
+                    </el-tooltip>
+                    <span v-else>{{item.standard_mile}}km</span>
+                  </div>
+                </div>
+              </el-col>
           </el-row>
           <el-row :gutter="40">
             <el-col :span="8">
