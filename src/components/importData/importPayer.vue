@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'付款方导入'" :table-list="thTableList" :back-link="'/arap/payerMeetManage/payerReceivableList'" :api-name-data="apiNameData" :post-data="postData"></import-data>
+    <import-data :import-title="'付款方回款导入'" :table-list="thTableList" :back-link="'/arap/payerMeetManage/payerReceivableList'" :api-name-data="apiNameData" :post-data="postData"></import-data>
   </div>
 </template>
 <script>
@@ -32,7 +32,8 @@ export default {
       }, {
         title: '回款日期',
         param: 'payment_datetime',
-        width: ''
+        width: '',
+        dateType: 'date'
       }, {
         title: '回款金额',
         param: 'amount',
@@ -40,7 +41,8 @@ export default {
       }, {
         title: '备注',
         param: 'desc',
-        width: ''
+        width: '170',
+        isEllipsis: true
       }],
     };
   },

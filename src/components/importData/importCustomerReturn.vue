@@ -32,7 +32,8 @@ export default {
       }, {
         title: '回款日期',
         param: 'payment_datetime',
-        width: ''
+        width: '',
+        dateType: 'date'
       }, {
         title: '回款金额',
         param: 'amount',
@@ -40,7 +41,8 @@ export default {
       }, {
         title: '备注',
         param: 'desc',
-        width: ''
+        width: '170',
+        isEllipsis: true
       }],
     };
   },

@@ -58,12 +58,10 @@
         <el-table-column type="selection" width="55" :selectable="checkboxInit">
         </el-table-column>
         <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:(tableList.length>6?140:'')">
-          <!-- <template slot-scope="scope">
-            <div v-if="item.param === 'waybill'">
-              <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
-            </div>
-            <div v-else>{{scope.row[item.param]}}</div>
-          </template> -->
+          <template slot-scope="scope">
+            <div v-if="item.dateType==='date'">{{scope.row[item.param]|dateFilter}}</div>
+            <div :class="item.isEllipsis?'td-hover':''" v-else>{{scope.row[item.param]}}</div>
+          </template>
         </el-table-column>
         <el-table-column label="状态" align="center" width="100" fixed="right">
           <template slot-scope="scope">
@@ -141,7 +139,7 @@ export default {
       selectIds: [], //选择的ID
       singleSelectIds: [], //单选ID数据
       isAllSelect: false,
-      token: ''
+      token: '',
     }
   },
   created() {
@@ -488,19 +486,10 @@ export default {
                 this.tableData[i].isSelect = false;
               }
             }
-            // for (let j in this.singleSelectIds) {
-            //   if (this.tableData[i].id === this.singleSelectIds[j]) {
-            //     this.tableData[i].isSelect = false;
-            //   }
-            // }
           }
-          // if (this.isAllSelect) {
           this.$nextTick(function() {
             this.checked();
           })
-          // }else{
-
-          // }
           this.pageData.totalCount = results.data.data.count;
 
         }
