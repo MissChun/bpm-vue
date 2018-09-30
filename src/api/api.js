@@ -9,6 +9,54 @@
  */
 
 const api = {
+  exportConsumerrMeetData: {
+    url: '/export/consumer-pay/',
+    method: 'get',
+    desc: '导出客户应收报表',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 supplier-pay'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportPayerMeetData: {
+    url: '/export/payer-pay/',
+    method: 'get',
+    desc: '导出付款方应收报表',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 supplier-pay'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportSupplierMeetData: {
+    url: '/export/supplier-pay/',
+    method: 'get',
+    desc: '导出供应商应付管理',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 supplier-pay'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   exportsTemplate: {
     url: '/export/cost/',
     method: 'post',
