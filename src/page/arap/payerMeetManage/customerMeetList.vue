@@ -38,12 +38,13 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
+          <div class="operation-btn text-right">
+            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportConsumerrMeetData'"></export-button>
             <!-- <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button>
             <el-button type="success" @click="addPerson">新增</el-button> -->
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
               </el-table-column>
@@ -73,7 +74,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 20,
       },
       activeName: 'customer',
       searchPostData: {}, //搜索参数
@@ -141,7 +142,13 @@ export default {
         width: ''
       }],
       tableData: [],
-
+      exportPostData: {}, //导出筛选
+      exportType: {
+        type: 'consumer-pay',
+        filename: '客户应收管理',
+        isPage: true,
+        pageSize: 20
+      },
     }
   },
   methods: {
@@ -174,6 +181,7 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
+      this.exportPostData = postData;
       this.$$http('getCustomerMeetList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
