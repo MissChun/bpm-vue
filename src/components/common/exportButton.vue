@@ -84,7 +84,11 @@ export default {
         page_arg: exportType.type,
         ids: ids
       };
-      this.exportPostData = this.postDataFilter(this.exportPostData);
+      if (!exportType.isPage) {
+        this.exportPostData = this.postDataFilter(this.exportPostData);
+      } else {
+        postData.page_size = exportType.pageSize;
+      }
       let newPostData = Object.assign(this.exportPostData, postData);
       this.exportBtn = {
         text: '导出中',

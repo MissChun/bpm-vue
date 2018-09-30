@@ -74,7 +74,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 20,
       },
       activeName: 'customer',
       searchPostData: {}, //搜索参数
@@ -145,7 +145,9 @@ export default {
       exportPostData: {}, //导出筛选
       exportType: {
         type: 'consumer-pay',
-        filename: '客户应收管理'
+        filename: '客户应收管理',
+        isPage: true,
+        pageSize: 20
       },
     }
   },

@@ -74,7 +74,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 20,
       },
       activeName: 'meet',
       searchPostData: {}, //搜索参数
@@ -138,7 +138,9 @@ export default {
       exportPostData: {}, //导出筛选
       exportType: {
         type: 'payer-pay',
-        filename: '付款方应收报表'
+        filename: '付款方应收报表',
+        isPage: true,
+        pageSize: 20
       },
     }
   },
