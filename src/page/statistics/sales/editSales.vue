@@ -100,7 +100,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="亏吨:" prop="deficiency">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.deficiency"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">

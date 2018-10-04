@@ -338,7 +338,7 @@
 				                </el-col>
 							</el-row>
 								<el-row style="margin-top:20px;" :gutter="20">
-					                <el-col :span="4" class="whiteSpan">
+					                <el-col :span="4" class="whiteSpan" v-if="false">
 					                  标准里程: 
 					                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_standard_mile">
 					                      <div slot="content" style="width:120px;">

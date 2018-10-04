@@ -445,7 +445,7 @@
               </div>
             </el-col>
             <el-col :span="8">
-                <div class="label-list">
+                <div class="label-list" v-if="false">
                   <label>标准里程:</label>
                    <div class="detail-form-item" >
                       <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="item.standard_mile">

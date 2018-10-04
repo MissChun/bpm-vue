@@ -66,8 +66,8 @@
               </el-form>
             </div>
             <el-row :gutter="10" style="margin:10px 0;">
-              <el-col :span="2" :offset="22">
-                <el-button type="primary" @click="operation('upMatchList')">提交卸货单</el-button>
+              <el-col :span="3" :offset="21"> 
+                <el-button type="primary" class="float-right" :loading="operationBtn.isLoading" :disabled="operationBtn.isLoading" @click="operation('upMatchList')">提交卸货单</el-button>
               </el-col>
             </el-row>
             <div class="table-list">
@@ -183,6 +183,9 @@ export default {
         param: 'consignee_phone',
         width: ''
       }],
+      operationBtn:{
+        isLoading:false,
+      }
 
     }
   },
@@ -297,6 +300,7 @@ export default {
           }
         });
       } else if (type == 'upMatchList') {
+        this.operationBtn.isLoading = true;
         sendData.waybill_id = vm.id;
         sendData.match_order_list = this.match_order_list;
         sendData.cancel_order_list = this.cancel_order_list;
@@ -307,6 +311,7 @@ export default {
               message: "匹配卸货地成功"
             })
           }
+          this.operationBtn.isLoading = false;
           vm.$router.push({ path: "/consignmentCenter/consignmentOrders" });
         });
       }
