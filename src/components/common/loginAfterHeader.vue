@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.g-statues-bar {
+  .g-statues-bar {
   left: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -249,7 +249,6 @@ export default {
   },
   computed: {
     // users: function() {
-    //   // console.log('users', this.pbFunc.getLocalData('user',true));
     //   return this.pbFunc.getLocalData('user', true);
     // },
     breadcrumbs: function() {
@@ -271,14 +270,7 @@ export default {
       ws.onopen = function(event) {
         console.log('链接消息', event)
       }
-      // $timeout(() => {
-      //   ws.onopen = function(event) {
-      //     console.log('重新链接消息', event)
-      //   }
-      // }, 10000)
       ws.onmessage = function(event) {
-
-        console.log('接收的消息', event.data)
         let msg = JSON.parse(event.data);
         // vm.$store.state.common.unreadNewNum++;
         vm.$store.commit('ChangeMsgNum', {

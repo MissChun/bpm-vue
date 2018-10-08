@@ -70,42 +70,42 @@
               <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
               <span v-else v-html="scope.row[item.param]"></span>
       </div>
-      </template>
-      </el-table-column>
-      <el-table-column label="是否对账" align="center" width="100">
-        <template slot-scope="scope">
-          <div>{{scope.row.is_reconciliation.verbose}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="运费合计" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
-            {{scope.row.waiting_charges}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="140" fixed="right">
-        <template slot-scope="scope">
-          <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-            <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
-            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-          </div>
-          <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
-            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-          </div>
-        </template>
-      </el-table-column>
-      </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+</template>
+</el-table-column>
+<el-table-column label="是否对账" align="center" width="100">
+  <template slot-scope="scope">
+    <div>{{scope.row.is_reconciliation.verbose}}</div>
+  </template>
+</el-table-column>
+<el-table-column label="运费合计" align="center" width="100" fixed="right">
+  <template slot-scope="scope">
+    <div>
+      <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+      {{scope.row.waiting_charges}}
     </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-      </el-pagination>
+  </template>
+</el-table-column>
+<el-table-column label="操作" align="center" width="140" fixed="right">
+  <template slot-scope="scope">
+    <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+      <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
+      <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
     </div>
-  </div>
-  <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-  </div>
+    <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
+      <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+    </div>
+  </template>
+</el-table-column>
+</el-table>
+<no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+</div>
+<div class="page-list text-center">
+  <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+  </el-pagination>
+</div>
+</div>
+<consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+</div>
 </template>
 <script>
 import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
@@ -255,13 +255,13 @@ export default {
         width: '180'
       }],
       tableData: [],
-         
+
       reconciliationsBtn: {
         text: '批量对账',
         isDisabled: false,
         isLoading: false
       },
-       
+
       multipleSelection: [], //所选数据   
       reconciliationList: [], //
       exportPostData: {}, //导出筛选
@@ -438,7 +438,6 @@ export default {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             }
           }
-          console.log('ces ', this.tableData.data.data)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

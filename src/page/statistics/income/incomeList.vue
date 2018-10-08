@@ -291,7 +291,6 @@ export default {
           isDisabled: false,
         }
         if (results.data && results.data.code == 0) {
-          console.log('data', results)
           window.open(results.data.data.filename);
           this.$message({
             message: '导出成功',

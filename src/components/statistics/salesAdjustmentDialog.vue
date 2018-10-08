@@ -1,7 +1,5 @@
 <!-- salesAdjustmentDialog.vue -->
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -172,7 +170,6 @@ export default {
     searchPayer(value) {
       if (value) {
         for (let i in this.payerSelect) {
-          console.log(value, this.payerSelect[i].id)
           if (value === this.payerSelect[i].id) {
             this.formRules.payer_name_adjust = this.payerSelect[i].payer;
             break;
@@ -222,7 +219,7 @@ export default {
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.adjustRow.unit_price) * 100) / 100;
         }
-      } else if (type === 'unloadNums') {//
+      } else if (type === 'unloadNums') { //
         if (isNaN(this.formRules.unload_nums_adjust) || !this.$store.state.common.regular.vehicle.match.test(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
           this.differenceValue.unload_nums = '';
         } else {
@@ -275,7 +272,7 @@ export default {
     },
   },
   watch: {
-    accountAdjustIsShow(curVal, oldVal) {　
+    accountAdjustIsShow(curVal, oldVal) {
       this.formRules = {
         short_name_adjust: '', //客户简称
         payer_name: '', //付款方
@@ -285,20 +282,20 @@ export default {
         unload_nums_adjust: '', //卸车数
         adjust_time: '', //调账时间
         remark_adjust: '', //调账备注
-      };　
+      };
       this.differenceValue = { //差价
         check_quantity: '', //核算吨位
         unit_price: '', //结算单价
         unload_nums: '' //卸车数
-      }　　
+      }
       if (curVal) {
         this.getCustomer();
         this.getPayer();
       }
       this.submitBtn.isDisabled = true;
       if (this.$refs['formRules']) {
-        this.$refs['formRules'].clearValidate();　　　　
-      }　　
+        this.$refs['formRules'].clearValidate();
+      }
 
     },
   },

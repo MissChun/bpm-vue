@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -172,7 +170,6 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'meet') {
         this.$router.push({ path: "/arap/supplierMeetManage/supplierMeetList" });
       }

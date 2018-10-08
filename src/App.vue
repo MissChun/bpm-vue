@@ -212,7 +212,6 @@ export default {
   created: function(newPath) {
     let vm = this;
     let token = vm.pbFunc.getLocalData('token', true);
-    // console.log('token', token)
     /*if (token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {

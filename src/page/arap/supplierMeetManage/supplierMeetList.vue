@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -22,7 +20,8 @@
               <el-row :gutter="30">
                 <el-col :span="10">
                   <el-form-item label="开始日期:">
-                    <el-row :gutter="0">
+                    <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" :clearable="false" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['16:00:00','16:00:00']"></el-date-picker>
+                    <!-- <el-row :gutter="0">
                       <el-col :span="11">
                         <el-date-picker v-model="startTime" type="month" placeholder="选择开始月" :clearable="false" value-format="yyyy-MM-dd HH:mm:ss" @change="dateSelect"></el-date-picker>
                       </el-col>
@@ -31,7 +30,7 @@
                         <el-date-picker v-model="endTime" type="month" placeholder="选择结束月" :clearable="false" value-format="yyyy-MM" @change="dateSelect('end')">
                         </el-date-picker>
                       </el-col>
-                    </el-row>
+                    </el-row> -->
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -74,6 +73,7 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
+      activeTime: [],
       activeName: 'meet',
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -164,12 +164,15 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        active_time_start: this.startTime,
-        active_time_end: this.endTime,
+        // active_time_start: this.startTime,
+        // active_time_end: this.endTime,
       };
+      if (this.activeTime.length) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      console.log('日期', this.startTime, this.endTime)
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
@@ -197,7 +200,6 @@ export default {
       }).catch((err) => {})
     },
     handleClick: function(tab, event) {
-      console.log('tab222', tab);
       if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/supplierMeetManage/paymentManage" });
       }
@@ -210,10 +212,11 @@ export default {
     },
     payerDate() {
       let payDate = new Date();
-      let days = (new Date(payDate.getFullYear(), payDate.getMonth() + 1, 0)).getDate();
-      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + '01 00:00:00';
+      let days = (new Date(payDate.getFullYear(), payDate.getMonth(), 0)).getDate();
+      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()) + '-' + days + ' 16:00:00';
       // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
       this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
+      this.activeTime = [this.startTime, this.endTime];
     }
   },
   activated() {

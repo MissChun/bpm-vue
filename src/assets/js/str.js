@@ -116,7 +116,6 @@ export const cnStrlen = function(str) {
  */
 export const hasChinese = function(str) {
   return (str.length < cnStrlen(str)) ? true : false;
-//console.log('hasChinese', str.length, _this.cnStrlen(str));
 }
 
 /**

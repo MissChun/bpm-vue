@@ -50,7 +50,7 @@ let router = new Router({
 });
 router.beforeEach((to, from, next) => {
   let routeName = to.meta.title || to.name;
-  window.document.title = (routeName ? routeName : '');
+  window.document.title = (routeName ? routeName : '91lng-bpm');
   next();
 });
 
