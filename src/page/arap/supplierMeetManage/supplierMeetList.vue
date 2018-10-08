@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -175,7 +173,6 @@ export default {
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      // console.log('日期', this.startTime, this.endTime)
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
@@ -203,7 +200,6 @@ export default {
       }).catch((err) => {})
     },
     handleClick: function(tab, event) {
-      console.log('tab222', tab);
       if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/supplierMeetManage/paymentManage" });
       }

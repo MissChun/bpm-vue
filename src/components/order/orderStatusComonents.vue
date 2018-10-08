@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.searchSection {
+  .searchSection {
 
   /deep/ .el-range-editor.el-input__inner {
     width: 100%;
@@ -282,21 +282,20 @@ export default {
         // let fileName = res.headers['content-disposition'].match(/fushun(\S*)xls/)[0];
         // fileDownload(res.data, fileName);
         //如果用方法一 ，这里需要安装 npm install js-file-download --save ,然后引用 var fileDownload = require('js-file-download')，使用详情见github;
-        this.exportLoading = false;　　
-        this.loadingAllDialog = false;　
+        this.exportLoading = false;
+        this.loadingAllDialog = false;
         if (res.data && res.status == 200) {
           // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
           let objectUrl = URL.createObjectURL(res.data);
-          console.log('objectUrl', objectUrl);　
           let link = document.createElement('a');
           link.style.display = 'none';
           link.href = objectUrl;
           link.setAttribute('download', '托运订单.xlsx');
           document.body.appendChild(link);
-          link.click()　　　　　
+          link.click()
         }
       }).catch(function(res) {
-        this.exportLoading = false;　　
+        this.exportLoading = false;
       });
     },
     searchList: function(targetName) {

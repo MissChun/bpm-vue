@@ -1,6 +1,6 @@
 <!-- editCarrier.vue -->
 <style scoped lang="less">
-/deep/ .code {
+  /deep/ .code {
   input {
     border-color: #dcdfe6!important;
   }
@@ -289,7 +289,6 @@ export default {
             overtime_price: this.detail.overtime_price
 
           }
-          console.log('this.editMsgForm.code', this.editMsgForm.code)
           if (this.editMsgForm.code === 'credit_code') {
             this.rules.codeMsg = this.sociology;
           } else {

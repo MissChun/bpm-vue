@@ -301,20 +301,15 @@ export const objPrint = function(obj, level, currentLevel, showLevel) {
    */
   var arrow = "";
   if (typeof obj !== 'object') {
-    //console.log("objPrint ", (obj || "").toString().replace(/[\n\r]/gi, ""));
     return false;
   }
   if (obj === null) {
-    //console.log("objPrint ", "null");
     return false;
   }
   if (objSize(obj) === null) {
-    //console.log("objPrint ", "empty");
     return false;
   }
-  //console.log("objPrint init", _level, _currentLevel);
   if (_level === 0) {
-    //console.log("objPrint ", "[" + _level + ":" + _currentLevel + "]" + "[obj]=" + obj.toString().replace(/[\n\r]/gi, ""));
     return false;
   }
   /**
@@ -342,11 +337,9 @@ export const objPrint = function(obj, level, currentLevel, showLevel) {
         arrow += ">>>>>";
       }
       if (typeof obj[t] === 'object') {
-        //console.log("objPrint ", arrow + "[" + _level + ":" + _currentLevel + "]" + "[" + t + "]; ");
         if (_currentLevel < _showLevel) objPrint(obj[t], _level - 1, _currentLevel + 1);
       } else {
         var temp = (obj && obj[t]) ? obj[t].toString().replace(/[\n\r]/gi, "") : '';
-        //console.warn("objPrint ", arrow + "[" + _level + ":" + _currentLevel + "]" + "[" + t + "]=" + temp + "; ");
       }
     }
   }

@@ -1,12 +1,14 @@
 <style type="text/css" scoped lang="less">
 .nav-tab-setting {
   position: relative;
+
   .business-btn {
     right: 0;
     position: absolute;
     top: -15px;
     z-index: 2;
   }
+
   .operation-btn-list {
     span+span {
       margin-left: 10px;
@@ -450,24 +452,23 @@ export default {
           text: '导出',
           isLoading: false,
           isDisabled: false,
-        }　　　　
+        }
         if (res.data && res.status == 200) {
           // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
           let objectUrl = URL.createObjectURL(res.data);
-          console.log('objectUrl', objectUrl);　
           let link = document.createElement('a');
           link.style.display = 'none';
           link.href = objectUrl;
           link.setAttribute('download', '业务单.xlsx');
           document.body.appendChild(link);
-          link.click()　　　　　
+          link.click()
         }
       }).catch(function(res) {
         this.exportBtn = {
           text: '导出',
           isLoading: false,
           isDisabled: false,
-        }　　
+        }
       });
     },
     isShowBtn(status) {

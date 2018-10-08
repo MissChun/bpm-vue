@@ -14,7 +14,6 @@ import App from './App'
 Vue.prototype.pbFunc = pbFunc;
 Vue.prototype.$$http = httpServer;
 
-// console.log('http', http);
 
 Vue.config.productionTip = false
 

@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -111,8 +109,6 @@ export default {
     },
 
     adjustBtn: function() {
-
-      // console.log('调账', this.formRules)
       this.$refs['formRules'].validate((valid) => {
         if (valid) {
           this.submitBtn = {
@@ -162,13 +158,13 @@ export default {
     },
   },
   watch: {
-    arapDialog(curVal, oldVal) {　
+    arapDialog(curVal, oldVal) {
       this.formRules = {
         supplier: '', //供应商
         payment_datetime: '', //付款日期
         amount: '', //付款金额
         desc: '', //调账备注
-      };　　
+      };
       if (curVal.type === 'update') {
         this.formRules = {
           supplier: this.arapRow.supplier, //供应商
@@ -179,10 +175,10 @@ export default {
         this.title = '修改打款事项';
       } else {
         this.title = '新增打款事项';
-      }　　　　　　　　
+      }
       if (this.$refs['formRules']) {
-        this.$refs['formRules'].clearValidate();　　　　
-      }　　
+        this.$refs['formRules'].clearValidate();
+      }
 
     },
   },

@@ -1,7 +1,5 @@
 <!-- purchaseAdjustmentDialog.vue -->
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -133,7 +131,6 @@ export default {
       })
     },
     isValue(type, error) {
-      console.log('error', type);
 
       this.submitBtn.isDisabled = true;
       for (let i in this.formRules) {
@@ -149,7 +146,7 @@ export default {
           this.differenceValue.active_tonnage = (parseFloat(this.formRules.active_tonnage_adjust) * 1000 - parseFloat(this.purchaseRow.active_tonnage) * 1000) / 1000;
         }
       } else if (type === 'unitPrice') {
-        if (isNaN(this.formRules.unit_price_adjust)|| !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
+        if (isNaN(this.formRules.unit_price_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
           this.differenceValue.unit_price = '';
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.purchaseRow.unit_price) * 100) / 100;
@@ -158,7 +155,6 @@ export default {
     },
     adjustBtn: function() {
 
-      // console.log('调账', this.formRules)
       this.$refs['formRules'].validate((valid) => {
         if (valid) {
           this.submitBtn = {
@@ -208,17 +204,17 @@ export default {
     },
   },
   watch: {
-    accountAdjustIsShow(curVal, oldVal) {　
+    accountAdjustIsShow(curVal, oldVal) {
       this.formRules = {
         supplier_adjust: '', //供应商
         active_tonnage_adjust: '', //实际装车吨位
         unit_price_adjust: '', //采购价格
         adjust_time: '', //调账时间
         remark_adjust: '', //调账备注
-      };　　　　　　　　
+      };
       if (this.$refs['formRules']) {
-        this.$refs['formRules'].clearValidate();　　　　
-      }　　
+        this.$refs['formRules'].clearValidate();
+      }
       this.submitBtn.isDisabled = true;
       this.differenceValue = { //差价
         active_tonnage: '', //实际装车吨位

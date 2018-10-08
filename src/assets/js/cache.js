@@ -24,7 +24,6 @@ export const setLocalData = function(storageKey, storageValue, isPermanent) {
    * @type {objecy}
    */
   var windowStorageObj = (_isPermanent) ? window.localStorage : window.sessionStorage;
-  //console.log('setLocalData', storageKey);
   try {
     //windowStorageObj.setItem(storageKey, angular.toJson(storageValue));
     windowStorageObj.setItem(storageKey, JSON.stringify(storageValue));
@@ -58,7 +57,6 @@ export const getLocalData = function(storageKey, isPermanent) {
    * @type {objecy}
    */
   var windowStorageObj = (_isPermanent) ? window.localStorage : window.sessionStorage;
-  //if (pbDebug) console.log('getLocalData', storageKey);
   try {
 
     if (storageKey in windowStorageObj) {
@@ -100,7 +98,6 @@ export const delLocalData = function(storageKey, cb, isPermanent) {
    * @type {objecy}
    */
   var storageObj = (_isPermanent) ? localStorage : sessionStorage;
-  //if (pbDebug) console.log('delLocalData', storageKey);
   try {
     if (storageKey in windowStorageObj) {
       windowStorageObj.removeItem(storageKey);
@@ -169,7 +166,6 @@ export const clearLocalData = function(isPermanent) {
  */
 export const cacheKey = function(cType, cUrl, cId, more) {
   var _more = (typeof more === 'string') ? more : 'ecOpt';
-  //console.log('cacheKey', cType, cUrl, cId);
   return _more + '_' + cType + '_' + MD5(cType + '_' + cUrl + '_' + cId);
 }
 
@@ -183,7 +179,6 @@ export const cacheKey = function(cType, cUrl, cId, more) {
  */
 export const setLocalDataWithTime = function(name, value) {
   var ts = sTime();
-  //console.log("[save]setLocalDataWithTime", name, JSON.stringify(value).length);
   setLocalData(name, {
     ts: ts,
     data: value
@@ -203,7 +198,6 @@ export const getLocalDataWithTime = function(name, cacheTime) {
   var cache = getLocalData(name, true);
   var currentTime = sTime();
   if (cache && cache.ts) {
-    //console.log("[get]getLocalDataWithTime", name, currentTime, cache.ts, currentTime - cache.ts, _cacheTime);
     if (currentTime - cache.ts >= _cacheTime) {
       //过期
       delLocalData(name, undefined, true);

@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.searchSection {
+  .searchSection {
 
   /deep/ .el-range-editor.el-input__inner {
     width: 100%;
@@ -41,15 +41,15 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
     </div>
-    <div class="nav-tab-setting mt-25" >
+    <div class="nav-tab-setting mt-25">
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
         <el-tab-pane v-for="(item,index) in sendMenuData[status]" :label="item.countLable" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <outsidePickListRender :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsidePickListRender>
+              <outsidePickListRender :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></outsidePickListRender>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -99,14 +99,14 @@ export default {
       },
       expandStatus: true,
       pageLoading: false,
-      exportLoading:false,
+      exportLoading: false,
       fifterName: "all",
       sendMenuData: {
-        'all_new': [{ key: 'all', value: '全部',countLable:"全部"}, { key: 'create_manager_check', value: '待经理审批',countLable:"待经理审批"},{ key: 'create_department_check', value: '待部门审批',countLable:"待部门审批"}],
-        'all_pickup': [{ key: 'all', value: '全部',countLable:"全部"}],
-        'all_change': [{ key: 'all', value: '全部',countLable:"全部"}],
-        'all_finish': [{ key: 'all', value: '全部',countLable:"全部"},{ key: 'finished', value: '已完成',countLable:"已完成"},{ key: 'all_cancel', value: '已经取消',countLable:"已经取消"}],
-        'all_count': [{ key: 'all', value: '全部',countLable:"全部"}],
+        'all_new': [{ key: 'all', value: '全部', countLable: "全部" }, { key: 'create_manager_check', value: '待经理审批', countLable: "待经理审批" }, { key: 'create_department_check', value: '待部门审批', countLable: "待部门审批" }],
+        'all_pickup': [{ key: 'all', value: '全部', countLable: "全部" }],
+        'all_change': [{ key: 'all', value: '全部', countLable: "全部" }],
+        'all_finish': [{ key: 'all', value: '全部', countLable: "全部" }, { key: 'finished', value: '已完成', countLable: "已完成" }, { key: 'all_cancel', value: '已经取消', countLable: "已经取消" }],
+        'all_count': [{ key: 'all', value: '全部', countLable: "全部" }],
       },
       timeParam: {
         load_plan_time: []
@@ -135,17 +135,17 @@ export default {
   props: {
     status: String,
     countParam: Array,
-    secondActiveName:String
+    secondActiveName: String
   },
-  
+
   methods: {
     changeTabs: function(name) {
       this.$emit("changeTab", name);
     },
-    changeExtendsStatus:function(){
-      this.expandStatus=!this.expandStatus;
+    changeExtendsStatus: function() {
+      this.expandStatus = !this.expandStatus;
     },
-   
+
     searchList: function(targetName) {
       //
       this.$emit("reshCount");
@@ -153,14 +153,13 @@ export default {
       var vm = this;
       this.pageLoading = true;
       if (this.fifterName == 'all') {
-        sendData.all_search = this.status ;
-      }else if(this.fifterName=='all_cancel'){
-        sendData.all_search = 'all_cancel' ;
+        sendData.all_search = this.status;
+      } else if (this.fifterName == 'all_cancel') {
+        sendData.all_search = 'all_cancel';
+      } else {
+        sendData.status = this.fifterName;
       }
-      else{
-        sendData.status=this.fifterName;
-      }
-     
+
       if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
         sendData.plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.plan_time_end = this.timeParam.load_plan_time[1];
@@ -180,8 +179,8 @@ export default {
       sendData.pageSize = this.pageData.pageSize;
 
       this.$$http("searchOutSaleOrder", sendData).then((results) => {
-        if(results.data.code==0){
-          this.listFifterData=results.data.data.data;
+        if (results.data.code == 0) {
+          this.listFifterData = results.data.data.data;
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
         }
         setTimeout(() => {
@@ -189,7 +188,6 @@ export default {
         })
         vm.searchStatus = false;
       }).catch((err) => {
-        console.log('err', err);
         vm.pageLoading = false;
       });
     },
@@ -198,7 +196,7 @@ export default {
       //重新查询一次数据
       this.searchList(targetName);
       //this.$emit("changeTab", this.status);
-      this.$emit("childchangeTabs", { first: this.status, second:targetName.name });
+      this.$emit("childchangeTabs", { first: this.status, second: targetName.name });
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
@@ -210,15 +208,15 @@ export default {
       });
     },
     assemblyData: function(secondMenuData) {
-      this.sendMenuData[this.status].map((item) =>{
-        for(let i in secondMenuData){
-          if(secondMenuData[i].tab_key==item.key){
-            if(secondMenuData[i].num<99){
-              this.$set(item,"countLable",item.value+"("+secondMenuData[i].num+")");
+      this.sendMenuData[this.status].map((item) => {
+        for (let i in secondMenuData) {
+          if (secondMenuData[i].tab_key == item.key) {
+            if (secondMenuData[i].num < 99) {
+              this.$set(item, "countLable", item.value + "(" + secondMenuData[i].num + ")");
               //item.countLable=item.value+"("+secondMenuData[i].num+")";
-            }else{
-              item.countLable=item.value+"99+";
-              this.$set(item,"countLable",item.value+"(99+)");
+            } else {
+              item.countLable = item.value + "99+";
+              this.$set(item, "countLable", item.value + "(99+)");
             }
           }
         }
@@ -230,7 +228,7 @@ export default {
     this.assemblyData(this.countParam);
   },
   created() {
-    this.fifterName=this.secondActiveName;
+    this.fifterName = this.secondActiveName;
     //this.listFifterData = this.listData;
     this.searchList();
   },
@@ -239,7 +237,7 @@ export default {
       handler(val, oldVal) {
         this.assemblyData(val);
       },
-      deep:true
+      deep: true
     }
   }
 };
