@@ -78,7 +78,7 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
               <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
@@ -203,7 +203,7 @@ export default {
         width: ''
       }, {
         title: '业务类型',
-        param: 'business_type_name',
+        param: 'business_type',
         width: '',
       }, {
         title: '客户简称',
