@@ -265,10 +265,6 @@ export default {
         title: '调账时间',
         param: 'adjust_time',
         width: '180'
-      }, {
-        title: '开票时间',
-        param: 'invoice_time',
-        width: '180'
       }],
       tableData: [],
 

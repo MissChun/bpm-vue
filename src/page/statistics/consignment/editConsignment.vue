@@ -164,11 +164,6 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="开票时间:">
-                    <el-input placeholder="暂无" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.invoice_time"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
                   <el-form-item label="调账备注:">
                     <el-input placeholder="暂无" type="textarea" resize="none" :rows="3" :disabled="isDisabled" v-model.trim="editMsgForm.remark_adjust"></el-input>
                   </el-form-item>
@@ -241,7 +236,6 @@ export default {
         station: '', //站点
         work_end_time: '',
         remark: '', //备注
-        invoice_time: '',
         reconciliation_time: '',
         remark_adjust: '',
         adjust_time: '',
@@ -343,7 +337,6 @@ export default {
             station: this.detail.station, //站点
             work_end_time: this.detail.work_end_time,
             remark: this.detail.remark, //备注
-            invoice_time: this.detail.invoice_time,
             reconciliation_time: this.detail.reconciliation_time,
             remark_adjust: this.detail.remark_adjust,
             adjust_time: this.detail.adjust_time,
