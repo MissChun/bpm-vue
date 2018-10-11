@@ -245,7 +245,7 @@ export default {
         reconciliation_time: '',
         remark_adjust: '',
         adjust_time: '',
-        stand_freight:''
+        stand_freight: ''
       },
 
       rules: {
@@ -386,7 +386,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'work_end_time', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['check_quantity', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'work_end_time', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'lcl_cost', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
