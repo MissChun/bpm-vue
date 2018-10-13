@@ -294,7 +294,7 @@ export default {
           param: 'order_number',
           width: ''
         }, {
-          title: '业务单类',
+          title: '业务类型',
           param: 'business_type_name',
           width: ''
         }, {

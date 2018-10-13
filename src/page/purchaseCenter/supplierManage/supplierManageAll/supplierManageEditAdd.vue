@@ -167,7 +167,7 @@ export default {
         //1
         supplier_name:[
           { required: true, message: '该项为必填项', trigger: 'blur' },
-          { min: 1, max: 20, message: '供应商名称为1~20个字符', trigger: 'blur' }
+          { min: 1, max: 30, message: '供应商名称为1~30个字符', trigger: 'blur' }
         ],
         supplier_short_name:[
           { required: true, message: '该项为必填项', trigger: 'blur' },

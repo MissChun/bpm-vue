@@ -119,7 +119,7 @@ export default {
           }
         }
       }
-      if (postData.ids.length&&!isRead) {
+      if (postData.ids.length && !isRead) {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             if (row) {
@@ -131,15 +131,15 @@ export default {
               if (this.isShowLink(row)) {
                 this.urlLink(row);
               }
-              this.getList();
             } else {
               this.getUnreadNewNum();
             }
+            this.getList();
           }
         }).catch((err) => {
 
         })
-      }else if(postData.ids.length && isRead) {
+      } else if (postData.ids.length && isRead) {
         if (this.isShowLink(row)) {
           this.urlLink(row);
         }

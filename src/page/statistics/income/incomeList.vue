@@ -241,6 +241,10 @@ export default {
         param: 'change_rate',
         width: ''
       }, {
+        title: '标准运价',
+        param: 'stand_freight',
+        width: ''
+      }, {
         title: '标准运费',
         param: 'freight_value',
         width: ''
@@ -275,7 +279,7 @@ export default {
       let postData = {
         filename: '业务台账',
         page_arg: type,
-        ids: [76, 77, 81, 82, 90, 113, 84, 127, 78, 79, 91, 92, 94, 93, 83, 108, 85, 80, 95, 97, 96, 98, 101, 100, 86, 99, 102, 88, 103, 104, 105, 87, 106, 107, 89]
+        ids: [76, 77, 81, 82, 90, 113, 84, 127, 78, 79, 91, 92, 94, 93, 83, 108, 85, 80, 95, 97, 96, 98, 101, 100, 86, 99, 102, 88, 103, 104, 105, 173, 87, 106, 107, 89]
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);

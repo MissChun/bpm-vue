@@ -78,61 +78,61 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
               <span v-else v-html="scope.row[item.param]"></span>
               </span>
       </div>
-</template>
-</el-table-column>
-<el-table-column label="待时后总额" align="center" width="100" fixed="right">
-  <template slot-scope="scope">
-    <div>
-      <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
-      {{scope.row.waiting_charges}}
+      </template>
+      </el-table-column>
+      <el-table-column label="待时后总额" align="center" width="100" fixed="right">
+        <template slot-scope="scope">
+          <div>
+            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            {{scope.row.waiting_charges}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="业务员" align="center" width="150" fixed="right">
+        <template slot-scope="scope">
+          <div>{{scope.row.sale_man}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="140" fixed="right">
+        <template slot-scope="scope">
+          <!--  -->
+          <div v-if="scope.row.waybill_status.key==='is_loading'">
+            <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
+              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
+              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
+            </el-tooltip>
+          </div>
+          <div v-else>
+            <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+              <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="success" size="mini" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+            </div>
+            <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+              <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div>
+          </div>
+        </template>
+      </el-table-column>
+      </el-table>
+      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
     </div>
-  </template>
-</el-table-column>
-<el-table-column label="业务员" align="center" width="150" fixed="right">
-  <template slot-scope="scope">
-    <div>{{scope.row.sale_man}}</div>
-  </template>
-</el-table-column>
-<el-table-column label="操作" align="center" width="140" fixed="right">
-  <template slot-scope="scope">
-    <!--  -->
-    <div v-if="scope.row.waybill_status.key==='is_loading'">
-      <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
-        <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
-        <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
-      </el-tooltip>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+      </el-pagination>
     </div>
-    <div v-else>
-      <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-        <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-        <el-button type="success" size="mini" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-      </div>
-      <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-        <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-        <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-      </div>
-    </div>
-  </template>
-</el-table-column>
-</el-table>
-<no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
-</div>
-<div class="page-list text-center">
-  <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-  </el-pagination>
-</div>
-</div>
-<sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></sales-adjustment-dialog>
-</div>
+  </div>
+  <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></sales-adjustment-dialog>
+  </div>
 </template>
 <script>
 import salesAdjustmentDialog from '@/components/statistics/salesAdjustmentDialog';
@@ -201,6 +201,10 @@ export default {
         title: '业务单号',
         param: 'business_order',
         width: ''
+      }, {
+        title: '业务类型',
+        param: 'business_type',
+        width: '',
       }, {
         title: '客户简称',
         param: 'short_name',
@@ -308,12 +312,24 @@ export default {
         param: 'sell_rental',
         width: ''
       }, {
+        title: '备注',
+        param: 'remark',
+        width: '170'
+      }, {
+        title: '对账时间',
+        param: 'reconciliation_time',
+        width: '180'
+      }, {
         title: '调账备注',
         param: 'remark_adjust',
         width: '180'
       }, {
         title: '调账时间',
         param: 'adjust_time',
+        width: '180'
+      }, {
+        title: '开票时间',
+        param: 'invoice_time',
         width: '180'
       }],
       tableData: [],
@@ -341,7 +357,7 @@ export default {
       let postData = {
         filename: '销售统计',
         page_arg: type,
-        ids: [16, 17, 20, 21, 39, 18, 19, 24, 125, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 111]
+        ids: [16, 17, 20, 21, 39, 18, 19, 24, 125, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 165, 116, 117, 164, 111]
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);
