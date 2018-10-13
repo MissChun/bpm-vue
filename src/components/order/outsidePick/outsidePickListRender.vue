@@ -328,8 +328,8 @@
           </el-select>
         </el-form-item>
        <el-form-item label="液厂名称:" abel-width="120px" prop="actual_fluid">
-          <el-select v-model="passParam.actual_fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindFluidName">
-              <el-option v-for="(item,key) in selectData.fluidList" :key="item.actual_fluid" :label="item.fluid_name" :value="item.actual_fluid">
+          <el-select v-model="choosedFluidId" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindFluidName">
+              <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
               </el-option>
           </el-select>
         </el-form-item>
@@ -373,6 +373,7 @@ export default {
       }
     };
     return {
+      choosedFluidId:'',
       noDataObj:{
         imgUrl:require("../../../assets/img/tms_no_data.png")
       },
@@ -468,11 +469,13 @@ export default {
       this.dialogParam.departemntCancleShow = false;
       this.refuseParam={approval_mark:"",action:"denied",order_id:""};
       this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
+      this.choosedFluidId = '';
     },
     bindFluidName:function(){
       this.selectData.fluidList.forEach((item,index)=>{
-        if(item.actual_fluid==this.passParam.actual_fluid){
+        if(item.id==this.choosedFluidId){
           this.passParam.fluid_name=item.fluid_name;
+          this.passParam.actual_fluid=item.actual_fluid;
         }
       });
     },
@@ -532,6 +535,7 @@ export default {
             if(results.data.code==0){
               this.dialogParam.departemntPassShow=false;
               this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
+              this.choosedFluidId = '';
               this.$message({
                 message: '审核通过成功',
                 type: 'success'
