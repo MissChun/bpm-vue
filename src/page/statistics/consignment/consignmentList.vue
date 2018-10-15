@@ -293,21 +293,26 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
+          window.open(`#/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          window.open(`#/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}`, '_blank')
         }
       } else if (tpye === 'business_order') {
         if (row.business_order.indexOf("SE") != -1) {
-          this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
+          window.open(`#/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}`, '_blank')
         } else {
-          this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+          //this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+          window.open(`#/statistics/consignment/consignmentBusinessDetail?id=${row.business_order_id}`, '_blank')
         }
 
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
+        //this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
+        window.open(`#/statistics/consignment/editConsignment?id=${row.id}`, '_blank')
       }
     },
     closeDialog: function(isSave) {

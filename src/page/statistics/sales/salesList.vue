@@ -401,21 +401,26 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}` });
+          window.open(`#/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          window.open(`#/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}`, '_blank')
         }
       } else if (tpye === 'business_order') {
         if (row.business_order.indexOf("SE") != -1) {
-          this.$router.push({ path: `/statistics/sales/salesOutsidePickDetali/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesOutsidePickDetali/${row.business_order_id}` });
+          window.open(`#/statistics/sales/salesOutsidePickDetali/${row.business_order_id}`, '_blank')
         } else {
-          this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
+          //this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
+          window.open(`#/statistics/sales/salesBusinessDetail?id=${row.business_order_id }`, '_blank')
         }
 
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
+        window.open(`#/statistics/sales/editSales?id=${row.id }`, '_blank')
+        //this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
       }
     },
     closeDialog: function(isSave) {

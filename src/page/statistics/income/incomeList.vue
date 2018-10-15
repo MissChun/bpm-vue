@@ -320,17 +320,21 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/income/incomeOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/income/incomeOutsideBuyDetali/${row.waybill_id}` });
+          window.open(`#/statistics/income/incomeOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/income/incomeWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/income/incomeWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          window.open(`#/statistics/income/incomeWaybillDetail/${row.waybill_id}/${row.business_order_id}`, '_blank')
         }
       } else if (tpye === 'business_order') {
         if (row.business_order.indexOf("SE") != -1) {
-          this.$router.push({ path: `/statistics/income/incomeOutsidePickDetali/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/income/incomeOutsidePickDetali/${row.business_order_id}` });
+          window.open(`#/statistics/income/incomeOutsidePickDetali/${row.business_order_id}`, '_blank')
         } else {
-          this.$router.push({ path: `/statistics/income/incomeBusinessDetail/`, query: { id: row.business_order_id } });
+          //this.$router.push({ path: `/statistics/income/incomeBusinessDetail/`, query: { id: row.business_order_id } });
+          window.open(`#/statistics/income/incomeBusinessDetail?id=${row.business_order_id}`, '_blank')
         }
       }
     },

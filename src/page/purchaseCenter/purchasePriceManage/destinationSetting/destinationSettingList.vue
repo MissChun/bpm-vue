@@ -116,7 +116,8 @@ export default {
   },
   methods: {
     checkLink(id, number) {
-      this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/editDestination", query: { id: id, activeStep: number } });
+      //this.$router.push({ path: "/purchaseCenter/purchasePriceManage/destinationSetting/editDestination", query: { id: id, activeStep: number } });
+      window.open(`#/purchaseCenter/purchasePriceManage/destinationSetting/editDestination?id=${id}&activeStep=${number}`, '_blank')
     },
     startSearch: function() {
       this.pageData.currentPage = 1;

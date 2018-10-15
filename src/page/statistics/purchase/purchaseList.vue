@@ -292,14 +292,17 @@ export default {
       console.log(row)
       if (row.operator === 'check') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/purchase/purchaseOutsideBuyDetali/${row.id}` });
+          //this.$router.push({ path: `/statistics/purchase/purchaseOutsideBuyDetali/${row.id}` });
+          window.open(`#/statistics/purchase/purchaseOutsideBuyDetali/${row.id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
+          //this.$router.push({ path: `/statistics/purchase/purchaseWaybillDetail/${row.id}` });
+          window.open(`#/statistics/purchase/purchaseWaybillDetail/${row.id}`, '_blank')
         }
       } else if (row.operator === 'edit') {
-        this.$router.push({ path: `/statistics/purchase/editPurchase`, query: { id: row.id } });
+        window.open(`#/statistics/purchase/editPurchase？id=${row.id}`, '_blank')
+        //this.$router.push({ path: `/statistics/purchase/editPurchase`, query: { id: row.id } });
       }
     },
     startSearch() {

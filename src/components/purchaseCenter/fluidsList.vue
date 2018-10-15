@@ -152,17 +152,20 @@ export default {
     },
     jumpPage(row) {
 
-      this.$router.push({
-        path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
-        query: {
-          id: row.rowData.id,
-        }
-      })
+      // this.$router.push({
+      //   path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
+      //   query: {
+      //     id: row.rowData.id,
+      //   }
+      // })
+
+      window.open(`#/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=${row.rowData.id}`, '_blank')
     },
     addFluids() {
-      this.$router.push({
-        path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
-      })
+      // this.$router.push({
+      //   path: '/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd',
+      // })
+      window.open(`#/purchaseCenter/supplierManage/supplierFluidsAll/supplierFluidsEditAdd`, '_blank')
     }
   },
   created() {

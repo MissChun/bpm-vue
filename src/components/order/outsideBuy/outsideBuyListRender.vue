@@ -492,7 +492,8 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}` });
+      //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}` });
+      window.open(`#/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}`, '_blank')
     },
     
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
@@ -568,9 +569,11 @@ export default {
         });
       }); 
       }else if(type=='matchUnload'){
-        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+        //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+        window.open(`#/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
       }else if(type=='changeUnload'){
-        this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+        //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+        window.open(`#/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
       }
     },
     judgeStatus:function(status,trip_id,callBack){

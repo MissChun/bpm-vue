@@ -785,7 +785,8 @@ export default {
 			}
 		},
 		gotoDetalis: function(rowData) {
-			this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+			//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+			window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
 		},
 		SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
@@ -897,21 +898,25 @@ export default {
 
 				});
 			} else if (type == 'matchUnload') { //匹配卸货单
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
-.id}/${rowData.id}` });
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
 			} else if (type == 'upUnload') { //提交卸货单
 
 			} else if (type == 'changeUnload') { //变更卸货单
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill
-.id}/${rowData.id}` });
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
 			} else if (type == 'showDetalis') { //查看详情
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
 			} else if (type == 'sureDownOrder') {
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			} else if (type == 'sureChangeCar') {
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			} else if (type=='sureUnload') {
-				this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			}
 		},
 

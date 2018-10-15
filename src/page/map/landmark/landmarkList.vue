@@ -301,11 +301,13 @@ export default {
     },
     handleMenuClick: function(command) {
       if (command.operator === 'check') {
-        this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
+        window.open(`#/mapManage/landMark/landmarkDetail/${command.id}`, '_blank')
+        //this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
       }
     },
     addLandmark: function() {
-      this.$router.push({ path: '/mapManage/landMark/editLandmark' });
+      window.open(`#/mapManage/landMark/editLandmark`, '_blank')
+      //this.$router.push({ path: '/mapManage/landMark/editLandmark' });
     }
   },
   created: function() {

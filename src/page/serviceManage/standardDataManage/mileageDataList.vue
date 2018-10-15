@@ -227,13 +227,15 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/mileageDetail", query: { id: command.id } });
+      window.open(`#/serviceManage/standardDataManage/mileageDetail?id=${command.id}`, '_blank')
+      //this.$router.push({ path: "/serviceManage/standardDataManage/mileageDetail", query: { id: command.id } });
     },
     editMile(isEdit) {
       // if(isEdit){
 
       // }else{
-      this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
+      //this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
+      window.open(`#/serviceManage/standardDataManage/editMileage`, '_blank')
       // }
 
     },

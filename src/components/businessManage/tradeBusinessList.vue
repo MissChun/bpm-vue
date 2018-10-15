@@ -72,9 +72,9 @@
                 </el-table-column>
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
                   <template slot-scope="scope">
-                    <div v-if="item.param === 'order_number'" class="order-color">
-                      <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link>
-                      <span v-else>{{scope.row.order_number}}</span>
+                    <div v-if="item.param === 'order_number'" class="order-color" @click="goDetailLink(scope.row.id)">
+                      <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.order_number}}</router-link> -->
+                      <span style="color: rgb(64, 158, 255);cursor:pointer">{{scope.row.order_number}}</span>
                     </div>
                     <div v-else>
                       <span v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</span>
@@ -377,7 +377,11 @@ export default {
   },
   methods: {
     checkLink(row) {
-      this.$router.push({ path: this.detailLink, query: { id: row.id } });
+      //this.$router.push({ path: this.detailLink, query: { id: row.id } });
+      window.open(`#${this.detailLink}?id=${row.id}`, '_blank')
+    },
+    goDetailLink(id){
+      window.open(`#${this.detailLink}?id=${id}`, '_blank')
     },
     getTabs(isSwitch) {
       return new Promise((resolve, reject) => {
