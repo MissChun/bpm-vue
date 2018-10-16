@@ -226,7 +226,7 @@ let outsidePick = {
       name: 'outsidePickList',
       meta: {
         isVerificationL: false,
-        title: '外提单列表',
+        title: '外销单列表',
       },
       component: (resolve) => require(['../page/purchaseCenter/outsidePick/outsidePickList'], resolve),
     },
@@ -235,7 +235,7 @@ let outsidePick = {
       name: 'outsidePickDetalisTab',
       meta: {
         isVerificationL: false,
-        title: '外提单列表',
+        title: '外销单列表',
       },
       component: (resolve) => require(['../page/purchaseCenter/outsidePick/outsidePickDetalisTab'], resolve),
       redirect: "/purchaseCenter/outsidePick/outsidePickDetalis",
@@ -244,7 +244,7 @@ let outsidePick = {
         name: 'outsidePickDetalis',
         meta: {
           isVerificationL: false,
-          title: '外提单详情',
+          title: '外销单详情',
         },
         component: (resolve) => require(['../page/purchaseCenter/outsidePick/outsidePickDetalis'], resolve),
       }, {
@@ -252,7 +252,7 @@ let outsidePick = {
         name: 'outsidePickPoress',
         meta: {
           isVerificationL: false,
-          title: '外提单进程',
+          title: '外销单进程',
         },
         component: (resolve) => require(['../page/purchaseCenter/outsidePick/outsidePickPoress'], resolve),
       }]
