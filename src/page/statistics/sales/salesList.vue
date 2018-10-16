@@ -354,10 +354,131 @@ export default {
       return postData;
     },
     exportTableData(type) {
+      
+      const exportThTableList = [{
+        title:'运单号',
+        id:16
+      },{
+        title:'业务单号',
+        id:17
+      },{
+        title:'业务类型',
+        id:168
+      },{
+        title:'客户简称',
+        id:20
+      },{
+        title:'调账简称',
+        id:178
+      },{
+        title:'客户名称',
+        id:21
+      },{
+        title:'付款方',
+        id:39
+      },{
+        title:'调账付款方',
+        id:179
+      },{
+        title:'车牌号',
+        id:18
+      },{
+        title:'实际液厂',
+        id:19
+      },{
+        title:'实际到厂时间',
+        id:24
+      },{
+        title:'装车完成时间',
+        id:125
+      },{
+        title:'采购单价',
+        id:31
+      },{
+        title:'业务优惠',
+        id:30
+      },{
+        title:'装车吨位',
+        id:26
+        
+      },{
+        title:'实际离站时间',
+        id:22
+      },{
+        title:'卸货站',
+        id:23
+      },{
+        title:'结算价格',
+        id:29
+      },{
+        title:'调帐结算价格差值',
+        id:180
+      },{
+        title:'实收吨位',
+        id:27
+      },{
+        title:'调账吨位差值',
+        id:183
+      },{
+        title:'亏吨',
+        id:25
+      },{
+        title:'标准里程',
+        id:109
+      },{
+        title:'核算吨位',
+        id:28
+      },{
+        title:'销售总额',
+        id:34
+      },{
+        title:'卸车待时金额',
+        id:33
+      },{
+        title:'待时后总额',
+        id:35
+      },{
+        title:'调账待时后总额差值',
+        id:182
+      },{
+        title:'卸车数',
+        id:32
+      },{
+        title:'调账卸车数差值',
+        id:181
+      },{
+        title:'业务员',
+        id:36
+      },{
+        title:'是否对账',
+        id:37
+      },{
+        title:'是否开票',
+        id:38
+      },{
+        title:'对账时间',
+        id:166
+      },{
+        title:'开票时间',
+        id:165
+      },{
+        title:'调账备注',
+        id:116
+      },{
+        title:'调账时间',
+        id:117
+      },{
+        title:'运单状态',
+        id:111
+      },{
+        title:'备注',
+        id:167
+      }]
+      const exportThTableListIds = exportThTableList.map(item => item.id);
       let postData = {
         filename: '销售统计',
         page_arg: type,
-        ids: [16, 17, 20, 21, 39, 18, 19, 24, 125, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 165, 116, 117, 164, 111]
+        ids: exportThTableListIds
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);
@@ -401,7 +522,7 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          //this.$router.push({ path: `/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesOutsid:eBuyDetali/${row.waybill_id}` });
           window.open(`#/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 

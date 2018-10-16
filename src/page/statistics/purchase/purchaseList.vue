@@ -61,8 +61,8 @@
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>
-            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button> -->
+            <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button> 
           </el-col>
         </el-row>
       </div>
@@ -277,6 +277,11 @@ export default {
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
       purchaseRow: {}, //调账信息
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
@@ -289,7 +294,6 @@ export default {
       this.multipleSelection = val;
     },
     handleMenuClick(row) {
-      console.log(row)
       if (row.operator === 'check') {
         if (row.waybill.indexOf("TE") != -1) {
           //this.$router.push({ path: `/statistics/purchase/purchaseOutsideBuyDetali/${row.id}` });
@@ -301,7 +305,7 @@ export default {
           window.open(`#/statistics/purchase/purchaseWaybillDetail/${row.id}`, '_blank')
         }
       } else if (row.operator === 'edit') {
-        window.open(`#/statistics/purchase/editPurchase？id=${row.id}`, '_blank')
+        window.open(`#/statistics/purchase/editPurchase?id=${row.id}`, '_blank')
         //this.$router.push({ path: `/statistics/purchase/editPurchase`, query: { id: row.id } });
       }
     },
@@ -455,6 +459,129 @@ export default {
         this.pageLoading = false;
       })
 
+    },
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData(){
+      
+      const exportThTableList = [{
+        title:'运单号' ,
+        id:1,
+      },{
+        title:'供应商',
+        id:2
+      },{
+        title:'调账供应商',
+        id:174
+      },{
+        title:'液厂名称',
+        id:4
+      },{
+        title:'车号',
+        id:5
+      },{
+        title:'实际到厂时间',
+        id:6
+      },{
+        title:'装车完成时间',
+        id:124
+      },{
+        title:'实际装车吨位',
+        id:9
+      },{
+        title:'调账实际装车吨位差值',
+        id:176
+      },{
+        title:'采购单价',
+        id:7
+      },{
+        title:'调账采购单价差值',
+        id:175
+      },{
+        title:'卸货站',
+        id:3
+      },{
+        title:'业务优惠',
+        id:10
+      },{
+        title:'采购优惠',
+        id:8
+      },{
+        title:'运单状态',
+        id:15
+      },{
+        title:'是否对账',
+        id:11
+      },{
+        title:'是否开票',
+        id:14
+      },{
+        title:'备注',
+        id:164
+      },{
+        title:'对账时间',
+        id:163
+      },{
+        title:'调账备注',
+        id:114
+      },{
+        title:'调账时间',
+        id:115
+      },{
+        title:'开票时间',
+        id:162
+      },{
+        title:'采购总额',
+        id:12
+      },{
+        title:'优惠后总额',
+        id:13
+      },{
+        title:'调账优惠后总额差值',
+        id:177
+      }]
+      const exportThTableListIds = exportThTableList.map(item => item.id);
+      let postData = {
+        filename: '采购数据',
+        page_arg: 'procurement',
+        ids: exportThTableListIds
+      };
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportPurchaseData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     }
   },
   created() {

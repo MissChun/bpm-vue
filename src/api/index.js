@@ -12,7 +12,7 @@ import { getLocalData } from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 15000;
+let timeout = 60000;
 
 
 /* 配置访问url */
@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
     domainUrl = `${prefix}testbpm.91lng.cn`;
   } else {
-    domainUrl = `${prefix}bpm.hhtdlng.com`; //本地开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }
