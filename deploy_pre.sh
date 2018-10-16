@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "测试发布"
+echo "预发发布"
 USER=root
 HOST=39.104.21.131
 DIR=/home/www/front/bpm_front
