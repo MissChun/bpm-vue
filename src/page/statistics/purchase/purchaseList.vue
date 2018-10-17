@@ -62,12 +62,12 @@
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->
-            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button> 
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
+        <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':!tableDataObj.len}">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
@@ -111,7 +111,7 @@
         </template>
       </el-table-column>
       </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -141,6 +141,10 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
@@ -452,7 +456,10 @@ export default {
             }
             this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
           }
-
+          this.tableDataObj = {
+            len: this.tableData.data.data.length,
+            data: this.tableData.data.data
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
@@ -468,83 +475,83 @@ export default {
       }
       return postData;
     },
-    exportTableData(){
-      
+    exportTableData() {
+
       const exportThTableList = [{
-        title:'运单号' ,
-        id:1,
-      },{
-        title:'供应商',
-        id:2
-      },{
-        title:'调账供应商',
-        id:174
-      },{
-        title:'液厂名称',
-        id:4
-      },{
-        title:'车号',
-        id:5
-      },{
-        title:'实际到厂时间',
-        id:6
-      },{
-        title:'装车完成时间',
-        id:124
-      },{
-        title:'实际装车吨位',
-        id:9
-      },{
-        title:'调账实际装车吨位差值',
-        id:176
-      },{
-        title:'采购单价',
-        id:7
-      },{
-        title:'调账采购单价差值',
-        id:175
-      },{
-        title:'卸货站',
-        id:3
-      },{
-        title:'业务优惠',
-        id:10
-      },{
-        title:'采购优惠',
-        id:8
-      },{
-        title:'运单状态',
-        id:15
-      },{
-        title:'是否对账',
-        id:11
-      },{
-        title:'是否开票',
-        id:14
-      },{
-        title:'备注',
-        id:164
-      },{
-        title:'对账时间',
-        id:163
-      },{
-        title:'调账备注',
-        id:114
-      },{
-        title:'调账时间',
-        id:115
-      },{
-        title:'开票时间',
-        id:162
-      },{
-        title:'采购总额',
-        id:12
-      },{
-        title:'优惠后总额',
-        id:13
-      },{
-        title:'调账优惠后总额差值',
-        id:177
+        title: '运单号',
+        id: 1,
+      }, {
+        title: '供应商',
+        id: 2
+      }, {
+        title: '调账供应商',
+        id: 174
+      }, {
+        title: '液厂名称',
+        id: 4
+      }, {
+        title: '车号',
+        id: 5
+      }, {
+        title: '实际到厂时间',
+        id: 6
+      }, {
+        title: '装车完成时间',
+        id: 124
+      }, {
+        title: '实际装车吨位',
+        id: 9
+      }, {
+        title: '调账实际装车吨位差值',
+        id: 176
+      }, {
+        title: '采购单价',
+        id: 7
+      }, {
+        title: '调账采购单价差值',
+        id: 175
+      }, {
+        title: '卸货站',
+        id: 3
+      }, {
+        title: '业务优惠',
+        id: 10
+      }, {
+        title: '采购优惠',
+        id: 8
+      }, {
+        title: '运单状态',
+        id: 15
+      }, {
+        title: '是否对账',
+        id: 11
+      }, {
+        title: '是否开票',
+        id: 14
+      }, {
+        title: '备注',
+        id: 164
+      }, {
+        title: '对账时间',
+        id: 163
+      }, {
+        title: '调账备注',
+        id: 114
+      }, {
+        title: '调账时间',
+        id: 115
+      }, {
+        title: '开票时间',
+        id: 162
+      }, {
+        title: '采购总额',
+        id: 12
+      }, {
+        title: '优惠后总额',
+        id: 13
+      }, {
+        title: '调账优惠后总额差值',
+        id: 177
       }]
       const exportThTableListIds = exportThTableList.map(item => item.id);
       let postData = {

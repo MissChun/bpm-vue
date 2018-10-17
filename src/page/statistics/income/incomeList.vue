@@ -45,7 +45,7 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
+        <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableDataObj.len}">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
             <template slot-scope="scope">
               <div v-if="item.param === 'waybill'||item.param === 'business_order'">
@@ -75,7 +75,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -98,6 +98,10 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
       },
       exportType: {
         type: 'ledger',
@@ -552,6 +556,10 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          this.tableDataObj = {
+            len: this.tableData.data.data.length,
+            data: this.tableData.data.data
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
