@@ -187,6 +187,10 @@ export default {
           let times = new Date();
           postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
           postData.is_adjust = 'yes';
+          postData.check_quantity_dvalue = this.differenceValue.check_quantity;
+          postData.stand_mile_dvalue = this.differenceValue.stand_mile;
+          postData.waiting_charges_dvalue = this.differenceValue.waiting_charges;
+          
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateConsignmentStatistics', postData).then((results) => {
             this.submitBtn = {
