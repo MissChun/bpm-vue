@@ -49,12 +49,13 @@
           </el-col>
           <el-col :span="9" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
-            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
+            <!--<export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>-->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
+        <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" max-height="600" size="mini" @selection-change="handleSelectionChange" v-loading="pageLoading" :class="{'tabal-height-500':!tableDataObj.len}">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
@@ -94,10 +95,10 @@
           <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
             <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
           </div>
-        </template>
-      </el-table-column>
+        </template></el-table-column>
+
       </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -124,6 +125,10 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际到厂时间
@@ -279,6 +284,11 @@ export default {
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
@@ -293,21 +303,26 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
+          window.open(`#/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          window.open(`#/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}`, '_blank')
         }
       } else if (tpye === 'business_order') {
         if (row.business_order.indexOf("SE") != -1) {
-          this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
+          window.open(`#/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}`, '_blank')
         } else {
-          this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+          //this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
+          window.open(`#/statistics/consignment/consignmentBusinessDetail?id=${row.business_order_id}`, '_blank')
         }
 
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
+        //this.$router.push({ path: `/statistics/consignment/editConsignment`, query: { id: row.id } });
+        window.open(`#/statistics/consignment/editConsignment?id=${row.id}`, '_blank')
       }
     },
     closeDialog: function(isSave) {
@@ -450,12 +465,164 @@ export default {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             }
           }
+          this.tableDataObj = {
+            len: this.tableData.data.data.length,
+            data: this.tableData.data.data
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
 
+    },
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData() {
+      const exportThTableList = [{
+        title: '运单号',
+        id: 40,
+      }, {
+        title: '业务单号',
+        id: 41,
+      }, {
+        title: '承运商',
+        id: 42,
+      }, {
+        title: '调账承运商',
+        id: 184,
+      }, {
+        title: '车牌号',
+        id: 43,
+      }, {
+        title: '实际液厂',
+        id: 44,
+      }, {
+        title: '卸货站',
+        id: 45,
+      }, {
+        title: '计划装车时间',
+        id: 46,
+      }, {
+        title: '实际到厂时间',
+        id: 47,
+      }, {
+        title: '装车完成时间',
+        id: 126,
+      }, {
+        title: '实际离站时间',
+        id: 48,
+      }, {
+        title: '装车吨位',
+        id: 49,
+      }, {
+        title: '实收吨位',
+        id: 50,
+      }, {
+        title: '亏吨',
+        id: 51,
+      }, {
+        title: '核算吨位',
+        id: 53,
+      }, {
+        title: '调账核算吨位差值',
+        id: 185,
+      }, {
+        title: '标准里程',
+        id: 54,
+      }, {
+        title: '标准里程差值',
+        id: 186,
+      }, {
+        title: '实际里程',
+        id: 112,
+      }, {
+        title: '起步价',
+        id: 55,
+      }, {
+        title: '运输费率',
+        id: 52,
+      }, {
+        title: '标准运价',
+        id: 171,
+      }, {
+        title: '标准运费',
+        id: 56,
+      }, {
+        title: '气差金额',
+        id: 57,
+      }, {
+        title: '分卸费',
+        id: 58,
+      }, {
+        title: '卸车待时金额',
+        id: 59,
+      }, {
+        title: '备注',
+        id: 172,
+      }, {
+        title: '对账时间',
+        id: 170,
+      }, {
+        title: '调账备注',
+        id: 118,
+      }, {
+        title: '调账时间',
+        id: 119,
+      }, {
+        title: '是否对账',
+        id: 61,
+      }, {
+        title: '运费合计',
+        id: 60,
+      }, {
+        title: '调账运费合计差值',
+        id: 187,
+      }]
+
+      const exportThTableListIds = exportThTableList.map(item => item.id);
+
+      let postData = {
+        filename: '托运数据',
+        page_arg: 'logistic',
+        ids: exportThTableListIds
+      };
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportLogisticData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     }
   },
   created() {

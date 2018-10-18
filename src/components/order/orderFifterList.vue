@@ -98,6 +98,10 @@
 }
 .buttonContent .el-row{
   margin-top:10px;
+  
+}
+.buttonContent .el-row .el-button{
+  font-size:13px;
 }
 .buttonContent>div:nth-child(1){
   margin-top:0px;
@@ -293,7 +297,8 @@ export default {
       } else {
         type = 'edit';
       }
-      this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+      window.open(`#/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}`, '_blank')
+      //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
     },
     showMapDetalis: function(type, id) {
       var vm = this;
@@ -383,7 +388,8 @@ export default {
 
         // });
         //传入一个订单号跳转订单详情-车辆指派页面
-        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        window.open(`#/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
         var type = "";
@@ -392,7 +398,8 @@ export default {
         } else {
           type = 'edit';
         }
-        this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}` });
+        window.open(`#/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}`, '_blank')
+        //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}` });
       }
     },
     upPlanMethod: function() {

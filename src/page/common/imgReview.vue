@@ -39,7 +39,7 @@ export default {
       imgList: [],
       previewIndex: 0,
       rotateDeg: 0,
-      zoomNum: 1,
+      zoomNum: 1.8,
     }
   },
   methods: {

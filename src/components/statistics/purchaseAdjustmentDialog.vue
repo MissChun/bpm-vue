@@ -173,6 +173,8 @@ export default {
           //   }
           // }
           postData.is_adjust = 'yes';
+          postData.active_tonnage_differ = this.differenceValue.active_tonnage;
+          postData.unit_price_differ = this.differenceValue.unit_price;
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updatePurchaseStatistics', postData).then((results) => {
             this.submitBtn = {

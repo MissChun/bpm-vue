@@ -353,9 +353,10 @@ export default {
       let operatorDom = '';
 
       let fellowOrder = () => {
-        _this.$router.push({
-          path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${detailData.id}/${detailData.waybill}`,
-        })
+        // _this.$router.push({
+        //   path: `/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${detailData.id}/${detailData.waybill}`,
+        // })
+        window.open(`#/consignmentCenter/consignmentOrders/orderDetail/consignmentRouteplay/${detailData.id}/${detailData.waybill}`, '_blank')
       }
 
       operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--success el-button--mini">订单跟踪</a></div>`;

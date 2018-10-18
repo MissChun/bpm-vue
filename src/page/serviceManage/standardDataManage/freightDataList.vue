@@ -231,7 +231,8 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id } });
+      window.open(`#/serviceManage/standardDataManage/freightDetail?id=${command.id}`, '_blank')
+      //this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id } });
     },
 
     pageChange: function() {

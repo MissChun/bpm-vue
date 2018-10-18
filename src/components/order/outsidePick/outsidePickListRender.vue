@@ -489,7 +489,8 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}` });
+      //this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}` });
+      window.open(`#/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}`, '_blank')
     },
     
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {

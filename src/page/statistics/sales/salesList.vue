@@ -64,7 +64,7 @@
         </el-row>
       </div>
       <div class="table-list">
-        <el-table :data="tableData.data?tableData.data.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':tableData.data&&!tableData.data.data.length}">
+        <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" :class="{'tabal-height-500':!tableDataObj.len}">
           <el-table-column type="selection" width="55">
           </el-table-column>
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
@@ -124,7 +124,7 @@
         </template>
       </el-table-column>
       </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.data.length"></no-data>
+      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
@@ -152,6 +152,10 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
       },
       leaveTime: [], //离站时间
       searchPostData: {}, //搜索参数
@@ -354,10 +358,131 @@ export default {
       return postData;
     },
     exportTableData(type) {
+
+      const exportThTableList = [{
+        title: '运单号',
+        id: 16
+      }, {
+        title: '业务单号',
+        id: 17
+      }, {
+        title: '业务类型',
+        id: 168
+      }, {
+        title: '客户简称',
+        id: 20
+      }, {
+        title: '调账简称',
+        id: 178
+      }, {
+        title: '客户名称',
+        id: 21
+      }, {
+        title: '付款方',
+        id: 39
+      }, {
+        title: '调账付款方',
+        id: 179
+      }, {
+        title: '车牌号',
+        id: 18
+      }, {
+        title: '实际液厂',
+        id: 19
+      }, {
+        title: '实际到厂时间',
+        id: 24
+      }, {
+        title: '装车完成时间',
+        id: 125
+      }, {
+        title: '采购单价',
+        id: 31
+      }, {
+        title: '业务优惠',
+        id: 30
+      }, {
+        title: '装车吨位',
+        id: 26
+
+      }, {
+        title: '实际离站时间',
+        id: 22
+      }, {
+        title: '卸货站',
+        id: 23
+      }, {
+        title: '结算价格',
+        id: 29
+      }, {
+        title: '调帐结算价格差值',
+        id: 180
+      }, {
+        title: '实收吨位',
+        id: 27
+      }, {
+        title: '调账吨位差值',
+        id: 183
+      }, {
+        title: '亏吨',
+        id: 25
+      }, {
+        title: '标准里程',
+        id: 109
+      }, {
+        title: '核算吨位',
+        id: 28
+      }, {
+        title: '销售总额',
+        id: 34
+      }, {
+        title: '卸车待时金额',
+        id: 33
+      }, {
+        title: '待时后总额',
+        id: 35
+      }, {
+        title: '调账待时后总额差值',
+        id: 182
+      }, {
+        title: '卸车数',
+        id: 32
+      }, {
+        title: '调账卸车数差值',
+        id: 181
+      }, {
+        title: '业务员',
+        id: 36
+      }, {
+        title: '是否对账',
+        id: 37
+      }, {
+        title: '是否开票',
+        id: 38
+      }, {
+        title: '对账时间',
+        id: 166
+      }, {
+        title: '开票时间',
+        id: 165
+      }, {
+        title: '调账备注',
+        id: 116
+      }, {
+        title: '调账时间',
+        id: 117
+      }, {
+        title: '运单状态',
+        id: 111
+      }, {
+        title: '备注',
+        id: 167
+      }]
+      const exportThTableListIds = exportThTableList.map(item => item.id);
       let postData = {
         filename: '销售统计',
         page_arg: type,
-        ids: [16, 17, 20, 21, 39, 18, 19, 24, 125, 31, 30, 26, 22, 23, 29, 27, 25, 109, 28, 34, 33, 35, 32, 36, 37, 38, 165, 116, 117, 164, 111]
+        ids: exportThTableListIds
       };
       this.exportPostData = this.postDataFilter(this.exportPostData);
       let newPostData = Object.assign(this.exportPostData, postData);
@@ -401,21 +526,26 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         if (row.waybill.indexOf("TE") != -1) {
-          this.$router.push({ path: `/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesOutsid:eBuyDetali/${row.waybill_id}` });
+          window.open(`#/statistics/sales/salesOutsideBuyDetali/${row.waybill_id}`, '_blank')
         } else if (row.waybill.indexOf("TSE") != -1) {
 
         } else {
-          this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
+          window.open(`#/statistics/sales/salesWaybillDetail/${row.waybill_id}/${row.business_order_id}`, '_blank')
         }
       } else if (tpye === 'business_order') {
         if (row.business_order.indexOf("SE") != -1) {
-          this.$router.push({ path: `/statistics/sales/salesOutsidePickDetali/${row.business_order_id}` });
+          //this.$router.push({ path: `/statistics/sales/salesOutsidePickDetali/${row.business_order_id}` });
+          window.open(`#/statistics/sales/salesOutsidePickDetali/${row.business_order_id}`, '_blank')
         } else {
-          this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
+          //this.$router.push({ path: `/statistics/sales/salesBusinessDetail/`, query: { id: row.business_order_id } });
+          window.open(`#/statistics/sales/salesBusinessDetail?id=${row.business_order_id }`, '_blank')
         }
 
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
+        window.open(`#/statistics/sales/editSales?id=${row.id }`, '_blank')
+        //this.$router.push({ path: `/statistics/sales/editSales`, query: { id: row.id } });
       }
     },
     closeDialog: function(isSave) {
@@ -537,7 +667,10 @@ export default {
               this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             }
           }
-
+          this.tableDataObj = {
+            len: this.tableData.data.data.length,
+            data: this.tableData.data.data
+          }
           this.pageData.totalCount = results.data.data.count;
 
         }

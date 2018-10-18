@@ -12,7 +12,7 @@ import { getLocalData } from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 15000;
+let timeout = 60000;
 
 
 /* 配置访问url */
@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
     domainUrl = `${prefix}testbpm.91lng.cn`;
   } else {
-    domainUrl = `${prefix}devbpm.hhtdlng.com`; //本地开发环境
+    domainUrl = `${prefix}bpm.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }
@@ -94,7 +94,8 @@ axios.interceptors.response.use(response => {
   removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
   return response;
 }, error => {
-  return error; //返回一个空对象，主要是防止控制台报错
+  return Promise.reject(error); //返回一个空对象，主要是防止控制台报错
+  
 });
 
 
@@ -107,7 +108,7 @@ const errorState = function(error) {
         errorMsg = '参数错误';
         break;
       case 401:
-        errorMsg = '未授权，请重新登录';
+        errorMsg = '未授权或登录过期，请重新登录';
         break;
       case 403:
         errorMsg = '拒绝访问';
@@ -142,10 +143,17 @@ const errorState = function(error) {
       default:
         errorMsg = `连接出错(${error.response.status})!`;
     }
+  }else if(error.code === 'ECONNABORTED'){
+    errorMsg = '接口超时，请检查网络再刷新重试!'
   } else {
     errorMsg = '连接服务器失败!'
   }
-  Message.error(errorMsg);
+  if(!axios.isCancel(error)){//如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
+    Message.error(errorMsg);
+  }
+  if(error && error.response && error.response.status === 401){
+    router.push({ path: "/login" });
+  }
 }
 
 

@@ -112,7 +112,8 @@ export default {
   },
   methods: {
     addSupplierManage: function() {
-      this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd" });
+       window.open(`#/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd`, '_blank')
+      //this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageEditAdd" });
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'supplierFluids') {
@@ -149,7 +150,8 @@ export default {
     },
     jumpPage: function(scope) {
       if (scope.operator == "show") {
-        this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageDetalis?supplierId=" + scope.rowData.id });
+        //this.$router.push({ path: "/purchaseCenter/supplierManage/supplierManageAll/supplierManageDetalis?supplierId=" + scope.rowData.id });
+        window.open(`#/purchaseCenter/supplierManage/supplierManageAll/supplierManageDetalis?supplierId=${scope.rowData.id}`, '_blank')
       } else if (scope.operator == "operation") {
 
       }

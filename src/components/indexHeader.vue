@@ -5,11 +5,11 @@
   .bpm-head {
     width: 1200px;
     margin: 0 auto;
-    line-height: 64px;
+    line-height: 60px;
     color: #fff;
     font-size: 16px;
     img {
-      margin-top: 14px;
+      margin-top: 6px;
     }
     a {
       color: #fff;
@@ -47,7 +47,7 @@
   <el-header>
     <div class="bpm-head">
       <el-row>
-        <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
+        <el-col :span="6"><img src="@/assets/img/logo.svg" alt=""></el-col>
         <el-col :span="18" class="text-right">
           <a rel="nofollow" target="_blank" :href="appUrl.driverAppUrl">司机端App下载</a>
           <span>｜</span>

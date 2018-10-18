@@ -241,6 +241,11 @@ export default {
           let times = new Date();
           postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
           postData.is_adjust = 'yes';
+          postData.check_quantity_differ = this.differenceValue.check_quantity;
+          postData.unit_price_differ = this.differenceValue.unit_price;
+          postData.unload_nums_differ = this.differenceValue.unload_nums;
+          
+
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateSalesStatistics', postData).then((results) => {
             this.submitBtn = {

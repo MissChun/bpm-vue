@@ -75,7 +75,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 20,
+        pageSize: 10,
       },
       activeTime: [],
       activeName: 'meet',
@@ -141,8 +141,6 @@ export default {
       exportType: {
         type: 'payer-pay',
         filename: '付款方应收报表',
-        isPage: true,
-        pageSize: 20
       },
     }
   },
