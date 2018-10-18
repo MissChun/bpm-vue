@@ -98,6 +98,10 @@
 }
 .buttonContent .el-row{
   margin-top:10px;
+  
+}
+.buttonContent .el-row .el-button{
+  font-size:13px;
 }
 .buttonContent>div:nth-child(1){
   margin-top:0px;

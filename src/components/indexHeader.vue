@@ -5,7 +5,7 @@
   .bpm-head {
     width: 1200px;
     margin: 0 auto;
-    line-height: 64px;
+    line-height: 60px;
     color: #fff;
     font-size: 16px;
     img {
