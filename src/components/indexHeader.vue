@@ -47,7 +47,7 @@
   <el-header>
     <div class="bpm-head">
       <el-row>
-        <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
+        <el-col :span="6"><img src="@/assets/img/logo.svg" alt=""></el-col>
         <el-col :span="18" class="text-right">
           <a rel="nofollow" target="_blank" :href="appUrl.driverAppUrl">司机端App下载</a>
           <span>｜</span>

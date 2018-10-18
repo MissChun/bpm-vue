@@ -173,7 +173,7 @@
   <el-header>
     <el-row type="flex" class="g-head">
       <router-link :to="{path: '/'}">
-        <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.png"></div>
+        <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.svg"></div>
       </router-link>
       <div class="nav">
         <div class="g-statues-bar p-lr">
