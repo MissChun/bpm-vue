@@ -170,6 +170,7 @@ export default {
           this.differenceValue.waiting_charges = '';
         } else {
           this.differenceValue.waiting_charges = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
+          this.differenceValue.waiting_charges = (this.differenceValue.waiting_charges).toFixed(2);
         }
       }
     },
@@ -190,7 +191,6 @@ export default {
           postData.check_quantity_differ = this.differenceValue.check_quantity;
           postData.stand_mile_differ = this.differenceValue.stand_mile;
           postData.waiting_charges_differ = this.differenceValue.waiting_charges;
-          
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateConsignmentStatistics', postData).then((results) => {
             this.submitBtn = {
