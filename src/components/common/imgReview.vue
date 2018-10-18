@@ -53,7 +53,7 @@ export default {
     return {
       previewIndex: 0,
       imgList: [],
-      zoomNum: 1,
+      zoomNum: 1.8,
       rotateDeg: 0,
     }
   },
