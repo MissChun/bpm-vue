@@ -9,7 +9,7 @@
     color: #fff;
     font-size: 16px;
     img {
-      margin-top: 14px;
+      margin-top: 6px;
     }
     a {
       color: #fff;
