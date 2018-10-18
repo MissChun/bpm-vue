@@ -1,4 +1,6 @@
 <style scoped lang="less">
+
+
 </style>
 <template>
   <div>
@@ -71,7 +73,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalCount: '',
-        pageSize: 10,
+        pageSize: 20,
       },
       activeTime: [],
       activeName: 'meet',
@@ -136,7 +138,9 @@ export default {
       exportPostData: {}, //导出筛选
       exportType: {
         type: 'supplier-pay',
-        filename: '供应商应付管理'
+        filename: '供应商应付管理',
+        isPage: true,
+        pageSize: 20,
       },
     }
   },

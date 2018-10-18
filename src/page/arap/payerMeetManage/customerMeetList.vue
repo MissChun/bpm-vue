@@ -148,6 +148,8 @@ export default {
       exportType: {
         type: 'consumer-pay',
         filename: '客户应收管理',
+        isPage: true,
+        pageSize: 20,
       },
     }
   },
