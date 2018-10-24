@@ -359,6 +359,22 @@ export default {
           param: 'status_display',
           width: '200'
         }, {
+          title: '采购单价（预估）',
+          param: 'buy_price_estimate',
+          width: ''
+        }, {
+          title: '采购总额（预估）',
+          param: 'buy_total_estimate',
+          width: ''
+        }, {
+          title: '运费金额（预估）',
+          param: 'trans_price_estimate',
+          width: ''
+        }, {
+          title: '利润（预估）',
+          param: 'profit_estimate',
+          width: ''
+        }, {
           title: '下单人',
           param: 'sale_name',
           width: ''
