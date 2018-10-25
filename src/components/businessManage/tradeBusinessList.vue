@@ -289,6 +289,7 @@ export default {
           { id: 'sale_man_name', value: '下单人' },
         ]
       },
+      thTableListCopy:[],
       thTableList: [{
           title: '业务单号',
           param: 'order_number',
@@ -358,7 +359,14 @@ export default {
           title: '状态',
           param: 'status_display',
           width: '200'
-        }, {
+        },  {
+          title: '下单人',
+          param: 'sale_name',
+          width: ''
+        }
+      ],
+      newAddThTabelList:[
+        {
           title: '采购单价（预估）',
           param: 'buy_price_estimate',
           width: ''
@@ -374,11 +382,7 @@ export default {
           title: '利润（预估）',
           param: 'profit_estimate',
           width: ''
-        }, {
-          title: '下单人',
-          param: 'sale_name',
-          width: ''
-        }
+        },
       ],
       tableData: [],
       multipleSelection: [], //全选
@@ -707,6 +711,13 @@ export default {
         keyword: '',
         field: 'consumer_name',
       };
+      //添加预估字段
+      if(tab.name === 'all_new'){
+        this.thTableList.splice(this.thTableList.length - 1 , 0 , ...this.newAddThTabelList);
+      }else{
+        this.thTableList = [...this.thTableListCopy];
+      }
+
       this.getTabs(true).then((results) => {
         if (results.data && results.data.code == 0) {
           for (let i in this.tabList) {
@@ -794,6 +805,10 @@ export default {
     }
   },
   created() {
+    //添加预估字段
+    this.thTableListCopy = [...this.thTableList];
+    this.thTableList.splice(this.thTableList.length - 1 , 0 , ...this.newAddThTabelList);
+
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
     this.getTabs().then((results) => {
