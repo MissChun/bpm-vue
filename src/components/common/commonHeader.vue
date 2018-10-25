@@ -76,6 +76,13 @@ export default {
                 message: '退出成功',
                 type: 'success'
               });
+
+              //growingio 发送用户name
+              let currentUrl = document.location.href.toString();
+              if (currentUrl.match(`bpm.91lng.cn`) && !currentUrl.match(`pbpm.91lng.cn`) && !currentUrl.match(`testbpm.91lng.cn`)) {
+                 gio('clearUserId');
+              }
+
             }
           }).catch((err) => {
             //this.$message.error('退出失败');

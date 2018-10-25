@@ -208,6 +208,13 @@ export default {
                     message: '登录成功',
                     type: 'success'
                   });
+
+                  //growingio 发送用户name
+                  let currentUrl = document.location.href.toString();
+                  if (currentUrl.match(`bpm.91lng.cn`) && !currentUrl.match(`pbpm.91lng.cn`) && !currentUrl.match(`testbpm.91lng.cn`)) {
+                     gio('setUserId', this.ruleForm.username);
+                  }
+
                   this.$emit('login');
                 } else {
                   this.$alert('还没有设置权限！请联系管理员', '请注意', {
