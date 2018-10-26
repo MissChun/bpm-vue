@@ -47,34 +47,44 @@ export default {
   methods: {
     buildDictionary: function() {
       let dictionaryObject = {
-        dashboard: 'dashborad',
+        dashboard: 'dashborad',//概览
         purchaseDashboard: 'purchaseDashboard',
         serviceCentreDashboard: 'serviceCentreDashboard',
         energyDashboard: 'energyDashboard',
         salesStatisticsDashboard: 'salesStatisticsDashboard',
         puchaseStatisticsDashboard: 'puchaseStatisticsDashboard',
-        purchaseCenter: 'purchaseCenter',
-        pickupOrders: 'pickupOrders',
-        supplierManage: 'supplierManage',
-        purchasePriceManage: 'purchasePriceManage',
 
-        outsideBuy: 'outsideBuy',
-        outsidePick: 'outsidePick',
+        orderManage: 'OrderCenter',//采购中心
+        pickupOrders: 'pickupOrders',//托运订单
+        outsidePick: 'outsidePick',//外销定单
+        outsideBuy: 'outsideBuy',//外采订单
+        businessOrder:'SalesOrder',//销售订单
 
-        consignmentCenter: 'consignmentCenter',
-        consignmentOrders: 'consignmentOrders',
-        carrierManage: 'carrierManage',
+        logisticsManage:'LogisticOrder',//物流管理
+        platformWaybill:'platformOrder',//平台管理
 
-        businessManage: 'businessManage',
-        tradeBusiness: 'tradeBusiness',
-        customerManage: 'customerManage',
-
-        serviceManage: 'serviceManage',
-        businessToExamine: 'businessToExamine',
-        standardDataManage: 'standardDataManage',
         mapManage: 'mapManage',
         carMonitor: 'carMonitor',
         landmark: 'landmark',
+
+        basicDataManage:'baseDataManagement',//基础数据管理
+        customerManage:'customerManage',//贸易客户管理
+        supplierManage: 'supplierManage',//供应商管理
+        purchasePriceManage: 'purchasePriceManage',//采购价格管理
+        carrierManage: 'carrierManage',//承运商管理
+        standardDataSet:'standardDataManage',//标准数据设置
+        // consignmentCenter: 'consignmentCenter',
+        // consignmentOrders: 'consignmentOrders',
+
+
+        // businessManage: 'businessManage',
+        // tradeBusiness: 'tradeBusiness',
+        // customerManage: 'customerManage',
+
+        // serviceManage: 'serviceManage',
+        // businessToExamine: 'businessToExamine',
+        // standardDataManage: 'standardDataManage',
+
 
         statistics: 'statistics',
         purchase: 'purchase',

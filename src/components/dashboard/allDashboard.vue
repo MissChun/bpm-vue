@@ -75,7 +75,7 @@ export default {
         'purchaseDashboard':[
           {//采购概览
           'dashboardSqureData':[
-              {key:'determine_count',value:'待确认计划数',goUrl:'/purchaseCenter/pickupOrders/ordersList?goTo=determine',dimension:"单"},
+              {key:'determine_count',value:'待确认计划数',goUrl:'/orderManage/pickupOrders/ordersList?goTo=determine',dimension:"单"},
             ],
             'searchShow':false,
             'type':'procurement_centre_scedule',
@@ -96,9 +96,9 @@ export default {
         'serviceCentreDashboard':[//服务中心概览
           {
             'dashboardSqureData':[
-              {key:'create_department_check_count',value:'待部门审核',goUrl:'/serviceManage/businessToExamine/businessList',dimension:"单"},
-              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/consignmentCenter/consignmentOrders/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"单"},
-              {key:'standard_mile_count',value:'待测里程数',goUrl:'/serviceManage/standardDataManage/mileageDataList?mile=0',dimension:"条"}
+              {key:'create_department_check_count',value:'待部门审核',goUrl:'/orderManage/businessOrder/businessList',dimension:"单"},
+              {key:'section_waiting_match_count',value:'待匹配卸货单',goUrl:'/logisticsManage/platformWaybill/ordersList?goTo=second&secondActiveName=waiting_match',dimension:"单"},
+              {key:'standard_mile_count',value:'待测里程数',goUrl:'/basicDataManage/standardDataSet/mileage/mileageList?mile=0',dimension:"条"}
             ],
             'searchShow':false,
             'type':'service_centre_schedule',

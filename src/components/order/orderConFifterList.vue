@@ -207,7 +207,7 @@
 			                  <span v-else>{{props.row.pick_active_time}}</span>
 			                </el-col>
 							<el-col :span="4" class="whiteSpan">
-			                  实际装车吨位: 
+			                  实际装车吨位:
 			                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
 			                      <div slot="content" style="width:120px;">
 			                        <el-row>
@@ -260,7 +260,7 @@
 					                  <span v-else>{{props.row.pick_active_time}}</span>
 					                </el-col>
 					                <el-col :span="4" class="whiteSpan">
-					                  实际装车吨位: 
+					                  实际装车吨位:
 					                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
 					                      <div slot="content" style="width:120px;">
 					                        <el-row>
@@ -295,7 +295,7 @@
 									</el-tooltip>
 								</el-col>
 								<el-col :span="4" class="whiteSpan">
-				                  实际卸车吨位: 
+				                  实际卸车吨位:
 				                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_actual_quantity">
 				                      <div slot="content" style="width:120px;">
 				                        <el-row>
@@ -339,7 +339,7 @@
 							</el-row>
 								<el-row style="margin-top:20px;" :gutter="20">
 					                <el-col :span="4" class="whiteSpan" v-if="false">
-					                  标准里程: 
+					                  标准里程:
 					                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_standard_mile">
 					                      <div slot="content" style="width:120px;">
 					                        <el-row>
@@ -353,7 +353,7 @@
 					                 <span v-else>{{props.row.standard_mile}}km</span>
 					                </el-col>
 					                <el-col :span="4" class="whiteSpan">
-					                  实际里程: 
+					                  实际里程:
 					                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_active_mile">
 					                      <div slot="content" style="width:120px;">
 					                        <el-row>
@@ -786,7 +786,7 @@ export default {
 		},
 		gotoDetalis: function(rowData) {
 			//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
-			window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
+			window.open(`#/logisticsManage/platformWaybill/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
 		},
 		SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
@@ -898,24 +898,24 @@ export default {
 
 				});
 			} else if (type == 'matchUnload') { //匹配卸货单
-				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
-				window.open(`#/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+				//this.$router.push({ path: `/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
+				window.open(`#/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
 			} else if (type == 'upUnload') { //提交卸货单
 
 			} else if (type == 'changeUnload') { //变更卸货单
-				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
-				window.open(`#/consignmentCenter/consignmentOrders/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+				//this.$router.push({ path: `/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
+				window.open(`#/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
 			} else if (type == 'showDetalis') { //查看详情
-				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
-				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/logisticsManage/platformWaybill/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/logisticsManage/platformWaybill/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
 			} else if (type == 'sureDownOrder') {
-				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
-				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/logisticsManage/platformWaybill/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/logisticsManage/platformWaybill/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			} else if (type == 'sureChangeCar') {
-				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
-				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+				window.open(`#/logisticsManage/platformWaybill/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				//this.$router.push({ path: `/logisticsManage/platformWaybill/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			} else if (type=='sureUnload') {
-				window.open(`#/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+				window.open(`#/logisticsManage/platformWaybill/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
 				//this.$router.push({ path: `/consignmentCenter/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
 			}
 		},
