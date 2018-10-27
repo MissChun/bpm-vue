@@ -321,7 +321,7 @@ export default {
           { validator: planTongVa, trigger: 'blur' }
         ],
         unit_price: [
-          
+
         ],
         business_price: [
           //{ validator: discountVa, trigger: 'blur' }
@@ -344,7 +344,7 @@ export default {
   },
   methods: {
     goOrderList: function() {
-      this.$router.push({ path: "/purchaseCenter/pickupOrders/ordersList" });
+      this.$router.push({ path: "/orderManage/pickupOrders/ordersList" });
     },
     upOrder: function() {
       this.$refs['addPickOrderForm'].validate((valid) => {
@@ -374,7 +374,7 @@ export default {
             message: '创建托运单成功',
             type: 'success'
           });
-          this.$router.push({ path: "/purchaseCenter/pickupOrders" });
+          this.$router.push({ path: "/orderManage/pickupOrders" });
         }
       }).catch(() => {
         this.loadingArr.pageLoading = false;

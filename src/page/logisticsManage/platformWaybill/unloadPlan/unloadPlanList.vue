@@ -310,9 +310,10 @@ export default {
               type: "success",
               message: "匹配卸货地成功"
             })
+            vm.$router.push({ path: "/logisticsManage/platformWaybill/ordersList" });
           }
           this.operationBtn.isLoading = false;
-          vm.$router.push({ path: "/logisticsManage/platformWaybill/orderList" });
+
         });
       }
     },
