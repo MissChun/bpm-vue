@@ -259,7 +259,11 @@ export default {
         // active_time_start: this.startTime,
         // active_time_end: this.endTime,
       };
-      if (this.activeTime.length) {
+      if (this.activeTime&&this.activeTime.length) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }else{
+        this.activeTime = [this.startTime, this.endTime];
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
