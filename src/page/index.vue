@@ -483,6 +483,8 @@ export default {
     }
     if (currentUrl.match('pbpm.hhtdlng.com')) {
       getUrl('Temp')
+      this.driverCodeImg = `http://www.pgyer.com/app/qrcode/newDriverNewTemp`;
+      this.appUrl.driverAppUrl = `https://www.pgyer.com/newDriverNewTemp`;
     } else if (currentUrl.match('pbpm.91lng.cn')) {
       getUrl('Prepare')
     } else if (currentUrl.match('bpm.hhtdlng.com')) {
