@@ -327,7 +327,7 @@ export default {
               });
               if (isReview) {
                 if (this.id) {
-                  this.$router.push({ path: "/basicDataManage/carrierManage/carrierDetail", query: { id: this.id } });
+                  this.$router.push({ path: `/basicDataManage/carrierManage/carrierDetail/${this.id }` });
                 } else {
                   this.$router.push({ path: "/basicDataManage/carrierManage/carrierList" });
                 }
