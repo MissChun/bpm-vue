@@ -21,7 +21,7 @@
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-form-item label="实际到厂时间:" label-width="105px">
+              <el-form-item label="装车完成时间:" label-width="105px">
                 <el-date-picker v-model="planArriveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                 <!-- <el-date-picker v-model="planArriveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
@@ -55,8 +55,11 @@
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="14" class="total-data">
+          <el-col :span="14" class="total-data" v-if="multipleSelection.length==0">
             一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+          </el-col>
+          <el-col :span="14" class="total-data" v-else>
+            当前选择{{chooseCount.num}}单，实际装车吨位{{chooseCount.active_tonna}}吨，采购总额{{chooseCount.unit_sum_pri}}元，采购优惠后总额{{chooseCount.discounts_sum_pri}}元
           </el-col>
           <el-col :span="10" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
@@ -145,6 +148,12 @@ export default {
       tableDataObj: {
         len: '', //长度
         data: [], //内容
+      },
+      chooseCount:{
+        num:0,
+        active_tonna:"0",//实际吨位
+        unit_sum_pri:"0",//采购总额
+        discounts_sum_pri:"0",//优惠后总额
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
@@ -296,6 +305,20 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      if(val.length>0){
+        this.calculation();
+      }
+    },
+    calculation:function(){
+      var newfifterCount={num:0,active_tonna:"0.00",unit_sum_pri:"0.00",discounts_sum_pri:"0.00"};
+      this.multipleSelection.forEach(item=>{
+        newfifterCount.num++;
+        // newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
+        newfifterCount.active_tonna=(parseFloat(newfifterCount.active_tonna)+parseFloat(item.active_tonnage)).toFixed(2);
+        newfifterCount.unit_sum_pri=(parseFloat(newfifterCount.unit_sum_pri)+parseFloat(item.unit_sum_price)).toFixed(2);
+        newfifterCount.discounts_sum_pri=(parseFloat(newfifterCount.discounts_sum_pri)+parseFloat(item.discounts_sum_price)).toFixed(2);
+      });
+      this.chooseCount=newfifterCount;
     },
     handleMenuClick(row) {
       if (row.operator === 'check') {
@@ -429,8 +452,8 @@ export default {
         is_invoice: this.searchPostData.is_invoice,
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
-        postData.active_time_start = this.planArriveTime[0];
-        postData.active_time_end = this.planArriveTime[1];
+        postData.work_end_time_start = this.planArriveTime[0];
+        postData.work_end_time_end = this.planArriveTime[1];
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);

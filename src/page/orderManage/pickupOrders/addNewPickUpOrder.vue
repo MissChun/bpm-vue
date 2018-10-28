@@ -184,7 +184,7 @@
         </div>
       </el-main>
     </el-container>
-    <el-dialog title="确认生产订单" :visible.sync="sureAdd" center width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog title="确认生成订单" :visible.sync="sureAdd" center width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form label-width="125px" status-icon>
         <el-row justify="center">
           <el-col :span="18">
