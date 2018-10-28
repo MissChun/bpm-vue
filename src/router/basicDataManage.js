@@ -318,6 +318,14 @@
           title: '运费约定详情',
         },
         component: (resolve) => require(['../page/basicDataManage/standardDataSet/freight/freightDetail'], resolve),
+      },{
+        path: 'editFreight',
+        name: 'editFreight',
+        meta: {
+          isVerificationL: false,
+          title: '运费约定编辑',
+        },
+        component: (resolve) => require(['../page/basicDataManage/standardDataSet/freight/editFreight'], resolve),
       }]
     },{
       path: 'mileage',

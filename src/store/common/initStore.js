@@ -26,8 +26,12 @@ export default {
   wsMsg: null, //websocket
   regular:{
     price:{
-      match:/^(\-|\+)?\d+(\.\d{1,2})?$/,
+      match:/^(\+)?\d+(\.\d{1,2})?$/,
       tips:'请输入数值且最多两位小数的数值'
+    },
+    variableRate:{
+      match:/^(\+)?\d+(\.\d{1,3})?$/,
+      tips:'请输入数值正数且最多三位小数的数值'
     },
     tonnage:{
       match:/^(\-|\+)?\d+(\.\d{1,3})?$/,

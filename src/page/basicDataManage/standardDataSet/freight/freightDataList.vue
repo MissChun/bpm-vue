@@ -46,12 +46,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
+          <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button>
-            <el-button type="primary">导出</el-button>
-            <el-button type="success" @click="addPerson">新增</el-button> -->
+            <el-button type="primary">导出</el-button> -->
+            <el-button type="success" @click="addFreight">新增</el-button>
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
@@ -72,6 +72,7 @@
               <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -165,6 +166,35 @@ export default {
     }
   },
   methods: {
+    deleteFreight(id){
+      this.$confirm('确定删除该运费约定？', "提醒", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+      .then(() => {
+        this.$$http('deleteFreight', { id: id }).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.$message({
+              message: '删除运费成功',
+              type: 'success'
+            });
+            this.startSearch();
+          }
+        }).catch((err) => {
+          this.$message.error('删除运费失败');
+        })
+      })
+      .catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消删除运费'
+        });
+      });
+    },
+    addFreight(){
+      window.open(`#/basicDataManage/standardDataSet/freight/editFreight`, '_blank')
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();

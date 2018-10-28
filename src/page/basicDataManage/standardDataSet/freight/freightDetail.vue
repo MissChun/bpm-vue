@@ -35,6 +35,9 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       运费规则
                     </el-col>
+                    <el-col :span="6" class="text-right">
+                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                    </el-col>
                   </el-row>
                 </div>
                 <div class="trans-fee">
@@ -166,7 +169,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/clientManage/addClient?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
+      this.$router.push({ path: "/basicDataManage/standardDataSet/freight/editFreight?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
     },
 
   }
