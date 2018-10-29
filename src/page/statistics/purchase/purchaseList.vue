@@ -619,7 +619,7 @@ export default {
     let nowDate = new Date();
     let nowDateDetail = this.pbFunc.getDateDetail(nowDate);
     let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' +  nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' +  nowDateDetail.second;
-    this.planArriveTime = ['2018-09-30 16:00:00',nowDateStr];
+    this.planArriveTime = ['2018-10-01 08:00:00',nowDateStr];
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }
