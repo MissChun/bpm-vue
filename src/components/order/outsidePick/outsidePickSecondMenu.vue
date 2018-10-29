@@ -43,6 +43,7 @@
       </el-form>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder" :loading="exportLoading">导出</el-button>
     </div>
     <div class="nav-tab-setting mt-25">
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
@@ -62,6 +63,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+import indexjs from '@/api/index';
 export default {
   name: 'outsidePickSecondMenu',
   components: {
@@ -116,6 +119,8 @@ export default {
           { id: 'truck_no', value: '车号' },
           { id: 'plan_fluid_name', value: '液厂名' },
           { id: 'order_number', value: '业务单号' },
+          { id: 'short_name', value: '客户简称' },
+          { id: 'sale_man_name', value: '业务员' },
         ],
       },
       searchStatus: false,
@@ -145,7 +150,64 @@ export default {
     changeExtendsStatus: function() {
       this.expandStatus = !this.expandStatus;
     },
+    exportOrder:function(){
+      this.$emit("reshCount");
+      var sendData = {};
+      var vm = this;
+      if (this.fifterName == 'all') {
+        sendData.all_search = this.status;
+      } else if (this.fifterName == 'all_cancel') {
+        sendData.all_search = 'all_cancel';
+      } else {
+        sendData.status = this.fifterName;
+      }
 
+      if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
+        sendData.plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
+        sendData.plan_time_end = this.timeParam.load_plan_time[1];
+      }
+      if (this.fifterParam.field) {
+        sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      }
+      sendData.pageSize = this.pageData.pageSize;
+      sendData.page = this.pageData.currentPage;
+      sendData.export_excel = 'export'
+      this.exportLoading = true;
+      let url = "http://"+this.pbFunc.getDomainUrl();
+      axios.get(url+'/api/v1/outsale_order/', {
+        method: 'get',
+        responseType: 'blob',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8",
+          'Authorization': 'jwt ' + this.pbFunc.getLocalData('token', true)
+        },
+        params: sendData,
+      }).then((res) => {
+        // let fileName = res.headers['content-disposition'].match(/fushun(\S*)xls/)[0];
+        // fileDownload(res.data, fileName);
+        //如果用方法一 ，这里需要安装 npm install js-file-download --save ,然后引用 var fileDownload = require('js-file-download')，使用详情见github;
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (res.data && res.status == 200) {
+          // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
+          let objectUrl = URL.createObjectURL(res.data);
+          let link = document.createElement('a');
+          link.style.display = 'none';
+          link.href = objectUrl;
+          link.setAttribute('download', '外销单.xlsx');
+          document.body.appendChild(link);
+          link.click()
+          vm.exportLoading = false;
+        }
+      }).catch(function(res) {
+        vm.exportLoading = false;
+      });
+    },
     searchList: function(targetName) {
       //
       this.$emit("reshCount");
@@ -190,6 +252,7 @@ export default {
       }).catch((err) => {
         vm.pageLoading = false;
       });
+     
     },
     clickFifter: function(targetName) {
       var status = targetName.name;

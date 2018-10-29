@@ -249,6 +249,16 @@
            <span v-else>无</span>
        </template>
       </el-table-column>
+
+      <el-table-column label="客户简称" prop="" min-width="150">
+        <template slot-scope="props" >
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.short_name" placement="top-start" v-if="props.row.short_name">
+                 <span >{{props.row.short_name}}</span>
+            </el-tooltip>
+           <span v-else>无</span>
+       </template>
+      </el-table-column>
+
        <el-table-column label="计划采购时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
@@ -308,6 +318,14 @@
                   </el-tooltip>
        </template>
       </el-table-column>
+
+      <el-table-column label="业务员" prop="" min-width="150">
+
+       <template slot-scope="props">
+         <span >{{props.row.sale_man_name}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">
           <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" >
