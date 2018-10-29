@@ -4,7 +4,7 @@
   name: 'basicDataManage',
   meta: {
     isVerificationL: true,
-    title: '基础数据管理',
+    title: '基础信息管理',
     iconName: 'icon-coin',
   },
   component: (resolve) => require(['../page/basicDataManage/basicDataManage'], resolve),

@@ -3,9 +3,9 @@
   left: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  width: 60%;
+  //width: 60%;
   height: 59px;
-  margin-left: 50px;
+  //margin-left: 50px;
   background: #fff;
   line-height: 60px;
   float: left;
@@ -48,11 +48,12 @@
   flex: 1;
   float: left;
   border-bottom: 1px solid rgb(222, 222, 222);
+  padding-left:50px;
 }
 
 .usermenu {
   float: right;
-  padding: 0 2em;
+  padding: 0 2em 0 0;
   color: black;
   .notice {
     display: inline-block;
@@ -176,52 +177,60 @@
         <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.svg"></div>
       </router-link>
       <div class="nav">
-        <div class="g-statues-bar p-lr">
-          <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
-              {{ item.meta.title || "" }}
-            </el-breadcrumb-item>
-          </el-breadcrumb>
-        </div>
-        <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
-          <el-popover placement="top" width="426" trigger="click" v-model="showNotice">
-            <div class="notice" v-if="!false">
-              <div class="notice-temp" v-if="showNotice">
-                <div class="notice-temp-title">系统通知</div>
-                <div class="notice-temp-content" v-loading="noticeLoading">
-                  <ul>
-                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item,item.read)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}<span class="time">{{item.created_at}}</span></li>
-                  </ul>
-                </div>
-                <div class="notice-temp-footer">
-                  <el-row>
-                    <el-col :span="12">
-                      <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
-                    </el-col>
-                    <el-col :span="12" class="text-right">
-                      <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
-                    </el-col>
-                  </el-row>
-                </div>
-              </div>
+        <el-row>
+          <el-col :span="16">
+            <div class="g-statues-bar p-lr">
+              <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
+                  {{ item.meta.title || "" }}
+                </el-breadcrumb-item>
+              </el-breadcrumb>
             </div>
-            <span slot="reference" v-on:click="isShowNotice">
-              <el-badge :value="$store.state.common.unreadNewNum?($store.state.common.unreadNewNum<9?$store.state.common.unreadNewNum:'N'):''" class="item">
-                <i class="icon-notice cursor-pointer"></i>
-              </el-badge>
-            </span>
-            <!-- <el-button>click 激活</el-button> -->
-          </el-popover>
-          <span class="ml-25 mr-25 text-stance fs-18">|</span>
-          <i class="icon-user"></i>
-          <el-dropdown trigger="click" @command="logout">
-            <span class="el-dropdown-link">Hi，{{users.profile.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>退出</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
-        </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="usermenu" v-if="users.profile&&users.profile.nick_name">
+              <el-popover placement="top" width="426" trigger="click" v-model="showNotice">
+                <div class="notice" v-if="!false">
+                  <div class="notice-temp" v-if="showNotice">
+                    <div class="notice-temp-title">系统通知</div>
+                    <div class="notice-temp-content" v-loading="noticeLoading">
+                      <ul>
+                        <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item,item.read)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}<span class="time">{{item.created_at}}</span></li>
+                      </ul>
+                    </div>
+                    <div class="notice-temp-footer">
+                      <el-row>
+                        <el-col :span="12">
+                          <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
+                        </el-col>
+                        <el-col :span="12" class="text-right">
+                          <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
+                        </el-col>
+                      </el-row>
+                    </div>
+                  </div>
+                </div>
+                <span slot="reference" v-on:click="isShowNotice">
+                  <el-badge :value="$store.state.common.unreadNewNum?($store.state.common.unreadNewNum<9?$store.state.common.unreadNewNum:'N'):''" class="item">
+                    <i class="icon-notice cursor-pointer"></i>
+                  </el-badge>
+                </span>
+                <!-- <el-button>click 激活</el-button> -->
+              </el-popover>
+              <span class="ml-25 mr-25 text-stance fs-18">|</span>
+              <i class="icon-user"></i>
+              <el-dropdown trigger="click" @command="logout">
+                <span class="el-dropdown-link">Hi，{{users.profile.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>退出</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
+            </div>
+          </el-col>
+        </el-row>
+
+
       </div>
     </el-row>
   </el-header>

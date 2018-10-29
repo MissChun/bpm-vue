@@ -95,7 +95,7 @@
       <el-table-column label="待时后总额" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
             {{scope.row.waiting_charges}}
           </div>
         </template>
@@ -220,12 +220,12 @@ export default {
         width: '',
         isAdjust: true,
         adjustParam: 'short_name_adjust'
-      }, 
+      },
       // {
       //   title: '客户名称',
       //   param: 'consumer_name',
       //   width: '220'
-      // }, 
+      // },
       {
         title: '付款方',
         param: 'payer_name',
@@ -236,12 +236,12 @@ export default {
         title: '车号',
         param: 'plate_number',
         width: ''
-      }, 
+      },
       // {
       //   title: '实际到厂时间',
       //   param: 'active_time',
       //   width: '200'
-      // }, 
+      // },
       {
         title: '装车完成时间',
         param: 'work_end_time',
@@ -694,9 +694,9 @@ export default {
             if (this.tableData.data.data[i].unload_nums_adjust) {
               this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums) * 1000) / 1000;
             }
-            if (this.tableData.data.data[i].waiting_charges_adjust) {
-              this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
-            }
+            // if (this.tableData.data.data[i].waiting_charges_adjust) {
+            //   this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
+            // }
           }
           this.tableDataObj = {
             len: this.tableData.data.data.length,
