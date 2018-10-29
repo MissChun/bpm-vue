@@ -233,8 +233,12 @@ export default {
               // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
               this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
             }
-            this.tableData[i].carriers=[...new Set(this.tableData[i].carriers)];
-            this.tableData[i].fluids=[...new Set(this.tableData[i].fluids)];
+            // this.tableData[i].carriers=[...new Set(this.tableData[i].carriers)];
+            // this.tableData[i].carriers = this.tableData[i].carriers.reduceRight((item, next) => {
+            //   hash[next.id] ? '' : hash[next.id] = true && item.push(next);
+            //   return item;
+            // }, []);
+            // this.tableData[i].fluids=[...new Set(this.tableData[i].fluids)];
           }
           console.log('运费',this.tableData)
           this.pageData.totalCount = results.data.data.count;
