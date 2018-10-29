@@ -421,6 +421,15 @@
                 </div>
               </div>
             </el-col>
+
+            <el-col :span="8">
+              <div class="label-list">
+                <label>车辆所属:</label>
+                <div class="detail-form-item">
+                  <span v-if="detailData.delivery_order&&detailData.delivery_order.carriers" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></span>
+                </div>
+              </div>
+            </el-col>
           </el-row>
         </div>
         <div class="detail-list detail-form" v-for="(item,index) in unloadArr" :key="item.id">
