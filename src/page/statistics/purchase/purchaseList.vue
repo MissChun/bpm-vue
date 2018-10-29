@@ -157,7 +157,7 @@ export default {
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
-      planArriveTime: [], //计划到站时间
+      planArriveTime: ['2018-9-30 16:00:00','2018-10-30 16:00:00'], //计划到站时间
       createdAt: [], //下计划日期
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -337,6 +337,7 @@ export default {
       }
     },
     startSearch() {
+      console.log('planArriveTime',this.planArriveTime);
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
@@ -615,6 +616,10 @@ export default {
     }
   },
   created() {
+    let nowDate = new Date();
+    let nowDateDetail = this.pbFunc.getDateDetail(nowDate);
+    let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' +  nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' +  nowDateDetail.second;
+    this.planArriveTime = ['2018-09-30 16:00:00',nowDateStr];
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }
