@@ -108,7 +108,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>承运方:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.carrier&&transPowerData.tractor.carrier.name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.carriers[0].carrier_name)"></div>
                 </div>
               </el-col>
             </el-row>
