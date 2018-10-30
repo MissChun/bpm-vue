@@ -579,16 +579,23 @@ export const fifterbyArr = function(Obj, fifterArr, isNull) {
   var object = deepcopy(Obj);
   var newObj = {};
   if (isNull) {
-    for (let i = 0; i < fifterArr.length; i++) {
-      newObj[fifterArr[i]] = object[fifterArr[i]];
+    if (isNull == 'empty') {
+      for (let i = 0; i < fifterArr.length; i++) {
+        newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : "";
+      }
+    } else {
+      for (let i = 0; i < fifterArr.length; i++) {
+        newObj[fifterArr[i]] = object[fifterArr[i]];
+      }
     }
+
   } else {
     for (let i = 0; i < fifterArr.length; i++) {
-      newObj[fifterArr[i]] = (object[fifterArr[i]] || object[fifterArr[i]] == '0') ? object[fifterArr[i]] : null;
+      newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
     }
   }
   return newObj;
-}
+};
 export const dealNullData = function(data) {
   if (data === null || data === undefined || data === '') {
     return '<span class="text-stance">无</span>'
