@@ -411,7 +411,8 @@ export default {
                   });
                 });
                 //dataBody[0].transPowerInfo = transPowerInfo.data.data.results[0];
-                vm.listFifterData = dataBody;
+                vm.listFifterData = vm.dealDataByStatus(dataBody);
+                // vm.listFifterData = dataBody;
               }
             }).catch(() => {
 
@@ -424,6 +425,20 @@ export default {
       }).catch(() => {
         vm.pageLoading = false;
       });
+    },
+    dealDataByStatus: function(dataBody) {
+      for (var i in dataBody) {
+        if (dataBody[i].status.key == 'already_match' || dataBody[i].status.key == 'waiting_match') {
+          var middleArr = [];
+          for (var unIndex in dataBody[i].unload_trips) {
+            if (dataBody[i].unload_trips[unIndex].status.key != 'canceled') {
+              middleArr.push(dataBody[i].unload_trips[unIndex]);
+            }
+          }
+          dataBody[i].unload_trips = middleArr;
+        }
+      }
+      return dataBody;
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
