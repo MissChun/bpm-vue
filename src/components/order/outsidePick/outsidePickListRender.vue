@@ -133,60 +133,60 @@
                   <el-tooltip v-else class="item" effect="light" :content="props.row.short_name" placement="top-start">
                     <span>{{props.row.short_name.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   付款方客户简称: <span v-if="props.row.payer_name&&props.row.payer_name.length<8">{{props.row.payer_name}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.payer_name" placement="top-start">
                     <span>{{props.row.payer_name.slice(0,5)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4" class="whiteSpan">
-                  计划采购时间: 
+                  计划采购时间:
                   <el-tooltip  class="item" effect="light" :content="props.row.plan_time" placement="top-start">
                     <span>{{props.row.plan_time.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   车号:  <span v-if="props.row.tractor_plate_number&&props.row.tractor_plate_number.length<10">{{props.row.tractor_plate_number}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.tractor_plate_number" placement="top-start">
                     <span>{{props.row.tractor_plate_number.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   主驾: <span v-if="props.row.driver&&props.row.driver.length<10">{{props.row.driver}} </span>
-                </el-col> 
+                </el-col>
 
                  <el-col :span="4">
                   联系方式: <span v-if="props.row.driver_phone">{{props.row.driver_phone}}</span>
-                </el-col> 
+                </el-col>
 
               </el-row>
 
               <el-row style="margin-top:5px;">
                 <el-col :span="4" class="whiteSpan">
-                  实际到厂时间: 
+                  实际到厂时间:
                   <el-tooltip  class="item" effect="light" :content="props.row.actual_time" placement="top-start">
                     <span>{{props.row.actual_time}}</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   液厂名称: <span v-if="props.row.fluid_name&&props.row.fluid_name.length<10">{{props.row.fluid_name}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.fluid_name" placement="top-start">
                     <span v-if="props.row.fluid_name">{{props.row.fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   实际液厂: <span v-if="props.row.actual_fluid_name&&props.row.actual_fluid_name.length<10">{{props.row.actual_fluid_name}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.actual_fluid_name" placement="top-start">
                     <span v-if="props.row.actual_fluid_name">{{props.row.actual_fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   实际装车吨位: <span v-if="props.row.actual_quantity&&props.row.actual_quantity.length<10">{{props.row.actual_quantity}}</span>
@@ -196,37 +196,37 @@
                   <router-link target="_blank" :to="'/imgReview?imgList='+props.row.weight_note_image_url" v-if="props.row.weight_note_image_url">
                       <span style="color:#409EFF">(磅单)</span>
                   </router-link>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   最终售价: <span v-if="props.row.sale_price &&props.row.sale_price .length<10">{{props.row.sale_price }}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.sale_price " placement="top-start">
                     <span v-if="props.row.sale_price ">{{props.row.sale_price .slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   销售总额: <span v-if="props.row.total_price&&props.row.total_price.length<10">{{props.row.total_price}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.total_price" placement="top-start">
                     <span v-if="props.row.total_price">{{props.row.total_price.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
               </el-row>
 
               <el-row style="margin-top:5px;">
                 <el-col :span="4" class="whiteSpan">
-                  下单人: 
+                  下单人:
                   <el-tooltip  class="item" effect="light" :content="props.row.sale_man_name" placement="top-start">
                     <span>{{props.row.sale_man_name}}</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
 
                 <el-col :span="4">
                   下单人电话: <span v-if="props.row.sale_man_phone&&props.row.sale_man_phone.length<15">{{props.row.sale_man_phone}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.sale_man_phone" placement="top-start">
                     <span v-if="props.row.sale_man_phone">{{props.row.sale_man_phone.slice(0,8)}}....</span>
                   </el-tooltip>
-                </el-col> 
+                </el-col>
               </el-row>
             </div>
             <div style="clear:both"></div>
@@ -249,9 +249,19 @@
            <span v-else>无</span>
        </template>
       </el-table-column>
+
+      <el-table-column label="客户简称" prop="" min-width="150">
+        <template slot-scope="props" >
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.short_name" placement="top-start" v-if="props.row.short_name">
+                 <span >{{props.row.short_name}}</span>
+            </el-tooltip>
+           <span v-else>无</span>
+       </template>
+      </el-table-column>
+
        <el-table-column label="计划采购时间" prop="" min-width="150">
         <template slot-scope="props">
-          <div class="whiteSpan"> 
+          <div class="whiteSpan">
              <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time}}</span>
             </el-tooltip>
@@ -294,7 +304,7 @@
        </template>
       </el-table-column>
        <el-table-column label="实际装车吨位" prop="" min-width="150">
-        
+
        <template slot-scope="props">
          <span >{{props.row.actual_quantity}}</span>
         </template>
@@ -308,13 +318,21 @@
                   </el-tooltip>
        </template>
       </el-table-column>
+
+      <el-table-column label="业务员" prop="" min-width="150">
+
+       <template slot-scope="props">
+         <span >{{props.row.sale_man_name}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" prop="" width="100" fixed="right">
-        <template slot-scope="props">  
+        <template slot-scope="props">
           <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" >
               <el-col v-if="key==0">
                 <el-button  :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
-            </el-row>   
+            </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -348,7 +366,7 @@
         <el-form-item label="拒绝原因:" label-width="120px" prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
-       
+
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
        <el-button @click="handleClose">取 消</el-button>
@@ -430,7 +448,7 @@ export default {
         supplierList:[],
         fluidList:[]
       },
-      
+
       passParam:{
         buy_price:"",
         actual_fluid:"",
@@ -489,15 +507,15 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      //this.$router.push({ path: `/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}` });
-      window.open(`#/purchaseCenter/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}`, '_blank')
+      //this.$router.push({ path: `/orderManage/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}` });
+      window.open(`#/orderManage/outsidePick/outsidePickDetalisTab/outsidePickDetalis/${rowData.id}`, '_blank')
     },
-    
+
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
     },
     upStatus: function() {
-      
+
     },
     getRowKeys: function(row) {
       return row.id;

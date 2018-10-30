@@ -1,5 +1,7 @@
 <style scoped lang="less">
-
+/deep/ .total-data {
+  line-height: 40px;
+}
 
 </style>
 <template>
@@ -39,14 +41,19 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
-            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportConsumerrMeetData'"></export-button>
-            <!-- <el-button type="primary" plain @click="importList">导入</el-button>
-            <el-button type="primary">导出</el-button>
-            <el-button type="success" @click="addPerson">新增</el-button> -->
-          </div>
+          <div class="operation-btn">
+            <el-row>
+              <el-col :span="14" class="total-data">
+                选中{{fifterCount.num}}单，核算吨位{{fifterCount.check_quantity_sum}}吨，回款金额{{fifterCount.total_amount}}元，期末余额{{fifterCount.last_amount}}元, 卸车数{{fifterCount.unload_nums_sum}}辆
+              </el-col>
+              <el-col :span="10" class="text-right">
+                <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportConsumerrMeetData'"></export-button>
+              </el-col>
+            </el-row>
+        </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
+            <el-table :data="tableData" ref="multipleTable" stripe style="width:  100%"  size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}" @select="checkRows" @select-all="checkAllRows">
+              <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
               </el-table-column>
             </el-table>
@@ -84,6 +91,14 @@ export default {
         supplier_id: '',
         field: 'short_name',
       },
+      fifterCount:{
+        num:0,
+        check_quantity_sum:"0.00",
+        total_amount:"0.00",
+        last_amount:"0.00",
+        unload_nums_sum:0
+      },
+      chooseArr:[],
       selectData: {
         fieldSelect: [
           { id: 'short_name', value: '客户简称' },
@@ -154,10 +169,74 @@ export default {
     }
   },
   methods: {
+    checkRows:function(selection, row){
+      var sendJudge = false;
+        selection.forEach(item => {
+          if (item.id == row.id) {
+            sendJudge = true;
+          }
+      });
+      if(sendJudge){
+        this.chooseArr=this.chooseArr.concat(row);
+      }else{
+        var newArr=[];
+        this.chooseArr.forEach((Citem)=>{
+          if(Citem.id!=row.id){
+            newArr.push(Citem);
+          }
+        });
+        this.chooseArr=newArr;
+      }
+
+      this.calculation();
+    },
+    checkAllRows:function(selection){
+      if(selection.length==0){
+        let middleArr=[];
+        this.chooseArr.forEach(item=>{
+          let add=true;
+          this.tableData.forEach(Titem=>{
+            if(item.id==Titem.id){
+              add=false;
+            }
+          });
+          if(add){
+            middleArr.push(item);
+          }
+        });
+        this.chooseArr=middleArr;
+      }else{
+        let middleArr=[];
+        selection.forEach(Sitem=>{
+          var isIn=false;
+          this.chooseArr.forEach(item=>{
+            if(Sitem.id==item.id){
+              isIn=true;
+            }
+          });
+          if(!isIn){
+            this.chooseArr.push(Sitem);
+          }
+        });
+      }
+      this.calculation();
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
+    },
+    calculation:function(){
+
+      var newfifterCount={num:0,check_quantity_sum:"0.00",total_amount:"0.00",last_amount:"0.00",unload_nums_sum:0};
+      this.chooseArr.forEach(item=>{
+        newfifterCount.num++;
+        newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
+        newfifterCount.total_amount=(parseFloat(newfifterCount.total_amount)+parseFloat(item.total_amount)).toFixed(2);
+        newfifterCount.last_amount=(parseFloat(newfifterCount.last_amount)+parseFloat(item.last_amount)).toFixed(2);
+        newfifterCount.unload_nums_sum+=parseInt(item.unload_nums_sum);
+      });
+      this.fifterCount=newfifterCount;
     },
     dateSelect(type) {
       let dates = this.endTime.split('-');
@@ -180,7 +259,11 @@ export default {
         // active_time_start: this.startTime,
         // active_time_end: this.endTime,
       };
-      if (this.activeTime.length) {
+      if (this.activeTime&&this.activeTime.length) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }else{
+        this.activeTime = [this.startTime, this.endTime];
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
@@ -188,11 +271,22 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
+      var vm=this;
       this.$$http('getCustomerMeetList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
           this.pageData.totalCount = results.data.data.count;
+          setTimeout(() => {
+            vm.chooseArr.forEach(row => {
+              this.tableData.forEach(thisRow=>{
+                if(thisRow.id==row.id){
+                  vm.$refs.multipleTable.toggleRowSelection(thisRow, true);
+                }
+              });
+            });
+
+          })
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -220,6 +314,7 @@ export default {
     pageChange: function() {
       setTimeout(() => {
         this.getList();
+        
       })
     },
     payerDate() {

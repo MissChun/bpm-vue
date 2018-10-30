@@ -60,7 +60,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="计划装车时间:" prop="plan_loading_time">
-                    <el-date-picker v-model="editMsgForm.plan_loading_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.plan_loading_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -70,7 +70,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="装车完成时间:">
-                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -119,8 +119,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="标准运价:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.stand_freight"></el-input>
+                  <el-form-item label="标准运价:" prop="stand_freight">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_freight"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -273,6 +273,9 @@ export default {
         change_rate: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
+        stand_freight: [
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -340,7 +343,8 @@ export default {
             reconciliation_time: this.detail.reconciliation_time,
             remark_adjust: this.detail.remark_adjust,
             adjust_time: this.detail.adjust_time,
-            stand_freight: this.detail.stand_freight
+            stand_freight: this.detail.stand_freight,
+            plan_loading_time:this.detail.plan_loading_time
           }
         }
       })
@@ -379,7 +383,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['check_quantity', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'work_end_time', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'lcl_cost', 'remark'];
+      let keyArray = ['check_quantity','stand_freight', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'lcl_cost', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

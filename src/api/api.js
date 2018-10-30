@@ -9,6 +9,30 @@
  */
 
 const api = {
+  deleteFreight:{
+    url: '/api/v1/freight-managements/:id/',
+    method: 'delete',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  updateFreight:{
+    url: '/api/v1/freight-managements/:id/',
+    method: 'put',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  addFreight:{
+    url: '/api/v1/freight-managements/',
+    method: 'POST',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
   exportConsumerrMeetData: {
     url: '/export/consumer-pay/',
     method: 'get',

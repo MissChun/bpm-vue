@@ -12,7 +12,7 @@
       name: "supplierMeetManage",
       redirect: '/arap/supplierMeetManage/supplierMeetList',
       meta: {
-        title: '供应商应付管理',
+        title: '供应商应付',
         isVerificationL: true
       },
       component: (resolve) => require(['../page/arap/supplierMeetManage/supplierMeetManage'], resolve),
@@ -39,7 +39,7 @@
       name: "payerMeetManage",
       redirect: '/arap/payerMeetManage/payerMeetList',
       meta: {
-        title: '付款方应收管理',
+        title: '付款方应收',
         isVerificationL: true
       },
       component: (resolve) => require(['../page/arap/payerMeetManage/payerMeetManage'], resolve),
@@ -82,7 +82,7 @@
       name: "carrierMeetManage",
       redirect: '/arap/carrierMeetManage/carrierMeetList',
       meta: {
-        title: '承运商应付管理',
+        title: '承运商应付',
         isVerificationL: true
       },
       component: (resolve) => require(['../page/arap/carrierMeetManage/carrierMeetManage'], resolve),

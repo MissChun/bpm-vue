@@ -52,7 +52,7 @@
       width: 11.5%;
     }
     .el-table__row {
-     
+
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
@@ -98,7 +98,7 @@
 }
 .buttonContent .el-row{
   margin-top:10px;
-  
+
 }
 .buttonContent .el-row .el-button{
   font-size:13px;
@@ -214,7 +214,7 @@
           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time}}</span>
              </el-tooltip>
-           <span v-else>无</span> 
+           <span v-else>无</span>
         </template>
       </el-table-column>
 
@@ -268,12 +268,12 @@ export default {
     noData: noData
   },
   computed: {
-    
+
   },
- 
+
   methods: {
     rowClick:function(row, event, column){
-      
+
     },
     expandArr: function() {
       if(this.expandStatus){
@@ -285,7 +285,7 @@ export default {
       }
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
-      
+
     },
     getRowKeys: function(row) {
       return row.id;
@@ -297,8 +297,8 @@ export default {
       } else {
         type = 'edit';
       }
-      window.open(`#/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}`, '_blank')
-      //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+      window.open(`#/orderManage/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}`, '_blank')
+      //this.$router.push({ path: `/orderManage/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
     },
     showMapDetalis: function(type, id) {
       var vm = this;
@@ -388,8 +388,8 @@ export default {
 
         // });
         //传入一个订单号跳转订单详情-车辆指派页面
-        //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
-        window.open(`#/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
+        //this.$router.push({ path: `/orderManage/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        window.open(`#/orderManage/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
         var type = "";
@@ -398,8 +398,8 @@ export default {
         } else {
           type = 'edit';
         }
-        window.open(`#/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}`, '_blank')
-        //this.$router.push({ path: `/purchaseCenter/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}` });
+        window.open(`#/orderManage/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}`, '_blank')
+        //this.$router.push({ path: `/orderManage/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/${type}` });
       }
     },
     upPlanMethod: function() {

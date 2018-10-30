@@ -108,7 +108,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>承运方:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.carrier&&transPowerData.tractor.carrier.name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.carriers[0].carrier_name)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -418,6 +418,15 @@
                   <span v-if="transPowerData.escort_staff&&transPowerData.escort_staff.name" v-html="pbFunc.dealNullData(transPowerData.escort_staff.name)"></span>
                   <span style="margin-left:15px;" v-if="transPowerData.escort_staff&&transPowerData.escort_staff.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.escort_staff.mobile_phone)"></span>
                   <span v-else v-html="pbFunc.dealNullData('')"></span>
+                </div>
+              </div>
+            </el-col>
+
+            <el-col :span="8">
+              <div class="label-list">
+                <label>车辆所属:</label>
+                <div class="detail-form-item">
+                  <span v-if="detailData.delivery_order&&detailData.delivery_order.carriers" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></span>
                 </div>
               </div>
             </el-col>

@@ -209,3 +209,26 @@ export const getLocalDataWithTime = function(name, cacheTime) {
     return undefined;
   }
 }
+
+export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
+  let currentUrl = document.location.href.toString();
+  let domainUrl = '';
+
+  if (currentUrl.match('pbpm.hhtdlng.com')) { //演示环境
+    domainUrl = `${prefix}pbpm.hhtdlng.com`;
+  } else if (currentUrl.match('pbpm.91lng.cn')) { //预发环境
+    domainUrl = `${prefix}pbpm.91lng.cn`;
+  } else if (currentUrl.match(`bpm.hhtdlng.com`) && !currentUrl.match(`devbpm.hhtdlng.com`)) { //测试环境
+    domainUrl = `${prefix}bpm.hhtdlng.com`;
+  } else if (currentUrl.match(`bpm.91lng.cn`) && !currentUrl.match(`pbpm.91lng.cn`) && !currentUrl.match(`testbpm.91lng.cn`)) {
+    //正式环境
+    domainUrl = `${prefix}bpm.91lng.cn`;
+  } else if (currentUrl.match(`devbpm.hhtdlng.com`)) { //开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`;
+  } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
+    domainUrl = `${prefix}testbpm.91lng.cn`;
+  } else {
+    domainUrl = `${prefix}bpm.hhtdlng.com`; //本地开发环境
+  }
+  return domainUrl;
+}

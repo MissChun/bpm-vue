@@ -44,8 +44,12 @@
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="15" class="total-data">
+          <el-col :span="15" class="total-data" v-if="multipleSelection.length==0">
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
+          </el-col>
+
+          <el-col :span="15" class="total-data" v-else>
+            当前选择{{chooseCount.num}}单，运费总计{{chooseCount.waiting_charges}}元
           </el-col>
           <el-col :span="9" class="text-right">
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
@@ -289,11 +293,27 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
+      chooseCount:{
+        num:0,
+        waiting_charges:"0.00"
+      },
     }
   },
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
+      if(val.length>0){
+        this.calculation();
+      }
+    },
+    calculation:function(){
+      var newfifterCount={num:0,waiting_charges:"0.00"};
+      this.multipleSelection.forEach(item=>{
+        newfifterCount.num++;
+        // newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
+        newfifterCount.waiting_charges=(parseFloat(newfifterCount.waiting_charges)+parseFloat(item.waiting_charges)).toFixed(2);
+      });
+      this.chooseCount=newfifterCount;
     },
     pageChange() {
       setTimeout(() => {
