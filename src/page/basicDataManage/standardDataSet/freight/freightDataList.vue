@@ -16,6 +16,9 @@
       line-height: 32px;
 
       border-bottom: 1px solid #e4e7ed;
+      &:last-child{
+        border-bottom: 0;
+      }
     }
   }
 }
@@ -61,11 +64,11 @@
                     </ul>
                   </div>
                   <div v-else>
-                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
-                      <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
+                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'||item.param==='carrier_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                      <span v-for="(value,key) in (item.param==='carrier_name'?scope.row.carriers:scope.row.fluids)" v-if="key<5">{{value}}<br></span>
                     </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
-                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time'||item.param==='carrier_name')">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time')">{{scope.row.agreements[0][item.param]}}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -224,13 +227,16 @@ export default {
             for (let j in this.tableData[i].agreements) {
               this.tableData[i].carriers.push(this.tableData[i].agreements[j].carrier_name);
               this.tableData[i].fluids.push(this.tableData[i].agreements[j].fluid_name);
-              // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
-              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
             }
             this.tableData[i].carriers=[...new Set(this.tableData[i].carriers)];
             this.tableData[i].fluids=[...new Set(this.tableData[i].fluids)];
+            for (let z in this.tableData[i].carriers) {
+               this.tableData[i].carrierListStr += this.tableData[i].carriers[z] + (z < this.tableData[i].carriers.length - 1 ? '，' : '');
+            }
+            for (let x in this.tableData[i].fluids) {
+              this.tableData[i].fluidListStr += this.tableData[i].fluids[x] + (x < this.tableData[i].fluids.length - 1 ? '，' : '');
+            }
           }
-          console.log('运费',this.tableData)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

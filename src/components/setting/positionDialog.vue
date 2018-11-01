@@ -1,7 +1,7 @@
 <!-- positionDialog.vue -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="positionDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="positionDialog.isShow" width="500px" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="positionRules" status-icon ref="positionRules">
           <el-form-item label="部门名称：">

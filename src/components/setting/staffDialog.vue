@@ -2,7 +2,7 @@
 <!-- staffDialog -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="staffDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="staffDialog.isShow" width="500px" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="staffRules" status-icon ref="staffRules">
           <el-form-item label="手机号码：" prop="mobile_number">

@@ -118,7 +118,7 @@ export default {
       }, {
         title: '实际站点名称',
         param: 'map_station_name',
-        width: ''
+        width: '140'
       }, {
         title: '站点类型',
         param: 'station_type_display',
