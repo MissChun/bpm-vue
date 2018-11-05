@@ -379,6 +379,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
+
       let postData = {
         records:this.recordsData
       }
@@ -407,13 +408,19 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           /* 如果id存在则为编辑 */
+          btnObject.btnText = '正在提交';
+          btnObject.isLoading = true;
           if (this.id) {
             postData.id = this.id;
             apiName = 'updateFreight';
+          }else{
+            postData = this.pbFunc.fifterObjIsNull(postData);
           }
-          btnObject.btnText = '正在提交';
-          btnObject.isLoading = true;
-          postData = this.pbFunc.fifterObjIsNull(postData);
+          for(let i in postData.records){
+            for(let j in postData.records[i]){
+              postData.records[i][j] = parseFloat(postData.records[i][j]);
+            }
+          }
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
