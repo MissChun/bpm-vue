@@ -49,12 +49,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
+          <div class="operation-btn text-right" v-if="false">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button> -->
             <el-button type="success" @click="addFreight">新增</el-button>
           </div>
-          <div class="table-list">
+          <div class="table-list mt-25">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
@@ -75,7 +75,7 @@
               <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                  <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button>
+                  <!-- <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button> -->
                 </template>
               </el-table-column>
             </el-table>
