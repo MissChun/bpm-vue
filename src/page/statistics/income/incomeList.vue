@@ -184,14 +184,14 @@ export default {
         title: '采购单价',
         param: 'buy_price',
         width: '',
-        isAdjust: true,
-        adjustParam: 'unit_price_differ'
+        // isAdjust: true,
+        // adjustParam: 'unit_price_differ'
       }, {
         title: '实际装车吨位',
         param: 'active_tonnage',
         width: '',
-        isAdjust: true,
-        adjustParam: 'active_tonnage_differ'
+        // isAdjust: true,
+        // adjustParam: 'active_tonnage_differ'
       }, {
         title: '采购优惠',
         param: 'discount_price',
@@ -208,8 +208,8 @@ export default {
         title: '采购优惠后总额',
         param: 'unit_sum_price',
         width: '',
-        isAdjust: true,
-        adjustParam: 'discounts_sum_differ'
+        // isAdjust: true,
+        // adjustParam: 'discounts_sum_differ'
       }, {
         title: '卸货站',
         param: 'station',
