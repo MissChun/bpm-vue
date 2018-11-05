@@ -155,9 +155,19 @@
 								</el-col>
 							</el-row>
 							<el-row style="margin-top:20px;">
-								<el-col :span="4">
-									卸货区域:
-								</el-col>
+								<el-col :span="4" class="whiteSpan">
+									<el-tooltip class="item" effect="light" placement="right">
+                    					<div slot="content" style="width:250px;"> 
+                      						<el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}">
+                        						<el-col >站点:{{unloadItem.station}}</el-col>
+                        						<el-col >需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
+                        						<el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
+                        						<el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
+                      						</el-row>
+                    					</div>
+                    					<div class="whiteSpan">预匹配卸货地:<span v-for="(Uitem,Uindex) in props.row.pre_business_order_list"><span v-if="props.row.pre_business_order_list.length>1&&Uindex!=props.row.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
+                  					</el-tooltip>
+                				</el-col>
 								<el-col :span="4">
 									供应商: <span v-if="props.row.delivery_order.trader.length<10">{{props.row.delivery_order.trader}}</span>
 									<el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.trader" placement="top-start">
