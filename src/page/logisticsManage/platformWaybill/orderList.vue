@@ -92,12 +92,10 @@ export default {
       },
       defaultSecond:{
         first:'all',
-        second:'waiting_match',
+        second:'all',
         third:'all',
         fourth:'all',
         fifth:'all',
-        sxith:'all',
-        seven:'all'
       },
       timeParam: [],
       listFifterData: [],
