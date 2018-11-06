@@ -737,15 +737,17 @@ export default {
 	},
 	props: ['ListData','firstMenu','secondMenu','expandStatus'],
 	computed: {
-		nowHead:function(){
-			var returnHead="";
-			this.tableHeadConfig[this.firstMenu].forEach((item)=>{
-				if(item.key==this.secondMenu){
-					returnHead=item.value;
-				}
-			});
-			return returnHead;
-		}
+		nowHead: function() {
+	      var returnHead = "";
+	      if(this.firstMenu=='first'){
+	        returnHead="loadHead";
+	      }else if(this.firstMenu=='second'){
+	        returnHead="matchHead";
+	      }else{
+	        returnHead="unloadHead";
+	      }
+	      return returnHead;
+	    }
 	},
 	mounted() {
 

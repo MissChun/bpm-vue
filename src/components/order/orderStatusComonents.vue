@@ -261,8 +261,8 @@ export default {
       var returnFiferName="";
       this.fifterNameArr.forEach((item,index)=>{
         if(item!="all"){
-          if(this.fifterNameArr.length>1&&index!=this.fifterNameArr.length-1){
-            returnFiferName+=(item+',');
+          if(returnFiferName!=""){
+            returnFiferName+=(","+item);
           }else{
             returnFiferName+=item;
           }
@@ -323,9 +323,7 @@ export default {
       }else if(this.status=='fifth'){
         sendData.search='';
       }
-      if (this.fifterName.indexOf('canceling')>0|this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
-        sendData.interrupt_status = this.fifterName;
-      } else {
+      if(this.fifterName){
         sendData.child_search = this.fifterName;
       }
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
@@ -402,12 +400,9 @@ export default {
       }else if(this.status=='fifth'){
         sendData.search='';
       }
-      if (this.fifterName.indexOf('canceling')>0|this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
-        sendData.interrupt_status = this.fifterName;
-      } else {
+      if(this.fifterName){
         sendData.child_search = this.fifterName;
       }
-
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
