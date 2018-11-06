@@ -261,7 +261,7 @@
     <common-header :type="'loginAfter'"></common-header>
     <el-container>
       <el-aside style="width: 190px;">
-        <el-menu class="g-side" router>
+        <el-menu class="g-side" router :collapse="false">
           <el-row style="margin-top:30px;">
             <el-col>
               <div class="munu-logo">MENU</div>

@@ -280,6 +280,7 @@ export default {
         console.log('链接消息', event)
       }
       ws.onmessage = function(event) {
+        console.log('接收消息', event)
         let msg = JSON.parse(event.data);
         // vm.$store.state.common.unreadNewNum++;
         vm.$store.commit('ChangeMsgNum', {
