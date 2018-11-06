@@ -191,14 +191,14 @@
             <div class="detail-form-title text-center">托运计划</div>
             <div class="detail-form">
               <el-row :gutter="40">
-                <el-col :span="8">
+                <el-col :span="12">
                   <el-form-item label="承运方式:" prop="consignment_type">
                     <el-radio v-model="pickOrderParam.consignment_type" label="own" border>自有贸易</el-radio>
                     <el-radio v-model="pickOrderParam.consignment_type" label="external" border>外部承运</el-radio>
                     <!--  <el-radio v-model="pickOrderParam.consignment_type" label="together" border>共同承运</el-radio> -->
                   </el-form-item>
                 </el-col>
-                <el-col :span="16">
+                <el-col :span="12">
                   <el-form-item label="承运商:" v-loading="loadingArr.carriersLoading" prop="carriers">
                     <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                       <el-form-item label="自有:" label-width="60px">
@@ -372,6 +372,7 @@ export default {
         {title: '业务单状态',param: 'status_display',width: ''}, 
         {title: '客户简称',param: 'short_name',width: ''}, 
         {title: '业务员',param: 'sale_name',width: ''}, 
+        {title: '液厂',param: 'actual_fluid_name',width: ''}, 
         {title: '站点',param: 'station',width: '180'}, 
         {title: '站点地址',param: 'station_address',width: ''}, 
         {title: '计划到站时间',param: 'plan_arrive_time', width: ''}, 

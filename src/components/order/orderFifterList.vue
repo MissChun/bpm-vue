@@ -241,6 +241,7 @@
             <div slot="content" style="width:250px;">
               <el-row v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
                 <el-col >站点:{{Uitem.station}}</el-col>
+                <el-col style="margin-top:10px;">需求液厂:{{Uitem.actual_fluid_name}}</el-col>
                 <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.plan_tonnage">{{Uitem.plan_tonnage}}吨</span></el-col>
                 <el-col style="margin-top:10px;" class="whiteSpan">
                   计划到站时间:

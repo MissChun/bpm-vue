@@ -200,14 +200,14 @@ export default {
         'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
-        'fourth': [{ key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
         'fifth': [{ key: 'all', value: '全部' }],
       },
       allStatusList: {
         'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
-        'fourth': [{ key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
         'fifth': [{ key: 'all', value: '全部' }],
       },
       timeParam: {

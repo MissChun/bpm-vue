@@ -293,7 +293,7 @@ export default {
       return {
         customerType: [{ verbose: "一类客户", key: "a" }, { verbose: "二类客户", key: "b" }, { verbose: "三类客户", key: "c" }],
         //saleMan: this.$store.state.common.selectData.saleMan,
-        settlementType: [{ verbose: "预付", key: "0" }, { verbose: "现结", key: "1" }, { verbose: "周结", key: "2" }, { verbose: "月结", key: "3" }, { verbose: "见磅单付款", key: "4" }],
+        settlementType: [{ verbose: "预付", key: "0" }, { verbose: "货到付款", key: "1" }, { verbose: "周结", key: "2" }, { verbose: "月结", key: "3" }, { verbose: "见票付款", key: "4" }],
       }
     },
     returnPage: function() {
