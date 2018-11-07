@@ -16,7 +16,54 @@
     }
   }
 }
-
+.nav-tab-setting /deep/ .el-tabs__header .el-tabs__nav .el-tabs__item {
+  height:44px;
+}
+.nav-tab-setting /deep/ .el-tabs__header .el-tabs__nav .el-tabs__item.is-active:after {
+   position: absolute;
+   bottom: 0;
+   left: 18%;
+   display: block;
+   width: 64%;
+   height: 0px !important;
+   content: " ";
+   background-color:white;
+}
+.tagerLable{
+ background-color:#eef4fa;color:black;
+ margin-top:3px;
+}
+.ml-12{
+  margin-left:12px;
+}
+/deep/ .padding-clear-top .el-tag .el-icon-close{
+  margin-left: -5px;
+  color: black;
+  &:hover{
+    color:white;
+  }
+}
+.checkbox__label_text{
+    line-height: 12px;
+    font-size: 12px;
+    display: inline-block;
+    padding-left: 0;
+}
+.check_lable{
+    padding: 5px 10px;
+    line-height: 28px;
+    border-radius: 3px;
+    margin-left:12px;
+    background-color:#eef4fa;
+    color:#999;
+    border: 1px solid white;
+    cursor:pointer;
+}
+.check_lable_active{
+  border: 1px solid #409EFF;
+  color:#409EFF;
+  background-color:white;
+}
 </style>
 <template>
   <div>
@@ -83,11 +130,29 @@
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="loadingAllDialog = true" v-if="status == 'seven'">导出</el-button>
     </div>
     <div class="nav-tab-setting mt-25">
-      <el-tabs v-model="fifterName" @tab-click="clickFifter">
-        <el-tab-pane v-for="(item,index) in statusList[status]" :key="index" :label="item.value" :name="item.key" v-loading="pageLoading">
-          <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
+      <el-tabs v-model="status">
+       <el-tab-pane  :name="status" v-loading="pageLoading">
+        <div slot="label" style="height:36px">
+          <span>状态:</span>
+          <el-select v-model="fifterNameArr" placeholder="请选择" size="small"  @change="secondMenuChange" multiple collapse-tags>
+            <el-option
+              v-for="item in statusList[status]"
+              :label="item.value"
+              :value="item.key"
+              >
+            </el-option>
+          </el-select>
+        </div>
+          <div class="tab-content padding-clear-top" style="padding-top:1px!important;">
+            <el-row :gutter="3" style="height:100%;margin-top:10px;">
+              <el-col>
+                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium"> 
+                {{tag.value}}
+                </el-tag>
+              </el-col>
+            </el-row>
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" :expandStatus="expandStatus" @chiledchangeTabs="chiledchangeTabs" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
+                <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -151,24 +216,21 @@ export default {
       expandStatus: true,
       pageLoading: false,
       exportLoading: false,
-      fifterName: "",
+      tagArr:[],
+      fifterNameArr:[],
       statusList: {
-        'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
-        'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'all', value: '全部' }, { key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
-        'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' }],
-        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
-        'seven': [{ key: 'all', value: '全部' }]
+        'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
+        'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
+        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'fifth': [{ key: 'all', value: '全部' }],
       },
       allStatusList: {
-        'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
-        'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'all', value: '全部' }, { key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
-        'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' }],
-        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
-        'seven': [{ key: 'all', value: '全部' }]
+        'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
+        'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
+        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'fifth': [{ key: 'all', value: '全部' }],
       },
       timeParam: {
         unload_active_time: [],
@@ -216,12 +278,61 @@ export default {
     countParam: Object,
     secondActiveName: String
   },
+  computed: {
+    fifterName: function(){
+      var returnFiferName="";
+      this.fifterNameArr.forEach((item,index)=>{
+        if(item!="all"){
+          if(returnFiferName!=""){
+            returnFiferName+=(","+item);
+          }else{
+            returnFiferName+=item;
+          }
+        }
+      });
+      return returnFiferName
+    }
+  },
   methods: {
+    handleClose:function(tag) {
+      this.fifterNameArr.splice(this.fifterNameArr.indexOf(tag.key), 1);
+      this.tagArr.splice(this.fifterNameArr.indexOf(tag.key), 1)
+      this.secondMenuChange();
+    },
     chiledchangeTabs: function(tabsObj) {
       this.$emit("childchangeTabs", tabsObj);
     },
     changeExtendsStatus: function() {
       this.expandStatus = !this.expandStatus;
+    },
+    clickFifterSecond:function(key){
+      if(this.fifterNameArr.indexOf(key)>-1){
+        this.fifterNameArr.splice(this.fifterNameArr.indexOf(key),1);
+      }else{
+         this.fifterNameArr.push(key);
+      }
+      this.secondMenuChange();
+    },
+    secondMenuChange:function(){
+       var status = this.fifterName;
+      //重新查询一次数据
+      
+      //this.$emit("changeTabs", this.status);
+      let middleTagArr=[];
+      this.fifterNameArr.forEach(item=>{
+        this.statusList[this.status].forEach(tagItem=>{
+          if(tagItem.key==item){
+            middleTagArr.push(tagItem);
+          }
+        })
+      });
+      this.tagArr=middleTagArr;
+      this.$emit("childchangeTabs", { first: this.status, second:this.fifterName });
+      if(this.fifterNameArr.length==0){
+        this.listFifterData=[];
+      }else{
+        this.searchList(this.fifterName);
+      }
     },
     changeTabs: function(name) {
       this.$emit("changeTabs", name);
@@ -230,28 +341,20 @@ export default {
       var sendData = {};
       var vm = this;
       this.exportLoading = true;
-      if (this.fifterName == 'all') {
-        if (this.status == 'first') {
-          sendData.search = 'all_truck_loaded';
-        } else if (this.status == 'second') {
-          sendData.search = 'all_match';
-        } else if (this.status == 'third') {
-          sendData.search = 'all_unload';
-        } else if (this.status == 'fourth') {
-          sendData.search = 'all_settle';
-        } else if (this.status == 'fifth') {
-          sendData.search = 'all_change';
-        } else if (this.status == 'sxith') {
-          sendData.search = 'all_finish';
-        } else if (this.status == 'seven') {
-          sendData.search = this.loadingAllRadio == '1' ? 'settlement_finish' : '';
-        }
-      } else {
-        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
-          sendData.interrupt_status = this.fifterName;
-        } else {
-          sendData.status = this.fifterName;
-        }
+
+      if(this.status=='first'){
+        sendData.search='all_truck_loaded';
+      }else if(this.status=='second'){
+        sendData.search='all_match';
+      }else if(this.status=='third'){
+        sendData.search='all_unload';
+      }else if(this.status=='fourth'){
+        sendData.search='all_change';
+      }else if(this.status=='fifth'){
+        sendData.search='';
+      }
+      if(this.fifterName){
+        sendData.child_search = this.fifterName;
       }
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
@@ -307,8 +410,9 @@ export default {
           document.body.appendChild(link);
           link.click()
         }
-      }).catch(function(res) {
+      }).catch((res)=> {
         this.exportLoading = false;
+        console.log(res);
       });
     },
     searchList: function(targetName) {
@@ -316,30 +420,20 @@ export default {
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
-      if (this.fifterName == 'all') {
-        if (this.status == 'first') {
-          sendData.search = 'all_truck_loaded';
-        } else if (this.status == 'second') {
-          sendData.search = 'all_match';
-        } else if (this.status == 'third') {
-          sendData.search = 'all_unload';
-        } else if (this.status == 'fourth') {
-          sendData.search = 'all_settle';
-        } else if (this.status == 'fifth') {
-          sendData.search = 'all_change';
-        } else if (this.status == 'sxith') {
-          sendData.search = 'all_finish';
-        } else if (this.status == 'seven') {
-          sendData.search = '';
-        }
-      } else {
-        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
-          sendData.interrupt_status = this.fifterName;
-        } else {
-          sendData.status = this.fifterName;
-        }
+      if(this.status=='first'){
+        sendData.search='all_truck_loaded';
+      }else if(this.status=='second'){
+        sendData.search='all_match';
+      }else if(this.status=='third'){
+        sendData.search='all_unload';
+      }else if(this.status=='fourth'){
+        sendData.search='all_change';
+      }else if(this.status=='fifth'){
+        sendData.search='';
       }
-
+      if(this.fifterName){
+        sendData.child_search = this.fifterName;
+      }
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
@@ -459,51 +553,73 @@ export default {
         this.searchList();
       });
     },
-    assemblyData: function(val) {
-      var renderStatus = this.pbFunc.deepcopy(this.allStatusList);
-      var assemblyData = renderStatus[this.status]; //当前tabs数组
-      var add = "";
-      if (this.status == 'first') {
-        add = '_driver';
-      } else if (this.status == 'second') {
-        add = '_match';
-      } else if (this.status == 'third') {
-        add = '_unload';
-      } else if (this.status == 'fourth') {
-        add = '_settlement';
-      } else if (this.status == 'fifth') {
-        add = '_change';
-      } else if (this.status == 'sxith') {
-        add = '_finish';
-      }
-      for (var i in assemblyData) {
-        for (var j in val) { //传入过来的数值
-          if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
-            if (val[j] > 99) {
-              assemblyData[i].value += "(99+)";
-            } else {
-              assemblyData[i].value += "(" + val[j] + ")";
-            }
-          }
-        }
-      }
-      this.statusList[this.status] = assemblyData;
-    }
+    // assemblyData: function(val) {
+    //   var renderStatus = this.pbFunc.deepcopy(this.allStatusList);
+    //   var assemblyData = renderStatus[this.status]; //当前tabs数组
+    //   var add = "";
+    //   if (this.status == 'first') {
+    //     add = '_driver';
+    //   } else if (this.status == 'second') {
+    //     add = '_match';
+    //   } else if (this.status == 'third') {
+    //     add = '_unload';
+    //   } else if (this.status == 'fourth') {
+    //     add = '_settlement';
+    //   } else if (this.status == 'fifth') {
+    //     add = '_change';
+    //   } else if (this.status == 'sxith') {
+    //     add = '_finish';
+    //   }
+    //   for (var i in assemblyData) {
+    //     for (var j in val) { //传入过来的数值
+    //       if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
+    //         if (val[j] > 99) {
+    //           assemblyData[i].value += "(99+)";
+    //         } else {
+    //           assemblyData[i].value += "(" + val[j] + ")";
+    //         }
+    //       }
+    //     }
+    //   }
+    //   this.statusList[this.status] = assemblyData;
+    // }
   },
   mounted() {
-    this.assemblyData(this.countParam);
+    // this.assemblyData(this.countParam);
   },
   created() {
-    this.fifterName = this.secondActiveName;
+    if(!this.secondActiveName||this.secondActiveName=='all'){
+      let fifterName="";
+      this.statusList[this.status].forEach((item,index)=>{
+        if(this.statusList[this.status].length-1!=index&&this.statusList[this.status].length>1){
+          fifterName+=(item.key+",");
+        }else{
+          fifterName+=(item.key);
+        }
+        this.fifterNameArr.push(item.key);
+        this.tagArr.push(item);
+      })
+    }else{
+      let middleTagArr=[];
+      this.secondActiveName.split(",").forEach(Sitem=>{
+        this.fifterNameArr.push(Sitem);
+        this.statusList[this.status].forEach(tagItem=>{
+          if(tagItem.key==Sitem){
+            middleTagArr.push(tagItem);
+          }
+        })
+      })
+      this.tagArr=middleTagArr;
+    }
     //this.listFifterData = this.listData;
     this.searchList();
   },
   watch: {
-    countParam: {
-      handler(val, oldVal) {
-        this.assemblyData(val);
-      }
-    }
+    // countParam: {
+    //   handler(val, oldVal) {
+    //     this.assemblyData(val);
+    //   }
+    // }
   }
 };
 

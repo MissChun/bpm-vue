@@ -36,7 +36,7 @@
                       运费规则
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
+                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -58,8 +58,8 @@
                       <div class="label-list">
                         <label>对应液厂:</label>
                         <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')" -->
-                        <div class="detail-form-item">
-                          <span v-for="(row,index) in detailData.agreements">{{row.fluid_name}}<span v-if="index!=detailData.agreements.length-1">，</span></span>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluidListStr)">
+                          <!-- <span v-for="(row,index) in detailData.agreements">{{row.fluid_name}}<span v-if="index!=detailData.agreements.length-1">，</span></span> -->
                         </div>
                       </div>
                     </el-col>
@@ -81,7 +81,7 @@
                       <div class="label-list">
                         <label>生效承运商:</label>
                         <!-- v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')" -->
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].carrier_name:'')">
+                        <div class="detail-form-item"  v-html="pbFunc.dealNullData(detailData.carrierListStr)">
                           <!-- <span v-for="(row,index) in detailData.agreements" v-if="index<5">{{row.carrier_name}}<span v-if="index!=4&&index!=detailData.agreements.length-1">，</span></span> -->
                         </div>
                       </div>
@@ -153,6 +153,24 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
+
+          this.detailData.carrierListStr = '';
+          this.detailData.fluidListStr = '';
+          this.detailData.carriers =[];
+          this.detailData.fluids = [];
+          for (let j in this.detailData.agreements) {
+            this.detailData.carriers.push(this.detailData.agreements[j].carrier_name);
+            this.detailData.fluids.push(this.detailData.agreements[j].fluid_name);
+          }
+          this.detailData.carriers=[...new Set(this.detailData.carriers)];
+          this.detailData.fluids=[...new Set(this.detailData.fluids)];
+          for (let z in this.detailData.carriers) {
+             this.detailData.carrierListStr += this.detailData.carriers[z] + (z < this.detailData.carriers.length - 1 ? '，' : '');
+          }
+          for (let x in this.detailData.fluids) {
+            this.detailData.fluidListStr += this.detailData.fluids[x] + (x < this.detailData.fluids.length - 1 ? '，' : '');
+          }
+          console.log('运费详情',this.detailData)
         }
       }).catch((err) => {
         this.pageLoading = false;

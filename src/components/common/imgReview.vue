@@ -46,6 +46,8 @@ export default {
         -moz-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
         -webkit-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});
         -o-transform: rotate(${this.rotateDeg}deg)  scale(${this.zoomNum});`
+
+        console.log('imgStyle',imgStyle,this.zoomNum);
       return imgStyle;
     }
   },
@@ -86,7 +88,7 @@ export default {
       }
     },
     closePreview() {
-      this.zoomNum= 1;
+      this.zoomNum= 1.8;
       this.rotateDeg=0;
       this.imgObject.showPreview = false;
     },

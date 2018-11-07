@@ -133,7 +133,7 @@
               <el-row  style="position:relative;margin-top:5px;" :gutter="20">
                 <!-- <el-col :span="4" style="position:absolute;left:-20px;margin-top:15px;" ><span>{{props.$index+1}}.</span></el-col> -->
                 <el-col v-for="(loadItem,loadIndex) in loadRender" :span="4" class="whiteSpan" >
-                   {{loadItem.tltle}}: 
+                   {{loadItem.tltle}}:
                   <el-tooltip v-if="!loadRender.keyMore" class="item" effect="light" :content="props.row.waybill[loadItem.valueKey]" placement="top-start" :open-delay="1500">
                     <span v-if="props.row.waybill[loadItem.valueKey]">
                       {{props.row.waybill[loadItem.valueKey]}}
@@ -158,8 +158,8 @@
                     <el-tooltip  class="item" effect="light" :content="uitem.business_order[Ritem.valueKey]" placement="top-start" :open-delay="1500">
                       <span>{{uitem.business_order[Ritem.valueKey]}}</span>
                     </el-tooltip>
-                  </el-col> 
-                </el-row> 
+                  </el-col>
+                </el-row>
             </div>
 
             <!-- 卸车模块的信息 -->
@@ -167,7 +167,7 @@
               <el-row  style="position:relative;margin-top:5px;"  :gutter="20">
                 <!-- <el-col :span="4" style="position:absolute;left:-20px;margin-top:15px;" ><span>{{props.$index+1}}.</span></el-col> -->
                 <el-col v-for="(unloadItem,unloadIndex) in unloadStationRender" :span="4" class="whiteSpan" style="margin-top:10px;">
-                   {{unloadItem.tltle}}: 
+                   {{unloadItem.tltle}}:
                   <el-tooltip v-if="!unloadItem.keyMore" class="item" effect="light" :content="props.row.unloadInfo[unloadItem.valueKey]" placement="top-start" :open-delay="1500">
                     <span v-if="props.row.unloadInfo[unloadItem.valueKey]">{{props.row.unloadInfo[unloadItem.valueKey]}}
                        <router-link target="_blank" :to="'/imgReview?imgList='+props.row.unloadInfo[unloadItem.poundKey]" v-if="unloadItem.pound&&props.row.unloadInfo[unloadItem.poundKey]">
@@ -186,7 +186,7 @@
               </el-row>
             </div>
 
-            </div>  
+            </div>
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
@@ -219,7 +219,7 @@
 
        <el-table-column label="液厂" prop="" min-width="150">
         <template slot-scope="props">
-          <div class="whiteSpan"> 
+          <div class="whiteSpan">
              <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.waybill.actual_fluid_name" placement="top-start" v-if="props.row.waybill.actual_fluid_name">
                  <span >{{props.row.waybill.actual_fluid_name}}</span>
             </el-tooltip>
@@ -300,7 +300,7 @@
        </template>
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
-        <template slot-scope="props">  
+        <template slot-scope="props">
           <!-- <el-row v-for="(items,keys) in buttonAll[props.row.status.key]" :key="keys" >
               <el-col>
                 <el-button  :type="items.type" :plan="items.attrPlan" size="mini" @click="operation(items.methods_type,props.row)">{{item.text}}</el-button>
@@ -325,7 +325,7 @@
         <el-form-item label="拒绝原因:" label-width="120px" prop="approval_mark">
           <el-input type="textarea" :rows="3" v-model="refuseParam.approval_mark"></el-input>
         </el-form-item>
-       
+
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
        <el-button @click="handleClose">取 消</el-button>
@@ -451,7 +451,7 @@ export default {
         supplierList:[],
         fluidList:[]
       },
-      
+
       refuseParam:{
         approval_mark:"",
         action:"denied",
@@ -493,14 +493,14 @@ export default {
     },
     gotoDetalis: function(rowData) {
       //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}` });
-      window.open(`#/purchaseCenter/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}`, '_blank')
+      window.open(`#/orderManage/outsideBuy/outsideBuyDetalisTab/outsideBuyDetalis/${rowData.waybill.id}/${rowData.id}`, '_blank')
     },
-    
+
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
     },
     upStatus: function() {
-      
+
     },
     getRowKeys: function(row) {
       return row.id;
@@ -532,7 +532,7 @@ export default {
           return false;
         }
       });
-      
+
     },
     operation: function(type, rowData) {
       if (type == 'departemntPass') {
@@ -547,7 +547,7 @@ export default {
               this.$emit('searchList');
             }
             }).catch((err)=>{
-              
+
             });
           }
         });
@@ -567,13 +567,13 @@ export default {
         }).catch((err)=>{
 
         });
-      }); 
+      });
       }else if(type=='matchUnload'){
         //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
-        window.open(`#/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+        window.open(`#/orderManage/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
       }else if(type=='changeUnload'){
-        //this.$router.push({ path: `/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
-        window.open(`#/purchaseCenter/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+        //this.$router.push({ path: `/orderManage/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`});
+        window.open(`#/orderManage/outsideBuy/outsideUnloadMatchTabs/outsideUnloadMatchList/${rowData.waybill.id}/${rowData.id}`, '_blank')
       }
     },
     judgeStatus:function(status,trip_id,callBack){

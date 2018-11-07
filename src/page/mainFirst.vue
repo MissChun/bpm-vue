@@ -254,14 +254,16 @@
     padding: 0 22px;
   }
 }
-
+.main-content{
+  min-width:850px;
+}
 </style>
 <template>
   <el-container>
     <common-header :type="'loginAfter'"></common-header>
     <el-container>
       <el-aside style="width: 190px;">
-        <el-menu class="g-side" router>
+        <el-menu class="g-side" router :collapse="false">
           <el-row style="margin-top:30px;">
             <el-col>
               <div class="munu-logo">MENU</div>
@@ -296,7 +298,7 @@
       </el-aside>
       <el-main>
         <template>
-          <div style="margin-top: 61px;">
+          <div style="margin-top: 61px;" class="main-content">
             <router-view></router-view>
           </div>
         </template>

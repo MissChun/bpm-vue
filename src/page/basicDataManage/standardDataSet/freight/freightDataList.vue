@@ -16,6 +16,9 @@
       line-height: 32px;
 
       border-bottom: 1px solid #e4e7ed;
+      &:last-child{
+        border-bottom: 0;
+      }
     }
   }
 }
@@ -46,12 +49,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
+          <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button> -->
             <el-button type="success" @click="addFreight">新增</el-button>
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
@@ -61,18 +64,18 @@
                     </ul>
                   </div>
                   <div v-else>
-                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
-                      <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
+                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'||item.param==='carrier_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                      <span v-for="(value,key) in (item.param==='carrier_name'?scope.row.carriers:scope.row.fluids)" v-if="key<5">{{value}}<br></span>
                     </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
-                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time'||item.param==='carrier_name')">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time')">{{scope.row.agreements[0][item.param]}}</span>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                  <!-- <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button> -->
+                  <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -219,28 +222,21 @@ export default {
           for (let i in this.tableData) {
             this.tableData[i].carrierListStr = '';
             this.tableData[i].fluidListStr = '';
-            this.tableData[i].carriers=[];
+            this.tableData[i].carriers =[];
             this.tableData[i].fluids = [];
             for (let j in this.tableData[i].agreements) {
-              this.tableData[i].carriers.push({
-                id:this.tableData[i].agreements[j].carrier,
-                carrier_name:this.tableData[i].agreements[j].carrier_name
-              })
-              this.tableData[i].fluids.push({
-                id:this.tableData[i].agreements[j].fluid,
-                fluid_name:this.tableData[i].agreements[j].fluid_name
-              })
-              // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
-              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
+              this.tableData[i].carriers.push(this.tableData[i].agreements[j].carrier_name);
+              this.tableData[i].fluids.push(this.tableData[i].agreements[j].fluid_name);
             }
-            // this.tableData[i].carriers=[...new Set(this.tableData[i].carriers)];
-            // this.tableData[i].carriers = this.tableData[i].carriers.reduceRight((item, next) => {
-            //   hash[next.id] ? '' : hash[next.id] = true && item.push(next);
-            //   return item;
-            // }, []);
-            // this.tableData[i].fluids=[...new Set(this.tableData[i].fluids)];
+            this.tableData[i].carriers=[...new Set(this.tableData[i].carriers)];
+            this.tableData[i].fluids=[...new Set(this.tableData[i].fluids)];
+            for (let z in this.tableData[i].carriers) {
+               this.tableData[i].carrierListStr += this.tableData[i].carriers[z] + (z < this.tableData[i].carriers.length - 1 ? '，' : '');
+            }
+            for (let x in this.tableData[i].fluids) {
+              this.tableData[i].fluidListStr += this.tableData[i].fluids[x] + (x < this.tableData[i].fluids.length - 1 ? '，' : '');
+            }
           }
-          console.log('运费',this.tableData)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

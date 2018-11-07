@@ -39,7 +39,7 @@
                           <template slot-scope="scope">
                             <div v-if="scope.row.isEdit">
                               <div v-if="item.param==='start_mileage'">
-                                {{scope.row.start_mileage}}=={{scope.row.record_count}}<span v-if="scope.row.record_count>1">（含）</span>
+                                {{scope.row.start_mileage}}<span v-if="scope.row.record_count>1">（不含）</span>
                               </div>
                               <div v-if="item.param==='end_mileage'">
                                 <el-row>
@@ -47,7 +47,7 @@
                                     <el-input placeholder="请输入" size="small" type="text" v-model.trim="scope.row.end_mileage"></el-input>
                                     <!-- <span>{{}}</span> -->
                                   </el-col>
-                                  <el-col :span="6"><span class="end-mileage-unit">(不含)</span></el-col>
+                                  <el-col :span="6"><span class="end-mileage-unit">(含)</span></el-col>
                                 </el-row>
                               </div>
                               <div v-if="item.param==='initial_price'">
@@ -65,8 +65,8 @@
                             </div>
                             <div v-else>
                               {{scope.row[item.param]}}
-                              <span v-if="item.param==='start_mileage'&&scope.row.record_count>1">（含）{{scope.row.index}}</span>
-                              <span v-if="item.param==='end_mileage'">（不含）</span>
+                              <span v-if="item.param==='start_mileage'&&scope.row.record_count>1">（不含）</span>
+                              <span v-if="item.param==='end_mileage'">（含）</span>
                             </div>
                             <!-- <div class="fee-list" v-if="item.param==='start_mileage'||">
                               {{scope.row[item.param]}}<span v-if="item.param==='start_mileage'">（不含）</span><span v-if="item.param==='end_mileage'"></span>
@@ -75,7 +75,7 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="140" fixed="right">
                           <template slot-scope="scope">
-                              <el-button type="danger" plain size="mini" v-if="scope.row.record_count>1&&!scope.row.isEdit" @click="deleteRecords(scope.row)">删除</el-button>
+                              <el-button type="danger" plain size="mini" v-if="scope.row.record_count>1&&!scope.row.isEdit||scope.row.record_count>1&&(scope.row.index==recordsData.length-1)" @click="deleteRecords(scope.row)">删除</el-button>
                               <el-button type="primary" plain size="mini" @click="saveBtn(scope.row)" v-if="scope.row.isEdit">保存</el-button>
                               <el-button type="primary" size="mini" @click="editRecords(scope.row)" v-if="!scope.row.isEdit">编辑</el-button>
                           </template>
@@ -107,7 +107,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="40" class="mt-30">
+              <el-row :gutter="40">
                 <el-col :span="10" :offset="2">
                   <el-form-item label="生效时间:" prop="effective_time">
                     <el-date-picker v-model="editMsgForm.effective_time" type="datetime" @change="dateSelect('satrt')" placeholder="请选择" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
@@ -246,6 +246,16 @@ export default {
     },
     addRecords(){
       let len = (this.recordsData.length)-1;
+      for(let i in this.recordsData){
+        if(this.recordsData[i].isEdit){
+          this.$message({
+            message: '请点击保存',
+            type: 'error',
+            duration:'5000'
+          });
+          return false;
+        }
+      }
       this.recordsData.push({
         record_count:this.recordsData[len].record_count+1,
         start_mileage:this.recordsData[len].end_mileage,
@@ -263,7 +273,7 @@ export default {
         this.recordsData[parseInt(row.index)+1].start_mileage = this.recordsData[parseInt(row.index)-1].end_mileage;
       }
       for(let i in this.recordsData){
-        if(this.recordsData[i].id === row.id){
+        if(this.recordsData[i].index === row.index){
           this.recordsData.splice(i, 1);
         }
       }
@@ -277,7 +287,7 @@ export default {
       }else{
         console.log('news')
         for(let i in this.recordsData){
-          if(this.recordsData[i].id === row.id){
+          if(this.recordsData[i].index === row.index){
             // this.recordsData[i].isEdit = true;
             this.$set(this.recordsData,i,{
               record_count:this.recordsData[i].record_count,
@@ -340,9 +350,9 @@ export default {
             type: 'error',
             duration:'5000'
           });
-        }else if(record.change_number&&!(record.change_number).match(this.$store.state.common.regular.variableRate.match)){
+        }else if(record.change_number&&!(record.change_number).match(this.$store.state.common.regular.variableValue.match)){
           this.$message({
-            message: '变动值仅支持正数且最多三位小数的数值',
+            message: '变动值仅支持正数且最多五位小数的数值',
             type: 'error',
             duration:'5000'
           });
@@ -369,6 +379,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
+
       let postData = {
         records:this.recordsData
       }
@@ -397,13 +408,19 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           /* 如果id存在则为编辑 */
+          btnObject.btnText = '正在提交';
+          btnObject.isLoading = true;
           if (this.id) {
             postData.id = this.id;
             apiName = 'updateFreight';
+          }else{
+            postData = this.pbFunc.fifterObjIsNull(postData);
           }
-          btnObject.btnText = '正在提交';
-          btnObject.isLoading = true;
-          postData = this.pbFunc.fifterObjIsNull(postData);
+          for(let i in postData.records){
+            for(let j in postData.records[i]){
+              postData.records[i][j] = parseFloat(postData.records[i][j]);
+            }
+          }
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
@@ -443,14 +460,23 @@ export default {
           this.detailData = results.data.data;
 
           this.editMsgForm.actual_fluids = [];
+          // this.detailData.carrierListStr = '';
+          // this.detailData.fluidListStr = '';
+          this.detailData.carriers =[];
+          this.detailData.fluids = [];
+          for (let j in this.detailData.agreements) {
+            this.detailData.carriers.push(this.detailData.agreements[j].carrier);
+            this.detailData.fluids.push(this.detailData.agreements[j].fluid);
+          }
+          this.detailData.carriers=[...new Set(this.detailData.carriers)];
+          this.detailData.fluids=[...new Set(this.detailData.fluids)];
+          this.editMsgForm.carriers = this.detailData.carriers;
+          this.editMsgForm.actual_fluids = this.detailData.fluids;
+          // console.log('运费详情',this.detailData)
 
           if(this.detailData.agreements&&this.detailData.agreements.length){
             this.editMsgForm.effective_time = this.detailData.agreements[0].effective_time;
             this.editMsgForm.dead_time = this.detailData.agreements[0].dead_time;
-            this.editMsgForm.carriers = this.detailData.agreements[0].carriers;
-            for(let i in this.detailData.agreements){
-              this.editMsgForm.actual_fluids.push(this.detailData.agreements[i].fluid);
-            }
           }
           this.recordsData = this.detailData.records;
           for(let i in this.recordsData){

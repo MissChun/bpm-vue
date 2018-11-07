@@ -7,6 +7,16 @@
         <el-tab-pane label="标准里程" name="mileage">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
               <el-row :gutter="30">
                 <el-col :span="6">
                   <el-form-item label="承运商:">
@@ -15,14 +25,14 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" v-if="false">
                   <el-form-item label="实际液厂:">
                     <el-select v-model="searchFilters.fluid" clearable filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="6" v-if="false">
                   <el-form-item label="站点:">
                     <el-select v-model="searchFilters.station" clearable filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.siteSelect" :key="key" :label="item.station_name" :value="item.id"></el-option>
@@ -91,14 +101,19 @@ export default {
         pageSize: 10,
       },
       activeName: 'mileage',
+      searchPostData: {}, //搜索参数
       searchFilters: {
-        fluid: '',
-        station: '',
+        // fluid: '',
+        // station: '',
         carriers: '',
-        field: '',
+        field: 'fluid_name',
         mile: this.$route.query.mile ? this.$route.query.mile : '',
       },
       selectData: {
+        fieldSelect: [
+          { id: 'fluid_name', value: '实际液厂' },
+          { id: 'station_name', value: '站点' },
+        ],
         carrierSelect: [{
           id: '',
           carrier_name: '全部'
@@ -151,21 +166,20 @@ export default {
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
     },
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        fluid: this.searchFilters.fluid,
-        station: this.searchFilters.station,
-        carriers: this.searchFilters.carriers,
-        mile: this.searchFilters.mile
+        // fluid: this.searchFilters.fluid,
+        // station: this.searchFilters.station,
+        carriers: this.searchPostData.carriers,
+        mile: this.searchPostData.mile
       };
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-
-      // postData[this.searchFilters.field] = this.searchFilters.keyword;
-
       this.pageLoading = true;
 
       this.$$http('getStandardMileList', postData).then((results) => {
