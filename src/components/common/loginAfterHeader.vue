@@ -49,6 +49,7 @@
   float: left;
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-left:50px;
+  min-width: 800px;
 }
 
 .usermenu {

@@ -254,7 +254,9 @@
     padding: 0 22px;
   }
 }
-
+.main-content{
+  min-width:850px;
+}
 </style>
 <template>
   <el-container>
@@ -296,7 +298,7 @@
       </el-aside>
       <el-main>
         <template>
-          <div style="margin-top: 61px;">
+          <div style="margin-top: 61px;" class="main-content">
             <router-view></router-view>
           </div>
         </template>
