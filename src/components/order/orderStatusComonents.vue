@@ -30,14 +30,18 @@
    background-color:white;
 }
 .tagerLable{
-  margin-left:10px;background-color:#4a9bf8;color:white;
+ background-color:#eef4fa;color:black;
  margin-top:3px;
-  .el-icon-close {
+}
+.ml-12{
+  margin-left:12px;
+}
+/deep/ .padding-clear-top .el-tag .el-icon-close{
+  margin-left: -5px;
+  color: black;
+  &:hover{
     color:white;
   }
-}
-/deep/ .el-tag .el-icon-close{
-  color:white;
 }
 .checkbox__label_text{
     line-height: 12px;
@@ -125,22 +129,12 @@
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder" :loading="exportLoading" v-if="status !== 'seven'">导出</el-button>
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="loadingAllDialog = true" v-if="status == 'seven'">导出</el-button>
     </div>
-    <div class="nav-tab-setting" style="position:relative;margin-top:65px;" >
-      <!-- <div style="position:absolute;left:285px;z-index:500;width:600px;height:40px;top:-5px;">
-        <el-row :gutter="3" style="height:100%;">
-          <el-col :key="tag.key" v-for="tag in tagArr" :span="5">
-            <el-tag  closable :disable-transitions="false" @close="handleClose(tag)" class="tagerLable" style="" size="mini"> 
-              {{tag.value}}
-            </el-tag>
-          </el-col>
-        </el-row>
-        
-      </div>
+    <div class="nav-tab-setting mt-25">
       <el-tabs v-model="status">
        <el-tab-pane  :name="status" v-loading="pageLoading">
         <div slot="label" style="height:36px">
           <span>状态:</span>
-          <el-select v-model="fifterNameArr" placeholder="请选择" size="mini"  class="selectFi" @change="secondMenuChange" multiple collapse-tags>
+          <el-select v-model="fifterNameArr" placeholder="请选择" size="small"  @change="secondMenuChange" multiple collapse-tags>
             <el-option
               v-for="item in statusList[status]"
               :label="item.value"
@@ -149,53 +143,20 @@
             </el-option>
           </el-select>
         </div>
-          <div class="tab-content padding-clear-top" >
+          <div class="tab-content padding-clear-top" style="padding-top:1px!important;">
+            <el-row :gutter="3" style="height:100%;margin-top:10px;">
+              <el-col>
+                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium"> 
+                {{tag.value}}
+                </el-tag>
+              </el-col>
+            </el-row>
             <keep-alive>
                 <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
-      </el-tabs> -->
-       <!-- <div style="position:absolute;left:285px;z-index:500;width:600px;height:40px;top:-5px;">
-        <el-row :gutter="3" style="height:100%;">
-          <el-col :key="tag.key" v-for="tag in tagArr" :span="5">
-            <el-tag  closable :disable-transitions="false" @close="handleClose(tag)" class="tagerLable" style="" size="mini"> 
-              {{tag.value}}
-            </el-tag>
-          </el-col>
-        </el-row>
-        
-      </div> -->
-       <div  v-loading="pageLoading">
-        
-          <div class="tab-content padding-clear-top" >
-            <div slot="label" style="height:36px;padding-top:1px;">
-          <!-- <span>状态:</span>
-          <el-select v-model="fifterNameArr" placeholder="请选择" size="mini"  class="selectFi" @change="secondMenuChange" multiple collapse-tags>
-            <el-option
-              v-for="item in statusList[status]"
-              :label="item.value"
-              :value="item.key"
-              >
-            </el-option>
-          </el-select> -->
-          <el-row type="flex" :gutter="15" style="margin-top:7px">
-            <el-col :span="2" style="line-height:28px;width: 5.33333%">状态：</el-col>
-            <el-col :span="22">
-              <!-- <el-checkbox-group v-model="checkboxGroup6" size="mini" >
-                <el-checkbox :label="item.value" border v-for="(item,index) in statusList[status]"></el-checkbox>
-              </el-checkbox-group> -->
-              <label v-for="(item,index) in statusList[status]" class="check_lable" v-bind:class="{'check_lable_active':fifterNameArr.indexOf(item.key)>-1}" @click="clickFifterSecond(item.key)">
-                <span class="checkbox__label_text">{{item.value}}</span><i v-if="fifterNameArr.indexOf(item.key)>-1" class="el-icon-check" style="font-size:12px;margin-left: 2px;"></i>
-              </label>
-            </el-col>
-          </el-row>
-        </div>
-            <keep-alive>
-                <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
-            </keep-alive>
-          </div>
-        </div>
+      </el-tabs>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if=" pageData.totalPage>1">
