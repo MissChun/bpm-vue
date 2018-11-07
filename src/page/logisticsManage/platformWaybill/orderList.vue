@@ -91,10 +91,10 @@ export default {
         'all_count':{}
       },
       defaultSecond:{
-        first:'all',
-        second:'all',
-        third:'all',
-        fourth:'all',
+        first:'driver_pending_confirmation',
+        second:'waiting_match',
+        third:'reach_site,in_settlement',
+        fourth:'canceling,modifying,abnormal',
         fifth:'all',
       },
       timeParam: [],

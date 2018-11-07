@@ -237,9 +237,9 @@
       </el-table-column>
       <el-table-column label="卸车信息" prop="" min-width="150" >
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" placement="bottom-start">
+          <el-tooltip class="item" effect="light" placement="bottom-start" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
             <div slot="content" style="width:250px;">
-              <el-row v-if="props.row.pre_business_order_list.length>0" v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
+              <el-row  v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
                 <el-col >站点:{{Uitem.station}}</el-col>
                 <el-col style="margin-top:10px;">需求液厂:{{Uitem.actual_fluid_name}}</el-col>
                 <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.plan_tonnage">{{Uitem.plan_tonnage}}吨</span></el-col>
@@ -251,10 +251,10 @@
                   <span v-else>无</span>
                 </el-col>
               </el-row>
-              <span v-else>无</span>
             </div>
             <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.pre_business_order_list"><span v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>1&&Uindex!=props.row.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
           </el-tooltip>
+            <span v-else>无</span>
         </template>
       </el-table-column>
        <el-table-column label="操作" prop="" fixed="right" width="100">

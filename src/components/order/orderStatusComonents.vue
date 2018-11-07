@@ -410,8 +410,9 @@ export default {
           document.body.appendChild(link);
           link.click()
         }
-      }).catch(function(res) {
+      }).catch((res)=> {
         this.exportLoading = false;
+        console.log(res);
       });
     },
     searchList: function(targetName) {
