@@ -146,7 +146,7 @@
           <div class="tab-content padding-clear-top" style="padding-top:1px!important;">
             <el-row :gutter="3" style="height:100%;margin-top:10px;">
               <el-col>
-                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium"> 
+                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium">
                 {{tag.value}}
                 </el-tag>
               </el-col>
@@ -178,6 +178,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'orderStatusComonents',
   components: {
@@ -316,7 +317,7 @@ export default {
     secondMenuChange:function(){
        var status = this.fifterName;
       //重新查询一次数据
-      
+
       //this.$emit("changeTabs", this.status);
       let middleTagArr=[];
       this.fifterNameArr.forEach(item=>{
@@ -384,7 +385,8 @@ export default {
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel = 'export'
       let url = 'http://bpm.hhtdlng.com';
-      axios.get('/api/v1/section-trips/', {
+      let domainUrl = getDomainUrl('http://');
+      axios.get(domainUrl+'/api/v1/section-trips/', {
         method: 'get',
         responseType: 'blob',
         headers: {
@@ -406,7 +408,7 @@ export default {
           let link = document.createElement('a');
           link.style.display = 'none';
           link.href = objectUrl;
-          link.setAttribute('download', '托运订单.xlsx');
+          link.setAttribute('download', '平台运单.xlsx');
           document.body.appendChild(link);
           link.click()
         }
