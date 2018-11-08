@@ -129,6 +129,7 @@
 <script>
 import refuseDialog from '@/components/businessManage/refuseDialog';
 import axios from 'axios';
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'tradeBusinessList',
   props: ['detailLink', 'isToExamine'],
@@ -451,6 +452,7 @@ export default {
           delete this.exportPostData[i];
         }
       }
+      let domainUrl = getDomainUrl('http://');
       this.exportPostData.export_excel = 'export';
       this.exportBtn = {
         text: '导出中',
@@ -458,7 +460,7 @@ export default {
         isDisabled: true,
       }
       let url = 'http://bpm.hhtdlng.com';
-      axios.get('/api/v1/business_order/', {
+      axios.get(domainUrl+'/api/v1/business_order/', {
         method: 'get',
         responseType: 'blob',
         headers: {

@@ -64,7 +64,8 @@
 </template>
 <script>
 import axios from 'axios';
-import indexjs from '@/api/index';
+// import indexjs from '@/api/index';
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'outsidePickSecondMenu',
   components: {
@@ -173,8 +174,9 @@ export default {
       sendData.page = this.pageData.currentPage;
       sendData.export_excel = 'export'
       this.exportLoading = true;
-      let url = "http://"+this.pbFunc.getDomainUrl();
-      axios.get(url+'/api/v1/outsale_order/', {
+      // let url = "http://"+this.pbFunc.getDomainUrl();
+      let domainUrl = getDomainUrl('http://');
+      axios.get(domainUrl+'/api/v1/outsale_order/', {
         method: 'get',
         responseType: 'blob',
         headers: {
@@ -252,7 +254,7 @@ export default {
       }).catch((err) => {
         vm.pageLoading = false;
       });
-     
+
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
