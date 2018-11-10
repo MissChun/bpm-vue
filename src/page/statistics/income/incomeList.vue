@@ -173,6 +173,10 @@ export default {
         param: 'fluid',
         width: ''
       }, {
+        title: '液厂名称',
+        param: 'fluid_name',
+        width: ''
+      }, {
         title: '实际到厂时间',
         param: 'active_time',
         width: '180'
@@ -357,7 +361,12 @@ export default {
       },{
         title:'实际液厂',
         id:79
-      },{
+      },
+      {
+        title:'液厂名称',
+        id:212
+      },
+      {
         title:'采购单价',
         id:91
       },{
