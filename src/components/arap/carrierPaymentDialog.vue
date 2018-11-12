@@ -67,7 +67,7 @@ export default {
         ],
         amount: [
           { required: true, message: '请输入付款金额', trigger: 'blur' },
-          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.accounts.match, message: this.$store.state.common.regular.accounts.tips, trigger: 'blur' },
         ],
         desc: [
           { min: 0, max: 50, message: '备注不超过50字', trigger: 'blur' }
