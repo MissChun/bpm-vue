@@ -27,6 +27,10 @@ export default {
   regular:{
     price:{
       match:/^(\+)?\d+(\.\d{1,2})?$/,
+      tips:'请输入数值正数且最多两位小数的数值'
+    },
+    accounts:{
+      match:/^(\-|\+)?\d+(\.\d{1,2})?$/,
       tips:'请输入数值且最多两位小数的数值'
     },
     variableRate:{
