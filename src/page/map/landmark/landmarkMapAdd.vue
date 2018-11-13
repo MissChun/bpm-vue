@@ -174,10 +174,17 @@ export default {
   methods: {
 
     initMap: function() {
-      this.map = new AMap.Map('map-container', { //初始化地图
+      //初始化地图
+      this.map = new AMap.Map('map-container', {
         zoom: 5
       });
       //初始简单标注SimpleMarker，简单信息窗口SimpleInfoWindow
+      this.initUi();
+      //初始化输入提示类，逆地理编码，地点查询类
+      this.initPlugin();
+    },
+
+    initUi: function() {
       AMapUI.loadUI(['overlay/SimpleInfoWindow', 'overlay/SimpleMarker', 'misc/MarkerList'], (SimpleInfoWindow, SimpleMarker, MarkerList) => {
         //初始化新增marker
         this.addMark = new SimpleMarker({
@@ -220,10 +227,13 @@ export default {
           })
         }
 
+        //初始化地标列表
         this.initLandmarkMarkList(MarkerList, SimpleMarker, SimpleInfoWindow);
 
       });
+    },
 
+    initPlugin: function() {
       /*初始化输入提示类，逆地理编码，地点查询类*/
       AMap.plugin(['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
 
@@ -250,7 +260,6 @@ export default {
         });
 
       });
-
     },
 
     //初始化地标列表标注列表
@@ -343,23 +352,6 @@ export default {
 
     getIconSrc: function(item) {
       let src = '';
-      /*lng加气站*/
-      if ((item.position_type && item.position_type === 'LNG') || (item.position_type && item.position_type === 'GAS_STATION')) {
-        if (item.async_status === 'ASYNCED') {
-          src = 'gas_1.png';
-        } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
-              src = 'gas_2.png'
-              break;
-            case 'TO_CONFIRM':
-              src = 'gas_3.png'
-              break;
-            default:
-              src = 'gas_4.png'
-          }
-        }
-      }
       /*卸货站*/
       if (item.position_type && item.position_type === 'DELIVER_POSITION') {
         if (item.async_status === 'ASYNCED') {
@@ -374,23 +366,6 @@ export default {
               break;
             default:
               src = 'l_4.png'
-          }
-        }
-      }
-      /*食宿停*/
-      if (item.position_type && item.position_type === 'REST_AREA') {
-        if (item.async_status === 'ASYNCED') {
-          src = 'parking_1.png';
-        } else {
-          switch (item.confirm_status) {
-            case 'SUCCESS':
-              src = 'parking_2.png'
-              break;
-            case 'TO_CONFIRM':
-              src = 'parking_3.png'
-              break;
-            default:
-              src = 'parking_4.png'
           }
         }
       }
@@ -511,21 +486,14 @@ export default {
       })
     },
     mapChangeSearch: function() {
-      //引起地图视图变化的有三种情况1、地图放大缩小。2、地图平移。3、浏览器窗口大小调整。
       let postData = {
         pagination: false,
-        // source_type: this.searchFilters.landmarkFrom,
-        // confirm_status: this.searchFilters.confirm_status,
-        // async_status: this.searchFilters.async_status,
-        // position_type: this.searchFilters.position_type,
+        confirm_status: 'SUCCESS',
         simplify: true,
       }
 
       let mapCenter = this.map.getCenter();
-      let bounds = this.map.getBounds();
-      let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
-      let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
-      let distance = Math.floor(lnglat1.distance(lnglat2));
+      let distance = 5000; //获取方圆5公里内的地标
 
       postData.longitude = mapCenter.lng;
       postData.latitude = mapCenter.lat;
@@ -534,10 +502,9 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.getLandmarkListAjax(postData).then(() => {
-        this.renderMarker();
+        this.markerList.render(this.landmarkList);
       });
     },
-
     //获取地标列表
     getLandmarkListAjax: function(postData) {
       return new Promise((resolve, reject) => {
@@ -546,7 +513,7 @@ export default {
             this.landmarkList = results.data.data.results;
             if (!this.landmarkList.length) {
               this.$message({
-                message: '无数据',
+                message: '附近无地标数据',
                 type: 'success'
               });
             }
@@ -562,29 +529,6 @@ export default {
 
       })
     },
-
-    //在地图上渲染MarkerList
-    renderMarker: function() {
-      if (this.overviewMarkerList) {
-        this.overviewMarkerList.clearData();
-      }
-
-      this.markerList.render(this.landmarkList);
-      this.map.plugin(["AMap.MarkerClusterer"], () => {
-        let allMakers = this.markerList.getAllMarkers();
-        if (this.cluster) {
-          //this.cluster.clearMarkers();
-          this.cluster.setMarkers(allMakers);
-        } else {
-          this.cluster = new AMap.MarkerClusterer(this.map, allMakers, {
-            minClusterSize: 3,
-            maxZoom: 17,
-          });
-        }
-      });
-    },
-
-
     //点击地图回调
     mapClickFun: function(e) {
       this.getAddress([e.lnglat.lng, e.lnglat.lat], true);
@@ -713,15 +657,19 @@ export default {
             reject(results);
           }
 
-          this.submitBtn.btnText = '保存并退出';
-          this.submitBtn.isLoading = false;
-          this.submitBtn.isDisabled = false;
+          this.submitBtn = {
+            btnText: '保存并退出',
+            isLoading: false,
+            isDisabled: false
+          }
 
         }).catch((err) => {
 
-          this.submitBtn.btnText = '保存并退出';
-          this.submitBtn.isLoading = false;
-          this.submitBtn.isDisabled = false;
+          this.submitBtn = {
+            btnText: '保存并退出',
+            isLoading: false,
+            isDisabled: false
+          }
 
           reject(results);
         })
