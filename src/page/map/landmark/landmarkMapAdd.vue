@@ -115,7 +115,7 @@ export default {
       placeSearch: '',
       geocoder: '',
       keyword: '',
-      zoomBoundary: 16,
+      zoomBoundary: 15,
       mapMessage: '',
       dialogVisible: false,
       formData: {
@@ -275,7 +275,19 @@ export default {
           return item.id;
         },
         getInfoWindow: (data, context, recycledInfoWindow) => {
-
+          let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
+          let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
+          if (recycledInfoWindow) {
+            recycledInfoWindow.setInfoTitle(infoTitleStr);
+            recycledInfoWindow.setInfoBody(infoBodyStr);
+            return recycledInfoWindow;
+          } else {
+            return new SimpleInfoWindow({
+              infoTitle: infoTitleStr,
+              infoBody: infoBodyStr,
+              offset: new AMap.Pixel(0, -37)
+            });
+          }
         },
         //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
         getMarker: (dataItem, context, recycledMarker) => {
@@ -319,7 +331,7 @@ export default {
 
       });
       //点击地标icon动态获取地标详情
-      this.markerList.on('selectedChanged', function(event, info) {
+      this.markerList.on('selectedChanged', (event, info) => {
         if (info.selected) {
           let infoWindow = this.markerList.getInfoWindow();
           let id = info.selected.data.id;
@@ -339,9 +351,11 @@ export default {
       let position_type = (data.position_type && data.position_type.verbose) ? data.position_type.verbose : '无';
       let confirm_status = (data.confirm_status && data.confirm_status.verbose) ? data.confirm_status.verbose : '无';
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let async_status = data.async_status ? '已同步' : '未同步';
+      let async_status = data.async_status.verbose || '未同步';
+      let address = data.address || '无';
+
       let infoBodyStr = '<div class="fs-13  md-5">地标类型：' + position_type +
-        '</div><div class="fs-13  md-5">地标位置：' + data.address +
+        '</div><div class="fs-13  md-5">地标位置：' + address +
         '</div><div class="fs-13  md-5">审核状态：' + confirm_status +
         '</div><div class="fs-13  md-5">上传来源：' + source_type +
         '</div><div class="fs-13">是否同步：' + async_status +
@@ -485,18 +499,18 @@ export default {
         isInitOverviewMarkerListFnc();
       })
     },
-    mapChangeSearch: function() {
+    mapChangeSearch: function(lnglat) {
       let postData = {
         pagination: false,
         confirm_status: 'SUCCESS',
         simplify: true,
       }
 
-      let mapCenter = this.map.getCenter();
+      //let mapCenter = this.map.getCenter();
       let distance = 5000; //获取方圆5公里内的地标
 
-      postData.longitude = mapCenter.lng;
-      postData.latitude = mapCenter.lat;
+      postData.longitude = lnglat[0];
+      postData.latitude = lnglat[1];
       postData.distance = distance;
 
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -558,7 +572,9 @@ export default {
 
           this.mapMessage = '';
 
-          this.mapChangeSearch();
+          if (!this.$route.query.id) {
+            this.mapChangeSearch(lnglat);
+          }
 
         } else {
           this.mapMessage = '无法获取地址';

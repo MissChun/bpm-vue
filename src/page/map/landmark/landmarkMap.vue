@@ -349,7 +349,7 @@ export default {
       let position_type = (data.position_type && data.position_type.verbose) ? data.position_type.verbose : '无';
       let confirm_status = (data.confirm_status && data.confirm_status.verbose) ? data.confirm_status.verbose : '无';
       let source_type = (data.source_type && data.source_type.verbose) ? data.source_type.verbose : '无';
-      let async_status = data.async_status ? '已同步' : '未同步';
+      let async_status = data.async_status.verbose || '未同步';
       let infoBodyStr = '<div class="fs-13  md-5">地标类型：' + position_type +
         '</div><div class="fs-13  md-5">地标位置：' + data.address +
         '</div><div class="fs-13  md-5">审核状态：' + confirm_status +
@@ -613,6 +613,7 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
+
   .map-loading {
     position: absolute;
     height: 50px;
@@ -620,6 +621,7 @@ export default {
     left: 0;
     top: 0;
   }
+
   .icon-description {
     padding: 10px;
     position: absolute;
@@ -635,17 +637,21 @@ export default {
       &:nth-child(2) {
         margin-left: 1px;
       }
+
       line-height: 24px;
       margin-bottom: 4px;
+
       img {
         width: 20px;
         height: 20px;
         margin-right: 5px;
       }
+
       span {
         line-height: 24px;
         font-size: 13px;
       }
+
       i {
         height: 18px;
         width: 18px;
@@ -653,15 +659,19 @@ export default {
         margin: 1px 6px 0 1px;
         font-size: 13px;
       }
+
       .bg-1 {
         background-color: #47d2d0;
       }
+
       .bg-2 {
         background-color: #4a9bf8;
       }
+
       .bg-3 {
         background-color: #f56c6c;
       }
+
       .bg-4 {
         background-color: #7c8fa0;
       }
