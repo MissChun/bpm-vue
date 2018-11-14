@@ -291,19 +291,19 @@ export default {
         param: 'check_quantity',
         width: '',
         isAdjust: true,
-        adjustParam: 'check_quantity_dvalue'
+        adjustParam: 'check_quantity_differ'
       }, {
         title: '结算价格',
         param: 'unit_price',
         width: '',
         isAdjust: true,
-        adjustParam: 'unit_price_dvalue'
+        adjustParam: 'unit_price_differ'
       }, {
         title: '卸车数',
         param: 'unload_nums',
         width: '',
         isAdjust: true,
-        adjustParam: 'unload_nums_dvalue'
+        adjustParam: 'unload_nums_differ'
       }, {
         title: '卸车待时金额',
         param: 'waiting_price',
@@ -681,19 +681,19 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
           for (let i in this.tableData.data.data) {
-            this.tableData.data.data[i].check_quantity_dvalue = '';
-            this.tableData.data.data[i].unit_price_dvalue = '';
-            this.tableData.data.data[i].unload_nums_dvalue = '';
-            this.tableData.data.data[i].waiting_charges_dvalue = '';
-            if (this.tableData.data.data[i].check_quantity_adjust) {
-              this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
-            }
-            if (this.tableData.data.data[i].unit_price_adjust) {
-              this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
-            }
-            if (this.tableData.data.data[i].unload_nums_adjust) {
-              this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums) * 1000) / 1000;
-            }
+            // this.tableData.data.data[i].check_quantity_dvalue = '';
+            // this.tableData.data.data[i].unit_price_dvalue = '';
+            // this.tableData.data.data[i].unload_nums_dvalue = '';
+            // this.tableData.data.data[i].waiting_charges_dvalue = '';
+            // if (this.tableData.data.data[i].check_quantity_adjust) {
+            //   this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
+            // }
+            // if (this.tableData.data.data[i].unit_price_adjust) {
+            //   this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
+            // }
+            // if (this.tableData.data.data[i].unload_nums_adjust) {
+            //   this.tableData.data.data[i].unload_nums_dvalue = (parseFloat(this.tableData.data.data[i].unload_nums_adjust) * 1000 - parseFloat(this.tableData.data.data[i].unload_nums) * 1000) / 1000;
+            // }
             // if (this.tableData.data.data[i].waiting_charges_adjust) {
             //   this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
             // }

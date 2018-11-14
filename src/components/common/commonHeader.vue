@@ -6,7 +6,7 @@
 </style>
 <template>
   <div v-if="type==='loginAfter'">
-    <login-after-header :users="users" :logout="logout"></login-after-header>
+    <login-after-header :users="users" :logout="logout" :is-collapse="isCollapse"></login-after-header>
   </div>
   <div v-else-if="type==='index'" class="index-header-He">
     <index-header :users="users" :logout="logout" :login-link="loginLink" :app-url="appUrl"></index-header>
@@ -25,7 +25,8 @@ export default {
   props: {
     type: String,
     appUrl: Object,
-    loginLink: Function
+    loginLink: Function,
+    isCollapse: Boolean
   },
   components: {
     loginAfterHeader: loginAfterHeader,

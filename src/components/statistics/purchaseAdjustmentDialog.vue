@@ -144,12 +144,14 @@ export default {
           this.differenceValue.active_tonnage = '';
         } else {
           this.differenceValue.active_tonnage = (parseFloat(this.formRules.active_tonnage_adjust) * 1000 - parseFloat(this.purchaseRow.active_tonnage) * 1000) / 1000;
+          this.differenceValue.active_tonnage = (this.differenceValue.active_tonnage).toFixed(3);
         }
       } else if (type === 'unitPrice') {
         if (isNaN(this.formRules.unit_price_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
           this.differenceValue.unit_price = '';
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.purchaseRow.unit_price) * 100) / 100;
+          this.differenceValue.unit_price = (this.differenceValue.unit_price).toFixed(2);
         }
       }
     },

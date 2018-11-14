@@ -96,7 +96,7 @@
       <el-table-column label="优惠后总额" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <div>
-            <div class="adjust" v-if="scope.row.discounts_sum_dvalue"><span>{{scope.row.discounts_sum_dvalue}}</span></div>
+            <div class="adjust" v-if="scope.row.discounts_sum_differ"><span>{{scope.row.discounts_sum_differ}}</span></div>
             <span>{{scope.row.discounts_sum_price}}</span>
           </div>
         </template>
@@ -233,13 +233,13 @@ export default {
         param: 'active_tonnage',
         width: '150',
         isAdjust: true,
-        adjustParam: 'active_tonnage_dvalue'
+        adjustParam: 'active_tonnage_differ'
       }, {
         title: '采购单价（元）',
         param: 'unit_price',
         width: '',
         isAdjust: true,
-        adjustParam: 'unit_price_dvalue'
+        adjustParam: 'unit_price_differ'
       }, {
         title: '卸货站',
         param: 'station',
@@ -465,19 +465,19 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
           for (let i in this.tableData.data.data) {
-            this.tableData.data.data[i].active_tonnage_dvalue = '';
-            this.tableData.data.data[i].unit_price_dvalue = '';
-            this.tableData.data.data[i].discounts_sum_dvalue = '';
-            if (this.tableData.data.data[i].active_tonnage_adjust) {
-              this.tableData.data.data[i].active_tonnage_dvalue = (parseFloat(this.tableData.data.data[i].active_tonnage_adjust) * 1000 - parseFloat(this.tableData.data.data[i].active_tonnage) * 1000) / 1000;
-            }
-            if (this.tableData.data.data[i].unit_price_adjust) {
-              this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
-            }
-            if (this.tableData.data.data[i].discounts_sum_adjust) {
-              this.tableData.data.data[i].discounts_sum_dvalue = (parseFloat(this.tableData.data.data[i].discounts_sum_adjust) * 100 - parseFloat(this.tableData.data.data[i].discounts_sum_price) * 100) / 100;
-              this.tableData.data.data[i].discounts_sum_dvalue = (this.tableData.data.data[i].discounts_sum_dvalue).toFixed(2);
-            }
+            // this.tableData.data.data[i].active_tonnage_dvalue = '';
+            // this.tableData.data.data[i].unit_price_dvalue = '';
+            // this.tableData.data.data[i].discounts_sum_dvalue = '';
+            // if (this.tableData.data.data[i].active_tonnage_adjust) {
+            //   this.tableData.data.data[i].active_tonnage_dvalue = (parseFloat(this.tableData.data.data[i].active_tonnage_adjust) * 1000 - parseFloat(this.tableData.data.data[i].active_tonnage) * 1000) / 1000;
+            // }
+            // if (this.tableData.data.data[i].unit_price_adjust) {
+            //   this.tableData.data.data[i].unit_price_dvalue = (parseFloat(this.tableData.data.data[i].unit_price_adjust) * 100 - parseFloat(this.tableData.data.data[i].unit_price) * 100) / 100;
+            // }
+            // if (this.tableData.data.data[i].discounts_sum_adjust) {
+            //   this.tableData.data.data[i].discounts_sum_dvalue = (parseFloat(this.tableData.data.data[i].discounts_sum_adjust) * 100 - parseFloat(this.tableData.data.data[i].discounts_sum_price) * 100) / 100;
+            //   this.tableData.data.data[i].discounts_sum_dvalue = (this.tableData.data.data[i].discounts_sum_dvalue).toFixed(2);
+            // }
             this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
           }
           this.tableDataObj = {

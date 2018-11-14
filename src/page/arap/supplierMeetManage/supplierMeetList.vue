@@ -45,7 +45,7 @@
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:150" :label="item.title">
               </el-table-column>
             </el-table>
             <no-data v-if="!pageLoading && !tableData.length"></no-data>
@@ -92,7 +92,7 @@ export default {
       thTableList: [{
         title: '供应商',
         param: 'supplier_name',
-        width: '200'
+        width: '260'
       }, {
         title: '期初余额',
         param: 'first_amount',

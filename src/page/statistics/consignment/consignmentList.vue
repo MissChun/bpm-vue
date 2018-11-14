@@ -85,7 +85,7 @@
       <el-table-column label="运费合计" align="center" width="100" fixed="right">
         <template slot-scope="scope">
           <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+            <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
             {{scope.row.waiting_charges}}
           </div>
         </template>
@@ -219,13 +219,13 @@ export default {
         param: 'check_quantity',
         width: '',
         isAdjust: true,
-        adjustParam: 'check_quantity_dvalue'
+        adjustParam: 'check_quantity_differ'
       }, {
         title: '标准里程',
         param: 'stand_mile',
         width: '',
         isAdjust: true,
-        adjustParam: 'stand_mile_dvalue'
+        adjustParam: 'stand_mile_differ'
       }, {
         title: '实际里程',
         param: 'actual_mile',
@@ -472,18 +472,18 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
           for (let i in this.tableData.data.data) {
-            this.tableData.data.data[i].check_quantity_dvalue = '';
-            this.tableData.data.data[i].stand_mile_dvalue = '';
-            this.tableData.data.data[i].waiting_charges_dvalue = '';
-            if (this.tableData.data.data[i].check_quantity_adjust) {
-              this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
-            }
-            if (this.tableData.data.data[i].stand_mile_adjust) {
-              this.tableData.data.data[i].stand_mile_dvalue = (parseFloat(this.tableData.data.data[i].stand_mile_adjust) * 10 - parseFloat(this.tableData.data.data[i].stand_mile) * 10) / 10;
-            }
-            if (this.tableData.data.data[i].waiting_charges_adjust) {
-              this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
-            }
+            // this.tableData.data.data[i].check_quantity_dvalue = '';
+            // this.tableData.data.data[i].stand_mile_dvalue = '';
+            // this.tableData.data.data[i].waiting_charges_dvalue = '';
+            // if (this.tableData.data.data[i].check_quantity_adjust) {
+            //   this.tableData.data.data[i].check_quantity_dvalue = (parseFloat(this.tableData.data.data[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.data[i].check_quantity) * 1000) / 1000;
+            // }
+            // if (this.tableData.data.data[i].stand_mile_adjust) {
+            //   this.tableData.data.data[i].stand_mile_dvalue = (parseFloat(this.tableData.data.data[i].stand_mile_adjust) * 10 - parseFloat(this.tableData.data.data[i].stand_mile) * 10) / 10;
+            // }
+            // if (this.tableData.data.data[i].waiting_charges_adjust) {
+            //   this.tableData.data.data[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.data[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.data[i].waiting_charges) * 100) / 100;
+            // }
           }
           this.tableDataObj = {
             len: this.tableData.data.data.length,
