@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
     domainUrl = `${prefix}testbpm.91lng.cn`;
   } else {
-    domainUrl = `${prefix}api.hhtdlng.com/bpm`; //本地开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }
@@ -143,15 +143,15 @@ const errorState = function(error) {
       default:
         errorMsg = `连接出错(${error.response.status})!`;
     }
-  }else if(error.code === 'ECONNABORTED'){
+  } else if (error.code === 'ECONNABORTED') {
     errorMsg = '接口超时，请检查网络再刷新重试!'
   } else {
     errorMsg = '连接服务器失败!'
   }
-  if(!axios.isCancel(error)){//如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
+  if (!axios.isCancel(error)) { //如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
     Message.error(errorMsg);
   }
-  if(error && error.response && error.response.status === 401){
+  if (error && error.response && error.response.status === 401) {
     router.push({ path: "/login" });
   }
 }

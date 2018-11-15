@@ -9,7 +9,7 @@
  */
 
 const api = {
-  deleteFreight:{
+  deleteFreight: {
     url: '/api/v1/freight-managements/:id/',
     method: 'delete',
     desc: '运费约定新增',
@@ -17,7 +17,7 @@ const api = {
 
     }
   },
-  updateFreight:{
+  updateFreight: {
     url: '/api/v1/freight-managements/:id/',
     method: 'put',
     desc: '运费约定新增',
@@ -25,7 +25,7 @@ const api = {
 
     }
   },
-  addFreight:{
+  addFreight: {
     url: '/api/v1/freight-managements/',
     method: 'POST',
     desc: '运费约定新增',
@@ -2690,6 +2690,14 @@ const api = {
     url: '/api/v1/outbuy_trip/:trip_id/',
     method: 'GET',
     desc: "分段详情",
+    param: {
+
+    }
+  },
+  getBuyPrice: {
+    url: '/api/v1/outsale_order/buy_price/',
+    method: 'GET',
+    desc: "外销单审核拿采购单价",
     param: {
 
     }
