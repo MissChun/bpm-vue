@@ -1,7 +1,4 @@
 <style type="text/css" scoped lang="less">
-/deep/ .total-data {
-  line-height: 40px;
-}
 
 </style>
 <template>
@@ -52,15 +49,20 @@
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="14" class="total-data" v-if="multipleSelection.length==0">
-            一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
+          <el-col :span="14" v-if="multipleSelection.length==0">
+            <div class="total-data">
+              一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
+            </div>
+
           </el-col>
 
-          <el-col :span="14" class="total-data" v-else>
-            当前选择{{chooseCount.num}}单，核算吨位{{chooseCount.check_quantity}}吨，销售总额{{chooseCount.sell_rental}}元，待时后总额{{chooseCount.waiting_charges}}元，共卸车{{chooseCount.unload_nums}}车
+          <el-col :span="14" v-else>
+            <div class="total-data">
+              当前选择{{chooseCount.num}}单，核算吨位{{chooseCount.check_quantity}}吨，销售总额{{chooseCount.sell_rental}}元，待时后总额{{chooseCount.waiting_charges}}元，共卸车{{chooseCount.unload_nums}}车
+            </div>
           </el-col>
-
           <el-col :span="10" class="text-right">
+            <el-button type="success" plain @click="batchReconciliation('reconciliation')">获取更新数据</el-button>
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportSaleData'"></export-button> -->

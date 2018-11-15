@@ -1,7 +1,4 @@
 <style type="text/css" scoped lang="less">
-/deep/ .total-data {
-  line-height: 40px;
-}
 
 </style>
 <template>
@@ -55,13 +52,19 @@
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="14" class="total-data" v-if="multipleSelection.length==0">
-            一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+          <el-col :span="14" v-if="multipleSelection.length==0">
+            <div class="total-data">
+              一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+            </div>
+
           </el-col>
-          <el-col :span="14" class="total-data" v-else>
-            当前选择{{chooseCount.num}}单，实际装车吨位{{chooseCount.active_tonna}}吨，采购总额{{chooseCount.unit_sum_pri}}元，采购优惠后总额{{chooseCount.discounts_sum_pri}}元
+          <el-col :span="14" v-else>
+            <div class="total-data">
+              当前选择{{chooseCount.num}}单，实际装车吨位{{chooseCount.active_tonna}}吨，采购总额{{chooseCount.unit_sum_pri}}元，采购优惠后总额{{chooseCount.discounts_sum_pri}}元
+            </div>
           </el-col>
           <el-col :span="10" class="text-right">
+            <el-button type="success" plain @click="batchReconciliation('reconciliation')">获取最新数据</el-button>
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->

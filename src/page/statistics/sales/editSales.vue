@@ -39,13 +39,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="业务类型:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_type_name"></el-input>
+                  <el-form-item label="业务类型:" prop="business_type">
+                    <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_type_name"></el-input> -->
+                    <el-select v-model="editMsgForm.business_type" filterable placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.businessTypeSelect" :key="item.id" :label="item.title" :value="item.id"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="客户简称:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input>
+                  <el-form-item label="客户简称:" prop="short_name">
+                    <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input> -->
+                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable  @change="getConsumer" @blur="selectId('short')" :remote-method="getConsumer" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.consumerSelect" :key="item.id" :label="item.short_name" :value="item.short_name"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -266,10 +272,16 @@ export default {
         reconciliation_time: '',
         remark_adjust: '',
         adjust_time: '',
-        business_type_name: ''
+        business_type: ''
       },
 
       rules: {
+        business_type:[
+          { required: true, message: '请选择业务类型', trigger: 'change' },
+        ],
+        short_name:[
+          { required: true, message: '请选择输入客户简称', trigger: 'blur' },
+        ],
         actual_quantity: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
@@ -310,11 +322,35 @@ export default {
         isDisabled: false,
       },
       detail: {},
-      customerList: []
+      customerList: [],
+      consumerLoading:false,
+      selectData:{
+        businessTypeSelect:[{
+          title:'批发',
+          id:0
+        },{
+          title:'零售',
+          id:1
+        },{
+          title:'点供',
+          id:2
+        },{
+          title:'外销',
+          id:3
+        },{
+          title:'外采',
+          id:4
+        },{
+          title:'承运',
+          id:5
+        }],
+        consumerSelect:[],//客户列表
+      }
     }
   },
   created() {
     this.numberReg = /^[0-9]+(.[0-9]{0,3})?$/;
+    this.getConsumer();
     if (this.id) {
       this.getDetail();
     }
@@ -326,6 +362,35 @@ export default {
       // } else {
       this.$router.push({ path: "/statistics/sales/salesList" });
       // }
+    },
+    shortNameSearch(query){
+      this.getConsumer('short',query)
+    },
+    consumerNameSearch(query){
+      this.getConsumer('consumer',query)
+    },
+    // 供应商列表
+    getConsumer: function(type,query) {
+      let postData = {
+        page: 1,
+        page_size:100,
+      }
+      if(query){
+        if(type==='consumer'){
+          postData.consumer_name = query;
+        }else{
+          postData.short_name = query;
+        }
+      }
+      this.consumerLoading = true;
+      this.$$http('searchCustomerList', postData).then((results) => {
+        this.consumerLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.selectData.consumerSelect = results.data.data.data;
+        }
+      }).catch((err) => {
+        this.consumerLoading = false;
+      })
     },
     getDetail: function() {
       this.$$http('getSalesStatisticsDetail', { id: this.id }).then((results) => {
@@ -368,7 +433,7 @@ export default {
             remark_adjust: this.detail.remark_adjust,
             adjust_time: this.detail.adjust_time,
             waybill_status: this.detail.waybill_status.verbose, //运单状态
-            business_type_name: this.detail.business_type_name
+            business_type: this.detail.business_type.key
           }
         }
       })
