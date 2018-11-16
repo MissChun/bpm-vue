@@ -34,11 +34,20 @@
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
+
             <el-form-item align="right" label="计划采购时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
+
+          <el-col :span="8" class="searchSection">
+            <el-form-item align="right" label="装车完成时间:" label-width="105px">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.actual_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+
         </el-row>
       </el-form>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
@@ -113,7 +122,8 @@ export default {
         'all_count': [{ key: 'all', value: '全部', countLable: "全部" }],
       },
       timeParam: {
-        load_plan_time: []
+        load_plan_time: [],
+        actual_time:[]
       },
       selectData: {
         fieldSelect: [
@@ -167,6 +177,11 @@ export default {
         sendData.plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.plan_time_end = this.timeParam.load_plan_time[1];
       }
+      if (this.timeParam.actual_time instanceof Array && this.timeParam.actual_time.length > 0) {
+        sendData.actual_time_start = this.timeParam.actual_time[0]; //计划装车
+        sendData.actual_time_end= this.timeParam.actual_time[1];
+      }
+      
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
