@@ -64,7 +64,7 @@
             </div>
           </el-col>
           <el-col :span="10" class="text-right">
-            <el-button type="success" plain @click="batchReconciliation('reconciliation')">获取最新数据</el-button>
+            <el-button type="success" plain @click="updatePostData">获取最新数据</el-button>
             <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
             <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->
@@ -125,14 +125,17 @@
     </div>
   </div>
   <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
+  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="''" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data>
   </div>
 </template>
 <script>
 import purchaseAdjustmentDialog from '@/components/statistics/purchaseAdjustmentDialog';
+import updateNewData from '@/components/statistics/updateNewData';
 export default {
   name: 'purchaseList',
   components: {
-    purchaseAdjustmentDialog: purchaseAdjustmentDialog
+    purchaseAdjustmentDialog: purchaseAdjustmentDialog,
+    updateNewData:updateNewData
   },
   computed: {
     // statusTabList(){
@@ -143,6 +146,7 @@ export default {
   data() {
     return {
       pageLoading: false,
+      updateDataIsShow:false,//更新数据弹窗
       pageData: {
         currentPage: 1,
         totalCount: '',
@@ -298,6 +302,17 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
+      filterParam:[
+        { id: 'waybill', value: '运单号' },
+        { id: 'supplier', value: '供应商' },
+        { id: 'plate_number', value: '车号' },
+        { id: 'fluid', value: '液厂' },
+        { id: 'waybill_status', value: '运单状态' },
+        { id: 'is_reconciliation', value: '是否对账' },
+        { id: 'is_invoice', value: '是否开票' },
+        { id: 'work_end_time_start', value: '装车完成时间' },
+      ],//筛选参数
+      updateData:{}//更新数据
     }
   },
   methods: {
@@ -305,6 +320,14 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    // 获取最新数据更新
+    updateNewData(){
+
+    },
+    // 更新数据
+    updatePostData(){
+      this.updateDataIsShow = true;
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -354,6 +377,12 @@ export default {
         this.getList();
       }
 
+    },
+    updateCloseDialog(isSave){
+      this.updateDataIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
     },
     // 调账
     accountAdjust(row) {
@@ -461,6 +490,7 @@ export default {
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
+      this.updateData = postData;
       this.pageLoading = true;
       this.exportPostData = postData;
       this.$$http('getPurchaseStatisticsList', postData).then((results) => {
@@ -481,7 +511,7 @@ export default {
             //   this.tableData.data.data[i].discounts_sum_dvalue = (parseFloat(this.tableData.data.data[i].discounts_sum_adjust) * 100 - parseFloat(this.tableData.data.data[i].discounts_sum_price) * 100) / 100;
             //   this.tableData.data.data[i].discounts_sum_dvalue = (this.tableData.data.data[i].discounts_sum_dvalue).toFixed(2);
             // }
-            this.tableData.data.data[i].station = this.tableData.data.data[i].station.replace(',', '<br/>');
+            this.tableData.data.data[i].station = (this.tableData.data.data[i].station.join(',')).replace(',', '<br/>');
           }
           this.tableDataObj = {
             len: this.tableData.data.data.length,

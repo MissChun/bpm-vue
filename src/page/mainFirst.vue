@@ -275,6 +275,9 @@
 .main-content{
   min-width:850px;
 }
+.el-main {
+  overflow: hidden;
+}
 .max-side-width{
   width:229px!important;
   transition: width 0.1s;

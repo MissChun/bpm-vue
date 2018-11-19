@@ -76,7 +76,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="卸货站:">
-                    <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.station"></el-input>
+                    <el-input placeholder="暂无" type="text" v-model="editMsgForm.station"  :disabled="isDisabled"></el-input>
                     <!-- <el-select v-model="editMsgForm.station" :loading="stationLoading" filterable clearable multiple @blur="selectId('station')"  placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.stationSelect" :key="item.id" :label="item.station_name" :value="item.station_name"></el-option>
                     </el-select> -->
@@ -187,7 +187,7 @@ export default {
         discount_price: '',
         unit_sum_price: '',
         discounts_sum_price: '',
-        station: [],
+        station: '',
         // station_id:[],
         is_invoice: '',
         is_reconciliation: '',
@@ -372,7 +372,7 @@ export default {
             discount_price: this.detail.discount_price,
             unit_sum_price: this.detail.unit_sum_price,
             discounts_sum_price: this.detail.discounts_sum_price,
-            station: this.detail.station,
+            station: (this.detail.station).join(','),
             // station_id: this.detail.station_id,
             is_invoice: this.detail.is_invoice.verbose,
             is_reconciliation: this.detail.is_reconciliation.verbose,
@@ -422,7 +422,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['supplier','supplier_id','fluid','fluid_id','station','station_id','active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
+      let keyArray = ['supplier','supplier_id','fluid','fluid_id','active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
