@@ -9,6 +9,22 @@
  */
 
 const api = {
+  exportPayerReceivable: {
+    url: '/export/payer-p/',
+    method: 'get',
+    desc: '导出付款方回款',
+    param: {
+
+    }
+  },
+  exportCustomerReceivable: {
+    url: '/export/payer-c/',
+    method: 'get',
+    desc: '导出付款方回款',
+    param: {
+
+    }
+  },
   deleteFreight: {
     url: '/api/v1/freight-managements/:id/',
     method: 'delete',

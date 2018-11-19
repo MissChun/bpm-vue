@@ -202,10 +202,10 @@ export default {
 
       rules: {
         supplier:[
-          { required: true, message: '请选择供应商', trigger: 'blur' },
+          { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         fluid:[
-          { required: true, message: '请选择液厂名称', trigger: 'blur' },
+          { required: true, message: '请选择液厂名称', trigger: 'change' },
         ],
         // station:[
         //   { required: true, message: '请选择卸货站', trigger: 'change' },
