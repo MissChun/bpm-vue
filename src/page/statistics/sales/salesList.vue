@@ -23,24 +23,34 @@
                 <!-- <el-date-picker v-model="leaveTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="是否对账:">
                 <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="5">
+            <el-col :span="6">
               <el-form-item label="是否开票:">
                 <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
+
+          </el-row>
+          <el-row :gutter="10">
             <el-col :span="6">
               <el-form-item label="运单状态:">
                 <el-select v-model="searchFilters.waybill_status" filterable @change="startSearch" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.waybillStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="客户是否确认:" label-width="100px">
+                <el-select v-model="searchFilters.consumer_confirm" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.consumerConfirmSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -85,7 +95,7 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type'">{{scope.row[item.param].verbose}}</span>
+                <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type' || item.param === 'consumer_confirm'">{{scope.row[item.param].verbose}}</span>
                 <span v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
               <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
@@ -172,6 +182,7 @@ export default {
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
         waybill_status: '',
+        consumer_confirm:'',
         field: 'short_name',
       },
       exportType: {
@@ -202,6 +213,12 @@ export default {
           { id: '', value: '全部' },
           { id: 'is_loading', value: '已卸货待结算' },
           { id: 'is_unload', value: '结算完成' }
+        ],
+        consumerConfirmSelect: [
+          { id: '', value: '全部' },
+          { id: 'yes', value: '客户已确认' },
+          { id: 'no', value: '客户吨位有误' },
+          { id: 'wait_confirm', value: '客户待确认' },
         ],
       },
       thTableList: [{
@@ -325,6 +342,10 @@ export default {
       }, {
         title: '销售总额',
         param: 'sell_rental',
+        width: ''
+      },{
+        title: '客户是否确认',
+        param: 'consumer_confirm',
         width: ''
       }, {
         title: '备注',
@@ -667,7 +688,8 @@ export default {
         page_size: this.pageData.pageSize,
         is_reconciliation: this.searchPostData.is_reconciliation,
         is_invoice: this.searchPostData.is_invoice,
-        waybill_status: this.searchPostData.waybill_status
+        waybill_status: this.searchPostData.waybill_status,
+        consumer_confirm:this.searchPostData.consumer_confirm
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];

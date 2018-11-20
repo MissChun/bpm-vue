@@ -38,6 +38,7 @@ export default {
       for(let i in this.filterParam){
         for(let j in this.updateData){
           if(this.filterParam[i].id === j){
+            if(this.filterParam[i].id === 'waybill' || this.filterParam[i].id === 'supplier'|| this.filterParam[i].id === 'plate_number'|| this.filterParam[i].id === 'fluid')
             this.showData.push({
               title:this.filterParam[i].value,
               value:this.updateData[j]
