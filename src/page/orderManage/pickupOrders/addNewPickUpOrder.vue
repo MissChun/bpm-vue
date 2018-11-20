@@ -58,6 +58,12 @@
   margin-left:15px;
   color:#F56C6C;
 }
+.redFont{
+  color:#F56C6C;
+}
+.blueFont{
+  color:#409EFF;
+}
 </style>
 <template>
   <div class="detail-main">
@@ -85,7 +91,11 @@
         <div>
           <el-form class="addPickOrder" label-width="120px" :model="pickOrderParam" status-icon :rules="rules" ref="addPickOrderForm">
             <div class="detail-form-title text-center">提货计划详情</div>
-            <div class="detail-form">
+            <div class="detail-form" style="position:relative">
+              <div v-if="pickOrderParam.supplier" style="position:absolute;left:120px;top:-20px;font-size:13px;">
+                <span v-if="balance>=0" class="blueFont">供应商余额:{{balance}}</span>
+                <span v-if="balance<0" class="redFont">供应商余额:{{balance}}</span>
+              </div>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="供应商名称:" prop="supplier">
@@ -203,7 +213,7 @@
                   <el-form-item label="承运商:" v-loading="loadingArr.carriersLoading" prop="carriers">
                     <el-col :span="13" v-if="pickOrderParam.consignment_type=='own'||pickOrderParam.consignment_type=='together'" :offset="1">
                       <el-form-item label="自有:" label-width="60px">
-                        <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">
+                        <el-select v-model="carriersParam.ownCarriers" filterable placeholder="请选择" @change="changeBindText('carriers','own')">
                           <el-option v-for="(item,key) in selectData.carriersOwnList" :key="item.id" :label="item.carrier_name" :value="item.id">
                           </el-option>
                         </el-select>
@@ -211,7 +221,7 @@
                     </el-col>
                     <el-col :span="13" :offset="1" v-if="pickOrderParam.consignment_type=='external'||pickOrderParam.consignment_type=='together'">
                       <el-form-item label="外部:" label-width="60px" prop="carriers">
-                        <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" @change="changeBindText('carriers')">
+                        <el-select v-model="carriersParam.extendCarriers" filterable placeholder="请选择" @change="changeBindText('carriers','external')">
                           <el-option v-for="(item,key) in selectData.carriersOutList" :key="item.id" :label="item.carrier_name" :value="item.id">
                           </el-option>
                         </el-select>
@@ -269,7 +279,7 @@
           <el-col :span="18">
             <div class="label-list">
               <label>指定承运:</label>
-              <div class="detail-form-item" v-html="pbFunc.dealNullData(bindText.carriersName)"></div>
+              <div class="detail-form-item" v-html="pbFunc.dealNullData(pickOrderParam.consignment_type=='own'? bindText.owncarriersName:bindText.outcarriersName)"></div>
             </div>
           </el-col>
         </el-row>
@@ -383,7 +393,8 @@ export default {
       ],
       bindText: {
         fluidName: '',
-        carriersName: ''
+        outcarriersName: '',
+        owncarriersName: ''
       },
       carriersParam: {
         ownCarriers: "",
@@ -443,7 +454,8 @@ export default {
       opearIndex:0,
       saveInfo:[],
       renderUnloadArr:[],
-      saveNum:""
+      saveNum:"",
+      balance:0
     };
   },
   computed: {
@@ -592,8 +604,25 @@ export default {
     },
     searchList: function() {
       this.getFulid(this.pickOrderParam.supplier);
+      this.searchBalance();
     },
-    changeBindText: function(type) {
+    searchBalance:function(){
+      let sendData={};
+      var newDate=this.pbFunc.getNowTime();
+      sendData.active_time_start=newDate;
+      sendData.active_time_end=newDate;
+      this.selectData.supplierList.forEach(item=>{
+        if(item.id==this.pickOrderParam.supplier){
+          sendData.supplier_name=item.supplier_name;
+        }
+      })
+      this.$$http('getSupplierMeetList', sendData).then((results) => {
+        if(results.data&&results.data.code==0){
+          this.balance=this.results.data.data.data&&this.results.data.data.data[0]&&this.results.data.data.data[0].last_amount;
+        }
+      });
+    },
+    changeBindText: function(type,carriersType) {
       if (type == 'fluidName') {
         //液厂变化
         var fluidId = this.pickOrderParam.fluid;
@@ -604,16 +633,19 @@ export default {
         }
       } else {
         //承运商变化
-        var ownCarriersId = this.carriersParam.ownCarriers;
-        var extendCarriersId = this.carriersParam.extendCarriers;
-        for (let j in this.selectData.carriersOwnList) {
-          if (this.selectData.carriersOwnList[j].id == ownCarriersId) {
-            this.bindText.carriersName = this.selectData.carriersOwnList[j].carrier_name;
+        if(carriersType){
+          var ownCarriersId = this.carriersParam.ownCarriers;
+          var extendCarriersId = this.carriersParam.extendCarriers;
+
+          for (let j in this.selectData.carriersOwnList) {
+            if (this.selectData.carriersOwnList[j].id == ownCarriersId) {
+              this.bindText.owncarriersName = this.selectData.carriersOwnList[j].carrier_name;
+            }
           }
-        }
-        for (let o in this.selectData.carriersOutList) {
-          if (this.selectData.carriersOutList[o].id == extendCarriersId) {
-            this.bindText.carriersName = this.selectData.carriersOutList[o].carrier_name;
+          for (let o in this.selectData.carriersOutList) {
+            if (this.selectData.carriersOutList[o].id == extendCarriersId) {
+              this.bindText.outcarriersName = this.selectData.carriersOutList[o].carrier_name;
+            }
           }
         }
       }

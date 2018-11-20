@@ -153,7 +153,13 @@ export default {
         title: '卸车数',
         param: 'unload_nums_sum',
         width: ''
-      }, {
+      }, 
+      {
+        title: '信用金额',
+        param: 'credit_limit',
+        width: ''
+      }, 
+      {
         title: '业务员',
         param: 'sale_man',
         width: ''

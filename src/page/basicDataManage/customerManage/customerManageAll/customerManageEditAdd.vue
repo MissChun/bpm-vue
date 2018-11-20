@@ -69,6 +69,11 @@
                     <el-input placeholder="请输入" type="num" v-model="customerFrom.consumer_address"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="信用额度:" prop="credit_limit">
+                    <el-input placeholder="请输入" type="num" v-model="customerFrom.credit_limit"></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -212,7 +217,13 @@ export default {
         callback(new Error("由18位数字和大写字母组成"));
       }
     }
-
+    var needNumVa = (rule, value, callback) => {
+      if (!((value+"").match(/^[0-9]\d{0,8}$/)) || value == '0') {
+        callback(new Error("只能是正整数"));
+      } else {
+        callback();
+      }
+    };
     return {
       editable: false,
       editStatus: false,
@@ -220,7 +231,7 @@ export default {
       editable: false,
       pageLoading: false,
       saleManPading: false,
-      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address'],
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address','credit_limit'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
@@ -229,7 +240,8 @@ export default {
         contract_start_date:"",
         contract_end_date:"",
         social_credit_codeVa:"",
-        kui_tons_standard:200
+        kui_tons_standard:200,
+        credit_limit:"",
       },
 
       rules: {
@@ -275,6 +287,9 @@ export default {
         ],
         contract_end_date: [
           { validator: endVa, trigger: 'blur' },
+        ],
+        credit_limit:[
+
         ]
       }
     }

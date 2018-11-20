@@ -352,10 +352,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="采购单价:" label-width="120px" prop="buy_price">
-          <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元</span>
+          <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元/吨</span>
         </el-form-item>
         <el-form-item label="采购优惠:" label-width="120px" prop="buy_discount" >
-          <el-input placeholder="请输入" type="text" v-model="passParam.buy_discount" style="width:100px;"></el-input><span style="margin-left:5px" v-loading="loadingArr.buyDiscountLoading">元</span>
+          <el-input placeholder="请输入" type="text" v-model="passParam.buy_discount" style="width:100px;"></el-input><span style="margin-left:5px" v-loading="loadingArr.buyDiscountLoading">元/吨</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
@@ -406,10 +406,10 @@ export default {
       },
       rules: {
         actual_fluid:[
-          { required: true, message: '请选择供应商', trigger: 'blur' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
         supplier_id:[
-          { required: true, message: '请选择液厂', trigger: 'blur' },
+          { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         buy_price:[
           { required: true, message: '采购价必填', trigger: 'blur' },
@@ -497,6 +497,7 @@ export default {
       this.refuseParam={approval_mark:"",action:"denied",order_id:""};
       this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
       this.choosedFluidId = '';
+      this.selectData.fluidList=[];
     },
     bindFluidName:function(){
       var sendParam={};

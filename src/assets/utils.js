@@ -23,7 +23,7 @@ export const clearLocalData = CACHE.clearLocalData
 export const cacheKey = CACHE.cacheKey
 export const setLocalDataWithTime = CACHE.setLocalDataWithTime
 export const getLocalDataWithTime = CACHE.getLocalDataWithTime
-export const getDomainUrl=CACHE.getDomainUrl
+export const getDomainUrl = CACHE.getDomainUrl
 
 /* 数组对象相关 */
 export const isArray = ARROBJ.isArray
@@ -69,7 +69,7 @@ export const toPinyinObjArr = STR.toPinyinObjArr
 
 /* 日期相关 */
 export const getDateDetail = DATE.getDateDetail
-
+export const getNowTime = DATE.getNowTime
 export default {
 
 }

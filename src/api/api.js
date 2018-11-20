@@ -2717,6 +2717,30 @@ const api = {
     param: {
 
     }
+  },
+  checkUnloadTonnage: {
+    url: '/api/v1/waybill-business/check-unload-tonnage/',
+    method: 'GET',
+    desc: "装车完成分段结束判断提醒",
+    param: {
+
+    }
+  },
+  checkOrderCredit: {
+    url: '/api/v1/waybill-business/check-order-credit/',
+    method: 'GET',
+    desc: "分段获取业务单信用额度",
+    param: {
+
+    }
+  },
+  getAssociatedNotUnload: {
+    url: '/api/v1/associated-notunload/',
+    method: 'GET',
+    desc: "概览-已关联未卸车",
+    param: {
+
+    }
   }
   /*--------*/
 }
