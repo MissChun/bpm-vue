@@ -47,7 +47,8 @@ export default {
       typeArr:{
         'associated_not_unload':{
           title:"库存详情页",
-          searchUrl:"getAssociatedNotUnload"
+          searchUrl:"getAssociatedNotUnload",
+          exportUrl:"associated-notunload/",
         }
       },
       pageData: {
@@ -72,11 +73,9 @@ export default {
       let sendparam=this.pbFunc.deepcopy(this.saveSearchParam);
       sendparam.export='yes';
       this.exportLoading=true;
-
-
       let url = 'http://bpm.hhtdlng.com';
       let domainUrl = getDomainUrl('http://');
-      axios.get(domainUrl+"/"+this.typeArr[this.searchForm.type].searchUrl, {
+      axios.get(domainUrl+"/api/v1/"+this.typeArr[this.searchForm.type].exportUrl, {
         method: 'get',
         responseType: 'blob',
         headers: {

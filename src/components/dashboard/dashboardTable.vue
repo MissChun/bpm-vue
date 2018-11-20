@@ -11,7 +11,7 @@
       :data="dashboardTableData"  max-height="250"  size="mini" stripe>
       <el-table-column v-for="(item,key) in renderTableData" :key="key"   align="center" :label="item.title" >
         <template slot-scope="scope">
-          <span @click="operation(item,scope.row)" v-bind:class="{canClick:item.goTopage}">{{scope.row[item.param]}}</span>
+          <span @click="operation(item,scope.row)" v-bind:class="{canClick:item.goTopage||item.showDetalis}">{{scope.row[item.param]}}</span>
         </template>
         </el-table-column>
     </el-table>

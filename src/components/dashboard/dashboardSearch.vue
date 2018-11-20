@@ -60,7 +60,7 @@ export default {
       searchInitData:{
         'associated_not_unload':{
           bindModel:[{
-                fluid_id:{type:"select",value:"",selectNeedQuery:'getFulid',selectSeaech:{need_all:true},selectId:"fluid_select",title:"实际液厂",colWidth:6,selectKV:{key:"id",value:"fluid_name"}},
+                fluid_id:{type:"select",value:"",selectNeedQuery:'getFluidList',selectSeaech:{need_all:true},selectId:"fluid_select",title:"实际液厂",colWidth:6,selectKV:{key:"id",value:"actual_fluid_name"}},
                 work_end_time:{type:"datetimerange",value:[],title:"时间搜索",colWidth:10},
                 consignment_type:{type:"select",value:"",selectId:"consignment_select",title:"承运类型",selectKV:{key:"type",value:"text"},colWidth:6}
               }
