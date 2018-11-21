@@ -10,7 +10,7 @@
             <el-col :span="12">
               <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                 <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
                 <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
               </el-input>
@@ -26,28 +26,25 @@
             <el-col :span="6">
               <el-form-item label="运单状态:">
                 <el-select v-model="searchFilters.waybill_status" filterable @change="startSearch" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.waybillStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.waybillStatus.data" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="是否对账:">
                 <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.isReconciliations.data" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="5">
               <el-form-item label="是否开票:">
                 <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.isInvoice.data" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <!--    <el-row :gutter="10">
-
-          </el-row> -->
         </el-form>
       </div>
       <div class="operation-btn">
@@ -125,7 +122,7 @@
     </div>
   </div>
   <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
-  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="''" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data>
+  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="exportPostData"></update-new-data>
   </div>
 </template>
 <script>
@@ -186,112 +183,114 @@ export default {
         title: '部门审批中',
         key: 'create_department_check',
       }],
-      selectData: {
-        isReconciliationsSelect: [
-          { id: '', value: '全部' },
-          { id: 'unfinished', value: '未对账' },
-          { id: 'finished', value: '已对账' }
-        ],
-        waybillStatusSelect: [
-          { id: '', value: '全部' },
-          { id: 'is_loading', value: '已装车待卸货' },
-          { id: 'is_unload', value: '卸货完成' }
-        ],
-        isInvoiceSelect: [
-          { id: '', value: '全部' },
-          { id: 'yes', value: '已开票' },
-          { id: 'no', value: '未开票' }
-        ],
-        fieldSelect: [
-          { id: 'waybill', value: '运单号' },
-          { id: 'supplier', value: '供应商' },
-          { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '液厂' },
-        ]
-      },
-      thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '供应商',
-        param: 'supplier',
-        width: '200',
-        isAdjust: true,
-        adjustParam: 'supplier_adjust'
-      }, {
-        title: '液厂名称',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '实际到厂时间',
-        param: 'active_time',
-        width: '200'
-      }, {
-        title: '装车完成时间',
-        param: 'work_end_time',
-        width: '200'
-      }, {
-        title: '实际装车吨位（吨）',
-        param: 'active_tonnage',
-        width: '150',
-        isAdjust: true,
-        adjustParam: 'active_tonnage_differ'
-      }, {
-        title: '采购单价（元）',
-        param: 'unit_price',
-        width: '',
-        isAdjust: true,
-        adjustParam: 'unit_price_differ'
-      }, {
-        title: '卸货站',
-        param: 'station',
-        width: ''
-      }, {
-        title: '业务优惠（元）',
-        param: 'business_price',
-        width: ''
-      }, {
-        title: '采购优惠（元）',
-        param: 'discount_price',
-        width: ''
-      }, {
-        title: '运单状态',
-        param: 'waybill_status',
-        width: ''
-      }, {
-        title: '是否对账',
-        param: 'is_reconciliation',
-        width: ''
-      }, {
-        title: '是否开票',
-        param: 'is_invoice',
-        width: ''
-      }, {
-        title: '备注',
-        param: 'remark',
-        width: '170'
-      }, {
-        title: '对账时间',
-        param: 'reconciliation_time',
-        width: '180'
-      }, {
-        title: '调账备注',
-        param: 'remark_adjust',
-        width: '170'
-      }, {
-        title: '调账时间',
-        param: 'adjust_time',
-        width: '180'
-      }, {
-        title: '开票时间',
-        param: 'invoice_time',
-        width: '180'
-      }],
+      // selectData: {
+      //   isReconciliationsSelect: [
+      //     { id: '', value: '全部' },
+      //     { id: 'unfinished', value: '未对账' },
+      //     { id: 'finished', value: '已对账' }
+      //   ],
+      //   waybillStatusSelect: [
+      //     { id: '', value: '全部' },
+      //     { id: 'is_loading', value: '已装车待卸货' },
+      //     { id: 'is_unload', value: '卸货完成' }
+      //   ],
+      //   isInvoiceSelect: [
+      //     { id: '', value: '全部' },
+      //     { id: 'yes', value: '已开票' },
+      //     { id: 'no', value: '未开票' }
+      //   ],
+      //   fieldSelect: [
+      //     { id: 'waybill', value: '运单号' },
+      //     { id: 'supplier', value: '供应商' },
+      //     { id: 'plate_number', value: '车号' },
+      //     { id: 'fluid', value: '液厂' },
+      //   ]
+      // },
+      thTableList: [
+        {
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        }, {
+          title: '供应商',
+          param: 'supplier',
+          width: '200',
+          isAdjust: true,
+          adjustParam: 'supplier_adjust'
+        }, {
+          title: '液厂名称',
+          param: 'fluid',
+          width: ''
+        }, {
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        }, {
+          title: '实际到厂时间',
+          param: 'active_time',
+          width: '200'
+        }, {
+          title: '装车完成时间',
+          param: 'work_end_time',
+          width: '200'
+        }, {
+          title: '实际装车吨位（吨）',
+          param: 'active_tonnage',
+          width: '150',
+          isAdjust: true,
+          adjustParam: 'active_tonnage_differ'
+        }, {
+          title: '采购单价（元）',
+          param: 'unit_price',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'unit_price_differ'
+        }, {
+          title: '卸货站',
+          param: 'station',
+          width: ''
+        }, {
+          title: '业务优惠（元）',
+          param: 'business_price',
+          width: ''
+        }, {
+          title: '采购优惠（元）',
+          param: 'discount_price',
+          width: ''
+        }, {
+          title: '运单状态',
+          param: 'waybill_status',
+          width: ''
+        }, {
+          title: '是否对账',
+          param: 'is_reconciliation',
+          width: ''
+        }, {
+          title: '是否开票',
+          param: 'is_invoice',
+          width: ''
+        }, {
+          title: '备注',
+          param: 'remark',
+          width: '170'
+        }, {
+          title: '对账时间',
+          param: 'reconciliation_time',
+          width: '180'
+        }, {
+          title: '调账备注',
+          param: 'remark_adjust',
+          width: '170'
+        }, {
+          title: '调账时间',
+          param: 'adjust_time',
+          width: '180'
+        }, {
+          title: '开票时间',
+          param: 'invoice_time',
+          width: '180'
+        }
+      ],
       tableData: [],
       multipleSelection: [], //所选数据   
       exportPostData: {}, //导出筛选
@@ -302,17 +301,58 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      filterParam:[
-        { id: 'waybill', value: '运单号' },
-        { id: 'supplier', value: '供应商' },
-        { id: 'plate_number', value: '车号' },
-        { id: 'fluid', value: '液厂' },
-        { id: 'waybill_status', value: '运单状态' },
-        { id: 'is_reconciliation', value: '是否对账' },
-        { id: 'is_invoice', value: '是否开票' },
-        { id: 'work_end_time_start', value: '装车完成时间' },
-      ],//筛选参数
-      updateData:{}//更新数据
+      filterParam:{
+        fieldSelect:[
+          {
+            id: 'waybill',
+            value: '运单号',
+          },{
+            id: 'supplier',
+            value: '供应商',
+          },{
+            id: 'plate_number',
+            value: '车号',
+          },{
+            id: 'fluid',
+            value: '液厂',
+          },
+        ],
+        waybillStatus: {
+          id: 'waybill_status',
+          value: '运单状态',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'is_loading', value: '已装车待卸货' },
+            { id: 'is_unload', value: '卸货完成' }
+          ],
+        },
+        isReconciliations: {
+          id: 'is_reconciliation',
+          value: '是否对账',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'unfinished', value: '未对账' },
+            { id: 'finished', value: '已对账' }
+          ],
+        },
+        isInvoice: {
+          id: 'is_invoice',
+          value: '是否开票',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'yes', value: '已开票' },
+            { id: 'no', value: '未开票' }
+          ],
+        },
+        times:[
+          {
+            id: 'work_end_time_start',
+            timeEnd:'work_end_time_end',
+            value: '装车完成时间'
+          }
+        ],
+      },//筛选参数
+      updateData:{}
     }
   },
   methods: {
@@ -321,13 +361,14 @@ export default {
         this.getList();
       })
     },
-    // 获取最新数据更新
-    updateNewData(){
-
-    },
     // 更新数据
     updatePostData(){
-      this.updateDataIsShow = true;
+      this.updateData = this.postDataFilter(this.updateData);
+      if(this.tableDataObj.data.length&&this.pbFunc.objSize(this.updateData)){
+        this.updateDataIsShow = true;
+      }else{
+        this.$message.warning('没有运单数据可获取');
+      }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -490,9 +531,9 @@ export default {
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
-      this.updateData = postData;
       this.pageLoading = true;
       this.exportPostData = postData;
+      this.updateData = postData;
       this.$$http('getPurchaseStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

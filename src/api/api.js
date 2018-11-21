@@ -9,6 +9,30 @@
  */
 
 const api = {
+  updateLogisticStatisticsList: {
+    url: '/api/v1/update-logistic-name/',
+    method: 'get',
+    desc: '更新托运统计列表数据',
+    param: {
+
+    }
+  },
+  updatePurchaseStatisticsList: {
+    url: '/api/v1/update-discount-name/',
+    method: 'get',
+    desc: '更新销售统计列表数据',
+    param: {
+
+    }
+  },
+  updateSaleStatisticsList: {
+    url: '/api/v1/update-sale-name/',
+    method: 'get',
+    desc: '更新采购统计列表数据',
+    param: {
+
+    }
+  },
   exportPayerReceivable: {
     url: '/export/payer-p/',
     method: 'get',

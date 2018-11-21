@@ -13,7 +13,7 @@
             <el-col :span="12">
               <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                 <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
                 <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
               </el-input>
@@ -35,7 +35,7 @@
             <el-col :span="6">
               <el-form-item label="是否对账:">
                 <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
-                  <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in filterParam.isReconciliations.data" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -52,6 +52,7 @@
             当前选择{{chooseCount.num}}单，运费总计{{chooseCount.waiting_charges}}元
           </el-col>
           <el-col :span="9" class="text-right">
+            <el-button type="success" plain @click="updatePostData">获取更新数据</el-button>
             <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
             <!--<export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>-->
             <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
@@ -110,14 +111,17 @@
     </div>
   </div>
   <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data>
   </div>
 </template>
 <script>
 import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
+import updateNewData from '@/components/statistics/updateNewData';
 export default {
   name: 'consignmentList',
   components: {
-    consignmentAdjustmentDialog: consignmentAdjustmentDialog
+    consignmentAdjustmentDialog: consignmentAdjustmentDialog,
+    updateNewData: updateNewData
   },
   computed: {
 
@@ -159,6 +163,35 @@ export default {
           // { id: 'consumer_name', value: '客户名称' },
           { id: 'plate_number', value: '车号' }
         ]
+      },
+      filterParam: {
+        isReconciliations: {
+          id:'is_reconciliation',
+          value:'是否对账',
+          data:[
+            { id: '', value: '全部' },
+            { id: 'unfinished', value: '未对账' },
+            { id: 'finished', value: '已对账' }
+          ]
+        },
+        fieldSelect: [
+          { id: 'waybill', value: '运单号' },
+          { id: 'carrier', value: '承运商' },
+          // { id: 'consumer_name', value: '客户名称' },
+          { id: 'plate_number', value: '车号' }
+        ],
+        times:[
+          {
+            id: 'leave_time_start',
+            timeEnd:'leave_time_end',
+            value: '实际离站时间'
+          },
+          {
+            id: 'active_time_start',
+            timeEnd:'active_time_end',
+            value: '实际到厂时间'
+          }
+        ],
       },
       thTableList: [{
         title: '运单号',
@@ -287,6 +320,7 @@ export default {
       reconciliationList: [], //
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
+      updateDataIsShow:false,//获取更新数据
       adjustRow: {}, //调账信息
       exportBtn: {
         text: '导出',
@@ -297,9 +331,25 @@ export default {
         num:0,
         waiting_charges:"0.00"
       },
+      updateData:{}
     }
   },
   methods: {
+    updateCloseDialog(isSave){
+      this.updateDataIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 更新数据
+    updatePostData(){
+      this.updateData = this.postDataFilter(this.updateData);
+      if(this.tableDataObj.data.length&&this.pbFunc.objSize(this.updateData)){
+        this.updateDataIsShow = true;
+      }else{
+        this.$message.warning('没有运单数据可获取或筛选条件');
+      }
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
       if(val.length>0){
@@ -467,6 +517,7 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
+      this.updateData = postData;
       this.$$http('getConsignmentStatisticsList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
