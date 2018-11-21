@@ -693,7 +693,7 @@ export default {
           this.selectData.carriersOwnList = dataBody;
           if(dataBody&&dataBody.length>0){
             this.carriersParam.ownCarriers=dataBody[0].id;
-            this.bindText.carriersName = dataBody[0].carrier_name;
+            this.bindText.owncarriersName = dataBody[0].carrier_name;
           }
         }
       }).catch(() => {

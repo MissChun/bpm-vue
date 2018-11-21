@@ -47,7 +47,6 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-
         </el-row>
       </el-form>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
@@ -242,6 +241,10 @@ export default {
       if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
         sendData.plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.plan_time_end = this.timeParam.load_plan_time[1];
+      }
+      if (this.timeParam.actual_time instanceof Array && this.timeParam.actual_time.length > 0) {
+        sendData.actual_time_start = this.timeParam.actual_time[0]; //计划装车
+        sendData.actual_time_end= this.timeParam.actual_time[1];
       }
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;

@@ -293,7 +293,7 @@
             <span v-else>无</span>
        </template>
       </el-table-column>
-       <el-table-column label="实际装车时间" prop="" min-width="150">
+       <el-table-column label="装车完成时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.actual_time" placement="top-start" v-if="props.row.actual_time">
