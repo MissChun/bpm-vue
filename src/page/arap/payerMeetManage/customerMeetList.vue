@@ -155,7 +155,7 @@ export default {
         width: ''
       }, 
       {
-        title: '信用金额',
+        title: '信用额度',
         param: 'credit_limit',
         width: ''
       }, 

@@ -416,7 +416,7 @@ export default {
           { validator: onlyNum, trigger: 'blur' }
         ],
         buy_discount:[
-          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.accounts.match, message: this.$store.state.common.regular.accounts.tips, trigger: 'blur' },
         ]
       },
       cancleRules: {

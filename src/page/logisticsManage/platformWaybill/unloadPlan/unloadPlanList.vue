@@ -252,7 +252,7 @@ export default {
       if (type == 'sureMatch') {
         this.$$http("checkOrderCredit",{order_id:row.id}).then(results=>{
           if(results.data&&results.data.code==0){
-            if(results.data.total<0){
+            if(results.data.data.total<0){
               vm.$confirm('已超客户账户可用额度(余额+授信),请谨慎匹配', '匹配卸货单', {
               confirmButtonText: '继续匹配',
               cancelButtonText: '返回',
