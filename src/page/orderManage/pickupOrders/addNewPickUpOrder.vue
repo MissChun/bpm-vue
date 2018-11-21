@@ -618,7 +618,7 @@ export default {
       })
       this.$$http('getSupplierMeetList', sendData).then((results) => {
         if(results.data&&results.data.code==0){
-          this.balance=this.results.data.data.data&&this.results.data.data.data[0]&&this.results.data.data.data[0].last_amount;
+          this.balance=results.data.data.data&&results.data.data.data[0]&&results.data.data.data[0].first_amount;
         }
       });
     },
