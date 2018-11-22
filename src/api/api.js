@@ -20,7 +20,7 @@ const api = {
   updatePurchaseStatisticsList: {
     url: '/api/v1/update-discount-name/',
     method: 'get',
-    desc: '更新销售统计列表数据',
+    desc: '更新采购统计列表数据',
     param: {
 
     }
@@ -28,7 +28,7 @@ const api = {
   updateSaleStatisticsList: {
     url: '/api/v1/update-sale-name/',
     method: 'get',
-    desc: '更新采购统计列表数据',
+    desc: '更新销售统计列表数据',
     param: {
 
     }

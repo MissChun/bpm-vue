@@ -30,6 +30,7 @@ export default {
       required: true
     },
     typeStr:String,
+    apiName: String,
     closeDialogBtn: Function,
     // updateBtn: Function,
     newData:Array,
@@ -58,7 +59,7 @@ export default {
         isDisabled: true,
         isLoading: true
       }
-      this.$$http('updatePurchaseStatisticsList', this.postData).then((results) => {
+      this.$$http(this.apiName, this.postData).then((results) => {
         this.submitBtn = {
           btnText: '确认更新',
           isDisabled: false,

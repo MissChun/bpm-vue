@@ -1,6 +1,6 @@
 <template>
   <div>
-      <update-new-data-show-dialog :is-show="isShow" v-on:closeDialogBtn="closeBtn" v-on:updateBtn="updateBtn()" :type-str="typeStr" :new-data="showData" :post-data="updateData"></update-new-data-show-dialog>
+      <update-new-data-show-dialog :is-show="isShow" v-on:closeDialogBtn="closeBtn" v-on:updateBtn="updateBtn()" :type-str="typeStr" :new-data="showData" :post-data="updateData" :api-name="apiName"></update-new-data-show-dialog>
   </div>
 </template>
 <script>
