@@ -412,7 +412,7 @@ export default {
           { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         buy_price:[
-          { required: true, message: '采购价必填', trigger: 'blur' },
+          { required: true, message: '采购价必填', trigger: 'change' },
           { validator: onlyNum, trigger: 'blur' }
         ],
         buy_discount:[
@@ -556,6 +556,7 @@ export default {
                 message: '审核拒绝成功',
                 type: 'success'
               });
+              this.handleClose();
               this.$emit('searchList');
             }
           }).catch((err)=>{

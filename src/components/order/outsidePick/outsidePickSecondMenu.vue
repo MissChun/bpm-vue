@@ -109,7 +109,7 @@ export default {
           }
         }]
       },
-      expandStatus: true,
+      expandStatus: false,
       pageLoading: false,
       exportLoading: false,
       fifterName: "all",
