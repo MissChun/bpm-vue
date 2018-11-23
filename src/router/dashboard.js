@@ -8,36 +8,46 @@ export default {
   },
   component: (resolve) => require(['../page/dashboard/dashboard'], resolve),
   children: [{
-    path: 'purchaseDashboard',
-    name: 'purchaseDashboard',
-    meta: {
-      isVerificationL: false,
-      title: '业务概览',
+      path: 'purchaseDashboard',
+      name: 'purchaseDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '业务概览',
+      },
+      component: (resolve) => require(['../page/dashboard/purchaseDashboard'], resolve),
+    }, {
+      path: 'serviceCentreDashboard',
+      name: 'serviceCentreDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '车辆调度概览',
+      },
+      component: (resolve) => require(['../page/dashboard/serviceCentreDashboard'], resolve),
+    }, {
+      path: 'puchaseStatisticsDashboard',
+      name: 'puchaseStatisticsDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '采购统计概览',
+      },
+      component: (resolve) => require(['../page/dashboard/puchaseStatisticsDashboard'], resolve),
+    }, {
+      path: 'salesStatisticsDashboard',
+      name: 'salesStatisticsDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '销售统计概览',
+      },
+      component: (resolve) => require(['../page/dashboard/salesStatisticsDashboard'], resolve),
     },
-    component: (resolve) => require(['../page/dashboard/purchaseDashboard'], resolve),
-  }, {
-    path: 'serviceCentreDashboard',
-    name: 'serviceCentreDashboard',
-    meta: {
-      isVerificationL: false,
-      title: '车辆调度概览',
+    {
+      path: 'dashboardDetalis',
+      name: 'dashboardDetalis',
+      meta: {
+        isVerificationL: false,
+        title: '调度详情列表页',
+      },
+      component: (resolve) => require(['../components/dashboard/dashboardDetalis'], resolve),
     },
-    component: (resolve) => require(['../page/dashboard/serviceCentreDashboard'], resolve),
-  }, {
-    path: 'puchaseStatisticsDashboard',
-    name: 'puchaseStatisticsDashboard',
-    meta: {
-      isVerificationL: false,
-      title: '采购统计概览',
-    },
-    component: (resolve) => require(['../page/dashboard/puchaseStatisticsDashboard'], resolve),
-  }, {
-    path: 'salesStatisticsDashboard',
-    name: 'salesStatisticsDashboard',
-    meta: {
-      isVerificationL: false,
-      title: '销售统计概览',
-    },
-    component: (resolve) => require(['../page/dashboard/salesStatisticsDashboard'], resolve),
-  }]
+  ]
 }

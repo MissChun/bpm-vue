@@ -143,15 +143,15 @@ const errorState = function(error) {
       default:
         errorMsg = `连接出错(${error.response.status})!`;
     }
-  }else if(error.code === 'ECONNABORTED'){
+  } else if (error.code === 'ECONNABORTED') {
     errorMsg = '接口超时，请检查网络再刷新重试!'
   } else {
     errorMsg = '连接服务器失败!'
   }
-  if(!axios.isCancel(error)){//如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
+  if (!axios.isCancel(error)) { //如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
     Message.error(errorMsg);
   }
-  if(error && error.response && error.response.status === 401){
+  if (error && error.response && error.response.status === 401) {
     router.push({ path: "/login" });
   }
 }

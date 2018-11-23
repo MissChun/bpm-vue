@@ -917,7 +917,28 @@ export default {
 
 			} else if (type == 'changeUnload') { //变更卸货单
 				//this.$router.push({ path: `/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}` });
-				window.open(`#/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+				this.$$http("checkUnloadTonnage",{trip_id:rowData.id}).then(results=>{
+					if(results.data&&results.data.code==0){
+						if(results.data.data>0){
+							vm.$confirm('该运单已经卸货'+results.data.data+"吨,若此时变更可能导致已卸货运单结算信息错误,是否继续变更卸货地？", '注意', {
+				              confirmButtonText: '继续',
+				              cancelButtonText: '取消',
+				              type: 'warning',
+				              center: true,
+				              closeOnClickModal: false,
+				              showClose: false,
+				              closeOnPressEscape: false
+				            }).then(() => {
+				              window.open(`#/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+				            }).catch(() => {
+				              
+				            });
+						}else{
+							window.open(`#/logisticsManage/platformWaybill/matchLoadPlan/unloadPlanList/${rowData.waybill.id}/${rowData.id}`, '_blank')
+						}
+					}
+				})
+				
 			} else if (type == 'showDetalis') { //查看详情
 				//this.$router.push({ path: `/logisticsManage/platformWaybill/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
 				window.open(`#/logisticsManage/platformWaybill/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')

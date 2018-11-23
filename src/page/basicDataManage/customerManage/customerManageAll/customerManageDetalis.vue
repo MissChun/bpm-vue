@@ -88,6 +88,11 @@
                   <div class="detail-form-item" v-if="customerData.consumer_address">{{customerData.consumer_address}}</div>
                 </el-form-item>
               </el-col>
+               <el-col :span="8">
+                <el-form-item label="信用额度:">
+                  <div class="detail-form-item" v-if="customerData.credit_limit">{{customerData.credit_limit}}</div>
+                </el-form-item>
+              </el-col>
             </el-row>
             <!-- </el-form> -->
           </div>

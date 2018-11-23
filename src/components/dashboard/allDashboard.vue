@@ -110,7 +110,8 @@ export default {
               {key:'work_end_time_count',value:'已装车',extendTable:true,dimension:"车",vLoading:false},
               {key:'waiting_match_count',value:'已装车未关联',extendTable:true,dimension:"车",vLoading:false},
               {key:'waiting_settlement_count',value:'当日卸车数',extendTable:false,dimension:"单",vLoading:false},
-              {key:'truck_count',value:'当日计划数',extendTable:true,dimension:"车",vLoading:false}
+              {key:'truck_count',value:'当日计划数',extendTable:true,dimension:"车",vLoading:false},
+              // {key:'associated_not_unload_count',value:'库存单数量',extendTable:true,dimension:"车",vLoading:false}
             ],
             'searchShow':true,
             'searchData':[],
@@ -128,6 +129,15 @@ export default {
             'searchShow':false,
             'type':'procurement_statistics_dashborad',
             'title':'数据概览'
+          },
+          {
+            'dashboardSqureData':[
+              {key:'associated_not_unload_count',value:'库存单数量',extendTable:true,dimension:"车",vLoading:false}
+            ],
+            'searchShow':true,
+            'searchData':[],
+            'type':'procurement_statistics_weightnote',
+            'title':''
           }
         ],
         'salesStatisticsDashboard':[//销售概览
@@ -143,6 +153,7 @@ export default {
           {
             'dashboardSqureData':[
               {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"车",vLoading:false,vLoading:false},
+              {key:'associated_not_unload_count',value:'库存单数量',extendTable:true,dimension:"车",vLoading:false}
             ],
             'searchShow':true,
             'searchData':[],

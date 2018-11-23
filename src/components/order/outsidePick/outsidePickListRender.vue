@@ -293,7 +293,7 @@
             <span v-else>无</span>
        </template>
       </el-table-column>
-       <el-table-column label="实际到厂时间" prop="" min-width="150">
+       <el-table-column label="装车完成时间" prop="" min-width="150">
         <template slot-scope="props">
           <div class="whiteSpan">
             <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.actual_time" placement="top-start" v-if="props.row.actual_time">
@@ -352,7 +352,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="采购单价:" label-width="120px" prop="buy_price">
-          <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元</span>
+          <el-input placeholder="请输入" type="text" v-model="passParam.buy_price" style="width:100px;"></el-input><span style="margin-left:5px">元/吨</span>
+        </el-form-item>
+        <el-form-item label="采购优惠:" label-width="120px" prop="buy_discount" >
+          <el-input placeholder="请输入" type="text" v-model="passParam.buy_discount" style="width:100px;"></el-input><span style="margin-left:5px" v-loading="loadingArr.buyDiscountLoading">元/吨</span>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
@@ -398,19 +401,23 @@ export default {
       loadingArr:{
         fluidLoading:false,
         departemntPassLoading:false,
-        departemntCancleLoading:false
+        departemntCancleLoading:false,
+        buyDiscountLoading:false
       },
       rules: {
         actual_fluid:[
-          { required: true, message: '请选择供应商', trigger: 'blur' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
         supplier_id:[
-          { required: true, message: '请选择液厂', trigger: 'blur' },
+          { required: true, message: '请选择供应商', trigger: 'change' },
         ],
         buy_price:[
-          { required: true, message: '采购价必填', trigger: 'blur' },
+          { required: true, message: '采购价必填', trigger: 'change' },
           { validator: onlyNum, trigger: 'blur' }
         ],
+        buy_discount:[
+          { pattern: this.$store.state.common.regular.accounts.match, message: this.$store.state.common.regular.accounts.tips, trigger: 'blur' },
+        ]
       },
       cancleRules: {
         approval_mark:[
@@ -461,6 +468,8 @@ export default {
         action:"denied",
         order_id:""
       },
+      planTime:"",
+      
     };
   },
   props: ['ListData','firstMenu','secondMenu','expandStatus'],
@@ -488,13 +497,26 @@ export default {
       this.refuseParam={approval_mark:"",action:"denied",order_id:""};
       this.passParam={buy_price:"",actual_fluid:"",supplier_id:"",id:"",fluid_name:""};
       this.choosedFluidId = '';
+      this.selectData.fluidList=[];
     },
     bindFluidName:function(){
+      var sendParam={};
+      sendParam.plan_time=this.planTime;
       this.selectData.fluidList.forEach((item,index)=>{
         if(item.id==this.choosedFluidId){
           this.passParam.fluid_name=item.fluid_name;
           this.passParam.actual_fluid=item.actual_fluid;
+          sendParam.fluid_id=item.id;
         }
+      });
+      this.loadingArr.buyDiscountLoading=true;
+      this.$$http("getBuyPrice",sendParam).then(results=>{
+        this.loadingArr.buyDiscountLoading=false;
+        if(results.data&&results.data.code==0){
+          this.passParam.buy_price=results.data.data.buy_price;
+        }
+      }).catch(()=>{
+        this.loadingArr.buyDiscountLoading=false;
       });
     },
     expandArr: function() {
@@ -534,6 +556,7 @@ export default {
                 message: '审核拒绝成功',
                 type: 'success'
               });
+              this.handleClose();
               this.$emit('searchList');
             }
           }).catch((err)=>{
@@ -559,6 +582,7 @@ export default {
                 message: '审核通过成功',
                 type: 'success'
               });
+              this.handleClose();
               this.$emit('searchList');
             }
           }).catch((err)=>{
@@ -573,6 +597,7 @@ export default {
       if (type == 'departemntPass') {
         this.dialogParam.departemntPassShow=true;
         this.passParam.id=rowData.id;
+        this.planTime=rowData.plan_time;
       } else if(type == 'cancle'){
         this.dialogParam.departemntCancleShow=true;
         this.refuseParam.order_id=rowData.id;
@@ -593,10 +618,14 @@ export default {
       var sendData = {};
       sendData.supplier = this.passParam.supplier_id;
       this.loadingArr.fluidLoading = true;
+      
       this.$$http("getFulid", sendData).then((results) => {
         this.loadingArr.fluidLoading = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data;
+          this.passParam.actual_fluid="";
+          this.choosedFluidId="";
+          this.passParam.fluid_name="";
           this.selectData.fluidList = dataBody;
         }
       }).catch(() => {

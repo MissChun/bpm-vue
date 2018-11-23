@@ -212,18 +212,21 @@ export default {
           this.differenceValue.check_quantity = '';
         } else {
           this.differenceValue.check_quantity = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
+          this.differenceValue.check_quantity = (this.differenceValue.check_quantity).toFixed(3);
         }
       } else if (type === 'unitPrice') {
         if (isNaN(this.formRules.unit_price_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.unit_price_adjust) || !this.formRules.unit_price_adjust) {
           this.differenceValue.unit_price = '';
         } else {
           this.differenceValue.unit_price = (parseFloat(this.formRules.unit_price_adjust) * 100 - parseFloat(this.adjustRow.unit_price) * 100) / 100;
+          this.differenceValue.unit_price = (this.differenceValue.unit_price).toFixed(2);
         }
       } else if (type === 'unloadNums') { //
         if (isNaN(this.formRules.unload_nums_adjust) || !this.$store.state.common.regular.vehicle.match.test(this.formRules.unload_nums_adjust) || !this.formRules.unload_nums_adjust) {
           this.differenceValue.unload_nums = '';
         } else {
           this.differenceValue.unload_nums = (parseFloat(this.formRules.unload_nums_adjust) * 1000 - parseFloat(this.adjustRow.unload_nums) * 1000) / 1000;
+          this.differenceValue.unload_nums = (this.differenceValue.unload_nums).toFixed(3);
         }
       }
     },
@@ -244,7 +247,7 @@ export default {
           postData.check_quantity_differ = this.differenceValue.check_quantity;
           postData.unit_price_differ = this.differenceValue.unit_price;
           postData.unload_nums_differ = this.differenceValue.unload_nums;
-          
+
 
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateSalesStatistics', postData).then((results) => {

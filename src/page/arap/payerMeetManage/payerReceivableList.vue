@@ -50,6 +50,7 @@
       <div class="business-btn">
         <el-button type="primary" plain @click="importList">导入</el-button>
         <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
+        <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPayerReceivable'"></export-button>
       </div>
       <el-tabs v-model="receivableActive" @tab-click="receivableClick">
         <el-tab-pane label="付款方回款" name="paymentReceivable">
@@ -141,7 +142,12 @@ export default {
         isShow: false,
         type: 'add'
       }, //弹窗
-      arapRow: {} //内容
+      arapRow: {}, //内容
+      exportType: {
+        type: 'payer-pay-p',
+        filename: '付款方回款'
+      },
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -180,7 +186,7 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getPayerReceivableList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

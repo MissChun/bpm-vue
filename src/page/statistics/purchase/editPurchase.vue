@@ -34,13 +34,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="供应商:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.supplier"></el-input>
+                  <el-form-item label="供应商:" prop="supplier">
+                    <el-select v-model="editMsgForm.supplier" :loading="supplierLoading" filterable remote clearable  @change="getSupplier" @blur="selectId('supplier')" :remote-method="getSupplier" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.supplierSelect" :key="item.id" :label="item.supplier_name" :value="item.supplier_name"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
+                  <el-form-item label="液厂:" prop="fluid">
+                    <el-select v-model="editMsgForm.fluid" :loading="fluidLoading" filterable remote clearable  @change="getFluidList" @blur="selectId('fluid')" :remote-method="getFluidList" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.fluidSelect" :key="item.id" :label="item.fluid_name" :value="item.fluid_name"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -71,8 +75,11 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="卸货站:" prop="station">
-                    <el-input placeholder="暂无" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.station"></el-input>
+                  <el-form-item label="卸货站:">
+                    <el-input placeholder="暂无" type="text" v-model="editMsgForm.station"  :disabled="isDisabled"></el-input>
+                    <!-- <el-select v-model="editMsgForm.station" :loading="stationLoading" filterable clearable multiple @blur="selectId('station')"  placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.stationSelect" :key="item.id" :label="item.station_name" :value="item.station_name"></el-option>
+                    </el-select> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -169,7 +176,9 @@ export default {
       editMsgForm: {
         waybill: '',
         supplier: '',
+        supplier_id:'',
         fluid: '',
+        fluid_id:'',
         plate_number: '',
         active_time: '',
         active_tonnage: '',
@@ -179,6 +188,7 @@ export default {
         unit_sum_price: '',
         discounts_sum_price: '',
         station: '',
+        // station_id:[],
         is_invoice: '',
         is_reconciliation: '',
         waybill_status: '',
@@ -191,6 +201,15 @@ export default {
       },
 
       rules: {
+        supplier:[
+          { required: true, message: '请选择供应商', trigger: 'change' },
+        ],
+        fluid:[
+          { required: true, message: '请选择液厂名称', trigger: 'change' },
+        ],
+        // station:[
+        //   { required: true, message: '请选择卸货站', trigger: 'change' },
+        // ],
         active_tonnage: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
@@ -221,11 +240,22 @@ export default {
         isDisabled: false,
       },
       detail: {},
-      customerList: []
+      customerList: [],
+      supplierLoading:false,
+      fluidLoading:false,
+      stationLoading:false,
+      selectData:{
+        supplierSelect:[],//供应商列表
+        fluidSelect:[],//液厂列表
+        stationSelect:[],//站点列表
+      }
     }
   },
   created() {
     this.numberReg = /^[0-9]+(.[0-9]{0,3})?$/;
+    this.getSupplier();
+    this.getFluidList();
+    // this.getSiteList();
     if (this.id) {
       this.getDetail();
     }
@@ -241,6 +271,89 @@ export default {
       this.$router.push({ path: "/statistics/purchase/purchaseList" });
       // }
     },
+    selectId(type){
+      setTimeout(()=>{
+        if(type==='supplier'){
+          for(let i in this.selectData.supplierSelect){
+            if(this.selectData.supplierSelect[i].supplier_name == this.editMsgForm.supplier){
+              this.editMsgForm.supplier_id = this.selectData.supplierSelect[i].id;
+              break;
+            }
+          }
+        }else if(type==='fluid'){
+          for(let i in this.selectData.fluidSelect){
+            if(this.selectData.fluidSelect[i].fluid_name == this.editMsgForm.fluid){
+              this.editMsgForm.fluid_id = this.selectData.fluidSelect[i].id;
+              // console.log(this.selectData.fluidSelect[i].id,'===',this.editMsgForm.fluid_id)
+              break;
+            }
+          }
+        }
+        // else if(type==='station'){
+        //   this.editMsgForm.station_id = [];
+        //   for(let i in this.selectData.stationSelect){
+        //     for(let j in this.editMsgForm.station){
+        //       if(this.selectData.stationSelect[i].station_name == this.editMsgForm.station[j]){
+        //         this.editMsgForm.station_id.push(this.selectData.stationSelect[i].id);
+        //         // console.log(this.selectData.stationSelect[i].id,'===',this.editMsgForm.station_id)
+        //         continue;
+        //       }
+        //     }
+        //   }
+        // }
+        console.log('id',this.editMsgForm.fluid_id)
+      },200)
+
+    },
+    // 供应商列表
+    getSupplier: function(query) {
+      let postData = {
+        page: 1,
+        page_size:100,
+      }
+      if(query){
+        postData.supplier_name = query;
+      }
+      this.supplierLoading = true;
+      this.$$http('searchSupplierList', postData).then((results) => {
+        this.supplierLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.selectData.supplierSelect = results.data.data.data;
+        }
+      }).catch((err) => {
+        this.supplierLoading = false;
+      })
+    },
+    // 液厂名称
+    getFluidList: function(query) {
+      let postData = {
+        page: 1,
+        page_size:100,
+      };
+      if(query){
+        postData.fluid_name = query;
+      }
+      this.fluidLoading = true;
+      this.$$http('getFluidsList', postData).then((results) => {
+        this.fluidLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.selectData.fluidSelect = results.data.data.data;
+        }
+      }).catch((err) => {
+        this.fluidLoading = false;
+      })
+
+    },
+    // 站点列表
+    getSiteList: function(query) {
+      let postData = {};
+      this.$$http('getSiteList', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.selectData.stationSelect = results.data.data;
+        }
+      }).catch((err) => {})
+
+    },
     getDetail: function() {
       this.$$http('getPurchaseStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -248,7 +361,9 @@ export default {
           this.editMsgForm = {
             waybill: this.detail.waybill,
             supplier: this.detail.supplier,
+            supplier_id:this.detail.supplier_id,
             fluid: this.detail.fluid,
+            fluid_id:this.detail.fluid,
             plate_number: this.detail.plate_number,
             active_time: this.detail.active_time,
             active_tonnage: this.detail.active_tonnage,
@@ -257,7 +372,8 @@ export default {
             discount_price: this.detail.discount_price,
             unit_sum_price: this.detail.unit_sum_price,
             discounts_sum_price: this.detail.discounts_sum_price,
-            station: this.detail.station,
+            station: (this.detail.station).join(','),
+            // station_id: this.detail.station_id,
             is_invoice: this.detail.is_invoice.verbose,
             is_reconciliation: this.detail.is_reconciliation.verbose,
             waybill_status: this.detail.waybill_status.verbose,
@@ -268,6 +384,7 @@ export default {
             adjust_time: this.detail.adjust_time,
             remark: this.detail.remark
           }
+
         }
       })
 
@@ -305,8 +422,9 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
+      let keyArray = ['supplier','supplier_id','fluid','fluid_id','active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
+      postData.discount_price = postData.discount_price?postData.discount_price:0;
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

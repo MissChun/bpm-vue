@@ -9,7 +9,47 @@
  */
 
 const api = {
-  deleteFreight:{
+  updateLogisticStatisticsList: {
+    url: '/api/v1/update-logistic-name/',
+    method: 'get',
+    desc: '更新托运统计列表数据',
+    param: {
+
+    }
+  },
+  updatePurchaseStatisticsList: {
+    url: '/api/v1/update-discount-name/',
+    method: 'get',
+    desc: '更新采购统计列表数据',
+    param: {
+
+    }
+  },
+  updateSaleStatisticsList: {
+    url: '/api/v1/update-sale-name/',
+    method: 'get',
+    desc: '更新销售统计列表数据',
+    param: {
+
+    }
+  },
+  exportPayerReceivable: {
+    url: '/export/payer-p/',
+    method: 'get',
+    desc: '导出付款方回款',
+    param: {
+
+    }
+  },
+  exportCustomerReceivable: {
+    url: '/export/payer-c/',
+    method: 'get',
+    desc: '导出付款方回款',
+    param: {
+
+    }
+  },
+  deleteFreight: {
     url: '/api/v1/freight-managements/:id/',
     method: 'delete',
     desc: '运费约定新增',
@@ -17,7 +57,7 @@ const api = {
 
     }
   },
-  updateFreight:{
+  updateFreight: {
     url: '/api/v1/freight-managements/:id/',
     method: 'put',
     desc: '运费约定新增',
@@ -25,7 +65,7 @@ const api = {
 
     }
   },
-  addFreight:{
+  addFreight: {
     url: '/api/v1/freight-managements/',
     method: 'POST',
     desc: '运费约定新增',
@@ -2690,6 +2730,38 @@ const api = {
     url: '/api/v1/outbuy_trip/:trip_id/',
     method: 'GET',
     desc: "分段详情",
+    param: {
+
+    }
+  },
+  getBuyPrice: {
+    url: '/api/v1/outsale_order/buy_price/',
+    method: 'GET',
+    desc: "外销单审核拿采购单价",
+    param: {
+
+    }
+  },
+  checkUnloadTonnage: {
+    url: '/api/v1/waybill-business/check-unload-tonnage/',
+    method: 'GET',
+    desc: "装车完成分段结束判断提醒",
+    param: {
+
+    }
+  },
+  checkOrderCredit: {
+    url: '/api/v1/waybill-business/check-order-credit/',
+    method: 'GET',
+    desc: "分段获取业务单信用额度",
+    param: {
+
+    }
+  },
+  getAssociatedNotUnload: {
+    url: '/api/v1/associated-notunload/',
+    method: 'GET',
+    desc: "概览-已关联未卸车",
     param: {
 
     }

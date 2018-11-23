@@ -196,7 +196,7 @@ export default {
       //timeParam: [],
       listFifterData: [],
       activeName: 'first',
-      expandStatus: true,
+      expandStatus: false,
       thisFifterName: 'all',
       pageData: {
         currentPage: 1,

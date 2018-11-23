@@ -12,7 +12,7 @@
           <a v-on:click="logout" class="cursor-pointer">退出</a>
         </div> -->
         <div class="usermenu text-right">
-          <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span>
+          <!-- <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span> -->
           <router-link :to="{path: '/login'}">登录</router-link>
         </div>
       </el-col>

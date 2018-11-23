@@ -78,7 +78,13 @@ export default {
         title: '亏吨标准(kg)',
         param: 'kui_tons_standard',
         width: '250'
-      }, {
+      }, 
+      {
+        title: '信用额度',
+        param: 'credit_limit',
+        width: '250'
+      }, 
+      {
         title: '客户等级',
         param: 'consumer_level_display',
         width: ''

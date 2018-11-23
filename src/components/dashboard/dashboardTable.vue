@@ -11,7 +11,7 @@
       :data="dashboardTableData"  max-height="250"  size="mini" stripe>
       <el-table-column v-for="(item,key) in renderTableData" :key="key"   align="center" :label="item.title" >
         <template slot-scope="scope">
-          <span @click="operation(item)" v-bind:class="{canClick:item.goTopage}">{{scope.row[item.param]}}</span>
+          <span @click="operation(item,scope.row)" v-bind:class="{canClick:item.goTopage||item.showDetalis}">{{scope.row[item.param]}}</span>
         </template>
         </el-table-column>
     </el-table>
@@ -45,6 +45,12 @@ export default {
           {title:"卸车计划数",width:'',param:'plan_no',showDetalis:true},
           {title:"未安排计划数",width:'',param:'unplan_no',goTopage:"/businessManage/tradeBusiness/?tabClassifyStatus=all_match&businessStatus=waiting_related",timeParam:"planArriveTime"},
         ],
+        'associated_not_unload_count':[
+          {title:"实际液厂",width:'',param:'actual_fluid_name'},
+          {title:"库存车数（自有承运）",width:'',param:'own',showDetalis:true,sendObj:{type:"associated_not_unload",searchParam:{'fluid_id':"needAssignment",'consignment_type':'own','work_end_time':'serchTime'},backUrl:"salesStatisticsDashboard"}},
+          {title:"库存车数（外部承运）",width:'',param:'external',showDetalis:true,sendObj:{type:"associated_not_unload",searchParam:{'fluid_id':"needAssignment",'consignment_type':'external',
+            'work_end_time':'serchTime'},backUrl:"salesStatisticsDashboard"}},
+        ],
         //采购中心
         'work_end_time_count':[
           {title:"实际液厂",width:'',param:'actual_fluid_name'},
@@ -76,8 +82,17 @@ export default {
         }
       }
     },
-    operation:function(item){
+    operation:function(item,rowData){
       if(item.showDetalis){
+        let searchParam=item.sendObj.searchParam;
+        for(let item in searchParam){
+          if(searchParam[item]=='needAssignment'){
+            searchParam[item]=rowData[item];
+          }else if(searchParam[item]=='serchTime'){
+            searchParam[item]=this.sendTime;
+          }
+        }
+        this.$router.push({ path: "/dashboard/dashboardDetalis?sendObj="+JSON.stringify(item.sendObj) });
       }else if (item.goTopage){
         var pathParam="";
         if(item.timeParam){

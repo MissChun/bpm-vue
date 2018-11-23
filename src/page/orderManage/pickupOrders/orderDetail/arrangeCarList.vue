@@ -374,11 +374,11 @@ export default {
             this.$$http("surePickOrder", sendData).then(results => {
               this.pageLoading = false;
               if (results.data.code == 0) {
-                vm.$router.push({ path: "/orderManage/pickupOrders?goTo=confirmed" });
                 this.$message({
                   message: '确认计划成功',
                   type: 'success'
                 });
+                vm.$router.go(0);
               }
             }).catch(() => {
               this.pageLoading = false;

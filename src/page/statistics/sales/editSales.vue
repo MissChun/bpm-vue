@@ -39,13 +39,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="业务类型:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_type_name"></el-input>
+                  <el-form-item label="业务类型:" prop="business_type">
+                    <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.business_type_name"></el-input> -->
+                    <el-select v-model="editMsgForm.business_type" filterable placeholder="请选择" @change="businessChange">
+                      <el-option v-for="(item,key) in selectData.businessTypeSelect" :key="item.id" :label="item.title" :value="item.id"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="客户简称:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input>
+                  <el-form-item label="客户简称:" prop="short_name">
+                    <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input> -->
+                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable  @change="getConsumer" @blur="selectId('short')" :remote-method="getConsumer" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.consumerSelect" :key="item.id" :label="item.short_name" :value="item.short_name"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -54,13 +60,16 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="付款方:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.payer_name"></el-input>
+                  <el-form-item label="付款方:" prop="payer_name">
+                    <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.payer_name"></el-input> -->
+                    <el-select v-model="editMsgForm.payer_name" :loading="payerLoading" filterable remote clearable  @change="getPayer" @blur="selectId('payer')" :remote-method="getPayer" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.payerSelect" :key="item.id" :label="item.payer" :value="item.payer"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="车号:">
-                    <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
+                  <el-form-item label="车号:" prop="plate_number">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isUpdatePlateNumber"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -236,9 +245,11 @@ export default {
         plate_number: '', //车牌号
         short_name: '', //客户简称
         consumer_name: '', //客户名称
+        consumer_id:'',
         payer_name: '', //付款方
+        payer_id:'',
         station: '', //站点
-        plate_number: '', //车牌号
+        // plate_number: '', //车牌号
         leave_time: '', //l离站时间
         plan_arrive_time: '', //计划到站时间
         deficiency: '', //亏吨
@@ -266,10 +277,23 @@ export default {
         reconciliation_time: '',
         remark_adjust: '',
         adjust_time: '',
-        business_type_name: ''
+        business_type: ''
       },
 
       rules: {
+        business_type:[
+          { required: true, message: '请选择业务类型', trigger: 'change' },
+        ],
+        short_name:[
+          { required: true, message: '请选择输入客户简称', trigger: 'change' },
+        ],
+        payer_name:[
+          { required: true, message: '请选择输入付款方', trigger: 'change' },
+        ],
+        plate_number:[
+          { required: true, message: '请输入车牌号', trigger: 'change' },
+          // { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
+        ],
         actual_quantity: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
@@ -310,11 +334,39 @@ export default {
         isDisabled: false,
       },
       detail: {},
-      customerList: []
+      customerList: [],
+      consumerLoading:false,
+      payerLoading:false,
+      isUpdatePlateNumber:true,
+      selectData:{
+        businessTypeSelect:[{
+          title:'批发',
+          id:0
+        },{
+          title:'零售',
+          id:1
+        },{
+          title:'点供',
+          id:2
+        },{
+          title:'外销',
+          id:3
+        },{
+          title:'外采',
+          id:4
+        },{
+          title:'承运',
+          id:5
+        }],
+        consumerSelect:[],//客户列表
+        payerSelect:[],//付款方列表
+      }
     }
   },
   created() {
     this.numberReg = /^[0-9]+(.[0-9]{0,3})?$/;
+    this.getConsumer();
+    this.getPayer();
     if (this.id) {
       this.getDetail();
     }
@@ -327,6 +379,71 @@ export default {
       this.$router.push({ path: "/statistics/sales/salesList" });
       // }
     },
+    selectId(type){
+      setTimeout(()=>{
+        if(type === 'short'){
+          for(let i in this.selectData.consumerSelect){
+            if(this.editMsgForm.short_name === this.selectData.consumerSelect[i].short_name){
+              this.editMsgForm.consumer_id = this.selectData.consumerSelect[i].id;
+            }
+          }
+        }else if(type === 'payer'){
+          for(let i in this.selectData.payerSelect){
+            if(this.editMsgForm.payer_name === this.selectData.payerSelect[i].payer){
+              this.editMsgForm.payer_id = this.selectData.payerSelect[i].id;
+            }
+          }
+        }
+        console.log('consumer_id',this.editMsgForm.payer_id)
+      },200)
+    },
+    businessChange(){
+      // this.editMsgForm.plate_number = '';
+      if(this.editMsgForm.business_type === 3){
+        this.isUpdatePlateNumber = false;
+      }else{
+        this.isUpdatePlateNumber = true;
+        this.editMsgForm.plate_number = this.detail.plate_number;
+      }
+    },
+    // 客户列表
+    getPayer: function(query) {
+      let postData = {
+        page: 1,
+        page_size:100,
+      }
+      if(query){
+          postData.payer = query;
+      }
+      this.payerLoading = true;
+      this.$$http('searchCustomerPayList', postData).then((results) => {
+        this.payerLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.selectData.payerSelect = results.data.data.data;
+        }
+      }).catch((err) => {
+        this.payerLoading = false;
+      })
+    },
+    // 客户列表
+    getConsumer: function(query) {
+      let postData = {
+        page: 1,
+        page_size:100,
+      }
+      if(query){
+          postData.short_name = query;
+      }
+      this.consumerLoading = true;
+      this.$$http('searchCustomerList', postData).then((results) => {
+        this.consumerLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.selectData.consumerSelect = results.data.data.data;
+        }
+      }).catch((err) => {
+        this.consumerLoading = false;
+      })
+    },
     getDetail: function() {
       this.$$http('getSalesStatisticsDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -338,9 +455,10 @@ export default {
             plate_number: this.detail.plate_number, //车牌号
             short_name: this.detail.short_name, //客户简称
             consumer_name: this.detail.consumer_name, //客户名称
+            consumer_id: this.detail.consumer_id,
             payer_name: this.detail.payer_name, //付款方
             station: this.detail.station, //站点
-            plate_number: this.detail.plate_number, //车牌号
+            // plate_number: this.detail.plate_number, //车牌号
             leave_time: this.detail.leave_time, //l离站时间
             plan_arrive_time: this.detail.plan_arrive_time, //计划到站时间
             deficiency: this.detail.deficiency, //亏吨
@@ -368,7 +486,10 @@ export default {
             remark_adjust: this.detail.remark_adjust,
             adjust_time: this.detail.adjust_time,
             waybill_status: this.detail.waybill_status.verbose, //运单状态
-            business_type_name: this.detail.business_type_name
+            business_type: this.detail.business_type.key
+          }
+          if(this.editMsgForm.business_type === 3){
+            this.isUpdatePlateNumber = false;
           }
         }
       })
@@ -407,7 +528,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['plate_number','short_name','payer_id','payer_name','consumer_id','business_type','leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

@@ -210,12 +210,9 @@ export default {
     checkRows: function(selection, row) {
 
     },
-    operation: function(type, row) {
-      var sendData = {};
+    addMatch:function(type, row){
       var vm = this;
-
-      if (type == 'sureMatch') {
-        vm.upMatchList.push(row.id);
+      vm.upMatchList.push(row.id);
         vm.renderList.forEach((item, index) => {
           if (item.id == row.id) {
             item.orderMatch = 'NoMatch';
@@ -247,6 +244,33 @@ export default {
         });
         this.cancel_order_list = cancel_order_list;
         this.match_order_list = match_order_list;
+    },
+    operation: function(type, row) {
+      var sendData = {};
+      var vm = this;
+
+      if (type == 'sureMatch') {
+        this.$$http("checkOrderCredit",{order_id:row.id}).then(results=>{
+          if(results.data&&results.data.code==0){
+            if(results.data.data.total<0){
+              vm.$confirm('已超客户账户可用额度(余额+授信),请谨慎匹配', '匹配卸货单', {
+              confirmButtonText: '继续匹配',
+              cancelButtonText: '返回',
+              type: 'warning',
+              center: true,
+              closeOnClickModal: false,
+              showClose: false,
+              closeOnPressEscape: false
+            }).then(() => {
+              this.addMatch(type, row);
+            }).catch(() => {
+
+            })
+            }else{
+              this.addMatch(type, row);
+            }
+          }
+        });        
       } else if (type == 'cancleMatch') {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;

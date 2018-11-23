@@ -39,8 +39,14 @@
   line-height: 59px;
   border: 1px solid rgb(222, 222, 222);
   border-top: none;
+  border-left:0;
 }
-
+.max-logo{
+  width: 229px;
+}
+.min-logo{
+  width: 63px;
+}
 .nav {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -184,7 +190,10 @@
   <el-header>
     <el-row type="flex" class="g-head">
       <router-link :to="{path: '/'}">
-        <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../../assets/img/91LNG.svg"></div>
+        <div href="" title="运输管理系统" class="logo" :class="isCollapse?'min-logo':'max-logo'">
+          <img class="log-img" v-if="isCollapse" src="../../assets/img/91LNG_min.svg">
+          <img class="log-img" v-else src="../../assets/img/91LNG.svg">
+        </div>
       </router-link>
       <div class="nav">
         <el-row>
@@ -253,8 +262,7 @@ export default {
   props: {
     users: Object,
     logout: Function,
-
-
+    isCollapse: Boolean
   },
 
   data: function() {

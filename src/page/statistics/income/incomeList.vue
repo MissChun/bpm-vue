@@ -52,6 +52,7 @@
                 <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
+              <div v-else-if="item.param === 'business_type'">{{scope.row.business_type.verbose}}</div>
               <div v-else>
                 <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
                 <div>{{scope.row[item.param]}}</div>
@@ -135,6 +136,10 @@ export default {
       }, {
         title: '业务单号',
         param: 'business_order',
+        width: ''
+      }, {
+        title: '业务类型',
+        param: 'business_type',
         width: ''
       }, {
         title: '供应商',
@@ -322,6 +327,9 @@ export default {
       },{
         title:'业务单号',
         id:77
+      },{
+        title:'业务类型',
+        id:225
       },{
         title:'承运商',
         id:81

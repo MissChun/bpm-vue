@@ -158,12 +158,14 @@ export default {
           this.differenceValue.check_quantity = '';
         } else {
           this.differenceValue.check_quantity = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
+          this.differenceValue.check_quantity = (this.differenceValue.check_quantity).toFixed(3);
         }
       } else if (type === 'standMile') {
         if (isNaN(this.formRules.stand_mile_adjust) || !this.$store.state.common.regular.mile.match.test(this.formRules.stand_mile_adjust) || !this.formRules.stand_mile_adjust) {
           this.differenceValue.stand_mile = '';
         } else {
           this.differenceValue.stand_mile = (parseFloat(this.formRules.stand_mile_adjust) * 10 - parseFloat(this.adjustRow.stand_mile) * 10) / 10;
+          this.differenceValue.stand_mile = (this.differenceValue.stand_mile).toFixed(1);
         }
       } else if (type === 'waitingCharges') {
         if (isNaN(this.formRules.waiting_charges_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.waiting_charges_adjust) || !this.formRules.waiting_charges_adjust) {
