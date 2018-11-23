@@ -582,6 +582,7 @@ export default {
                 message: '审核通过成功',
                 type: 'success'
               });
+              this.handleClose();
               this.$emit('searchList');
             }
           }).catch((err)=>{
