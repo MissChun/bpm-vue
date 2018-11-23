@@ -424,6 +424,7 @@ export default {
       let btnObject = btn;
       let keyArray = ['supplier','supplier_id','fluid','fluid_id','active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
+      postData.discount_price = postData.discount_price?postData.discount_price:0;
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

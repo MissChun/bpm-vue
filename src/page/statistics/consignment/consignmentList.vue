@@ -111,17 +111,17 @@
     </div>
   </div>
   <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data>
+  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data-dialog>
   </div>
 </template>
 <script>
 import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
-import updateNewData from '@/components/statistics/updateNewData';
+import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
 export default {
   name: 'consignmentList',
   components: {
     consignmentAdjustmentDialog: consignmentAdjustmentDialog,
-    updateNewData: updateNewData
+    updateNewDataDialog: updateNewDataDialog
   },
   computed: {
 

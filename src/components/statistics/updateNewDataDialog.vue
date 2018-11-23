@@ -4,7 +4,7 @@
       <div class="tms-dialog-form">
         <div class="tms-dialog-content">
           <el-row :gutter="10">
-            <el-col :span="24" v-for="(item,key) in newData" :key="key">
+            <el-col :span="24" v-for="(item,key) in showData" :key="key">
               <div class="label-list">
                 <label>{{item.title}}:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.value)"></div>
@@ -16,7 +16,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeBtn">取消</el-button>
-        <el-button type="primary" @click="updateBtn(submitBtn)" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+        <el-button type="primary" @click="updateBtn" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -32,9 +32,10 @@ export default {
     typeStr:String,
     apiName: String,
     closeDialogBtn: Function,
-    // updateBtn: Function,
-    newData:Array,
-    postData:Object
+    // newData:Array,
+    apiName: String,
+    updateData:Object,
+    filterParam:Object
   },
 
   data: function() {
@@ -44,6 +45,7 @@ export default {
         isDisabled: false,
         isLoading: false
       },
+      showData:[]
     }
   },
   computed: {
@@ -51,15 +53,53 @@ export default {
   },
   methods: {
     closeBtn: function() {
+      // this.closeDialogBtn()
       this.$emit('closeDialogBtn', false);
     },
-    updateBtn(btn){
+    handleData(){
+      this.showData = [];
+      for(let i in this.filterParam){
+        // console.log('i',i)
+        for(let j in this.updateData){
+          if(i === 'fieldSelect'){
+            for(let y in this.filterParam[i]){
+              if(this.filterParam[i][y].id === j){
+                this.showData.push({
+                  title:this.filterParam[i][y].value,
+                  value:this.updateData[j]
+                })
+              }
+            }
+          }else if(i === 'times'){
+            for(let m in this.filterParam[i]){
+              if(this.filterParam[i][m].id === j){
+                this.showData.push({
+                  title:this.filterParam[i][m].value,
+                  value:this.updateData[j]+' 至 '+this.updateData[this.filterParam[i][m].timeEnd]
+                })
+              }
+            }
+          }else{
+            for(let z in this.filterParam[i].data){
+              if(this.updateData[j] === this.filterParam[i].data[z].id){
+                this.showData.push({
+                  title:this.filterParam[i].value,
+                  value:this.filterParam[i].data[z].value
+                })
+              }
+            }
+          }
+        }
+      }
+      console.log('展示的参数',this.showData)
+    },
+    updateBtn(){
       this.submitBtn = {
         btnText: '更新中',
         isDisabled: true,
         isLoading: true
       }
-      this.$$http(this.apiName, this.postData).then((results) => {
+      this.$$http(this.apiName, this.updateData).then((results) => {
         this.submitBtn = {
           btnText: '确认更新',
           isDisabled: false,
@@ -83,6 +123,13 @@ export default {
       })
     }
 
+  },
+  watch: {
+    isShow(curVal, oldVal) {　
+      if(curVal){
+        this.handleData();
+      }
+    },
   },
 }
 

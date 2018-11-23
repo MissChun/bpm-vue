@@ -122,17 +122,17 @@
     </div>
   </div>
   <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
-  <update-new-data :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="exportPostData"></update-new-data>
+  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="exportPostData"></update-new-data-dialog>
   </div>
 </template>
 <script>
 import purchaseAdjustmentDialog from '@/components/statistics/purchaseAdjustmentDialog';
-import updateNewData from '@/components/statistics/updateNewData';
+import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
 export default {
   name: 'purchaseList',
   components: {
     purchaseAdjustmentDialog: purchaseAdjustmentDialog,
-    updateNewData:updateNewData
+    updateNewDataDialog:updateNewDataDialog
   },
   computed: {
     // statusTabList(){
