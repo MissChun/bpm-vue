@@ -249,7 +249,7 @@ export default {
         payer_name: '', //付款方
         payer_id:'',
         station: '', //站点
-        plate_number: '', //车牌号
+        // plate_number: '', //车牌号
         leave_time: '', //l离站时间
         plan_arrive_time: '', //计划到站时间
         deficiency: '', //亏吨
@@ -292,7 +292,7 @@ export default {
         ],
         plate_number:[
           { required: true, message: '请输入车牌号', trigger: 'change' },
-          { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
+          // { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
         ],
         actual_quantity: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
@@ -458,7 +458,7 @@ export default {
             consumer_id: this.detail.consumer_id,
             payer_name: this.detail.payer_name, //付款方
             station: this.detail.station, //站点
-            plate_number: this.detail.plate_number, //车牌号
+            // plate_number: this.detail.plate_number, //车牌号
             leave_time: this.detail.leave_time, //l离站时间
             plan_arrive_time: this.detail.plan_arrive_time, //计划到站时间
             deficiency: this.detail.deficiency, //亏吨
@@ -528,7 +528,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['short_name','payer_id','payer_name','consumer_id','business_type','leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['plate_number','short_name','payer_id','payer_name','consumer_id','business_type','leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
