@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div id="addeditTailCarPage" class="detail-main">
     <el-container>
       <el-header class="mt-5">
@@ -218,8 +218,8 @@ export default {
       }
     }
     var needNumVa = (rule, value, callback) => {
-      if (!((value+"").match(/^[0-9]\d{0,8}$/)) || value == '0') {
-        callback(new Error("只能是正整数"));
+      if (!((value+"").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/))||value>1000000) {
+        callback(new Error("请输入0-100万正数"));
       } else {
         callback();
       }
@@ -289,7 +289,7 @@ export default {
           { validator: endVa, trigger: 'blur' },
         ],
         credit_limit:[
-
+          { validator: needNumVa, trigger: 'blur' },
         ]
       }
     }
