@@ -476,7 +476,7 @@
 			</el-table-column>
 			<el-table-column label="实际卸车吨位" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
 				<template slot-scope="props">
-					<span v-if="props.row.status && props.row.status.key != 'waiting_match' && props.row.status.key != 'confirm_match'">{{props.row.active_tonnage}}</span><span v-else>无</span>
+					<span v-if="props.row.status && props.row.status.key != 'waiting_match' && props.row.status.key != 'confirm_match' && props.row.status.key != 'already_match'">{{props.row.active_tonnage}}</span><span v-else>无</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="卸车信息" prop="" min-width="150" v-if="this.nowHead=='matchHead'">
