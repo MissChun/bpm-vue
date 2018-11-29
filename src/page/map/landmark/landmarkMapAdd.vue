@@ -134,11 +134,10 @@ export default {
       positionTypeSelect: [{
         "key": "DELIVER_POSITION",
         "verbose": "卸货站"
-      }
-      // , {
-      //   "key": "LNG_FACTORY",
-      //   "verbose": "气源液厂"
-      // }
+      }, {
+        "key": "LNG_FACTORY",
+        "verbose": "气源液厂"
+        }
       ],
       gasTypeSelect: [{
         "key": "SEA_GAS",
