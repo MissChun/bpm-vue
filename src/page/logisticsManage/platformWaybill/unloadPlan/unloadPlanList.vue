@@ -327,9 +327,9 @@ export default {
               closeOnClickModal: false,
               type: 'warning'
             }).then(() => {
-              this.getList();
+              this.$router.go(0)
             }).catch(() => {
-              this.getList();
+              this.$router.go(0)
             });
           }
         });
