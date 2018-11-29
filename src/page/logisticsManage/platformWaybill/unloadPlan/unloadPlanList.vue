@@ -315,12 +315,22 @@ export default {
             this.cancel_order_list = cancel_order_list;
             this.match_order_list = match_order_list;
           } else {
-            vm.$confirm('当前状态不能取消匹配,请核实', '请注意', {
-              confirmButtonText: '确认',
-              type: 'warning',
-              showCancelButton: false,
-              center: true,
-            }).then(() => {})
+            // vm.$confirm('当前状态不能取消匹配,请核实', '请注意', {
+            //   confirmButtonText: '确认',
+            //   type: 'warning',
+            //   showCancelButton: false,
+            //   center: true,
+            // }).then(() => {})
+            this.$confirm('匹配的业务单状态已改变，请重新匹配', '提示', {
+              confirmButtonText: '确定',
+              showCancelButton:false,
+              closeOnClickModal: false,
+              type: 'warning'
+            }).then(() => {
+              this.$router.go(0)
+            }).catch(() => {
+              this.$router.go(0)
+            });
           }
         });
       } else if (type == 'upMatchList') {

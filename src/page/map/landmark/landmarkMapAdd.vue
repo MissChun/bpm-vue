@@ -137,7 +137,8 @@ export default {
       }, {
         "key": "LNG_FACTORY",
         "verbose": "气源液厂"
-      }],
+        }
+      ],
       gasTypeSelect: [{
         "key": "SEA_GAS",
         "verbose": "海气"

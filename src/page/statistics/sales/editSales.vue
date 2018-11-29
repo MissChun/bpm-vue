@@ -93,7 +93,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际离站时间:">
+                  <el-form-item label="实际离站时间:" prop="leave_time">
                     <el-date-picker v-model="editMsgForm.leave_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -293,6 +293,9 @@ export default {
         plate_number:[
           { required: true, message: '请输入车牌号', trigger: 'change' },
           // { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
+        ],
+        leave_time:[
+          { required: true, message: '请选择输入实际离站时间', trigger: 'blur' },
         ],
         actual_quantity: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },

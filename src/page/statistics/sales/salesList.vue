@@ -299,15 +299,15 @@ export default {
         isAdjust: true,
         adjustParam: 'short_name_adjust'
       },
-      // {
-      //   title: '客户名称',
-      //   param: 'consumer_name',
-      //   width: '220'
-      // },
+      {
+        title: '客户名称',
+        param: 'consumer_name',
+        width: '220'
+      },
       {
         title: '付款方',
         param: 'payer_name',
-        width: '200',
+        width: '220',
         isAdjust: true,
         adjustParam: 'payer_name_adjust'
       }, {
