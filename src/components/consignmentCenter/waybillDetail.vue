@@ -330,7 +330,7 @@
                       <div v-if="!item.weight_active_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_active_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_active_mile}}km</span>
                   </div>
@@ -360,7 +360,7 @@
                       <div v-if="!item.weight_audit_time">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_audit_time" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_audit_time}}</span>
                   </div>
@@ -471,7 +471,7 @@
                       <div v-if="!item.standard_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_standard_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.standard_mile}}km</span>
                   </div>
@@ -518,7 +518,7 @@
               <div class="label-list">
                 <label>装车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看磅单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">查看磅单</span>
                 </div>
               </div>
             </el-col>
@@ -526,7 +526,7 @@
               <div class="label-list">
                 <label>卸车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看磅单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">查看磅单（{{unloadInfo.destination}}）</span>
                 </div>
               </div>
             </el-col>
