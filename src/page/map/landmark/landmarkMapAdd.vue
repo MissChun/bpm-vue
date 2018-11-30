@@ -134,11 +134,7 @@ export default {
       positionTypeSelect: [{
         "key": "DELIVER_POSITION",
         "verbose": "卸货站"
-      }, {
-        "key": "LNG_FACTORY",
-        "verbose": "气源液厂"
-        }
-      ],
+      }],
       gasTypeSelect: [{
         "key": "SEA_GAS",
         "verbose": "海气"
@@ -703,6 +699,16 @@ export default {
     this.initMap();
     if (this.id) {
       this.getLandmarkDetail().then(() => {
+        if(this.detailData.position_type && this.detailData.position_type.key === 'LNG_FACTORY'){
+          this.positionTypeSelect = [{
+            "key": "DELIVER_POSITION",
+            "verbose": "卸货站"
+          },{
+            "key": "LNG_FACTORY",
+            "verbose": "气源液厂"
+            }
+          ]
+        }
         this.isInitMarkerList('oldMarker').then(() => {
           this.setCenter();
         })
