@@ -54,8 +54,8 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="承运类型:" prop="carrier_type">
-                    <el-select v-model="editMsgForm.carrier_type" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.carrierTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-select v-model="editMsgForm.carrier_type" placeholder="请选择" @change="changeCarrier">
+                      <el-option v-for="(item,key) in selectData.carrierTypeSelect" :key="key" :label="item.value" :value="item.id" ></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -168,7 +168,7 @@ export default {
         contact_phone: '',
         address: '',
         isValidName: true,
-        carrier_type: 'own',
+        carrier_type: 'external',
         license_pic: [],
         code: 'credit_code',
         codeMsg: '',
@@ -254,6 +254,21 @@ export default {
         this.rules.codeMsg = this.sociology;
       } else {
         this.rules.codeMsg = this.structure;
+      }
+    },
+    changeCarrier:function(){
+      if(this.editMsgForm.carrier_type=='own'){
+        this.$confirm('自有承运会获得当前公司液厂、卸货站等地标信息，请谨慎选择', '请注意', {
+                confirmButtonText: '确认',
+                type: 'warning',
+                showCancelButton: false,
+                center: true,
+                closeOnClickModal: false,
+                showClose: false,
+                closeOnPressEscape: false
+            }).then(() => {
+
+          })
       }
     },
     returnToPage: function() {
