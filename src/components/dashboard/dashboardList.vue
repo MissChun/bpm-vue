@@ -8,7 +8,8 @@
       <el-table :data="searchListData" stripe style="width: 100%" size="mini" >
         <el-table-column v-for="(item,key) in searchTableList[sendObj.type]" :key="key" :prop="item.param" align="center" :label="item.title">
           <template slot-scope="scope">
-              {{scope.row[item.param]}}
+            <span v-if="item.switchData">{{item.switchData[scope.row[item.param]]}}</span>
+            <span v-else>{{scope.row[item.param]}}</span> 
           </template>
         </el-table-column>
       </el-table>
@@ -28,6 +29,7 @@ export default {
           {title: '实际液厂',param: 'fluid_name',width: ''},
           {title: '装车完成时间',param: 'work_end_time',width: ''},
           {title: '承运类型',param: 'consignment_type',width: ''},
+          {title: '运单状态',param: 'unload_status',width: ''},
         ]
       }
     };

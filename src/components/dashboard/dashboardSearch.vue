@@ -59,25 +59,30 @@ export default {
       },
       searchInitData:{
         'associated_not_unload':{
-          bindModel:[{
+          bindModel:[
+              {
                 fluid_id:{type:"select",value:"",selectNeedQuery:'getFluidList',selectSeaech:{need_all:true},selectId:"fluid_select",title:"实际液厂",colWidth:6,selectKV:{key:"id",value:"actual_fluid_name"}},
                 work_end_time:{type:"datetimerange",value:[],title:"时间搜索",colWidth:10},
                 consignment_type:{type:"select",value:"",selectId:"consignment_select",title:"承运类型",selectKV:{key:"type",value:"text"},colWidth:6}
+              },
+              {
+                unload_status:{type:"select",value:"all",selectId:"unload_status",title:"运单状态",selectKV:{key:"type",value:"text"},colWidth:6}
               }
-            ]
-          ,
+            ],
           backModel:{
             work_end_time_start:{'key':'work_end_time','index':0},
             work_end_time_end:{'key':'work_end_time','index':1},
             consignment_type:"modelAssignment",
             fluid_id:'modelAssignment',
+            unload_status:'modelAssignment'
           }
         }
       },
       backForm:{},
       selectObj:{
         consignment_select:[{type:"all",text:"全部"},{type:"own",text:"自有承运"},{type:"external",text:"外部承运"}],
-        fluid_select:[]
+        fluid_select:[],
+        unload_status:[{type:"all",text:"全部"},{type:"already_unload ",text:"已卸货"},{type:"not_unload ",text:"未卸货"}],
       }
     };
   },
@@ -89,7 +94,7 @@ export default {
       var backObj=this.pbFunc.deepcopy(this.fifterData.backModel);
       let fifterDataObj={};
         this.fifterData.bindModel.forEach(item=>{
-        fifterDataObj=Object.assign(item);
+        fifterDataObj=Object.assign(fifterDataObj,item);
       });
       for(let item in backObj)
         if(backObj[item]=='modelAssignment'){
