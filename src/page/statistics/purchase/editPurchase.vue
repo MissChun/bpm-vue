@@ -363,7 +363,7 @@ export default {
             supplier: this.detail.supplier,
             supplier_id:this.detail.supplier_id,
             fluid: this.detail.fluid,
-            fluid_id:this.detail.fluid,
+            fluid_id:this.detail.fluid_id,
             plate_number: this.detail.plate_number,
             active_time: this.detail.active_time,
             active_tonnage: this.detail.active_tonnage,

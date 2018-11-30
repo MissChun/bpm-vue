@@ -397,7 +397,7 @@ export default {
             }
           }
         }
-        console.log('consumer_id',this.editMsgForm.payer_id)
+        // console.log('consumer_id',this.editMsgForm.payer_id)
       },200)
     },
     businessChange(){
@@ -460,6 +460,7 @@ export default {
             consumer_name: this.detail.consumer_name, //客户名称
             consumer_id: this.detail.consumer_id,
             payer_name: this.detail.payer_name, //付款方
+            payer_id:this.detail.payer_id,
             station: this.detail.station, //站点
             // plate_number: this.detail.plate_number, //车牌号
             leave_time: this.detail.leave_time, //l离站时间
