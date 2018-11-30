@@ -431,6 +431,8 @@ export default {
 
                 this.map.setZoom(15);
                 this.map.setCenter([this.landmarkDetail.location.longitude, this.landmarkDetail.location.latitude]);
+
+                this.showLeftWindow = true;
               });
 
             } else {
