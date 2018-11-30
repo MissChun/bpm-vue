@@ -565,7 +565,7 @@ export default {
             longitude: lnglat[0],
             latitude: lnglat[1],
             province: result.regeocode.addressComponent.province,
-            city: result.regeocode.addressComponent.city,
+            city: result.regeocode.addressComponent.city && result.regeocode.addressComponent.city.length ? result.regeocode.addressComponent.city : '',
             county: result.regeocode.addressComponent.district,
           }
 
