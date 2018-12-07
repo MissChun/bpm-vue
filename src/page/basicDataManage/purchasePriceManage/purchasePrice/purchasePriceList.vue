@@ -36,7 +36,9 @@
 //     }
 //   }
 // }
-
+.pad-li {
+  padding: 0 10px;
+}
 </style>
 <template>
   <div>
@@ -76,13 +78,14 @@
             <el-form :model="priceForm" :rules="rules" ref="priceForm" label-width="0">
               <el-table :data="tableData" stripe style="width: 100%" size="mini" border v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
                 <!-- <el-table-column  :prop="'list'" align="center" :label="'<span>55555</<span>'"></el-table-column> -->
-                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
                   <template slot-scope="scope">
-                    <div v-if="item.param === 'fluid_name'">
+                    <div v-if="item.param === 'fluid_name'|| item.param === 'supplier_name'">
                       <ul>
-                        <li>{{scope.row[item.param]}}</li>
+                        <li :class="item.param === 'supplier_name'?'td-hover pad-li':''" :title="scope.row[item.param]">{{scope.row[item.param]}}</li>
                       </ul>
                     </div>
+
                     <div v-if="item.param === 'area'">
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">{{area.area}}</li>
@@ -91,12 +94,13 @@
                     <div v-if="item.param === 'date'">
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">
-                          <div v-for="(quotes,index) in area.quotes" v-if="quotes.price_date===item.title" v-on:dblclick="isShowPrice(quotes,true,$event)">
-                            <div v-show="!quotes.isShow">{{quotes.today_unit_price}}</div>
-                            <el-form-item prop="price" v-show="quotes.isShow">
-                              <el-input v-model.trim="priceForm.price" @keyup.native.13="editPrice" size="mini" @blur="isShowPrice(quotes,false)" placeholder="请输入内容"></el-input>
-                            </el-form-item>
-                          </div>
+                          <div v-for="(quotes,index) in area.quotesData" v-on:dblclick="isShowPrice(quotes,true,$event)" v-if="quotes.price_date===item.title">
+                              <div v-show="!quotes.isShow">{{quotes.today_unit_price}}</div>
+                              <el-form-item prop="price" v-show="quotes.isShow">
+                                <el-input v-model.trim="priceForm.price" @keyup.native.13="editPrice" size="mini" @blur="isShowPrice(quotes,false,$event,area.id)" placeholder="请输入内容"></el-input>
+                              </el-form-item>
+                            </div>
+
                         </li>
                       </ul>
                     </div>
@@ -142,6 +146,10 @@ export default {
         param: 'fluid_name',
         width: ''
       }, {
+        title: '供应商',
+        param: 'supplier_name',
+        width: '170'
+      },{
         title: '目的地',
         param: 'area',
         width: ''
@@ -166,7 +174,8 @@ export default {
         firstDayOfWeek: 1
       },
       startData: '',
-      endData: ''
+      endData: '',
+      thDateTitle:[]
     };
   },
   computed: {
@@ -213,45 +222,65 @@ export default {
       // this.isShowPrice(this.editPriceInfo, false);
     },
     updateTableData(row, isShow) {
+
+      // this.$set(row, 'isShow', isShow)
+
       for (let i in this.tableData) {
         for (let j in this.tableData[i].business_areas) {
-          for (let z in this.tableData[i].business_areas[j].quotes) {
-            if (this.tableData[i].business_areas[j].quotes[z].id === row.id) {
-              this.$set(this.tableData[i].business_areas[j].quotes, z, {
+          for (let z in this.tableData[i].business_areas[j].quotesData) {
+            if (this.tableData[i].business_areas[j].quotesData[z].id === row.id) {
+              this.$set(this.tableData[i].business_areas[j].quotesData, z, {
                 id: row.id,
                 isShow: isShow,
                 price_date: row.price_date,
-                today_unit_price: row.today_unit_price
+                today_unit_price: row.today_unit_price,
+                isAdd:row.isAdd
               })
               this.editPriceInfo = row;
             } else {
-              this.$set(this.tableData[i].business_areas[j].quotes, z, {
-                id: this.tableData[i].business_areas[j].quotes[z].id,
+              this.$set(this.tableData[i].business_areas[j].quotesData, z, {
+                id: this.tableData[i].business_areas[j].quotesData[z].id,
                 isShow: false,
-                price_date: this.tableData[i].business_areas[j].quotes[z].price_date,
-                today_unit_price: this.tableData[i].business_areas[j].quotes[z].today_unit_price
+                price_date: this.tableData[i].business_areas[j].quotesData[z].price_date,
+                today_unit_price: this.tableData[i].business_areas[j].quotesData[z].today_unit_price,
+                isAdd:this.tableData[i].business_areas[j].quotesData[z].isAdd
               })
             }
           }
         }
       }
+      console.log('row',row,this.tableData)
     },
-    isShowPrice(row, isShow, event) {
+    isShowPrice(row, isShow, event,areaId) {
       if (isShow) {
+
         this.updateTableData(row, isShow);
         this.priceForm.price = row.today_unit_price;
         this.$nextTick(function() {
           event.target.parentNode.lastChild.lastChild.firstChild.childNodes[1].focus();
         })
       } else {
-        let postData = {
-          id: row.id,
-          today_unit_price: this.priceForm.price
-        }
+        let apiName = '';
+        let postData = {};
+        console.log('点击',row)
         setTimeout(() => {
           this.$refs['priceForm'].validate((valid) => {
             if (valid) {
-              this.$$http('updatePurchasePrice', postData).then((results) => {
+              if(row.isAdd){
+                apiName = 'addPurchasePrice';
+                postData = {
+                  fluid_business_area:areaId,
+                  quote_date: row.price_date,
+                  today_unit_price: this.priceForm.price
+                };
+              }else{
+                apiName = 'updatePurchasePrice';
+                postData = {
+                  id: row.id,
+                  today_unit_price: this.priceForm.price
+                };
+              }
+              this.$$http(apiName, postData).then((results) => {
                 if (results.data && results.data.code == 0) {
                   // this.updateTableData(row,isShow);
 
@@ -295,6 +324,10 @@ export default {
             param: 'fluid_name',
             width: ''
           }, {
+            title: '供应商',
+            param: 'supplier_name',
+            width: '170'
+          },{
             title: '目的地',
             param: 'area',
             width: ''
@@ -306,8 +339,28 @@ export default {
               width: ''
             })
           }
+          this.thDateTitle = results.data.data;
+
         }
       }).catch((err) => {})
+    },
+    // 日期价格list
+    dataQuotes(data){
+      let quotes = [];
+      for(let i in data){
+        let timestamp = Number(Math.random().toString().substr(3,30) + Date.now()).toString(36);;
+        quotes.push({
+          id:timestamp,
+          fluid_business_area:'',
+          price_date:data[i],
+          today_unit_price:0.00,
+          isShow:false,
+          isAdd:true,
+        })
+      }
+      console.log('quotes',quotes);
+      return quotes;
+
     },
     getList() {
       this.pageLoading = true;
@@ -326,11 +379,25 @@ export default {
           this.tableData = results.data.data.data;
           for (let i in this.tableData) {
             for (let j in this.tableData[i].business_areas) {
+              this.tableData[i].business_areas[j].quotesData = this.dataQuotes(this.thDateTitle);;
               for (let z in this.tableData[i].business_areas[j].quotes) {
                 this.tableData[i].business_areas[j].quotes[z].isShow = false;
+                for(let y in this.tableData[i].business_areas[j].quotesData){
+                  if(this.tableData[i].business_areas[j].quotesData[y].price_date === this.tableData[i].business_areas[j].quotes[z].price_date){
+                    this.tableData[i].business_areas[j].quotesData[y] = {
+                      id:this.tableData[i].business_areas[j].quotes[z].id,
+                      fluid_business_area:this.tableData[i].business_areas[j].quotes[z].fluid_business_area,
+                      price_date:this.tableData[i].business_areas[j].quotes[z].price_date,
+                      today_unit_price:this.tableData[i].business_areas[j].quotes[z].today_unit_price,
+                      isShow:false,
+                      isAdd:false
+                    }
+                  }
+                }
               }
             }
           }
+          // console.log('data',this.tableData);
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

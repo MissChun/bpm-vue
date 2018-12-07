@@ -1,5 +1,14 @@
 <style type="text/css" scoped lang="less">
+.operation-btn-content{
+  padding-right: 490px;
 
+  position:relative;
+  .operation-btn-op{
+    position:absolute;
+    right:0;
+    top:0;
+  }
+}
 </style>
 <template>
   <div>
@@ -49,23 +58,23 @@
       </div>
       <div class="operation-btn">
         <el-row>
-          <el-col :span="14" v-if="multipleSelection.length==0">
-            <div class="total-data">
-              一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+          <el-col :span="24">
+            <div class="operation-btn-content">
+              <div class="total-data" v-if="multipleSelection.length==0">
+                一共{{tableData.waybill?tableData.waybill:0}}单，实际装车吨位{{tableData.active_tonna?tableData.active_tonna:0}}吨，采购总额{{tableData.unit_sum_pri?tableData.unit_sum_pri:0}}元，采购优惠后总额{{tableData.discounts_sum_pri?tableData.discounts_sum_pri:0}}元
+              </div>
+              <div class="total-data" v-else>
+                当前选择{{chooseCount.num}}单，实际装车吨位{{chooseCount.active_tonna}}吨，采购总额{{chooseCount.unit_sum_pri}}元，采购优惠后总额{{chooseCount.discounts_sum_pri}}元
+              </div>
+              <div class="operation-btn-op">
+                <el-button type="primary" @click="showDialog('batch')">批量修改</el-button>
+                <el-button type="success" plain @click="updatePostData">获取最新数据</el-button>
+                <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
+                <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
+                <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->
+                <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button>
+              </div>
             </div>
-
-          </el-col>
-          <el-col :span="14" v-else>
-            <div class="total-data">
-              当前选择{{chooseCount.num}}单，实际装车吨位{{chooseCount.active_tonna}}吨，采购总额{{chooseCount.unit_sum_pri}}元，采购优惠后总额{{chooseCount.discounts_sum_pri}}元
-            </div>
-          </el-col>
-          <el-col :span="10" class="text-right">
-            <el-button type="success" plain @click="updatePostData">获取最新数据</el-button>
-            <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
-            <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-            <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPurchaseData'"></export-button>-->
-            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('procurement')">{{exportBtn.text}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -104,7 +113,7 @@
       <el-table-column label="操作" align="center" width="140" fixed="right">
         <template slot-scope="scope">
           <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="showDialog('adjust',scope.row)">调账</el-button>
             <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
           </div>
           <div v-if="scope.row.is_reconciliation.key==='unfinished'">
@@ -123,16 +132,20 @@
   </div>
   <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
   <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="exportPostData"></update-new-data-dialog>
+  <batch-update-dialog v-on:closeDialogBtn="batchUpdateCloseDialog" :is-show="batchUpdateIsShow" :number="multipleSelection.length" :ids="batchIds"></batch-update-dialog>
   </div>
 </template>
 <script>
 import purchaseAdjustmentDialog from '@/components/statistics/purchaseAdjustmentDialog';
 import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
+import batchUpdateDialog from '@/components/statistics/batchUpdateDialog';
+
 export default {
   name: 'purchaseList',
   components: {
     purchaseAdjustmentDialog: purchaseAdjustmentDialog,
-    updateNewDataDialog:updateNewDataDialog
+    updateNewDataDialog:updateNewDataDialog,
+    batchUpdateDialog:batchUpdateDialog
   },
   computed: {
     // statusTabList(){
@@ -144,6 +157,7 @@ export default {
     return {
       pageLoading: false,
       updateDataIsShow:false,//更新数据弹窗
+      batchUpdateIsShow:false,//批量修改
       pageData: {
         currentPage: 1,
         totalCount: '',
@@ -352,7 +366,8 @@ export default {
           }
         ],
       },//筛选参数
-      updateData:{}
+      updateData:{},
+      batchIds:[],//可批量修改数据的ID
     }
   },
   methods: {
@@ -419,6 +434,13 @@ export default {
       }
 
     },
+    // 批量修改 采购优惠 业务优惠
+    batchUpdateCloseDialog(isSave){
+      this.batchUpdateIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
     updateCloseDialog(isSave){
       this.updateDataIsShow = false;
       if (isSave) {
@@ -426,9 +448,24 @@ export default {
       }
     },
     // 调账
-    accountAdjust(row) {
-      this.accountAdjustIsShow = true;
-      this.purchaseRow = row;
+    showDialog(type,row) {
+      if(type === 'adjust'){
+        this.accountAdjustIsShow = true;
+      }else if(type === 'batch'){
+        if(this.multipleSelection.length){
+          this.batchIds = this.batchDataHandle('reconciliation');
+          if(this.batchIds.length){
+            this.batchUpdateIsShow = true;
+          }else{
+            this.$message.warning('已勾选中没有可修改（未对账）数据！');
+          }
+        }else{
+          this.$message.warning('没有勾选批量修改数据！');
+        }
+      }
+      if(row){
+        this.purchaseRow = row;
+      }
     },
     // 全部对账
     getUnReconciliations() {
@@ -474,6 +511,16 @@ export default {
         }
       }
       this.reconciliations(true, ids, price / 100, type);
+    },
+    // 不同状态的id列表
+    batchDataHandle(type){
+      let ids = [];
+      for(let i in this.multipleSelection){
+        if(this.multipleSelection[i].is_reconciliation.key === 'unfinished'&&type==='reconciliation'){
+          ids.push(this.multipleSelection[i].id);
+        }
+      }
+      return ids;
     },
     // 单个/批量 对账  开票
     reconciliations(isAll, ids, price, type) {

@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`testbpm.91lng.cn`)) { //自动化环境
     domainUrl = `${prefix}testbpm.91lng.cn`;
   } else {
-    domainUrl = `${prefix}api.hhtdlng.com/bpm`; //本地开发环境
+    domainUrl = `${prefix}devbpm.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }
