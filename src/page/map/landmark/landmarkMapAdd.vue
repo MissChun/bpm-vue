@@ -252,8 +252,13 @@ export default {
         this.map.on('click', this.mapClickFun); //对地图绑定点击事件
 
         AMap.event.addListener(autocomplete, "select", (e) => { //选择提示
-          this.keyword = e.poi.name;
-          this.inputChangeFun();
+          if (e.poi && e.poi.location) {
+            this.keyword = e.poi.name;
+            this.getAddress([e.poi.location.lng, e.poi.location.lat]);
+          } else {
+            this.keyword = e.poi.name;
+            this.inputChangeFun();
+          }
         });
 
       });
@@ -699,15 +704,14 @@ export default {
     this.initMap();
     if (this.id) {
       this.getLandmarkDetail().then(() => {
-        if(this.detailData.position_type && this.detailData.position_type.key === 'LNG_FACTORY'){
+        if (this.detailData.position_type && this.detailData.position_type.key === 'LNG_FACTORY') {
           this.positionTypeSelect = [{
             "key": "DELIVER_POSITION",
             "verbose": "卸货站"
-          },{
+          }, {
             "key": "LNG_FACTORY",
             "verbose": "气源液厂"
-            }
-          ]
+          }]
         }
         this.isInitMarkerList('oldMarker').then(() => {
           this.setCenter();

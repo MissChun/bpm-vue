@@ -43,12 +43,13 @@
                     </div>
                     <div class="table-list mt-25" v-loading="pageLoading">
                       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
+                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:'150'">
                           <template slot-scope="scope">
                             <div v-if="item.param==='is_active'">{{scope.row.is_active?'已启用':'未启用'}}</div>
                             <div v-if="item.param==='addresss'">{{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.address}}</div>
                             <div v-if="item.param==='owner_name'">{{scope.row.owner_name && scope.row.owner_name.length && scope.row.owner_name[0] || '无'}}</div>
-                            <div v-if="item.param!=='addresss'&& item.param!=='is_active' && item.param!=='owner_name'">{{scope.row[item.param]}}</div>
+                            <div v-if="item.param==='sale_man_name'">{{scope.row.sale_man_name && scope.row.sale_man_name.length && scope.row.sale_man_name[0] || '无'}}</div>
+                            <div v-if="item.param!=='addresss'&& item.param!=='is_active' && item.param!=='owner_name' && item.param!=='sale_man_name'">{{scope.row[item.param]}}</div>
                           </template>
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -103,7 +104,8 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'station_name', value: '站点名称' }
+          { id: 'station_name', value: '站点名称' },
+          { id: 'map_station_name', value: '实际站点名称' }
         ],
         isActiveSelect: [
           { id: '', value: '全部' },
@@ -118,7 +120,7 @@ export default {
       }, {
         title: '实际站点名称',
         param: 'map_station_name',
-        width: '140'
+        width: ''
       }, {
         title: '站点类型',
         param: 'station_type_display',
@@ -126,6 +128,10 @@ export default {
       }, {
         title: '所属客户',
         param: 'owner_name',
+        width: ''
+      }, {
+        title: '业务员名称',
+        param: 'sale_man_name',
         width: ''
       }, {
         title: '联系人',
@@ -253,6 +259,4 @@ export default {
 
 </script>
 <style scoped lang="less">
-
-
 </style>

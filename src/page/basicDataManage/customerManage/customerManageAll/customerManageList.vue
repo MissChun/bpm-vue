@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -18,6 +16,13 @@
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
+                <el-col :span="6">
+                  <el-form-item label="客户状态:">
+                    <el-select v-model="fifterParam.consumer_type" @change="searchList" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.consumertypeList" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
           </div>
@@ -32,7 +37,7 @@
       </div>
       <div class="table-list" v-loading="pageLoading">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width ? item.width : '150'">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -57,46 +62,53 @@ export default {
       fifterParam: {
         keyword: "",
         field: "consumer_name",
+        consumer_type: ''
       },
       thTableList: [{
-        title: '客户名称',
-        param: 'consumer_name',
-        width: ''
-      }, {
-        title: '客户简称',
-        param: 'short_name',
-        width: ''
-      }, {
-        title: '联系人',
-        param: 'contact_person',
-        width: ''
-      }, {
-        title: '联系电话',
-        param: 'contact_phone',
-        width: ''
-      }, {
-        title: '亏吨标准(kg)',
-        param: 'kui_tons_standard',
-        width: '250'
-      }, 
-      {
-        title: '信用额度',
-        param: 'credit_limit',
-        width: '250'
-      }, 
-      {
-        title: '客户等级',
-        param: 'consumer_level_display',
-        width: ''
-      }, {
-        title: '分属业务员',
-        param: 'sale_man_name',
-        width: '250'
-      }, {
-        title: '添加时间',
-        param: 'created_at',
-        width: ''
-      }],
+          title: '客户名称',
+          param: 'consumer_name',
+          width: '180'
+        }, {
+          title: '客户简称',
+          param: 'short_name',
+          width: ''
+        }, {
+          title: '联系人',
+          param: 'contact_person',
+          width: ''
+        }, {
+          title: '联系电话',
+          param: 'contact_phone',
+          width: ''
+        }, {
+          title: '亏吨标准(kg)',
+          param: 'kui_tons_standard',
+          width: ''
+        },
+        {
+          title: '信用额度',
+          param: 'credit_limit',
+          width: ''
+        },
+        {
+          title: '客户等级',
+          param: 'consumer_level_display',
+          width: ''
+        },
+        {
+          title: '客户状态',
+          param: 'consumer_type',
+          width: ''
+        }, {
+          title: '分属业务员',
+          param: 'sale_man_name',
+          width: ''
+        }, {
+          title: '添加时间',
+          param: 'created_at',
+          width: '170'
+        }
+      ],
       pageStatus: false,
       seachListParam: {
         consumer_name: "",
@@ -116,7 +128,17 @@ export default {
           { id: 'short_name', value: '客户简称' },
           { id: 'contact_phone', value: '联系电话' },
           { id: 'sale_man_name', value: '分属业务员' },
-        ]
+        ],
+        consumertypeList: [{
+          id: '',
+          value: '全部'
+        }, {
+          id: 'lazy',
+          value: '暂无交易'
+        }, {
+          id: 'active',
+          value: '活跃用户'
+        }]
       },
       tableData: [],
       saveSendData: {}
@@ -140,19 +162,39 @@ export default {
       var vm = this;
       var sendData = this.pbFunc.deepcopy(this.seachListParam);
       sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      sendData.consumer_type = this.fifterParam.consumer_type;
+
       vm.pageLoading = true;
       if (vm.pageStatus) {
         sendData = this.saveSendData;
         sendData.page = vm.pageData.currentPage;
       } else {
         this.saveSendData = sendData;
+        this.pageData.currentPage = 1;
         sendData.page = 1;
       }
       this.$$http('searchCustomerList', sendData).then(function(result) {
         var resultData;
         vm.pageStatus = false;
         if (result.data.code == 0) {
+          let resultData = result.data.data.data;
+          let timeSpace = 90;
+          let timeSpaceMs = 90 * 24 * 60 * 60 * 1000;
+          let nowDate = new Date();
+          let newDateTime = nowDate.getTime();
+
+          resultData.map(item => {
+            let lastTradeDate = new Date(item.last_trade_time);
+            let lastTradeTime = lastTradeDate.getTime();
+            if (newDateTime - lastTradeTime < timeSpaceMs) {
+              item.consumer_type = '';
+            } else {
+              item.consumer_type = '暂无交易';
+            }
+          })
+
           vm.tableData = result.data.data.data;
+
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }
