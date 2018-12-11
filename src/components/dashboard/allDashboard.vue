@@ -144,16 +144,24 @@ export default {
           {
             'dashboardSqureData':[
               {key:'is_reconciliation_count',value:'未对账',goUrl:'/statistics/sales/salesList?is_reconciliation=unfinished',dimension:"车",vLoading:false},
-              {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"车",vLoading:false},
+              // {key:'is_invoice_count',value:'未开票',goUrl:'/statistics/sales/salesList?is_invoice=no',dimension:"车",vLoading:false},
+              
+              
             ],
-            'searchShow':false,
+            // 'searchShow':true,
+            // 'searchData':[],
             'type':'sale_statistics_dashborad',
             'title':'数据概览'
           },
           {
             'dashboardSqureData':[
               {key:'waiting_settlement_count',value:'已卸车',extendTable:true,dimension:"车",vLoading:false,vLoading:false},
-              {key:'associated_not_unload_count',value:'库存单数量',extendTable:true,dimension:"车",vLoading:false}
+              {key:'associated_not_unload_count',value:'库存单数量',extendTable:true,dimension:"车",vLoading:false},
+              // {key:'is_reconciliation_noinvoice_count',value:'已对账未开票',dimension:"车",vLoading:false,extendTable:true},
+              // {key:'is_reconciliation_invoice_count',value:'已对账已开票',dimension:"车",vLoading:false,extendTable:true},
+              {key:'is_reconciliation_noinvoice_count',value:'已对账未开票',dimension:"车",vLoading:false,extendTable:true},
+              {key:'is_reconciliation_invoice_count',value:'已对账已开票',dimension:"车",vLoading:false,extendTable:true},
+              {key:'is_invoice_not_back',value:'已开票已/未还款金额',dimension:"元",vLoading:false,extendTable:true}
             ],
             'searchShow':true,
             'searchData':[],

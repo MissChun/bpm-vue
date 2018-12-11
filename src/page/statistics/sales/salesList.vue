@@ -178,16 +178,16 @@ export default {
         len: '', //长度
         data: [], //内容
       },
-      leaveTime: [], //离站时间
+      leaveTime: this.$route.query.leaveTime ? (this.$route.query.leaveTime).split(',') : [], //离站时间
       searchPostData: {}, //搜索参数
       searchFilters: {
-        plan_arrive_time: [],
+        plan_arrive_time:[],
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
-        keyword: '',
+        keyword: this.$route.query.consumer_name ? this.$route.query.consumer_name : '' ,
         waybill_status: '',
         consumer_confirm:'',
-        field: 'short_name',
+        field: this.$route.query.consumer_name ? 'consumer_name':'short_name',
       },
       exportType: {
         type: 'sale',
@@ -815,7 +815,7 @@ export default {
     let nowDate = new Date();
     let nowDateDetail = this.pbFunc.getDateDetail(nowDate);
     let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' +  nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' +  nowDateDetail.second;
-    this.leaveTime = ['2018-09-30 16:00:00',nowDateStr];
+    this.leaveTime = this.$route.query.leaveTime ? (this.$route.query.leaveTime).split(','):['2018-09-30 16:00:00',nowDateStr];
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }

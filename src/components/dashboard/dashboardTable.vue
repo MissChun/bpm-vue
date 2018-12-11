@@ -67,6 +67,21 @@ export default {
         'waiting_settlement_count':[
           {title:"地区",width:'',param:'area_name'},
           {title:"车数",width:'',param:'car_no',showDetalis:true},
+        ],
+        'is_reconciliation_noinvoice_count':[
+          {title:"客户名称",width:'',param:'consumer_name'},
+          {title:"已对账未开票数量",width:'',param:'pkcount',goTopage:"/statistics/sales/salesList?is_reconciliation=finished&is_invoice=no",timeParam:"leaveTime",needSendTable:'consumer_name'},
+        ],
+        'is_reconciliation_invoice_count':[
+          {title:"客户名称",width:'',param:'consumer_name'},
+          {title:"已对账已开票数量",width:'',param:'pkcount',goTopage:"/statistics/sales/salesList?is_reconciliation=finished&is_invoice=yes",timeParam:"leaveTime",needSendTable:'consumer_name'},
+        ],
+        'is_invoice_not_back':[
+          {title:"客户名称",width:'',param:'consumer_name'},
+          {title:"已开票数量",width:'',param:'is_invoice_count'},
+          {title:"已开票金额",width:'',param:'is_invoice_price'},
+          {title:"已回款金额",width:'',param:'is_back_price'},
+          {title:"未回款金额",width:'',param:'not_back_price'},
         ]
       }
     };
@@ -100,6 +115,9 @@ export default {
         }
         if(item.statusType){
           pathParam+=`&${time.statusType}=${this.sendStatusType}`
+        }
+        if(item.needSendTable){
+          pathParam+=`&${item.needSendTable}=${rowData[item.needSendTable]}`
         }
         this.$router.push({ path: `${item.goTopage}`+pathParam });
       }
