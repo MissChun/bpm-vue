@@ -67,7 +67,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center">
+              <el-table-column label="操作" align="center" :width="140">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="arapDialogEdit('update',scope.row)">修改</el-button>
                 </template>
@@ -119,7 +119,7 @@ export default {
       thTableList: [{
         title: '付款方',
         param: 'payer_name',
-        width: '200'
+        width: '240'
       }, {
         title: '回款金额',
         param: 'amount',

@@ -246,6 +246,7 @@ export default {
         },
         fieldSelect: [
           { id: 'business_order', value: '业务单号' },
+          { id: 'waybill', value: '运单号' },
           { id: 'short_name', value: '客户简称' },
           { id: 'consumer_name', value: '客户名称' },
           { id: 'station', value: '卸货站' },

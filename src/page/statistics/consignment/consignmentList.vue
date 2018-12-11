@@ -375,7 +375,7 @@ export default {
         if (row.waybill.indexOf("TE") != -1) {
           //this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
           window.open(`#/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}`, '_blank')
-        } else if (row.waybill.indexOf("TSE") != -1) {
+        } else if (row.waybill.indexOf("TSE") != -1||row.waybill.indexOf("T+") != -1) {
 
         } else {
           //this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
@@ -385,6 +385,8 @@ export default {
         if (row.business_order.indexOf("SE") != -1) {
           //this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
           window.open(`#/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}`, '_blank')
+        }  else if (row.business_order.indexOf("S+") != -1) {
+
         } else {
           //this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
           window.open(`#/statistics/consignment/consignmentBusinessDetail?id=${row.business_order_id}`, '_blank')
