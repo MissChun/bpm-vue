@@ -381,22 +381,22 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>车牌号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.plate_number)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.capacity_info.tractor&&detailData.capacity_info.tractor.plate_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶员:</label>
                 <div class="detail-form-item">
-                  <span v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></span>
-                  <span style="margin-left:15px;" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.mobile_phone)"></span>
+                  <span v-html="pbFunc.dealNullData(detailData.capacity_info.master_driver&&detailData.capacity_info.master_driver.name)"></span>
+                  <span style="margin-left:15px;" v-html="pbFunc.dealNullData(detailData.capacity_info.master_driver&&detailData.capacity_info.master_driver.mobile_phone)"></span>
                 </div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>挂车号:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.semitrailer&&transPowerData.semitrailer.plate_number)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.capacity_info.semitrailer&&detailData.capacity_info.semitrailer.plate_number)"></div>
               </div>
             </el-col>
           </el-row>
@@ -405,8 +405,8 @@
               <div class="label-list">
                 <label>副驾驶:</label>
                 <div class="detail-form-item">
-                  <span v-if="transPowerData.vice_driver&&transPowerData.vice_driver.name" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></span>
-                  <span style="margin-left:15px;" v-if="transPowerData.vice_driver&&transPowerData.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.vice_driver.mobile_phone)"></span>
+                  <span v-if="detailData.capacity_info.vice_driver&&detailData.capacity_info.vice_driver.name" v-html="pbFunc.dealNullData(detailData.capacity_info.vice_driver.name)"></span>
+                  <span style="margin-left:15px;" v-if="detailData.capacity_info.vice_driver&&detailData.capacity_info.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(detailData.capacity_info.vice_driver.mobile_phone)"></span>
                   <span v-else v-html="pbFunc.dealNullData('')"></span>
                 </div>
               </div>
@@ -414,9 +414,9 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>押运员:</label>
-                <div class="detail-form-item" v-if="transPowerData.escort_staff">
-                  <span v-if="transPowerData.escort_staff&&transPowerData.escort_staff.name" v-html="pbFunc.dealNullData(transPowerData.escort_staff.name)"></span>
-                  <span style="margin-left:15px;" v-if="transPowerData.escort_staff&&transPowerData.escort_staff.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.escort_staff.mobile_phone)"></span>
+                <div class="detail-form-item" v-if="detailData.capacity_info.escort_staff">
+                  <span v-if="detailData.capacity_info.escort_staff&&detailData.capacity_info.escort_staff.name" v-html="pbFunc.dealNullData(detailData.capacity_info.escort_staff.name)"></span>
+                  <span style="margin-left:15px;" v-if="detailData.capacity_info.escort_staff&&detailData.capacity_info.escort_staff.mobile_phone" v-html="pbFunc.dealNullData(detailData.capacity_info.escort_staff.mobile_phone)"></span>
                   <span v-else v-html="pbFunc.dealNullData('')"></span>
                 </div>
               </div>
@@ -426,7 +426,7 @@
               <div class="label-list">
                 <label>车辆所属:</label>
                 <div class="detail-form-item">
-                  <span v-if="detailData.delivery_order&&detailData.delivery_order.carriers" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></span>
+                  <span v-if="detailData.delivery_order&&detailData.delivery_order.carriers" v-html="pbFunc.dealNullData(detailData.capacity_info.tractor.carrier.name)"></span>
                 </div>
               </div>
             </el-col>

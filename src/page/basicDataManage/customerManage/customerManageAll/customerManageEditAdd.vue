@@ -218,7 +218,7 @@ export default {
       }
     }
     var needNumVa = (rule, value, callback) => {
-      if (!((value+"").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/)||value=="")||value>1000000) {
+      if (!((value+"").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/)||value==""||value==null)||value>1000000) {
         callback(new Error("请输入0-100万正数"));
       } else {
         callback();
