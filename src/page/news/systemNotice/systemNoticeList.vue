@@ -17,7 +17,8 @@
               <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead('',item,item.read)">
                 <el-row :gutter="10">
                   <el-col :span="18">
-                    <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}
+                    <!-- <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span> -->
+                    {{item.content}}
                   </el-col>
                   <el-col :span="4" class="text-right text-time">
                     {{item.created_at}}
