@@ -118,8 +118,8 @@ export default {
         ],
         confirm_password: [
           { required: true, message: '请再次输入你的密码', trigger: 'blur' },
-          { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
-          // { validator: validateConfirmPass, trigger: 'blur' }
+          // { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
+          { validator: validateConfirmPass, trigger: 'blur' }
         ],
         verify_code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
