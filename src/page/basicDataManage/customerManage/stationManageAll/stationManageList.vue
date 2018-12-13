@@ -130,7 +130,7 @@ export default {
         param: 'owner_name',
         width: ''
       }, {
-        title: '业务员名称',
+        title: '业务员',
         param: 'sale_man_name',
         width: ''
       }, {

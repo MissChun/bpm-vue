@@ -135,9 +135,6 @@ export default {
         }, {
           id: 'lazy',
           value: '暂无交易'
-        }, {
-          id: 'active',
-          value: '活跃用户'
         }]
       },
       tableData: [],
