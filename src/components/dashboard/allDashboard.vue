@@ -161,7 +161,7 @@ export default {
               // {key:'is_reconciliation_invoice_count',value:'已对账已开票',dimension:"车",vLoading:false,extendTable:true},
               {key:'is_reconciliation_noinvoice_count',value:'已对账未开票',dimension:"车",vLoading:false,extendTable:true},
               {key:'is_reconciliation_invoice_count',value:'已对账已开票',dimension:"车",vLoading:false,extendTable:true},
-              {key:'is_invoice_not_back',value:'已开票已/未还款金额',dimension:"元",vLoading:false,extendTable:true}
+              {key:'humanize_is_invoice_not_back',value:'已开票已/未还款金额',dimension:"万",vLoading:false,extendTable:true}
             ],
             'searchShow':true,
             'searchData':[],

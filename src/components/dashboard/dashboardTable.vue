@@ -76,7 +76,7 @@ export default {
           {title:"客户名称",width:'',param:'consumer_name'},
           {title:"已对账已开票数量",width:'',param:'pkcount',goTopage:"/statistics/sales/salesList?is_reconciliation=finished&is_invoice=yes",timeParam:"leaveTime",needSendTable:'consumer_name'},
         ],
-        'is_invoice_not_back':[
+        'humanize_is_invoice_not_back':[
           {title:"客户名称",width:'',param:'consumer_name'},
           {title:"已开票数量",width:'',param:'is_invoice_count'},
           {title:"已开票金额",width:'',param:'is_invoice_price'},
