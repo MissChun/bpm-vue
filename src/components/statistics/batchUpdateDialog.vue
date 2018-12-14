@@ -67,20 +67,15 @@ export default {
       this.$emit('closeDialogBtn', false);
     },
     isValue() {
-
-      setTimeout(() => {
-        this.submitBtn.isDisabled = true;
-        for (let i in this.formRules) {
-        // console.log(this.formRules[i]);
-          if (this.formRules[i]) {
-            this.submitBtn.isDisabled = false;
-            // break;
-          }
+      this.submitBtn.isDisabled = true;
+      for (let i in this.formRules) {
+        if (this.formRules[i].length) {
+          // console.log('i',this.formRules[i]);
+          this.submitBtn.isDisabled = false;
+          break;
         }
-        // console.log('===',this.submitBtn.isDisabled)
-      },100)
-
-
+      }
+      // console.log('===',this.submitBtn.isDisabled)
     },
     adjustBtn: function() {
       this.$refs['formRules'].validate((valid) => {
