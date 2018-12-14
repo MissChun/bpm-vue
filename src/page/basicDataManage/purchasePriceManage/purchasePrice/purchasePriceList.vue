@@ -262,7 +262,7 @@ export default {
       } else {
         let apiName = '';
         let postData = {};
-        console.log('点击',row)
+        // console.log('点击',row)
         setTimeout(() => {
           this.$refs['priceForm'].validate((valid) => {
             if (valid) {
@@ -358,7 +358,7 @@ export default {
           isAdd:true,
         })
       }
-      console.log('quotes',quotes);
+      // console.log('quotes',quotes);
       return quotes;
 
     },
