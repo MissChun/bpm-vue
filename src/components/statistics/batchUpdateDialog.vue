@@ -69,18 +69,18 @@ export default {
     isValue() {
 
       setTimeout(() => {
+        this.submitBtn.isDisabled = true;
         for (let i in this.formRules) {
-        console.log(this.formRules[i]);
+        // console.log(this.formRules[i]);
           if (this.formRules[i]) {
             this.submitBtn.isDisabled = false;
-            break;
-          }else{
-            this.submitBtn.isDisabled = true;
+            // break;
           }
         }
-      })
+        // console.log('===',this.submitBtn.isDisabled)
+      },100)
 
-      console.log(this.submitBtn.isDisabled)
+
     },
     adjustBtn: function() {
       this.$refs['formRules'].validate((valid) => {
