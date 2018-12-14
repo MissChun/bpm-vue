@@ -9,6 +9,14 @@
  */
 
 const api = {
+  batchUpdatePurchaseDiscount: {
+    url: '/api/v1/batch-update-procument/discount/',
+    method: 'patch',
+    desc: '采购优惠批量修改采购、业务优惠',
+    param: {
+
+    }
+  },
   updateLogisticStatisticsList: {
     url: '/api/v1/update-logistic-name/',
     method: 'get',
@@ -608,6 +616,22 @@ const api = {
     desc: '业务区域列表',
     param: {
 
+    }
+  },
+  addPurchasePrice: {
+    url: '/api/v1/supplier-quotes/',
+    method: 'post',
+    desc: '价格管理修改',
+    param: {
+      fluid_business_area: {
+        desc: '地区ID'
+      },
+      today_unit_price: {
+        desc: '价格'
+      },
+      quote_date: {
+        desc: '日期'
+      }
     }
   },
   updatePurchasePrice: {
@@ -1424,8 +1448,8 @@ const api = {
     }
   },
   forgetPassword: {
-    url: '/auth/reset_password/',
-    method: 'post',
+    url: '/api/v1/auth/reset-password/',
+    method: 'patch',
     notNeedToken: true,
     desc: '找回密码',
     param: {

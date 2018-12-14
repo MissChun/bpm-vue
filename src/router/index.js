@@ -23,11 +23,12 @@ let baseRoute = [{
 //   path: '/registerSuccess',
 //   name: '待审核',
 //   component: (resolve) => require(['../page/registerSuccess.vue'], resolve)
-// }, {
-//   path: '/forgetPassword',
-//   name: '找回密码',
-//   component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
 // },
+{
+  path: '/forgetPassword',
+  name: '找回密码',
+  component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
+},
 {
   path: '/401',
   name: '无权访问',

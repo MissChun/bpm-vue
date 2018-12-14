@@ -214,7 +214,7 @@
                     <div class="notice-temp-title">系统通知</div>
                     <div class="notice-temp-content" v-loading="noticeLoading">
                       <ul>
-                        <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item,item.read)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}<span class="time">{{item.created_at}}</span></li>
+                        <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item,item.read)"><!-- <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span> -->{{item.content}}<span class="time">{{item.created_at}}</span></li>
                       </ul>
                     </div>
                     <div class="notice-temp-footer">
@@ -295,17 +295,17 @@ export default {
       this.$store.state.common.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       let ws = this.$store.state.common.wsMsg;
       ws.onopen = function(event) {
-        console.log('链接消息', event)
+        // console.log('链接消息', event)
       }
       ws.onmessage = function(event) {
-        console.log('接收消息', event)
+        // console.log('接收消息', event)
         let msg = JSON.parse(event.data);
         // vm.$store.state.common.unreadNewNum++;
         vm.$store.commit('ChangeMsgNum', {
           num: 1
         });
         vm.$notify({
-          title: msg.message_type.verbose,
+          // title: msg.message_type.verbose,
           message: msg.content,
           position: 'bottom-right',
         });

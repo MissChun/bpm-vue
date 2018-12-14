@@ -39,7 +39,7 @@
           </el-row>
         </el-form-item> -->
         <div class="user-page-btn">
-          <!-- <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item> -->
+          <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item>
           <el-form-item>
             <el-button @click.native="login()" type="success" :loading="submitBtn.isBtnLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>

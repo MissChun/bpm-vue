@@ -144,14 +144,14 @@
 									</el-tooltip>
 								</el-col>
 								<el-col :span="4">
-									车号: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
+									车号: <span v-if="props.row.capacity_info && props.row.capacity_info.tractor">{{props.row.capacity_info.tractor.plate_number}}</span>
 									<span v-else>无</span>
 								</el-col>
 								<el-col :span="4">
-									主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span>
+									主驾: <span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.name">{{props.row.capacity_info.master_driver.name}}</span>
 								</el-col>
 								<el-col :span="4">
-									主驾电话: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
+									主驾电话: <span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.mobile_phone">{{props.row.capacity_info.master_driver.mobile_phone}}</span>
 								</el-col>
 							</el-row>
 							<el-row style="margin-top:20px;">
@@ -170,7 +170,7 @@
                   					<span v-else>预匹配卸货地:无</span>
                 				</el-col>
 								<el-col :span="4">
-									供应商: <span v-if="props.row.delivery_order.trader.length<10">{{props.row.delivery_order.trader}}</span>
+									承运商: <span v-if="props.row.delivery_order.trader.length<10">{{props.row.delivery_order.trader}}</span>
 									<el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.trader" placement="top-start">
 										<span>{{props.row.delivery_order.trader.slice(0,8)}}....</span>
 									</el-tooltip>
@@ -496,23 +496,23 @@
 			<el-table-column label="车辆信息" prop="" min-width="150">
 				<template slot-scope="props">
 					<el-tooltip class="item" effect="light"  placement="right">
-						<div slot="content" style="width:130px;">
+						<div slot="content" style="width:140px;">
 							<el-row>
-								<el-col>车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
+								<el-col>车号:<span v-if="props.row.capacity_info && props.row.capacity_info.tractor">{{props.row.capacity_info.tractor.plate_number}}</span>
 								<span v-else>无</span></el-col>
-								<el-col>挂车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer">{{props.row.transPowerInfo.semitrailer.plate_number}}</span>
+								<el-col>挂车号:<span v-if="props.row.capacity_info && props.row.capacity_info.semitrailer">{{props.row.capacity_info.semitrailer.plate_number}}</span>
 								<span v-else>无</span></el-col>
-								<el-col>主驾:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span>
+								<el-col>主驾:<span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.name">{{props.row.capacity_info.master_driver.name}}</span>
 								<span v-else>无</span></el-col>
-								<el-col>主驾电话:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
+								<el-col>主驾电话:<span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.mobile_phone">{{props.row.capacity_info.master_driver.mobile_phone}}</span>
 								<span v-else>无</span></el-col>
-								<el-col>副驾:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.vice_driver&&props.row.transPowerInfo.vice_driver.name">{{props.row.transPowerInfo.vice_driver.name}}</span>
+								<el-col>副驾:<span v-if="props.row.capacity_info && props.row.capacity_info.vice_driver&&props.row.capacity_info.vice_driver.name">{{props.row.capacity_info.vice_driver.name}}</span>
 								<span v-else>无</span ></el-col>
-								<el-col>押运:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.escort_staff&&props.row.transPowerInfo.escort_staff.name">{{props.row.transPowerInfo.escort_staff.name}}</span>
+								<el-col>押运:<span v-if="props.row.capacity_info && props.row.capacity_info.escort_staff&&props.row.capacity_info.escort_staff.name">{{props.row.capacity_info.escort_staff.name}}</span>
 								<span v-else>无</span></el-col>
 							</el-row>
 						</div>
-						<span v-if="props.row.transPowerInfo&&props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
+						<span v-if="props.row.capacity_info&&props.row.capacity_info.tractor">{{props.row.capacity_info.tractor.plate_number}}</span>
 					</el-tooltip>
 				</template>
 			</el-table-column>
@@ -526,7 +526,10 @@
 				<template slot-scope="props">
 					<el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
 							<el-col v-if="key==0">
-								<el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+								<el-button v-if="props.row.status.key=='loading_audit_failed'&&props.row.pick_loading_audit_failed_cancel==true" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" >{{item.text}}</el-button>
+
+								<el-button v-if="props.row.status.key!='loading_audit_failed'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+								<!-- <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button> -->
 							</el-col>
 						</el-row>
 						<el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
@@ -669,6 +672,14 @@ export default {
 					methods_type: "cancleOrder",
 					attrPlan: true
 				}],
+				loading_audit_failed: [
+		          { //
+		            text: "取消运单",
+		            type: "danger",
+		            methods_type: "cancleOrder",
+		            attrPlan: true
+		          }
+		        ],
 				//匹配卸车
 				waiting_match: [{ //待匹配卸货单
 					text: "匹配卸货单",

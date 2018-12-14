@@ -9,14 +9,14 @@
       <div v-if="isResetSuccess">
         <div class="user-page-title">找回密码</div>
         <el-form class="user-form" label-width="95px" :rules="resetRules" :model="ruleForm" ref="ruleForm" status-icon>
-          <el-form-item label="手机号" prop="phone">
-            <el-input :autofocus="true" placeholder="请输入注册手机号" v-model.trim="ruleForm.phone" name='email'>
+          <el-form-item label="手机号" prop="mobile_number">
+            <el-input :autofocus="true" placeholder="请输入注册手机号" v-model.trim="ruleForm.mobile_number" name='email'>
             </el-input>
           </el-form-item>
-          <el-form-item label="短信验证码" prop="message_verify_code">
+          <el-form-item label="短信验证码" prop="verify_code">
             <el-row>
               <el-col :span="14">
-                <el-input placeholder="请输入验证码" type="text" v-model.trim="ruleForm.message_verify_code" class="vaInput"></el-input>
+                <el-input placeholder="请输入验证码" type="text" v-model.trim="ruleForm.verify_code" class="vaInput"></el-input>
               </el-col>
               <el-col :span="9" :offset="1">
                 <el-button class="get-code-btn" style="" v-on:click="getMsgCode" type="primary" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
@@ -98,8 +98,8 @@ export default {
     };
     return {
       ruleForm: {
-        phone: '',
-        message_verify_code: '',
+        mobile_number: '',
+        verify_code: '',
         password: "",
         confirm_password: "",
       },
@@ -107,28 +107,30 @@ export default {
       times: 60,
       isResetSuccess: true,
       resetRules: {
-        phone: [
+        mobile_number: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^1\d{10}$/, message: '手机号码不正确', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请设置新登录密码', trigger: 'blur' },
-          { validator: validatePass, trigger: 'blur' }
+          { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
+          // { validator: validatePass, trigger: 'blur' }
         ],
         confirm_password: [
           { required: true, message: '请再次输入你的密码', trigger: 'blur' },
+          // { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
           { validator: validateConfirmPass, trigger: 'blur' }
         ],
-        message_verify_code: [
+        verify_code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
+          { min: 4,max: 4, message: '输入4位验证码', trigger: 'blur' }
           // { validator: validateNum, trigger: 'blur' },
         ]
       },
       msgBtn: {
         getCodeText: '获取验证码',
         isLoading: false,
-        isDisabled: false,
-        sendStatus: false
+        isDisabled: false
       },
       submitBtn: {
         btnText: '重置密码',
@@ -204,7 +206,7 @@ export default {
     getMsgCode() {
       let times = this.times;
       let intCountdown;
-      if (this.ruleForm.phone) {
+      if (this.ruleForm.mobile_number) {
         const countdown = () => {
           this.msgBtn.getCodeText = times + 's';
           if (times >= 1) {
@@ -219,8 +221,8 @@ export default {
         this.msgBtn.isDisabled = true;
         this.msgBtn.getCodeText = '发送中...';
         this.$$http('messageVerifyCode', {
-          phone: this.ruleForm.phone,
-          method_type: 'reset_password'
+          phone: this.ruleForm.mobile_number,
+          // method_type: 'reset_password'
         }).then((results) => {
           if (results.data && results.data.code == 0) {
             setTimeout(() => {
@@ -232,9 +234,10 @@ export default {
               intCountdown = setInterval(countdown, 1000);
             }, 1000)
 
+          } else {
+            this.msgBtn.isDisabled = false;
           }
           this.msgBtn.isLoading = false;
-          this.msgBtn.isDisabled = false;
 
         }).catch((err) => {
           this.msgBtn.isLoading = false;

@@ -337,7 +337,7 @@ export default {
           param: 'station_type',
           width: ''
         }, {
-          title: '实际液厂',
+          title: '计划液厂',
           param: 'actual_fluid_name',
           width: ''
         }, {
