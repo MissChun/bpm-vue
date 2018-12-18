@@ -35,7 +35,7 @@
                   <div class="trans-fee">
                     <div class="table-list">
                       <el-table :data="recordsData" stripe style="width: 100%" size="medium">
-                        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+                        <el-table-column v-for="(item,key) in thTableList" :key="item.param" :prop="item.param" align="center" :label="item.title" :width="item.width">
                           <template slot-scope="scope">
                             <div v-if="scope.row.isEdit">
                               <div v-if="item.param==='start_mileage'">
@@ -285,7 +285,7 @@ export default {
       if(this.editRecordsList.isEdit){
         this.saveBtn(this.editRecordsList,row,true);
       }else{
-        console.log('news')
+        // console.log('news')
         for(let i in this.recordsData){
           if(this.recordsData[i].index === row.index){
             // this.recordsData[i].isEdit = true;
@@ -311,7 +311,6 @@ export default {
 
       let record = row;
       let len = this.recordsData.length;
-
       // if(row.record_count === 1){
         if(!record.end_mileage){
           this.$message({
@@ -331,7 +330,7 @@ export default {
             type: 'error',
             duration:'5000'
           });
-        }else if(len>1&&record.index!=len-1&&(parseInt(record.index)+1)<=len&&record.end_mileage>=this.recordsData[parseInt(record.index)+1].end_mileage){//
+        }else if(len>1&&record.index!=len-1&&(parseInt(record.index)+1)<=len&&parseFloat(record.end_mileage)>=parseFloat(this.recordsData[parseInt(record.index)+1].end_mileage)){//
           this.$message({
             message: '该条终点里程不得大于下一条的起始里程',
             type: 'error',
@@ -366,7 +365,7 @@ export default {
           record.isEdit = false;
           this.editRecordsList = {};
           if(isSave){
-            console.log(99999)
+            // console.log(99999)
             this.editRecords(newRow);
           }
           if(len>1&&record.index!=len-1&&(parseInt(record.index)+1)<=len){
@@ -379,18 +378,28 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
+      let isEditData = true;//是否有编辑的数据  默认是有
 
       let postData = {
         records:this.recordsData
       }
       postData = Object.assign(postData,this.editMsgForm);
-      console.log('postData',postData);
+      // console.log('postData',postData);
       // let keyArray = ['name', 'contact_name', 'contact_phone', 'detail_address', 'deficiency_standard', 'code', 'codeMsg'];
       // let postData = this.pbFunc.fifterbyArr(this.customerMsgForm, keyArray);
       // if (btnType === 'next') {
       //   this.editAjax(postData, formName, btnObject, 2);
       // } else if (btnType === 'out') {
-      if(this.recordsData.length&&!this.editRecordsList.isEdit&&!this.recordsData[this.recordsData.length-1].isEdit){
+      for(let i in this.recordsData){
+        // console.log('编辑状态',this.recordsData[i].isEdit);
+        if(this.recordsData[i].isEdit){
+          isEditData = false;
+          break;
+        }
+      }
+      // 1、运费规则必须大于1
+      // 2、必须保证每条数据编辑状态都是关闭的false
+      if(this.recordsData.length&&isEditData){
         this.editAjax(postData, formName, btnObject, null, true);
       }else{
         this.$message({
@@ -483,7 +492,7 @@ export default {
             this.recordsData[i].isEdit = false;
             this.recordsData[i].index = i;
           }
-          console.log('详情',this.editMsgForm,this.recordsData)
+          // console.log('详情',this.editMsgForm,this.recordsData)
         }
       }).catch((err) => {
         this.pageLoading = false;
