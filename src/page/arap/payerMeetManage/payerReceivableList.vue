@@ -19,7 +19,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="供应商应付账款" name="meet"></el-tab-pane>
+        <el-tab-pane label="付款方应收报表" name="meet"></el-tab-pane>
         <el-tab-pane label="客户应收报表" name="customer"></el-tab-pane>
         <el-tab-pane label="回款管理" name="receivable">
           <div class="tab-screen">
