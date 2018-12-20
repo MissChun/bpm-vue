@@ -1,5 +1,5 @@
 <style scoped lang="less">
-/deep/ .code {
+  /deep/ .code {
   input {
     border-color: #dcdfe6!important;
   }
@@ -35,14 +35,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="供应商:" prop="supplier">
-                    <el-select v-model="editMsgForm.supplier" :loading="supplierLoading" filterable remote clearable  @change="getSupplier" @blur="selectId('supplier')" :remote-method="getSupplier" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.supplier" :loading="supplierLoading" filterable remote clearable @change="getSupplier" @blur="selectId('supplier')" :remote-method="getSupplier" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.supplierSelect" :key="item.id" :label="item.supplier_name" :value="item.supplier_name"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂:" prop="fluid">
-                    <el-select v-model="editMsgForm.fluid" :loading="fluidLoading" filterable remote clearable  @change="getFluidList" @blur="selectId('fluid')" :remote-method="getFluidList" placeholder="请输入选择">
+                  <el-form-item label="供方液厂名称:" prop="fluid">
+                    <el-select v-model="editMsgForm.fluid" :loading="fluidLoading" filterable remote clearable @change="getFluidList" @blur="selectId('fluid')" :remote-method="getFluidList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.fluidSelect" :key="item.id" :label="item.fluid_name" :value="item.fluid_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -76,7 +76,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="卸货站:">
-                    <el-input placeholder="暂无" type="text" v-model="editMsgForm.station"  :disabled="isDisabled"></el-input>
+                    <el-input placeholder="暂无" type="text" v-model="editMsgForm.station" :disabled="isDisabled"></el-input>
                     <!-- <el-select v-model="editMsgForm.station" :loading="stationLoading" filterable clearable multiple @blur="selectId('station')"  placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.stationSelect" :key="item.id" :label="item.station_name" :value="item.station_name"></el-option>
                     </el-select> -->
@@ -176,9 +176,9 @@ export default {
       editMsgForm: {
         waybill: '',
         supplier: '',
-        supplier_id:'',
+        supplier_id: '',
         fluid: '',
-        fluid_id:'',
+        fluid_id: '',
         plate_number: '',
         active_time: '',
         active_tonnage: '',
@@ -201,10 +201,10 @@ export default {
       },
 
       rules: {
-        supplier:[
+        supplier: [
           { required: true, message: '请选择供应商', trigger: 'change' },
         ],
-        fluid:[
+        fluid: [
           { required: true, message: '请选择液厂名称', trigger: 'change' },
         ],
         // station:[
@@ -241,13 +241,13 @@ export default {
       },
       detail: {},
       customerList: [],
-      supplierLoading:false,
-      fluidLoading:false,
-      stationLoading:false,
-      selectData:{
-        supplierSelect:[],//供应商列表
-        fluidSelect:[],//液厂列表
-        stationSelect:[],//站点列表
+      supplierLoading: false,
+      fluidLoading: false,
+      stationLoading: false,
+      selectData: {
+        supplierSelect: [], //供应商列表
+        fluidSelect: [], //液厂列表
+        stationSelect: [], //站点列表
       }
     }
   },
@@ -271,18 +271,18 @@ export default {
       this.$router.push({ path: "/statistics/purchase/purchaseList" });
       // }
     },
-    selectId(type){
-      setTimeout(()=>{
-        if(type==='supplier'){
-          for(let i in this.selectData.supplierSelect){
-            if(this.selectData.supplierSelect[i].supplier_name == this.editMsgForm.supplier){
+    selectId(type) {
+      setTimeout(() => {
+        if (type === 'supplier') {
+          for (let i in this.selectData.supplierSelect) {
+            if (this.selectData.supplierSelect[i].supplier_name == this.editMsgForm.supplier) {
               this.editMsgForm.supplier_id = this.selectData.supplierSelect[i].id;
               break;
             }
           }
-        }else if(type==='fluid'){
-          for(let i in this.selectData.fluidSelect){
-            if(this.selectData.fluidSelect[i].fluid_name == this.editMsgForm.fluid){
+        } else if (type === 'fluid') {
+          for (let i in this.selectData.fluidSelect) {
+            if (this.selectData.fluidSelect[i].fluid_name == this.editMsgForm.fluid) {
               this.editMsgForm.fluid_id = this.selectData.fluidSelect[i].id;
               // console.log(this.selectData.fluidSelect[i].id,'===',this.editMsgForm.fluid_id)
               break;
@@ -301,17 +301,17 @@ export default {
         //     }
         //   }
         // }
-        console.log('id',this.editMsgForm.fluid_id)
-      },200)
+        console.log('id', this.editMsgForm.fluid_id)
+      }, 200)
 
     },
     // 供应商列表
     getSupplier: function(query) {
       let postData = {
         page: 1,
-        page_size:100,
+        page_size: 100,
       }
-      if(query){
+      if (query) {
         postData.supplier_name = query;
       }
       this.supplierLoading = true;
@@ -328,9 +328,9 @@ export default {
     getFluidList: function(query) {
       let postData = {
         page: 1,
-        page_size:100,
+        page_size: 100,
       };
-      if(query){
+      if (query) {
         postData.fluid_name = query;
       }
       this.fluidLoading = true;
@@ -361,9 +361,9 @@ export default {
           this.editMsgForm = {
             waybill: this.detail.waybill,
             supplier: this.detail.supplier,
-            supplier_id:this.detail.supplier_id,
+            supplier_id: this.detail.supplier_id,
             fluid: this.detail.fluid,
-            fluid_id:this.detail.fluid_id,
+            fluid_id: this.detail.fluid_id,
             plate_number: this.detail.plate_number,
             active_time: this.detail.active_time,
             active_tonnage: this.detail.active_tonnage,
@@ -422,9 +422,9 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['supplier','supplier_id','fluid','fluid_id','active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
+      let keyArray = ['supplier', 'supplier_id', 'fluid', 'fluid_id', 'active_time', 'active_tonnage', 'unit_price', 'discount_price', 'business_price', 'work_end_time', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
-      postData.discount_price = postData.discount_price?postData.discount_price:0;
+      postData.discount_price = postData.discount_price ? postData.discount_price : 0;
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

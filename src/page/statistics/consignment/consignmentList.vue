@@ -62,7 +62,6 @@
           <el-col :span="15" class="total-data" v-if="multipleSelection.length==0">
             一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
-
           <el-col :span="15" class="total-data" v-else>
             当前选择{{chooseCount.num}}单，运费总计{{chooseCount.waiting_charges}}元
           </el-col>
@@ -88,53 +87,53 @@
               <div v-else>
                 <span>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                </span>
-                <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                <span v-else v-html="scope.row[item.param]"></span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="是否开票" align="center" width="100">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_invoice.verbose}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="运费合计" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>
-                <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
-                {{scope.row.waiting_charges}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="140" fixed="right">
-            <template slot-scope="scope">
-              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-                <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-              </div>
-              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-                <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+              </span>
+              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+              <span v-else v-html="scope.row[item.param]"></span>
       </div>
-      <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-        </el-pagination>
-      </div>
+</template>
+</el-table-column>
+<el-table-column label="是否对账" align="center" width="100">
+  <template slot-scope="scope">
+    <div>{{scope.row.is_reconciliation.verbose}}</div>
+  </template>
+</el-table-column>
+<el-table-column label="是否开票" align="center" width="100">
+  <template slot-scope="scope">
+    <div>{{scope.row.is_invoice.verbose}}</div>
+  </template>
+</el-table-column>
+<el-table-column label="运费合计" align="center" width="100" fixed="right">
+  <template slot-scope="scope">
+    <div>
+      <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
+      {{scope.row.waiting_charges}}
     </div>
-    <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-    <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
-  </div>
+  </template>
+</el-table-column>
+<el-table-column label="操作" align="center" width="140" fixed="right">
+  <template slot-scope="scope">
+    <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+      <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+      <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+    </div>
+    <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+      <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+      <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+    </div>
+  </template>
+</el-table-column>
+</el-table>
+<no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+</div>
+<div class="page-list text-center">
+  <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+  </el-pagination>
+</div>
+</div>
+<consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+<update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
+</div>
 </template>
 <script>
 import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
@@ -162,12 +161,12 @@ export default {
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际到厂时间
-      planTime: [],//计划装车时间
+      planTime: [], //计划装车时间
       selectMenus: [], //批量勾选
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
-        is_invoice:'',
+        is_invoice: '',
         keyword: '',
         field: 'plate_number',
       },
@@ -190,9 +189,9 @@ export default {
       },
       filterParam: {
         isReconciliations: {
-          id:'is_reconciliation',
-          value:'是否对账',
-          data:[
+          id: 'is_reconciliation',
+          value: '是否对账',
+          data: [
             { id: '', value: '全部' },
             { id: 'unfinished', value: '未对账' },
             { id: 'finished', value: '已对账' }
@@ -215,21 +214,19 @@ export default {
           { id: 'fluid', value: '实际液厂' },
           { id: 'station', value: '卸货站' }
         ],
-        times:[
-          {
-            id: 'leave_time_start',
-            timeEnd:'leave_time_end',
-            value: '实际离站时间'
-          },{
-            id: 'active_time_start',
-            timeEnd:'active_time_end',
-            value: '实际到厂时间'
-          },{
-            id: 'plan_loading_time_start',
-            timeEnd:'plan_loading_time_end',
-            value: '计划装车时间'
-          }
-        ],
+        times: [{
+          id: 'leave_time_start',
+          timeEnd: 'leave_time_end',
+          value: '实际离站时间'
+        }, {
+          id: 'active_time_start',
+          timeEnd: 'active_time_end',
+          value: '实际到厂时间'
+        }, {
+          id: 'plan_loading_time_start',
+          timeEnd: 'plan_loading_time_end',
+          value: '计划装车时间'
+        }],
       },
       thTableList: [{
         title: '运单号',
@@ -250,7 +247,7 @@ export default {
         param: 'plate_number',
         width: ''
       }, {
-        title: '实际液厂',
+        title: '液厂',
         param: 'fluid',
         width: ''
       }, {
@@ -337,7 +334,7 @@ export default {
         title: '对账时间',
         param: 'reconciliation_time',
         width: '180'
-      },{
+      }, {
         title: '开票时间',
         param: 'invoice_time',
         width: '180'
@@ -362,57 +359,57 @@ export default {
       reconciliationList: [], //
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
-      updateDataIsShow:false,//获取更新数据
+      updateDataIsShow: false, //获取更新数据
       adjustRow: {}, //调账信息
       exportBtn: {
         text: '导出',
         isLoading: false,
         isDisabled: false,
       },
-      chooseCount:{
-        num:0,
-        waiting_charges:"0.00"
+      chooseCount: {
+        num: 0,
+        waiting_charges: "0.00"
       },
-      updateData:{},
-      getNewDataIds:[]//获取最新数据的ID
+      updateData: {},
+      getNewDataIds: [] //获取最新数据的ID
     }
   },
   methods: {
-    updateCloseDialog(isSave){
+    updateCloseDialog(isSave) {
       this.updateDataIsShow = false;
       if (isSave) {
         this.getList();
       }
     },
     // 更新数据
-    updatePostData(){
+    updatePostData() {
       this.updateData = this.postDataFilter(this.updateData);
       this.getNewDataIds = [];
-      for(let i in this.multipleSelection){
-        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
+      if (this.getNewDataIds.length || this.pbFunc.objSize(this.updateData)) {
         this.updateDataIsShow = true;
-      }else{
+      } else {
         this.$message.warning('没有勾选未对账运单数据可获取或筛选条件');
       }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      if(val.length>0){
+      if (val.length > 0) {
         this.calculation();
       }
     },
-    calculation:function(){
-      var newfifterCount={num:0,waiting_charges:"0.00"};
-      this.multipleSelection.forEach(item=>{
+    calculation: function() {
+      var newfifterCount = { num: 0, waiting_charges: "0.00" };
+      this.multipleSelection.forEach(item => {
         newfifterCount.num++;
         // newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
-        newfifterCount.waiting_charges=(parseFloat(newfifterCount.waiting_charges)+parseFloat(item.waiting_charges)).toFixed(2);
+        newfifterCount.waiting_charges = (parseFloat(newfifterCount.waiting_charges) + parseFloat(item.waiting_charges)).toFixed(2);
       });
-      this.chooseCount=newfifterCount;
+      this.chooseCount = newfifterCount;
     },
     pageChange() {
       setTimeout(() => {
@@ -424,7 +421,7 @@ export default {
         if (row.waybill.indexOf("TE") != -1) {
           //this.$router.push({ path: `/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}` });
           window.open(`#/statistics/consignment/consignmentOutsideBuyDetali/${row.waybill_id}`, '_blank')
-        } else if (row.waybill.indexOf("TSE") != -1||row.waybill.indexOf("T+") != -1) {
+        } else if (row.waybill.indexOf("TSE") != -1 || row.waybill.indexOf("T+") != -1) {
 
         } else {
           //this.$router.push({ path: `/statistics/consignment/consignmentWaybillDetail/${row.waybill_id}/${row.business_order_id}` });
@@ -434,7 +431,7 @@ export default {
         if (row.business_order.indexOf("SE") != -1) {
           //this.$router.push({ path: `/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}` });
           window.open(`#/statistics/consignment/consignmentOutsidePickDetali/${row.business_order_id}`, '_blank')
-        }  else if (row.business_order.indexOf("S+") != -1) {
+        } else if (row.business_order.indexOf("S+") != -1) {
 
         } else {
           //this.$router.push({ path: `/statistics/consignment/consignmentBusinessDetail`, query: { id: row.business_order_id } });
@@ -675,7 +672,7 @@ export default {
         title: '车牌号',
         id: 43,
       }, {
-        title: '实际液厂',
+        title: '液厂',
         id: 44,
       }, {
         title: '卸货站',
@@ -743,7 +740,7 @@ export default {
       }, {
         title: '对账时间',
         id: 170,
-      },{
+      }, {
         title: '开票时间',
         id: 169,
       }, {
@@ -758,7 +755,7 @@ export default {
       }, {
         title: '是否开票',
         id: 226,
-      },{
+      }, {
         title: '运费合计',
         id: 60,
       }, {

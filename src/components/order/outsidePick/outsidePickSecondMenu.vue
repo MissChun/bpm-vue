@@ -34,13 +34,11 @@
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
-
             <el-form-item align="right" label="计划采购时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
-
           <el-col :span="8" class="searchSection">
             <el-form-item align="right" label="装车完成时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.actual_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
@@ -78,7 +76,7 @@ export default {
   name: 'outsidePickSecondMenu',
   components: {
     outsidePickListRender: () =>
-      import ("./outsidePickListRender.vue")
+      import("./outsidePickListRender.vue")
   },
   data() {
     return {
@@ -122,12 +120,12 @@ export default {
       },
       timeParam: {
         load_plan_time: [],
-        actual_time:[]
+        actual_time: []
       },
       selectData: {
         fieldSelect: [
           { id: 'truck_no', value: '车号' },
-          { id: 'plan_fluid_name', value: '液厂名' },
+          { id: 'plan_fluid_name', value: '标准液厂' },
           { id: 'order_number', value: '业务单号' },
           { id: 'short_name', value: '客户简称' },
           { id: 'sale_man_name', value: '业务员' },
@@ -160,7 +158,7 @@ export default {
     changeExtendsStatus: function() {
       this.expandStatus = !this.expandStatus;
     },
-    exportOrder:function(){
+    exportOrder: function() {
       this.$emit("reshCount");
       var sendData = {};
       var vm = this;
@@ -178,9 +176,9 @@ export default {
       }
       if (this.timeParam.actual_time instanceof Array && this.timeParam.actual_time.length > 0) {
         sendData.actual_time_start = this.timeParam.actual_time[0]; //计划装车
-        sendData.actual_time_end= this.timeParam.actual_time[1];
+        sendData.actual_time_end = this.timeParam.actual_time[1];
       }
-      
+
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
@@ -190,7 +188,7 @@ export default {
       this.exportLoading = true;
       // let url = "http://"+this.pbFunc.getDomainUrl();
       let domainUrl = getDomainUrl('http://');
-      axios.get(domainUrl+'/api/v1/outsale_order/', {
+      axios.get(domainUrl + '/api/v1/outsale_order/', {
         method: 'get',
         responseType: 'blob',
         headers: {
@@ -244,7 +242,7 @@ export default {
       }
       if (this.timeParam.actual_time instanceof Array && this.timeParam.actual_time.length > 0) {
         sendData.actual_time_start = this.timeParam.actual_time[0]; //计划装车
-        sendData.actual_time_end= this.timeParam.actual_time[1];
+        sendData.actual_time_end = this.timeParam.actual_time[1];
       }
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;

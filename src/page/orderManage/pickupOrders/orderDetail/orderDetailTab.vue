@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.detail-main {
+  .detail-main {
   min-height: 500px;
   border-top: 0 none;
 }
@@ -80,7 +80,7 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>液厂名称:</label>
+                        <label>供方液厂:</label>
                         <div class="detail-form-item">{{detailData.fluid_name}}</div>
                       </div>
                     </el-col>
@@ -110,7 +110,7 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>实际液厂:</label>
+                        <label>液厂:</label>
                         <div class="detail-form-item">{{detailData.actual_fluid_address}}</div>
                       </div>
                     </el-col>

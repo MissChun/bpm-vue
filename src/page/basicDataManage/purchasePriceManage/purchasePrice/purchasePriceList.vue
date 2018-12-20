@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.el-form-item {
+  .el-form-item {
   margin-bottom: 0;
   margin-top: -6px;
 }
@@ -85,7 +85,6 @@
                         <li :class="item.param === 'supplier_name'?'td-hover pad-li':''" :title="scope.row[item.param]">{{scope.row[item.param]}}</li>
                       </ul>
                     </div>
-
                     <div v-if="item.param === 'area'">
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">{{area.area}}</li>
@@ -95,12 +94,11 @@
                       <ul>
                         <li v-for="(area,index) in scope.row.business_areas">
                           <div v-for="(quotes,index) in area.quotesData" v-on:dblclick="isShowPrice(quotes,true,$event)" v-if="quotes.price_date===item.title">
-                              <div v-show="!quotes.isShow">{{quotes.today_unit_price}}</div>
-                              <el-form-item prop="price" v-show="quotes.isShow">
-                                <el-input v-model.trim="priceForm.price" @keyup.native.13="editPrice" size="mini" @blur="isShowPrice(quotes,false,$event,area.id)" placeholder="请输入内容"></el-input>
-                              </el-form-item>
-                            </div>
-
+                            <div v-show="!quotes.isShow">{{quotes.today_unit_price}}</div>
+                            <el-form-item prop="price" v-show="quotes.isShow">
+                              <el-input v-model.trim="priceForm.price" @keyup.native.13="editPrice" size="mini" @blur="isShowPrice(quotes,false,$event,area.id)" placeholder="请输入内容"></el-input>
+                            </el-form-item>
+                          </div>
                         </li>
                       </ul>
                     </div>
@@ -142,14 +140,14 @@ export default {
       },
       dateTime: '', //日期
       thTableList: [{
-        title: '液厂名称',
+        title: '供方液厂名称',
         param: 'fluid_name',
         width: ''
       }, {
         title: '供应商',
         param: 'supplier_name',
         width: '170'
-      },{
+      }, {
         title: '目的地',
         param: 'area',
         width: ''
@@ -158,14 +156,14 @@ export default {
       activeName: 'purchasePrice',
       searachPostData: {}, //搜索参数
       searchFilters: {
-        quote_date_start:'',
-        quote_date_end:'',
+        quote_date_start: '',
+        quote_date_end: '',
         keyword: '',
         field: 'fluid_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '实际液厂' },
+          { id: 'fluid_name', value: '液厂' },
           { id: 'supplier_name', value: '供应商' },
         ]
       },
@@ -175,7 +173,7 @@ export default {
       },
       startData: '',
       endData: '',
-      thDateTitle:[]
+      thDateTitle: []
     };
   },
   computed: {
@@ -190,7 +188,7 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searachPostData = this.pbFunc.deepcopy(this.searchFilters);
-      if(this.dateTime){
+      if (this.dateTime) {
         this.startData = this.pbFunc.formatDate(this.dateTime);
         this.endData = this.weekDate(5);
         this.searachPostData.quote_date_start = this.startData;
@@ -202,7 +200,7 @@ export default {
     weekDate(number) {
       let time = new Date(this.dateTime);
       time.setDate(time.getDate() + number);
-      let week = time.getFullYear() + "-" +(time.getMonth() + 1<10?'0':'')+ (time.getMonth() + 1) + "-" + time.getDate();
+      let week = time.getFullYear() + "-" + (time.getMonth() + 1 < 10 ? '0' : '') + (time.getMonth() + 1) + "-" + time.getDate();
       return week;
     },
     isPrevent(event) {
@@ -234,7 +232,7 @@ export default {
                 isShow: isShow,
                 price_date: row.price_date,
                 today_unit_price: row.today_unit_price,
-                isAdd:row.isAdd
+                isAdd: row.isAdd
               })
               this.editPriceInfo = row;
             } else {
@@ -243,15 +241,15 @@ export default {
                 isShow: false,
                 price_date: this.tableData[i].business_areas[j].quotesData[z].price_date,
                 today_unit_price: this.tableData[i].business_areas[j].quotesData[z].today_unit_price,
-                isAdd:this.tableData[i].business_areas[j].quotesData[z].isAdd
+                isAdd: this.tableData[i].business_areas[j].quotesData[z].isAdd
               })
             }
           }
         }
       }
-      console.log('row',row,this.tableData)
+      console.log('row', row, this.tableData)
     },
-    isShowPrice(row, isShow, event,areaId) {
+    isShowPrice(row, isShow, event, areaId) {
       if (isShow) {
 
         this.updateTableData(row, isShow);
@@ -266,14 +264,14 @@ export default {
         setTimeout(() => {
           this.$refs['priceForm'].validate((valid) => {
             if (valid) {
-              if(row.isAdd){
+              if (row.isAdd) {
                 apiName = 'addPurchasePrice';
                 postData = {
-                  fluid_business_area:areaId,
+                  fluid_business_area: areaId,
                   quote_date: row.price_date,
                   today_unit_price: this.priceForm.price
                 };
-              }else{
+              } else {
                 apiName = 'updatePurchasePrice';
                 postData = {
                   id: row.id,
@@ -286,7 +284,7 @@ export default {
 
                   setTimeout(() => {
                     this.priceForm.price = '';
-                    this.$refs['priceForm'].clearValidate();　
+                    this.$refs['priceForm'].clearValidate();
                   }, 1000)
                   this.getList();
                   this.$message({
@@ -312,22 +310,22 @@ export default {
     },
     getDateTitle() {
       let postData = {
-        quote_date_start:this.searachPostData.quote_date_start,
-        quote_date_end:this.searachPostData.quote_date_end
+        quote_date_start: this.searachPostData.quote_date_start,
+        quote_date_end: this.searachPostData.quote_date_end
       }
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.$$http('getPriceDateList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           // this.tableData = results.data;
-          this.thTableList= [{
-            title: '液厂名称',
+          this.thTableList = [{
+            title: '供方液厂名称',
             param: 'fluid_name',
             width: ''
           }, {
             title: '供应商',
             param: 'supplier_name',
             width: '170'
-          },{
+          }, {
             title: '目的地',
             param: 'area',
             width: ''
@@ -345,17 +343,17 @@ export default {
       }).catch((err) => {})
     },
     // 日期价格list
-    dataQuotes(data){
+    dataQuotes(data) {
       let quotes = [];
-      for(let i in data){
-        let timestamp = Number(Math.random().toString().substr(3,30) + Date.now()).toString(36);;
+      for (let i in data) {
+        let timestamp = Number(Math.random().toString().substr(3, 30) + Date.now()).toString(36);;
         quotes.push({
-          id:timestamp,
-          fluid_business_area:'',
-          price_date:data[i],
-          today_unit_price:0.00,
-          isShow:false,
-          isAdd:true,
+          id: timestamp,
+          fluid_business_area: '',
+          price_date: data[i],
+          today_unit_price: 0.00,
+          isShow: false,
+          isAdd: true,
         })
       }
       // console.log('quotes',quotes);
@@ -367,8 +365,8 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        quote_date_start:this.searachPostData.quote_date_start,
-        quote_date_end:this.searachPostData.quote_date_end
+        quote_date_start: this.searachPostData.quote_date_start,
+        quote_date_end: this.searachPostData.quote_date_end
       }
       postData[this.searachPostData.field] = this.searachPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -382,15 +380,15 @@ export default {
               this.tableData[i].business_areas[j].quotesData = this.dataQuotes(this.thDateTitle);;
               for (let z in this.tableData[i].business_areas[j].quotes) {
                 this.tableData[i].business_areas[j].quotes[z].isShow = false;
-                for(let y in this.tableData[i].business_areas[j].quotesData){
-                  if(this.tableData[i].business_areas[j].quotesData[y].price_date === this.tableData[i].business_areas[j].quotes[z].price_date){
+                for (let y in this.tableData[i].business_areas[j].quotesData) {
+                  if (this.tableData[i].business_areas[j].quotesData[y].price_date === this.tableData[i].business_areas[j].quotes[z].price_date) {
                     this.tableData[i].business_areas[j].quotesData[y] = {
-                      id:this.tableData[i].business_areas[j].quotes[z].id,
-                      fluid_business_area:this.tableData[i].business_areas[j].quotes[z].fluid_business_area,
-                      price_date:this.tableData[i].business_areas[j].quotes[z].price_date,
-                      today_unit_price:this.tableData[i].business_areas[j].quotes[z].today_unit_price,
-                      isShow:false,
-                      isAdd:false
+                      id: this.tableData[i].business_areas[j].quotes[z].id,
+                      fluid_business_area: this.tableData[i].business_areas[j].quotes[z].fluid_business_area,
+                      price_date: this.tableData[i].business_areas[j].quotes[z].price_date,
+                      today_unit_price: this.tableData[i].business_areas[j].quotes[z].today_unit_price,
+                      isShow: false,
+                      isAdd: false
                     }
                   }
                 }
@@ -415,13 +413,13 @@ export default {
   },
   watch: {
     tableData: {
-      handler(val, oldVal) {　　
+      handler(val, oldVal) {
         // for (let i = 0; i < val.length; i++) {　　　　　　　　
         //   if (oldVal[i] != val[i]) {　　　　　　　　　　
         //   }　　　　　　
         // }
       },
-      　　　　deep: true
+      deep: true
     }
   }
 

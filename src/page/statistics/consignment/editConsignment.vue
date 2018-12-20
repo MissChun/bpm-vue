@@ -1,5 +1,5 @@
 <style scoped lang="less">
-/deep/ .code {
+  /deep/ .code {
   input {
     border-color: #dcdfe6!important;
   }
@@ -41,7 +41,7 @@
                 <el-col :span="8">
                   <el-form-item label="承运商:" prop="carrier">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.carrier"></el-input> -->
-                    <el-select v-model="editMsgForm.carrier" :loading="carrierLoading" filterable remote clearable  @change="getCarrier" @blur="selectId('carrier')" :remote-method="getCarrier" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.carrier" :loading="carrierLoading" filterable remote clearable @change="getCarrier" @blur="selectId('carrier')" :remote-method="getCarrier" placeholder="请输入选择">
                       <el-option v-for="(item,key) in carriers" :key="item.id" :label="item.carrier_name" :value="item.carrier_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -52,7 +52,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:">
+                  <el-form-item label="液厂:">
                     <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
                   </el-form-item>
                 </el-col>
@@ -211,7 +211,7 @@ export default {
         fluid: '', //实际液厂
         business_order: '',
         carrier: '', //承运商
-        carrier_id:'',
+        carrier_id: '',
         waybill: '', //运单号
         plan_loading_time: '', //计划装车时间
         active_time: '', //实际装车时间
@@ -247,7 +247,7 @@ export default {
       },
 
       rules: {
-        carrier:[
+        carrier: [
           { required: true, message: '请选择承运商', trigger: 'change' },
         ],
         check_quantity: [
@@ -296,8 +296,8 @@ export default {
       },
       detail: {},
       customerList: [],
-      carriers:[],
-      carrierLoading:false
+      carriers: [],
+      carrierLoading: false
     }
   },
   created() {
@@ -315,24 +315,24 @@ export default {
       this.$router.push({ path: "/statistics/consignment/consignmentList" });
       // }
     },
-    selectId(type){
-      setTimeout(()=>{
-        if(type === 'carrier'){
-          for(let i in this.carriers){
-            if(this.editMsgForm.carrier === this.carriers[i].carrier_name){
+    selectId(type) {
+      setTimeout(() => {
+        if (type === 'carrier') {
+          for (let i in this.carriers) {
+            if (this.editMsgForm.carrier === this.carriers[i].carrier_name) {
               this.editMsgForm.carrier_id = this.carriers[i].id;
             }
           }
         }
-        console.log('consumer_id',this.editMsgForm.carrier_id)
-      },200)
+        console.log('consumer_id', this.editMsgForm.carrier_id)
+      }, 200)
     },
     getCarrier(query) {
       let postData = {
         page: 1,
         page_size: 100,
       };
-      if(query){
+      if (query) {
         postData.carrier_name = query;
       }
       this.carrierLoading = true;
@@ -356,7 +356,7 @@ export default {
             fluid: this.detail.fluid, //实际液厂
             business_order: this.detail.business_order,
             carrier: this.detail.carrier, //承运商
-            carrier_id:this.detail.carrier_id,
+            carrier_id: this.detail.carrier_id,
             waybill: this.detail.waybill, //运单号
             active_time: this.detail.active_time, //实际装车时间
             leave_time: this.detail.leave_time, //离站时间
@@ -388,7 +388,7 @@ export default {
             remark_adjust: this.detail.remark_adjust,
             adjust_time: this.detail.adjust_time,
             stand_freight: this.detail.stand_freight,
-            plan_loading_time:this.detail.plan_loading_time
+            plan_loading_time: this.detail.plan_loading_time
           }
         }
       })
@@ -427,7 +427,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['carrier', 'carrier_id','check_quantity','stand_freight', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'lcl_cost', 'remark'];
+      let keyArray = ['carrier', 'carrier_id', 'check_quantity', 'stand_freight', 'stand_mile', 'actual_mile', 'initial_price', 'change_rate', 'difference_value', 'freight_value', 'freight_value', 'waiting_price', 'lcl_cost', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

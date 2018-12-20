@@ -72,7 +72,7 @@ export default {
   name: 'outsidePickSecondMenu',
   components: {
     outsideBuyListRender: () =>
-      import ("./outsideBuyListRender.vue")
+      import("./outsideBuyListRender.vue")
   },
   data() {
     return {
@@ -124,7 +124,7 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'tractor_plate_number', value: '车号' },
-          { id: 'actual_fluid_name', value: '液厂名' },
+          { id: 'actual_fluid_name', value: '标准液厂' },
           { id: 'order_number', value: '业务单号' },
           { id: 'waybill_number', value: '运单号' },
         ],

@@ -164,7 +164,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="label-list">
-                  <label>液厂名称:</label>
+                  <label>供方液厂:</label>
                   <div class="detail-form-item whiteSpan">
                     <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.fluid_name" placement="top-start" v-if="outsidePickDetalisData.fluid_name">
                       <span>{{outsidePickDetalisData.fluid_name}}</span>
@@ -174,7 +174,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="label-list">
-                  <label>实际液厂:</label>
+                  <label>液厂:</label>
                   <div class="detail-form-item whiteSpan">
                     <el-tooltip class="item" effect="light" :open-delay="1000" :content="outsidePickDetalisData.actual_fluid_name" placement="top-start" v-if="outsidePickDetalisData.actual_fluid_name">
                       <span>{{outsidePickDetalisData.actual_fluid_name}}</span>
