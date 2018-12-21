@@ -183,7 +183,7 @@
                     </div>
                     <span v-if="Citem.unloadInfo.length==0" class="waitMatch" @click="changeUnload(Citem,Cindex)">匹配卸货地</span>
                     <el-tooltip placement="right-end" v-else>
-                      <div slot="content" style="width:250px;"> 
+                      <div slot="content" style="width:250px;">
                         <el-row v-for="(unloadItem,unloadIndex) in Citem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
                           <el-col >业务单号:{{unloadItem.order_number}}</el-col>
                           <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
@@ -379,14 +379,14 @@ export default {
         unload_area: ''
       },
       thTableList: [
-        {title: '业务单号',param: 'order_number',width: ''}, 
-        {title: '业务单状态',param: 'status_display',width: ''}, 
-        {title: '客户简称',param: 'short_name',width: ''}, 
-        {title: '业务员',param: 'sale_name',width: ''}, 
-        {title: '液厂',param: 'actual_fluid_name',width: ''}, 
-        {title: '站点',param: 'station',width: '180'}, 
-        {title: '站点地址',param: 'station_address',width: ''}, 
-        {title: '计划到站时间',param: 'plan_arrive_time', width: ''}, 
+        {title: '业务单号',param: 'order_number',width: ''},
+        {title: '业务单状态',param: 'status_display',width: ''},
+        {title: '客户简称',param: 'short_name',width: ''},
+        {title: '业务员',param: 'sale_name',width: ''},
+        {title: '液厂',param: 'actual_fluid_name',width: ''},
+        {title: '站点',param: 'station',width: '180'},
+        {title: '站点地址',param: 'station_address',width: ''},
+        {title: '计划到站时间',param: 'plan_arrive_time', width: ''},
         {title: '计划吨位',param: 'plan_tonnage',width: ''},
         {title: '收货人',param: 'consignee',width: ''},
         {title: '收货人电话',param: 'consignee_phone',width: ''},
@@ -683,7 +683,9 @@ export default {
 
     },
     getCarriers: function() {
-      var sendData = {};
+      var sendData = {
+        page_size: 100
+      };
       this.loadingArr.carriersLoading = true;
       sendData.carrier_type = "own";
       this.$$http("getCarriers", sendData).then((results) => {
@@ -765,7 +767,7 @@ export default {
       })
     },
   },
- 
+
   created() {
     this.getSupplier();
     //this.getFulid();
