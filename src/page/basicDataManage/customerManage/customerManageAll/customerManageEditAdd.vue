@@ -53,12 +53,11 @@
                 <el-col :span="8">
                   <el-form-item label="分属业务员:" prop="sale_man" v-loading="saleManPading" >
                     <el-select v-model="customerFrom.sale_man" filterable placeholder="请选择" >
-                      <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
+                    <el-option  v-for="(item,key) in payerList" :key="key" :label="item.payer" :value="item.id"></el-option>
+                      <!-- <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option> -->
                     </el-select>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="社会统一信用代码:" prop="social_credit_code">
                     <el-input placeholder="请输入" type="num" v-model="customerFrom.social_credit_code"></el-input>
@@ -74,6 +73,15 @@
                     <el-input placeholder="请输入" type="num" v-model="customerFrom.credit_limit"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="付款方:" prop="payer">
+                   <!--  <el-select v-model="customerFrom.payer" filterable @change="selectPayer" placeholder="请输入选择" >
+                      <el-option  v-for="(item,key) in payerList" :key="key" :label="item.payer" :value="item.id"></el-option>
+                    </el-select> -->
+
+                  </el-form-item>
+                </el-col>
+
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -231,7 +239,7 @@ export default {
       editable: false,
       pageLoading: false,
       saleManPading: false,
-      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address','credit_limit'],
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address','credit_limit','payer'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
@@ -242,10 +250,19 @@ export default {
         social_credit_codeVa:"",
         kui_tons_standard:200,
         credit_limit:"",
+        payerType:'',
+        payer:'',
+        payer_name:''
       },
-
+      payerList:[],
       rules: {
         //1
+        payerType: [
+          { required: true, message: '该项为必选项', trigger: 'change' }
+        ],
+        payer_name: [
+          { required: true, message: '该项为必选项', trigger: 'change' }
+        ],
         consumer_name: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
           { min: 1, max: 20, message: '客户名称为1~20个字符', trigger: 'blur' }
@@ -291,7 +308,8 @@ export default {
         credit_limit:[
           { validator: needNumVa, trigger: 'blur' },
         ]
-      }
+      },
+      customerId:''
     }
   },
   created() {
@@ -302,6 +320,7 @@ export default {
       this.editStatus = true;
     }
     this.getSaleMan();
+    this.getPayerList();
   },
   computed: {
     selectData: function() {
@@ -335,6 +354,46 @@ export default {
     }
   },
   methods: {
+    selectPayerType(label){
+      this.customerFrom.payerType = label;
+      if(!label){
+        this.customerFrom.payer = '';
+      }
+    },
+    selectPayer(query){
+      console.log('select',query)
+      if(query){
+        for(let i in this.payerList){
+          if(this.payerList[i].id === query){
+            setTimeout(()=>{
+              this.customerFrom.payer =  query;
+              this.customerFrom.payer_name =  this.payerList[i].payer;
+            },100)
+          }
+        }
+      }else{
+        this.customerFrom.payer = '';
+      }
+      console.log('this.customerFrom',this.customerFrom)
+    },
+    getPayerList(query) {
+      let postData = {
+        page: 1,
+        page_size: 100
+        // need_all:true
+      }
+      if(query){
+        postData.payer = query;
+      }
+      // this.payerLoading = true;
+      this.$$http('searchCustomerPayList', postData).then((result) => {
+        // this.payerLoading = false;
+        if (result.data&&result.data.code == 0) {
+          this.payerList = result.data.data.data;
+          console.log('payerList',this.payerList)
+        }
+      })
+    },
     VaDate: function() {
       this.validatorFrom('addEditFormSetp3');
     },
@@ -420,6 +479,10 @@ export default {
       this.$$http('getCustomerDetlis', sendData).then((result) => {
         if (result.data.code == 0) {
           this.customerFrom = result.data.data;
+          if(this.customerFrom.payer_info){
+            this.customerFrom.payer = this.customerFrom.payer_info.id;
+            this.customerFrom.payer_name = this.customerFrom.payer_info.payer_name;
+          }
           this.pageLoading = false;
         } else {
           this.pageLoading = false;
