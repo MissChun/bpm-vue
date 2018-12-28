@@ -95,7 +95,7 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           // { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符(除空格),至少包含2种', trigger: 'blur' },
-          { pattern: /[A-z0-9]{6,12}$/, message: '密码为6-12位字母、数字组合', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.password.match, message: this.$store.state.common.regular.password.tips, trigger: 'blur' },
           { validator: isSpace, trigger: 'blur' },
         ],
         nick_name: [
@@ -104,11 +104,11 @@ export default {
         ],
         mobile_number: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^1\d{10}$/, message: '手机号码格式不正确，请重新输入', trigger: 'blur' }
+          { pattern: this.$store.state.common.regular.phone.match, message: this.$store.state.common.regular.phone.tips, trigger: 'blur' }
         ],
         email: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: '邮箱格式不正确，请重新输入', trigger: 'blur' }
+          { pattern: this.$store.state.common.regular.email.match, message: this.$store.state.common.regular.email.tips, trigger: 'blur' }
         ],
         department: [
           { required: true, message: '请选择部门', trigger: 'blur' },

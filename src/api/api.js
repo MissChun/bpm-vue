@@ -9,6 +9,14 @@
  */
 
 const api = {
+  updateUserInfo: {
+    url: '/api/v1/users/:id/modify/',
+    method: 'patch',
+    desc: '修改个人信息',
+    param: {
+
+    }
+  },
   batchUpdatePurchaseDiscount: {
     url: '/api/v1/batch-update-procument/discount/',
     method: 'patch',

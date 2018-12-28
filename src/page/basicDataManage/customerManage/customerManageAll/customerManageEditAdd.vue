@@ -53,8 +53,7 @@
                 <el-col :span="8">
                   <el-form-item label="分属业务员:" prop="sale_man" v-loading="saleManPading" >
                     <el-select v-model="customerFrom.sale_man" filterable placeholder="请选择" >
-                    <el-option  v-for="(item,key) in payerList" :key="key" :label="item.payer" :value="item.id"></el-option>
-                      <!-- <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option> -->
+                      <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -73,15 +72,31 @@
                     <el-input placeholder="请输入" type="num" v-model="customerFrom.credit_limit"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="付款方:" prop="payer">
-                   <!--  <el-select v-model="customerFrom.payer" filterable @change="selectPayer" placeholder="请输入选择" >
-                      <el-option  v-for="(item,key) in payerList" :key="key" :label="item.payer" :value="item.id"></el-option>
-                    </el-select> -->
+                <el-col :span="8" v-if="customerId">
+                  <el-form-item label="付款方:" prop="payer_name">
+                    <el-select v-model="customerFrom.payer_name" v-loading="payerLoading" filterable multiple clearable @change="payerSelect" placeholder="请输入选择" >
+                      <el-option  v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
+                    </el-select>
 
                   </el-form-item>
                 </el-col>
-
+                <el-col :span="24" v-else>
+                  <el-form-item label="付款方:" prop="payerType">
+                    <el-row :gutter="0">
+                      <el-col :span="10" style="width:300px">
+                        <el-radio-group v-model="customerFrom.payerType" @change="selectPayerType">
+                          <el-radio :label="false">设为付款方</el-radio>
+                          <el-radio :label="true">选择已有付款方</el-radio>
+                        </el-radio-group>
+                      </el-col>
+                      <el-col :span="6" v-if="customerFrom.payerType">
+                        <el-select v-model="customerFrom.payer" v-loading="payerLoading" filterable multiple clearable placeholder="请输入选择" >
+                          <el-option  v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
+                        </el-select>
+                      </el-col>
+                    </el-row>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -239,6 +254,7 @@ export default {
       editable: false,
       pageLoading: false,
       saleManPading: false,
+      payerLoading:false,
       customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address','credit_limit','payer'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
@@ -251,8 +267,24 @@ export default {
         kui_tons_standard:200,
         credit_limit:"",
         payerType:'',
-        payer:'',
-        payer_name:''
+        payer:[],
+        payer_name:[],
+        free_hour:'',
+        waiting_price:'',
+        contract_start_date:'',
+        contract_end_date:'',
+        social_credit_codeVa:'',
+        kui_tons_standard:'',
+        credit_limit:'',
+        consumer_name:'',
+        short_name:'',
+        consumer_level:'',
+        contact_person:'',
+        contact_phone:'',
+        sale_man:'',
+        social_credit_code:'',
+        consumer_address:'',
+        credit_limit:'',
       },
       payerList:[],
       rules: {
@@ -360,37 +392,33 @@ export default {
         this.customerFrom.payer = '';
       }
     },
-    selectPayer(query){
-      console.log('select',query)
-      if(query){
-        for(let i in this.payerList){
-          if(this.payerList[i].id === query){
-            setTimeout(()=>{
-              this.customerFrom.payer =  query;
-              this.customerFrom.payer_name =  this.payerList[i].payer;
-            },100)
+    payerSelect(payers){
+
+      this.customerFrom.payer = [];
+      for(let i in this.payerList){
+        for(let j in payers){
+          console.log(this.payerList[i].payer,payers[j])
+          if(this.payerList[i].payer === payers[j]){
+            this.customerFrom.payer.push(this.payerList[i].id);
           }
         }
-      }else{
-        this.customerFrom.payer = '';
       }
-      console.log('this.customerFrom',this.customerFrom)
+      console.log(this.customerFrom.payer,payers)
     },
     getPayerList(query) {
       let postData = {
-        page: 1,
-        page_size: 100
-        // need_all:true
+        // page: 1,
+        // page_size: 100
+        need_all:true
       }
       if(query){
         postData.payer = query;
       }
-      // this.payerLoading = true;
+      this.payerLoading = true;
       this.$$http('searchCustomerPayList', postData).then((result) => {
-        // this.payerLoading = false;
+        this.payerLoading = false;
         if (result.data&&result.data.code == 0) {
-          this.payerList = result.data.data.data;
-          console.log('payerList',this.payerList)
+          this.payerList = result.data.data;
         }
       })
     },
@@ -476,13 +504,30 @@ export default {
       var sendData = {
         id: customerId
       }
+      let detailData = {};
       this.$$http('getCustomerDetlis', sendData).then((result) => {
         if (result.data.code == 0) {
-          this.customerFrom = result.data.data;
-          if(this.customerFrom.payer_info){
-            this.customerFrom.payer = this.customerFrom.payer_info.id;
-            this.customerFrom.payer_name = this.customerFrom.payer_info.payer_name;
+          detailData = result.data.data;
+
+
+          let peyerArr = [],payerNameArr = [];
+          if(detailData.payer_info){
+            for(let i in detailData.payer_info){
+              peyerArr.push(detailData.payer_info[i].id);
+              payerNameArr.push(detailData.payer_info[i].payer_name);
+            }
           }
+          for(let i in this.customerFrom){
+            if(i==='peyer'||i==='payer_name'){
+              this.$set(this.customerFrom,i, []);
+            }else{
+              this.$set(this.customerFrom,i, detailData[i]);
+            }
+            // console.log(i, detailData[i])
+          }
+          this.customerFrom.payer=[...new Set(peyerArr)];
+          this.customerFrom.payer_name =[...new Set(payerNameArr)];
+          // console.log('detailData',this.customerFrom);
           this.pageLoading = false;
         } else {
           this.pageLoading = false;

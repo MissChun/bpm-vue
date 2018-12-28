@@ -12,6 +12,14 @@
 }
 
 .insureBottom {}
+.item-row-font {
+    display: table-cell;
+    height: 42px;
+
+    line-height: 22px;
+
+    vertical-align: middle;
+}
 
 </style>
 <template>
@@ -85,7 +93,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="地址:">
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(customerData.consumer_address)"></div>
+                  <div class="detail-form-item item-row-font" v-html="pbFunc.dealNullData(customerData.consumer_address)"></div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -93,9 +101,13 @@
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(customerData.credit_limit)"></div>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="付款方:">
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(customerData.payer_info&&customerData.payer_info.payer_name)"></div>
+                  <div class="detail-form-item item-row-font">
+                    <span v-for="(item,key) in customerData.payer_info">{{item.payer_name}}</br></span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>

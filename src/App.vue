@@ -98,6 +98,7 @@ export default {
         carrierMeetManage: 'carrierMeetManage', //承运商
 
         setting: 'setting',
+        personalSettings:'personalSettings',
         organizationalStructure: 'organizationalStructure',
         staffsManage: 'staffsManage',
         powerManage: 'powerManage',

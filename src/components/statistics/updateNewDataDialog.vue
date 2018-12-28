@@ -4,7 +4,8 @@
       <div class="tms-dialog-form">
         <div class="tms-dialog-content">
           <el-row :gutter="10">
-            <el-col :span="24" v-for="(item,key) in showData" :key="key">
+            <el-col :span="24" class="text-center">可对<span class="text-blue fs-20"> {{idsLen}} </span>单获取最新数据。</el-col>
+            <el-col :span="24" class="mt-30" v-for="(item,key) in showData" :key="key">
               <div class="label-list">
                 <label>{{item.title}}:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.value)"></div>
@@ -12,7 +13,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="text-red text-center fs-13">注意：将更新以上所有条件的{{typeStr}}，更新后数据不可恢复</div>
+        <div class="text-red text-center fs-13 mt-20">注意：将更新以上所有条件的{{typeStr}}，更新后数据不可恢复</div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeBtn">取消</el-button>
@@ -35,7 +36,8 @@ export default {
     // newData:Array,
     apiName: String,
     updateData:Object,
-    filterParam:Object
+    filterParam:Object,
+    ids:Array
   },
 
   data: function() {
@@ -45,7 +47,8 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      showData:[]
+      showData:[],
+      idsLen:0
     }
   },
   computed: {
@@ -91,7 +94,7 @@ export default {
           }
         }
       }
-      console.log('展示的参数',this.showData)
+      // console.log('展示的参数',this.showData)
     },
     updateBtn(){
       this.submitBtn = {
@@ -99,7 +102,10 @@ export default {
         isDisabled: true,
         isLoading: true
       }
-      this.$$http(this.apiName, this.updateData).then((results) => {
+      let postData = {
+        ids:this.ids.join(',')
+      }
+      this.$$http(this.apiName, postData).then((results) => {
         this.submitBtn = {
           btnText: '确认更新',
           isDisabled: false,
@@ -128,6 +134,7 @@ export default {
     isShow(curVal, oldVal) {　
       if(curVal){
         this.handleData();
+        this.idsLen = this.ids.length;
       }
     },
   },
