@@ -199,6 +199,7 @@ export default {
               this.submitBtn.isBtnLoading = false;
               if (results.data && results.data.code === 0) {
                 resolve(results);
+                results.data.data.user.user_info = results.data.data.user_info;
                 this.pbFunc.setLocalData('token', results.data.data.token, true);
                 this.pbFunc.setLocalData('user', results.data.data.user, true);
                 if (results.data.data.user && results.data.data.user.menus && results.data.data.user.menus.length) {

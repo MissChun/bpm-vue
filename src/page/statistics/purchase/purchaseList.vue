@@ -131,7 +131,7 @@
     </div>
   </div>
   <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="exportPostData"></update-new-data-dialog>
+  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
   <batch-update-dialog v-on:closeDialogBtn="batchUpdateCloseDialog" :is-show="batchUpdateIsShow" :number="multipleSelection.length" :ids="batchIds"></batch-update-dialog>
   </div>
 </template>
@@ -368,6 +368,7 @@ export default {
       },//筛选参数
       updateData:{},
       batchIds:[],//可批量修改数据的ID
+      getNewDataIds:[]//获取最新数据的ID
     }
   },
   methods: {
@@ -379,10 +380,16 @@ export default {
     // 更新数据
     updatePostData(){
       this.updateData = this.postDataFilter(this.updateData);
-      if(this.tableDataObj.data.length&&this.pbFunc.objSize(this.updateData)){
+      this.getNewDataIds = [];
+      for(let i in this.multipleSelection){
+        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+          this.getNewDataIds.push(this.multipleSelection[i].id);
+        }
+      }
+      if(this.getNewDataIds.length){
         this.updateDataIsShow = true;
       }else{
-        this.$message.warning('没有运单数据可获取');
+        this.$message.warning('没有勾选未对账运单数据或筛选条件');
       }
     },
     handleSelectionChange(val) {

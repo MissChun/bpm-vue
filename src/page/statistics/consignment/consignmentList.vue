@@ -32,6 +32,14 @@
                 <!-- <el-date-picker v-model="activeTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"></el-date-picker> -->
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="计划装车时间:" label-width="105px">
+                <el-date-picker v-model="planTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
             <el-col :span="6">
               <el-form-item label="是否对账:">
                 <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
@@ -111,7 +119,7 @@
     </div>
   </div>
   <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData"></update-new-data-dialog>
+  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
   </div>
 </template>
 <script>
@@ -140,6 +148,7 @@ export default {
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际到厂时间
+      planTime: [],//计划装车时间
       selectMenus: [], //批量勾选
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -331,7 +340,8 @@ export default {
         num:0,
         waiting_charges:"0.00"
       },
-      updateData:{}
+      updateData:{},
+      getNewDataIds:[]//获取最新数据的ID
     }
   },
   methods: {
@@ -344,10 +354,16 @@ export default {
     // 更新数据
     updatePostData(){
       this.updateData = this.postDataFilter(this.updateData);
-      if(this.tableDataObj.data.length&&this.pbFunc.objSize(this.updateData)){
+      this.getNewDataIds = [];
+      for(let i in this.multipleSelection){
+        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+          this.getNewDataIds.push(this.multipleSelection[i].id);
+        }
+      }
+      if(this.getNewDataIds.length){
         this.updateDataIsShow = true;
       }else{
-        this.$message.warning('没有运单数据可获取或筛选条件');
+        this.$message.warning('没有勾选未对账运单数据可获取或筛选条件');
       }
     },
     handleSelectionChange(val) {
@@ -426,6 +442,10 @@ export default {
       if (this.activeTime instanceof Array && this.activeTime.length > 0) {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
+      }
+      if (this.planTime instanceof Array && this.planTime.length > 0) {
+        postData.plan_loading_time_start = this.planTime[0];
+        postData.plan_loading_time_end = this.planTime[1];
       }
       postData.batch = 'unfinished';
       postData[this.searchPostData.field] = this.searchPostData.keyword;
@@ -514,6 +534,10 @@ export default {
       if (this.activeTime instanceof Array && this.activeTime.length > 0) {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
+      }
+      if (this.planTime instanceof Array && this.planTime.length > 0) {
+        postData.plan_loading_time_start = this.planTime[0];
+        postData.plan_loading_time_end = this.planTime[1];
       }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
