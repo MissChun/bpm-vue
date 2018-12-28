@@ -194,11 +194,14 @@ export default {
             id: 'leave_time_start',
             timeEnd:'leave_time_end',
             value: '实际离站时间'
-          },
-          {
+          },{
             id: 'active_time_start',
             timeEnd:'active_time_end',
             value: '实际到厂时间'
+          },{
+            id: 'plan_loading_time_start',
+            timeEnd:'plan_loading_time_end',
+            value: '计划装车时间'
           }
         ],
       },
