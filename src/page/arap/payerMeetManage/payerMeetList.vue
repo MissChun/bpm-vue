@@ -41,7 +41,7 @@
             </el-form>
           </div>
          <!--  <div class="operation-btn text-right">
-            
+
             <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button>
             <el-button type="success" @click="addPerson">新增</el-button>
@@ -316,7 +316,7 @@ export default {
     payerDate() {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth(), 0)).getDate();
-      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()) + '-' + days + ' 16:00:00';
+      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()?payDate.getMonth():12) + '-' + days + ' 16:00:00';
       // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
       this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
       this.activeTime = [this.startTime, this.endTime];
