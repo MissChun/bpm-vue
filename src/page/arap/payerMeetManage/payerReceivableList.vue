@@ -36,7 +36,7 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="8">
-                  <el-form-item label="付款日期:">
+                  <el-form-item label="回款日期:">
                     <el-date-picker v-model="payerTime" type="daterange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
                   </el-form-item>
                 </el-col>

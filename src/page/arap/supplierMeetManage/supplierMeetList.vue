@@ -182,7 +182,6 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
-
       this.pageLoading = true;
       this.exportPostData = postData
 
@@ -221,10 +220,11 @@ export default {
     payerDate() {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth(), 0)).getDate();
-      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()) + '-' + days + ' 16:00:00';
+      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()?payDate.getMonth():12) + '-' + days + ' 16:00:00';
       // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
       this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
       this.activeTime = [this.startTime, this.endTime];
+      console.log('月',payDate.getMonth()-1)
     }
   },
   activated() {
