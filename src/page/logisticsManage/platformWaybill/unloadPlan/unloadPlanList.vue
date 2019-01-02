@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.el-table {
+  .el-table {
   /deep/ .el-table__fixed-header-wrapper tr th .el-checkbox__inner {
     display: none;
   }
@@ -130,6 +130,12 @@ export default {
         }, {
           value: '业务员',
           id: 'sale_man_name',
+        }, {
+          value: '站点',
+          id: 'station',
+        }, {
+          value: '站点地址',
+          id: 'station_address',
         }],
       },
       renderList: [],
@@ -183,8 +189,8 @@ export default {
         param: 'consignee_phone',
         width: ''
       }],
-      operationBtn:{
-        isLoading:false,
+      operationBtn: {
+        isLoading: false,
       }
 
     }
@@ -210,67 +216,67 @@ export default {
     checkRows: function(selection, row) {
 
     },
-    addMatch:function(type, row){
+    addMatch: function(type, row) {
       var vm = this;
       vm.upMatchList.push(row.id);
-        vm.renderList.forEach((item, index) => {
-          if (item.id == row.id) {
-            item.orderMatch = 'NoMatch';
-          }
-        });
-        var match_order_list = [];
-        var cancel_order_list = [];
-        vm.upMatchList.forEach(Uitem => {
-          var addFalg = true;
-          vm.hasList.forEach(item => {
-            if (Uitem == item) {
-              addFalg = false;
-            }
-          });
-          if (addFalg) {
-            match_order_list.push(Uitem);
-          }
-        });
+      vm.renderList.forEach((item, index) => {
+        if (item.id == row.id) {
+          item.orderMatch = 'NoMatch';
+        }
+      });
+      var match_order_list = [];
+      var cancel_order_list = [];
+      vm.upMatchList.forEach(Uitem => {
+        var addFalg = true;
         vm.hasList.forEach(item => {
-          var cancleFalg = true;
-          vm.upMatchList.forEach(Uitem => {
-            if (Uitem == item) {
-              cancleFalg = false;
-            }
-          });
-          if (cancleFalg) {
-            cancel_order_list.push(item);
+          if (Uitem == item) {
+            addFalg = false;
           }
         });
-        this.cancel_order_list = cancel_order_list;
-        this.match_order_list = match_order_list;
+        if (addFalg) {
+          match_order_list.push(Uitem);
+        }
+      });
+      vm.hasList.forEach(item => {
+        var cancleFalg = true;
+        vm.upMatchList.forEach(Uitem => {
+          if (Uitem == item) {
+            cancleFalg = false;
+          }
+        });
+        if (cancleFalg) {
+          cancel_order_list.push(item);
+        }
+      });
+      this.cancel_order_list = cancel_order_list;
+      this.match_order_list = match_order_list;
     },
     operation: function(type, row) {
       var sendData = {};
       var vm = this;
 
       if (type == 'sureMatch') {
-        this.$$http("checkOrderCredit",{order_id:row.id}).then(results=>{
-          if(results.data&&results.data.code==0){
-            if(results.data.data.total<0){
+        this.$$http("checkOrderCredit", { order_id: row.id }).then(results => {
+          if (results.data && results.data.code == 0) {
+            if (results.data.data.total < 0) {
               vm.$confirm('已超客户账户可用额度(余额+授信),请谨慎匹配', '匹配卸货单', {
-              confirmButtonText: '继续匹配',
-              cancelButtonText: '返回',
-              type: 'warning',
-              center: true,
-              closeOnClickModal: false,
-              showClose: false,
-              closeOnPressEscape: false
-            }).then(() => {
-              this.addMatch(type, row);
-            }).catch(() => {
+                confirmButtonText: '继续匹配',
+                cancelButtonText: '返回',
+                type: 'warning',
+                center: true,
+                closeOnClickModal: false,
+                showClose: false,
+                closeOnPressEscape: false
+              }).then(() => {
+                this.addMatch(type, row);
+              }).catch(() => {
 
-            })
-            }else{
+              })
+            } else {
               this.addMatch(type, row);
             }
           }
-        });        
+        });
       } else if (type == 'cancleMatch') {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;
@@ -323,7 +329,7 @@ export default {
             // }).then(() => {})
             this.$confirm('匹配的业务单状态已改变，请重新匹配', '提示', {
               confirmButtonText: '确定',
-              showCancelButton:false,
+              showCancelButton: false,
               closeOnClickModal: false,
               type: 'warning'
             }).then(() => {
