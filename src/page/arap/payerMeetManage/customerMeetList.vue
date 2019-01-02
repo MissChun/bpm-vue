@@ -153,12 +153,12 @@ export default {
         title: '卸车数',
         param: 'unload_nums_sum',
         width: ''
-      }, 
+      },
       {
         title: '信用额度',
         param: 'credit_limit',
         width: ''
-      }, 
+      },
       {
         title: '业务员',
         param: 'sale_man',
@@ -320,13 +320,13 @@ export default {
     pageChange: function() {
       setTimeout(() => {
         this.getList();
-        
+
       })
     },
     payerDate() {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth(), 0)).getDate();
-      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()) + '-' + days + ' 16:00:00';
+      this.startTime = (payDate.getMonth()?payDate.getFullYear():payDate.getFullYear()-1) + '-' + (payDate.getMonth()?payDate.getMonth():12) + '-' + days + ' 16:00:00';
       // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
       this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
       this.activeTime = [this.startTime, this.endTime];
