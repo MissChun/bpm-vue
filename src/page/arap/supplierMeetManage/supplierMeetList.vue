@@ -220,7 +220,7 @@ export default {
     payerDate() {
       let payDate = new Date();
       let days = (new Date(payDate.getFullYear(), payDate.getMonth(), 0)).getDate();
-      this.startTime = payDate.getFullYear() + '-' + (payDate.getMonth()?payDate.getMonth():12) + '-' + days + ' 16:00:00';
+      this.startTime = (payDate.getMonth()?payDate.getFullYear():payDate.getFullYear()-1) + '-' + (payDate.getMonth()?payDate.getMonth():12) + '-' + days + ' 16:00:00';
       // this.endTime = payDate.getFullYear() + '-' + (payDate.getMonth() + 1) + '-' + days + ' 23:23:59';
       this.endTime = payDate.Format("yyyy-MM-dd hh:mm:ss");
       this.activeTime = [this.startTime, this.endTime];
