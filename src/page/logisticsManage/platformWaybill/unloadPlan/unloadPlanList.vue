@@ -130,6 +130,12 @@ export default {
         }, {
           value: '业务员',
           id: 'sale_man_name',
+        }, {
+          value: '站点',
+          id: 'station',
+        }, {
+          value: '站点地址',
+          id: 'station_address',
         }],
       },
       renderList: [],
@@ -270,7 +276,7 @@ export default {
               this.addMatch(type, row);
             }
           }
-        });        
+        });
       } else if (type == 'cancleMatch') {
         sendData.section_trip_id = vm.setpId;
         sendData.business_order_id = row.id;

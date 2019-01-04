@@ -492,14 +492,19 @@ export default {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
         let fifterArr = [];
+        let addflag = true;
+        let tripsStatus ='';
         for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
-          var addflag = true;
+          addflag = true;
+          tripsStatus ='';
 
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
+            tripsStatus = this.delivery_list.trips[j].status+this.delivery_list.trips[j].capacity;
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
+                // console.log('is',this.allChangeList.indexOf(this.delivery_list.trips[j].capacity))
                 if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) == -1) {
                   operationArr[i].disableChoose = true;
                   addflag = false;
@@ -528,13 +533,19 @@ export default {
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
             // }
           }
+          console.log('status',tripsStatus,addflag)
           if (addflag) {
             operationArr[i].bindCheckBox = true;
             fifterArr.push(operationArr[i]);
             operationArr[i].disableChoose = false;
-            this.now_capacities.push(operationArr[i]);
+            // if(tripsStatus !== 'canceled'){
+              this.now_capacities.push(operationArr[i]);
+            // }
           }
+
+           console.log('addflag',this.now_capacities);
         }
+
         this.alerySureList = newArr;
 
         this.trueAll_list = fifterArr.concat(newArr);

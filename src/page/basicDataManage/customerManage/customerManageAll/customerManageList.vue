@@ -165,10 +165,12 @@ export default {
       if (vm.pageStatus) {
         sendData = this.saveSendData;
         sendData.page = vm.pageData.currentPage;
+        sendData.page_size = vm.pageData.pageSize;
       } else {
         this.saveSendData = sendData;
         this.pageData.currentPage = 1;
         sendData.page = 1;
+        sendData.page_size = vm.pageData.pageSize;
       }
       this.$$http('searchCustomerList', sendData).then(function(result) {
         var resultData;
