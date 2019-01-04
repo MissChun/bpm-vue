@@ -302,21 +302,22 @@ export default {
       } else {
         var vm = this;
         var sendJudge = false;
+        // console.log('selection',selection)
         selection.forEach(item => {
           if (item.id == row.id) {
             sendJudge = true;
           }
         });
         if (sendJudge) {
-          this.now_capacities.push(row);
+          this.demandCarNum.push(row);
         } else {
           var arr1 = [];
-          this.now_capacities.forEach((items, index) => {
-            if (items.id != row.id) {
+          this.demandCarNum.forEach((items, index) => {
+            if (items.capacity != row.id) {
               arr1.push(items);
             }
           });
-          this.now_capacities = arr1;
+          this.demandCarNum = arr1;
         }
         vm.trueAll_list.forEach((Titem) => {
           if (Titem.id == row.id) {
@@ -615,6 +616,7 @@ export default {
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);
       this.lastSearch_list = list;
+      // for(let i in list)
       // console.log('list',list)
       var vm = this;
       var page_list = this.pbFunc.deepcopy(list).splice(page * this.pageData.pageSize, this.pageData.pageSize);
