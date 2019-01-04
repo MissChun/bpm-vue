@@ -89,7 +89,7 @@
           </el-col> -->
             <el-col :span="10" :offset="14" style="line-height:40px;font-size:14px;">
               <span class="mr-10">
-                需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
+                需求车数:{{demandCarNum.length}}/{{delivery_list.require_car_number}}
               </span>
               <el-button v-if="delivery_list.status.key=='determine'" type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
               <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
@@ -220,6 +220,7 @@ export default {
       now_capacities: [],
       alerySureList: [],
       allChangeList: [],
+      demandCarNum:[],//需求车数
     }
   },
   computed: {
@@ -448,6 +449,13 @@ export default {
           });
           results.data.data.trips = list;
           vm.delivery_list = results.data.data;
+          vm.demandCarNum = [];
+          for(let i in list){
+            if(list[i].status !=='canceled'){
+              vm.demandCarNum.push(list[i]);
+            }
+          }
+
         }
         if (getDataNum == 2) {
           vm.pageLoading = false;
@@ -533,7 +541,7 @@ export default {
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
             // }
           }
-          console.log('status',tripsStatus,addflag)
+          // console.log('status',tripsStatus,addflag)
           if (addflag) {
             operationArr[i].bindCheckBox = true;
             fifterArr.push(operationArr[i]);
@@ -543,11 +551,11 @@ export default {
             // }
           }
 
-           console.log('addflag',this.now_capacities);
+           // console.log('addflag',this.now_capacities);
         }
 
         this.alerySureList = newArr;
-
+        // console.log('this.alerySureList',this.alerySureList)
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
         if (this.delivery_list.status.key != 'determine') {
@@ -607,6 +615,7 @@ export default {
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);
       this.lastSearch_list = list;
+      // console.log('list',list)
       var vm = this;
       var page_list = this.pbFunc.deepcopy(list).splice(page * this.pageData.pageSize, this.pageData.pageSize);
 
