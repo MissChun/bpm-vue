@@ -149,7 +149,7 @@
     </div>
   </div>
   <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></sales-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateSaleStatisticsList'" :type-str="'销售数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
+  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateSaleStatisticsList'" :type-str="'销售数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
   </div>
 </template>
 <script>
@@ -171,7 +171,7 @@ export default {
       updateDataIsShow:false,
       pageData: {
         currentPage: 1,
-        totalCount: '',
+        totalCount: 0,
         pageSize: 10,
       },
       tableDataObj: {
@@ -473,7 +473,7 @@ export default {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      if(this.getNewDataIds.length){
+      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
         this.updateDataIsShow = true;
       }else{
         this.$message.warning('没有勾选未对账运单数据可获取或筛选条件');

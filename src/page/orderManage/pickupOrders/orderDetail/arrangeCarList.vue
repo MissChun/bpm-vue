@@ -89,7 +89,7 @@
           </el-col> -->
             <el-col :span="10" :offset="14" style="line-height:40px;font-size:14px;">
               <span class="mr-10">
-                需求车数:{{now_capacities.length+alerySureList.length}}/{{delivery_list.require_car_number}}
+                需求车数:{{demandCarNum.length}}/{{delivery_list.require_car_number}}
               </span>
               <el-button v-if="delivery_list.status.key=='determine'" type="primary" plain @click="operation('sureCar')">确认车辆</el-button>
               <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
@@ -220,6 +220,7 @@ export default {
       now_capacities: [],
       alerySureList: [],
       allChangeList: [],
+      demandCarNum:[],//需求车数
     }
   },
   computed: {
@@ -301,21 +302,22 @@ export default {
       } else {
         var vm = this;
         var sendJudge = false;
+        // console.log('selection',selection)
         selection.forEach(item => {
           if (item.id == row.id) {
             sendJudge = true;
           }
         });
         if (sendJudge) {
-          this.now_capacities.push(row);
+          this.demandCarNum.push(row);
         } else {
           var arr1 = [];
-          this.now_capacities.forEach((items, index) => {
-            if (items.id != row.id) {
+          this.demandCarNum.forEach((items, index) => {
+            if (items.capacity != row.id) {
               arr1.push(items);
             }
           });
-          this.now_capacities = arr1;
+          this.demandCarNum = arr1;
         }
         vm.trueAll_list.forEach((Titem) => {
           if (Titem.id == row.id) {
@@ -448,6 +450,13 @@ export default {
           });
           results.data.data.trips = list;
           vm.delivery_list = results.data.data;
+          vm.demandCarNum = [];
+          for(let i in list){
+            if(list[i].status !=='canceled'){
+              vm.demandCarNum.push(list[i]);
+            }
+          }
+
         }
         if (getDataNum == 2) {
           vm.pageLoading = false;
@@ -492,14 +501,19 @@ export default {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
         let fifterArr = [];
+        let addflag = true;
+        let tripsStatus ='';
         for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
-          var addflag = true;
+          addflag = true;
+          tripsStatus ='';
 
           for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
+            tripsStatus = this.delivery_list.trips[j].status+this.delivery_list.trips[j].capacity;
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               if (this.delivery_list.trips[j].status == 'canceled') {
                 operationArr[i].waybill = this.delivery_list.trips[j];
+                // console.log('is',this.allChangeList.indexOf(this.delivery_list.trips[j].capacity))
                 if (this.allChangeList.indexOf(this.delivery_list.trips[j].capacity) == -1) {
                   operationArr[i].disableChoose = true;
                   addflag = false;
@@ -528,15 +542,21 @@ export default {
             // if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
             // }
           }
+          // console.log('status',tripsStatus,addflag)
           if (addflag) {
             operationArr[i].bindCheckBox = true;
             fifterArr.push(operationArr[i]);
             operationArr[i].disableChoose = false;
-            this.now_capacities.push(operationArr[i]);
+            // if(tripsStatus !== 'canceled'){
+              this.now_capacities.push(operationArr[i]);
+            // }
           }
-        }
-        this.alerySureList = newArr;
 
+           // console.log('addflag',this.now_capacities);
+        }
+
+        this.alerySureList = newArr;
+        // console.log('this.alerySureList',this.alerySureList)
         this.trueAll_list = fifterArr.concat(newArr);
         this.renderAll_list = fifterArr.concat(newArr);
         if (this.delivery_list.status.key != 'determine') {
@@ -596,6 +616,8 @@ export default {
     bindChekboxFunction: function(page, list) {
       this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);
       this.lastSearch_list = list;
+      // for(let i in list)
+      // console.log('list',list)
       var vm = this;
       var page_list = this.pbFunc.deepcopy(list).splice(page * this.pageData.pageSize, this.pageData.pageSize);
 

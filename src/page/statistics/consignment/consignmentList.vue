@@ -47,6 +47,13 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="是否开票:">
+                <el-select v-model="searchFilters.is_invoice" @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in filterParam.isInvoice.data" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -61,7 +68,8 @@
           </el-col>
           <el-col :span="9" class="text-right">
             <el-button type="success" plain @click="updatePostData">获取更新数据</el-button>
-            <el-button type="primary" plain @click="batchReconciliation">批量对账</el-button>
+            <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
+            <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
             <!--<export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>-->
             <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
           </el-col>
@@ -80,46 +88,52 @@
               <div v-else>
                 <span>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              </span>
-              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-              <span v-else v-html="scope.row[item.param]"></span>
+                </span>
+                <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否对账" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_reconciliation.verbose}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否开票" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_invoice.verbose}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="运费合计" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <div>
+                <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
+                {{scope.row.waiting_charges}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="140" fixed="right">
+            <template slot-scope="scope">
+              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              </div>
+              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+                <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
       </div>
-      </template>
-      </el-table-column>
-      <el-table-column label="是否对账" align="center" width="100">
-        <template slot-scope="scope">
-          <div>{{scope.row.is_reconciliation.verbose}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="运费合计" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
-            {{scope.row.waiting_charges}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="140" fixed="right">
-        <template slot-scope="scope">
-          <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-            <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id)">对账</el-button>
-            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-          </div>
-          <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_adjust.key==='no'">
-            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-          </div>
-        </template></el-table-column>
-
-      </el-table>
-      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+      <div class="page-list text-center">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+        </el-pagination>
+      </div>
     </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-      </el-pagination>
-    </div>
-  </div>
-  <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
+    <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+    <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
   </div>
 </template>
 <script>
@@ -139,7 +153,7 @@ export default {
       pageLoading: false,
       pageData: {
         currentPage: 1,
-        totalCount: '',
+        totalCount: 0,
         pageSize: 10,
       },
       tableDataObj: {
@@ -153,6 +167,7 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
+        is_invoice:'',
         keyword: '',
         field: 'plate_number',
       },
@@ -183,11 +198,22 @@ export default {
             { id: 'finished', value: '已对账' }
           ]
         },
+        isInvoice: {
+          id: 'is_invoice',
+          value: '是否开票',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'yes', value: '已开票' },
+            { id: 'no', value: '未开票' }
+          ],
+        },
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
           { id: 'carrier', value: '承运商' },
           // { id: 'consumer_name', value: '客户名称' },
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
+          { id: 'fluid', value: '实际液厂' },
+          { id: 'station', value: '卸货站' }
         ],
         times:[
           {
@@ -311,6 +337,10 @@ export default {
         title: '对账时间',
         param: 'reconciliation_time',
         width: '180'
+      },{
+        title: '开票时间',
+        param: 'invoice_time',
+        width: '180'
       }, {
         title: '调账备注',
         param: 'remark_adjust',
@@ -363,7 +393,7 @@ export default {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      if(this.getNewDataIds.length){
+      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
         this.updateDataIsShow = true;
       }else{
         this.$message.warning('没有勾选未对账运单数据可获取或筛选条件');
@@ -435,21 +465,7 @@ export default {
     },
     // 全部对账
     getUnReconciliations() {
-      let postData = {
-        is_reconciliation: this.searchPostData.is_reconciliation
-      };
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
-      if (this.planTime instanceof Array && this.planTime.length > 0) {
-        postData.plan_loading_time_start = this.planTime[0];
-        postData.plan_loading_time_end = this.planTime[1];
-      }
+      let postData = this.postDataFilter(this.exportPostData);
       postData.batch = 'unfinished';
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
@@ -467,49 +483,61 @@ export default {
       })
     },
     // 批量对账弹窗
-    batchReconciliation() {
+    // batchReconciliation() {
+    //   let ids = [];
+    //   let price = 0;
+    //   for (let i in this.multipleSelection) {
+    //     if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
+    //       ids.push(this.multipleSelection[i].id);
+    //       price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+    //     }
+    //   }
+    //   this.reconciliations(true, ids, price / 100);
+    // },
+    batchReconciliation(type) {
       let ids = [];
       let price = 0;
       for (let i in this.multipleSelection) {
-        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+        }
+        if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
           ids.push(this.multipleSelection[i].id);
           price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
         }
       }
-      this.reconciliations(true, ids, price / 100);
+      this.reconciliations(true, ids, price / 100, type);
     },
-    // 批量/单个  对账
-    reconciliations(isAll, ids, price) {
+
+    // 单个/批量 对账  开票
+    reconciliations(isAll, ids, price, type) {
       let content = '';
-      let postData = {
-        is_reconciliation: this.searchPostData.is_reconciliation
-      };
+      let postData = {};
+      let title = '';
+      if (type === 'reconciliation') {
+        postData.is_reconciliation = 'finished';
+        title = '对账';
+      } else if (type === 'invoice') {
+        postData.is_invoice = 'yes';
+        title = '开票';
+      }
       if (isAll) {
         if (ids.length) {
-          content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
+          content = '未' + title + '共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量' + title + '？';
           postData.id = ids;
-          // postData.batch = 'unfinished';
+
         } else {
           this.$message({
-            message: '请勾选未对账数据',
+            message: '请勾选未' + title + '数据',
             type: 'warning'
           });
         }
       } else {
-        content = '是否确认对账？';
+        content = '是否确认' + title + '？';
         postData.id = ids.split(',');
       }
-      // if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-      //   postData.leave_time_start = this.leaveTime[0];
-      //   postData.leave_time_end = this.leaveTime[1];
-      // }
-      // if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-      //   postData.active_time_start = this.activeTime[0];
-      //   postData.active_time_end = this.activeTime[1];
-      // }
 
-      // postData[this.searchPostData.field] = this.searchPostData.keyword;
-      // postData = this.pbFunc.fifterObjIsNull(postData);
       if (ids.length) {
         this.$confirm(content, "提示", {
           confirmButtonText: "确定",
@@ -524,11 +552,57 @@ export default {
         }).catch(() => {});
       }
     },
+    // reconciliations(isAll, ids, price) {
+    //   let content = '';
+    //   let postData = {
+    //     is_reconciliation: 'finished'
+    //   };
+    //   if (isAll) {
+    //     if (ids.length) {
+    //       content = '未对账共有' + ids.length + '单，运费合计' + price + '元，是否要对所选运单进行批量对账？';
+    //       postData.id = ids;
+    //       // postData.batch = 'unfinished';
+    //     } else {
+    //       this.$message({
+    //         message: '请勾选未对账数据',
+    //         type: 'warning'
+    //       });
+    //     }
+    //   } else {
+    //     content = '是否确认对账？';
+    //     postData.id = ids.split(',');
+    //   }
+    //   // if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+    //   //   postData.leave_time_start = this.leaveTime[0];
+    //   //   postData.leave_time_end = this.leaveTime[1];
+    //   // }
+    //   // if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+    //   //   postData.active_time_start = this.activeTime[0];
+    //   //   postData.active_time_end = this.activeTime[1];
+    //   // }
+
+    //   // postData[this.searchPostData.field] = this.searchPostData.keyword;
+    //   // postData = this.pbFunc.fifterObjIsNull(postData);
+    //   if (ids.length) {
+    //     this.$confirm(content, "提示", {
+    //       confirmButtonText: "确定",
+    //       cancelButtonText: "取消",
+    //       type: "warning"
+    //     }).then(() => {
+    //       this.$$http('reconciliations', postData).then((results) => {
+    //         if (results.data && results.data.code == 0) {
+    //           this.getList();
+    //         }
+    //       })
+    //     }).catch(() => {});
+    //   }
+    // },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchPostData.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        is_invoice: this.searchPostData.is_invoice,
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -669,6 +743,9 @@ export default {
       }, {
         title: '对账时间',
         id: 170,
+      },{
+        title: '开票时间',
+        id: 169,
       }, {
         title: '调账备注',
         id: 118,
@@ -679,6 +756,9 @@ export default {
         title: '是否对账',
         id: 61,
       }, {
+        title: '是否开票',
+        id: 226,
+      },{
         title: '运费合计',
         id: 60,
       }, {

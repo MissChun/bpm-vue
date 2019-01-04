@@ -4,7 +4,7 @@
       <div class="tms-dialog-form">
         <div class="tms-dialog-content">
           <el-row :gutter="10">
-            <el-col :span="24" class="text-center">可对<span class="text-blue fs-20"> {{idsLen}} </span>单获取最新数据。</el-col>
+            <el-col :span="24" class="text-center">可对<span class="text-blue fs-20"> {{idsLen?idsLen:allNum}} </span>单获取最新数据。</el-col>
             <el-col :span="24" class="mt-30" v-for="(item,key) in showData" :key="key">
               <div class="label-list">
                 <label>{{item.title}}:</label>
@@ -37,7 +37,8 @@ export default {
     apiName: String,
     updateData:Object,
     filterParam:Object,
-    ids:Array
+    ids:Array,
+    allNum:Number
   },
 
   data: function() {
@@ -102,8 +103,9 @@ export default {
         isDisabled: true,
         isLoading: true
       }
-      let postData = {
-        ids:this.ids.join(',')
+      let postData = this.updateData;
+      if(this.ids.length){
+        postData.source_ids = this.ids.join(',');
       }
       this.$$http(this.apiName, postData).then((results) => {
         this.submitBtn = {

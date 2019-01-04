@@ -64,6 +64,11 @@
   color:#409EFF;
   background-color:white;
 }
+.tab-select{
+  .el-input{
+    width:90%;
+  }
+}
 </style>
 <template>
   <div>
@@ -132,17 +137,17 @@
     <div class="nav-tab-setting mt-25">
       <el-tabs v-model="status">
        <el-tab-pane  :name="status" v-loading="pageLoading">
-        <div slot="label" style="height:36px">
-          <span>状态:</span>
-          <el-select v-model="fifterNameArr" placeholder="请选择" size="small"  @change="secondMenuChange" multiple collapse-tags>
-            <el-option
-              v-for="item in statusList[status]"
-              :label="item.value"
-              :value="item.key"
-              >
-            </el-option>
-          </el-select>
-        </div>
+          <div slot="label" style="height:36px">
+            <span>状态:</span>
+            <el-select v-model="fifterNameArr" class="tab-select" placeholder="请选择" size="small"  @change="secondMenuChange" multiple collapse-tags>
+              <el-option
+                v-for="item in statusList[status]"
+                :label="item.value"
+                :value="item.key"
+                >
+              </el-option>
+            </el-select>
+          </div>
           <div class="tab-content padding-clear-top" style="padding-top:1px!important;">
             <el-row :gutter="3" style="height:100%;margin-top:10px;">
               <el-col>
