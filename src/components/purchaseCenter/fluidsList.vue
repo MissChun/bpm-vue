@@ -65,7 +65,8 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '供方液厂' }
+          { id: 'fluid_name', value: '供方液厂' },
+          { id: 'fluid', value: '液厂' }
         ]
       },
       thTableList: [{

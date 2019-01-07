@@ -85,55 +85,55 @@
                 <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
               </div>
               <div v-else>
-                <span>
+                <div>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              </span>
-              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-              <span v-else v-html="scope.row[item.param]"></span>
+                </div>
+                <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否对账" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_reconciliation.verbose}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="是否开票" align="center" width="100">
+            <template slot-scope="scope">
+              <div>{{scope.row.is_invoice.verbose}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="运费合计" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <div>
+                <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
+                {{scope.row.waiting_charges}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="140" fixed="right">
+            <template slot-scope="scope">
+              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+              </div>
+              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+                <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
       </div>
-</template>
-</el-table-column>
-<el-table-column label="是否对账" align="center" width="100">
-  <template slot-scope="scope">
-    <div>{{scope.row.is_reconciliation.verbose}}</div>
-  </template>
-</el-table-column>
-<el-table-column label="是否开票" align="center" width="100">
-  <template slot-scope="scope">
-    <div>{{scope.row.is_invoice.verbose}}</div>
-  </template>
-</el-table-column>
-<el-table-column label="运费合计" align="center" width="100" fixed="right">
-  <template slot-scope="scope">
-    <div>
-      <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
-      {{scope.row.waiting_charges}}
+      <div class="page-list text-center">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+        </el-pagination>
+      </div>
     </div>
-  </template>
-</el-table-column>
-<el-table-column label="操作" align="center" width="140" fixed="right">
-  <template slot-scope="scope">
-    <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-      <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-      <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-    </div>
-    <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-      <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-      <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-    </div>
-  </template>
-</el-table-column>
-</el-table>
-<no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
-</div>
-<div class="page-list text-center">
-  <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-  </el-pagination>
-</div>
-</div>
-<consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
-<update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
-</div>
+    <consignment-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></consignment-adjustment-dialog>
+    <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'托运数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
+  </div>
 </template>
 <script>
 import consignmentAdjustmentDialog from '@/components/statistics/consignmentAdjustmentDialog';
@@ -184,7 +184,7 @@ export default {
           { id: 'waybill', value: '运单号' },
           { id: 'carrier', value: '承运商' },
           // { id: 'consumer_name', value: '客户名称' },
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
         ]
       },
       filterParam: {
@@ -211,8 +211,9 @@ export default {
           { id: 'carrier', value: '承运商' },
           // { id: 'consumer_name', value: '客户名称' },
           { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '实际液厂' },
-          { id: 'station', value: '卸货站' }
+          { id: 'station', value: '卸货站' },
+          { id: 'fluid', value: '液厂' }
+
         ],
         times: [{
           id: 'leave_time_start',

@@ -250,6 +250,7 @@ export default {
           { id: 'plate_number', value: '车号' },
           { id: 'sale_man', value: '业务员' },
           { id: 'payer_name', value: '付款方' },
+          { id: 'fluid', value: '液厂' },
         ],
         waybillStatus: {
           id: 'waybill_status',
