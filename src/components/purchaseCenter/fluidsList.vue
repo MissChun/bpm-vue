@@ -1,7 +1,5 @@
 <!-- fluidsList.vue -->
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -67,11 +65,12 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '液厂名称' }
+          { id: 'fluid_name', value: '供方液厂名称' },
+          { id: 'fluid', value: '液厂' }
         ]
       },
       thTableList: [{
-        title: '液厂名称',
+        title: '供方液厂名称',
         param: 'fluid_name',
         width: ''
       }, {
@@ -79,7 +78,7 @@ export default {
         param: 'supplier_name',
         width: ''
       }, {
-        title: '实际液厂名称',
+        title: '液厂',
         param: 'actual_fluid_name',
         width: ''
       }, {

@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -81,7 +79,7 @@ export default {
       },
       dateTime: [], //日期
       thTableList: [{
-        title: '液厂名称',
+        title: '供方液厂名称',
         param: 'fluid_name',
         width: '240'
       }, {
@@ -102,7 +100,7 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '实际液厂' },
+          { id: 'fluid_name', value: '液厂' },
           { id: 'supplier_name', value: '供应商' },
         ]
       },
@@ -166,13 +164,13 @@ export default {
   },
   watch: {
     tableData: {
-      handler(val, oldVal) {　　
+      handler(val, oldVal) {
         // for (let i = 0; i < val.length; i++) {　　　　　　　　
         //   if (oldVal[i] != val[i]) {　　　　　　　　　　
         //   }　　　　　　
         // }
       },
-      　　　　deep: true
+      deep: true
     }
   }
 

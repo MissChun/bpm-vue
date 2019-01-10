@@ -60,14 +60,14 @@
           </el-row>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="液厂名称:" prop="fluid_name">
+              <el-form-item label="供方液厂名:" prop="fluid_name">
                 <el-input placeholder="请输入" type="text" v-model="formData.fluid_name"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="实际液厂:" prop="actual_fluid">
+              <el-form-item label="液厂:" prop="actual_fluid">
                 <span>{{choosedActualFluid.position_name}}</span>
               </el-form-item>
             </el-col>
@@ -141,7 +141,7 @@ export default {
       },
       fieldSelect: [{
         key: 'position_name',
-        verbose: '实际液厂',
+        verbose: '液厂',
       }, ],
       showLeftWindow: false,
       formData: {
@@ -163,11 +163,11 @@ export default {
           { required: true, message: '请选择所属供应商', trigger: 'change' },
         ],
         fluid_name: [
-          { required: true, message: '请输入液厂名称', trigger: 'blur' },
+          { required: true, message: '请输入供方液厂名称', trigger: 'blur' },
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{0,20})$/gi, message: '液厂名称为1～20个字符', trigger: 'blur' },
         ],
         actual_fluid: [
-          { required: true, message: '请选择实际液厂', trigger: 'change' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
       },
       address: {
@@ -578,6 +578,7 @@ export default {
 <style scoped lang="less">
 .out-contain {
   position: relative;
+
   .return-box {
     height: 80px;
   }
@@ -594,16 +595,19 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
+
   .map-loading {
     position: absolute;
     height: 50px;
     width: 100%;
     left: 0;
     top: 0;
+
     /deep/ .el-loading-mask {
       background-color: rgba(250, 250, 250, 0);
     }
   }
+
   .icon-description {
     padding: 10px;
     position: absolute;
@@ -619,17 +623,21 @@ export default {
       &:nth-child(2) {
         margin-left: 1px;
       }
+
       line-height: 24px;
       margin-bottom: 4px;
+
       img {
         width: 20px;
         height: 20px;
         margin-right: 5px;
       }
+
       span {
         line-height: 24px;
         font-size: 13px;
       }
+
       i {
         height: 18px;
         width: 18px;
@@ -637,15 +645,19 @@ export default {
         margin: 1px 6px 0 1px;
         font-size: 13px;
       }
+
       .bg-1 {
         background-color: #47d2d0;
       }
+
       .bg-2 {
         background-color: #4a9bf8;
       }
+
       .bg-3 {
         background-color: #f56c6c;
       }
+
       .bg-4 {
         background-color: #7c8fa0;
       }
@@ -692,6 +704,7 @@ export default {
   background-color: #fff;
   color: #4a9bf8;
   z-index: 999;
+
   span {
     font-size: 16px;
   }
@@ -712,10 +725,12 @@ export default {
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;
+
   h4 {
     text-align: center;
     line-height: 60px;
   }
+
   /deep/ .el-select {
     display: block;
   }

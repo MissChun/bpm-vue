@@ -1,5 +1,4 @@
 <style type="text/css" scoped lang="less">
-
 </style>
 <template>
   <div>
@@ -37,7 +36,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
           </el-row>
           <el-row :gutter="10">
             <el-col :span="6">
@@ -63,9 +61,7 @@
             <div class="total-data">
               一共{{tableData.waybill?tableData.waybill:0}}单，核算吨位{{tableData.check_quanti?tableData.check_quanti:0}}吨，销售总额{{tableData.sell_rent?tableData.sell_rent:0}}元，待时后总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元，共卸车{{tableData.unload_nu?tableData.unload_nu:0}}车
             </div>
-
           </el-col>
-
           <el-col :span="14" v-else>
             <div class="total-data">
               当前选择{{chooseCount.num}}单，核算吨位{{chooseCount.check_quantity}}吨，销售总额{{chooseCount.sell_rental}}元，待时后总额{{chooseCount.waiting_charges}}元，共卸车{{chooseCount.unload_nums}}车
@@ -96,60 +92,61 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type' || item.param === 'consumer_confirm'">{{scope.row[item.param].verbose}}</span>
-                <span v-else>
+                <div v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-              <span v-else v-html="scope.row[item.param]"></span>
-              </span>
+                  <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                  <span v-else v-html="scope.row[item.param]"></span>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="待时后总额" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <div>
+                <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
+                {{scope.row.waiting_charges}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="业务员" align="center" width="150" fixed="right">
+            <template slot-scope="scope">
+              <div>{{scope.row.sale_man}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="140" fixed="right">
+            <template slot-scope="scope">
+              <!--  -->
+              <div v-if="scope.row.waybill_status.key==='is_loading'">
+                <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
+                  <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
+                  <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
+                </el-tooltip>
+              </div>
+              <div v-else>
+                <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+                  <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+                  <el-button type="success" size="mini" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+                </div>
+                <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                  <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
       </div>
-      </template>
-      </el-table-column>
-      <el-table-column label="待时后总额" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <div>
-            <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
-            {{scope.row.waiting_charges}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="业务员" align="center" width="150" fixed="right">
-        <template slot-scope="scope">
-          <div>{{scope.row.sale_man}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="140" fixed="right">
-        <template slot-scope="scope">
-          <!--  -->
-          <div v-if="scope.row.waybill_status.key==='is_loading'">
-            <el-tooltip class="item" effect="dark" content="未确认结算，无法对账" placement="top" :disabled="false">
-              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" class="is-disabled" plain size="mini">对账</el-button>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="未确认结算，无法编辑" placement="top" :disabled="false">
-              <el-button type="info" v-if="scope.row.is_reconciliation.key==='unfinished'" size="mini" class="is-disabled">编辑</el-button>
-            </el-tooltip>
-          </div>
-          <div v-else>
-            <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-              <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-              <el-button type="success" size="mini" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-            </div>
-            <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-              <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      </el-table>
-      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+      <div class="page-list text-center">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+        </el-pagination>
+      </div>
     </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-      </el-pagination>
-    </div>
-  </div>
-  <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></sales-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateSaleStatisticsList'" :type-str="'销售数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
+    <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow">
+    </sales-adjustment-dialog>
+    <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateSaleStatisticsList'" :type-str="'销售数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
   </div>
 </template>
 <script>
@@ -159,7 +156,7 @@ export default {
   name: 'salesList',
   components: {
     salesAdjustmentDialog: salesAdjustmentDialog,
-    updateNewDataDialog:updateNewDataDialog
+    updateNewDataDialog: updateNewDataDialog
   },
   computed: {
 
@@ -168,7 +165,7 @@ export default {
   data() {
     return {
       pageLoading: false,
-      updateDataIsShow:false,
+      updateDataIsShow: false,
       pageData: {
         currentPage: 1,
         totalCount: 0,
@@ -181,13 +178,13 @@ export default {
       leaveTime: this.$route.query.leaveTime ? (this.$route.query.leaveTime).split(',') : [], //离站时间
       searchPostData: {}, //搜索参数
       searchFilters: {
-        plan_arrive_time:[],
+        plan_arrive_time: [],
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
-        keyword: this.$route.query.consumer_name ? this.$route.query.consumer_name : '' ,
+        keyword: this.$route.query.consumer_name ? this.$route.query.consumer_name : '',
         waybill_status: '',
-        consumer_confirm:'',
-        field: this.$route.query.consumer_name ? 'consumer_name':'short_name',
+        consumer_confirm: '',
+        field: this.$route.query.consumer_name ? 'consumer_name' : 'short_name',
       },
       exportType: {
         type: 'sale',
@@ -227,18 +224,18 @@ export default {
       // },
       filterParam: {
         isInvoice: {
-          id:'is_invoice',
-          value:'是否开票',
-          data:[
+          id: 'is_invoice',
+          value: '是否开票',
+          data: [
             { id: '', value: '全部' },
             { id: 'yes', value: '已开票' },
             { id: 'no', value: '未开票' }
           ]
         },
         isReconciliations: {
-          id:'is_reconciliation',
-          value:'是否对账',
-          data:[
+          id: 'is_reconciliation',
+          value: '是否对账',
+          data: [
             { id: '', value: '全部' },
             { id: 'unfinished', value: '未对账' },
             { id: 'finished', value: '已对账' }
@@ -253,181 +250,181 @@ export default {
           { id: 'plate_number', value: '车号' },
           { id: 'sale_man', value: '业务员' },
           { id: 'payer_name', value: '付款方' },
+          { id: 'fluid', value: '液厂' },
         ],
         waybillStatus: {
-          id:'waybill_status',
-          value:'运单状态',
-          data:[
+          id: 'waybill_status',
+          value: '运单状态',
+          data: [
             { id: '', value: '全部' },
             { id: 'is_loading', value: '已卸货待结算' },
             { id: 'is_unload', value: '结算完成' }
           ]
         },
         consumerConfirm: {
-          id:'consumer_confirm',
-          value:'客户是否确认',
-          data:[
+          id: 'consumer_confirm',
+          value: '客户是否确认',
+          data: [
             { id: '', value: '全部' },
             { id: 'yes', value: '客户已确认' },
             { id: 'no', value: '客户吨位有误' },
             { id: 'wait_confirm', value: '客户待确认' },
           ]
         },
-        times:[
-          {
-            id: 'leave_time_start',
-            timeEnd:'leave_time_end',
-            value: '实际离站时间'
-          }
-        ],
+        times: [{
+          id: 'leave_time_start',
+          timeEnd: 'leave_time_end',
+          value: '实际离站时间'
+        }],
       },
       thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '业务单号',
-        param: 'business_order',
-        width: ''
-      }, {
-        title: '业务类型',
-        param: 'business_type',
-        width: '',
-      }, {
-        title: '客户简称',
-        param: 'short_name',
-        width: '',
-        isAdjust: true,
-        adjustParam: 'short_name_adjust'
-      },
-      {
-        title: '客户名称',
-        param: 'consumer_name',
-        width: '220'
-      },
-      {
-        title: '付款方',
-        param: 'payer_name',
-        width: '220',
-        isAdjust: true,
-        adjustParam: 'payer_name_adjust'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      },
-      // {
-      //   title: '实际到厂时间',
-      //   param: 'active_time',
-      //   width: '200'
-      // },
-      {
-        title: '装车完成时间',
-        param: 'work_end_time',
-        width: '200'
-      }, {
-        title: '实际液厂',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '采购单价',
-        param: 'discount_price',
-        width: ''
-      }, {
-        title: '业务优惠',
-        param: 'business_price',
-        width: ''
-      }, {
-        title: '销售价格',
-        param: 'sale_price',
-        width: ''
-      }, {
-        title: '实际离站时间',
-        param: 'leave_time',
-        width: '200'
-      }, {
-        title: '卸货站',
-        param: 'station',
-        width: ''
-      }, {
-        title: '装车吨位',
-        param: 'plan_tonnage',
-        width: ''
-      }, {
-        title: '实收吨位',
-        param: 'actual_quantity',
-        width: ''
-      }, {
-        title: '标准里程',
-        param: 'stand_mile',
-        width: ''
-      }, {
-        title: '亏吨',
-        param: 'deficiency',
-        width: ''
-      }, {
-        title: '核算吨位',
-        param: 'check_quantity',
-        width: '',
-        isAdjust: true,
-        adjustParam: 'check_quantity_differ'
-      }, {
-        title: '结算价格',
-        param: 'unit_price',
-        width: '',
-        isAdjust: true,
-        adjustParam: 'unit_price_differ'
-      }, {
-        title: '卸车数',
-        param: 'unload_nums',
-        width: '',
-        isAdjust: true,
-        adjustParam: 'unload_nums_differ'
-      }, {
-        title: '卸车待时金额',
-        param: 'waiting_price',
-        width: ''
-      }, {
-        title: '运单状态',
-        param: 'waybill_status',
-        width: ''
-      }, {
-        title: '是否对账',
-        param: 'is_reconciliation',
-        width: ''
-      }, {
-        title: '是否开票',
-        param: 'is_invoice',
-        width: ''
-      }, {
-        title: '销售总额',
-        param: 'sell_rental',
-        width: ''
-      },{
-        title: '客户是否确认',
-        param: 'consumer_confirm',
-        width: ''
-      }, {
-        title: '备注',
-        param: 'remark',
-        width: '170'
-      }, {
-        title: '对账时间',
-        param: 'reconciliation_time',
-        width: '180'
-      }, {
-        title: '调账备注',
-        param: 'remark_adjust',
-        width: '180'
-      }, {
-        title: '调账时间',
-        param: 'adjust_time',
-        width: '180'
-      }, {
-        title: '开票时间',
-        param: 'invoice_time',
-        width: '180'
-      }],
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        }, {
+          title: '业务单号',
+          param: 'business_order',
+          width: ''
+        }, {
+          title: '业务类型',
+          param: 'business_type',
+          width: '',
+        }, {
+          title: '客户简称',
+          param: 'short_name',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'short_name_adjust'
+        },
+        {
+          title: '客户名称',
+          param: 'consumer_name',
+          width: '220'
+        },
+        {
+          title: '付款方',
+          param: 'payer_name',
+          width: '220',
+          isAdjust: true,
+          adjustParam: 'payer_name_adjust'
+        }, {
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        },
+        // {
+        //   title: '实际到厂时间',
+        //   param: 'active_time',
+        //   width: '200'
+        // },
+        {
+          title: '装车完成时间',
+          param: 'work_end_time',
+          width: '200'
+        }, {
+          title: '液厂',
+          param: 'fluid',
+          width: ''
+        }, {
+          title: '采购单价',
+          param: 'discount_price',
+          width: ''
+        }, {
+          title: '业务优惠',
+          param: 'business_price',
+          width: ''
+        }, {
+          title: '销售价格',
+          param: 'sale_price',
+          width: ''
+        }, {
+          title: '实际离站时间',
+          param: 'leave_time',
+          width: '200'
+        }, {
+          title: '卸货站',
+          param: 'station',
+          width: ''
+        }, {
+          title: '装车吨位',
+          param: 'plan_tonnage',
+          width: ''
+        }, {
+          title: '实收吨位',
+          param: 'actual_quantity',
+          width: ''
+        }, {
+          title: '标准里程',
+          param: 'stand_mile',
+          width: ''
+        }, {
+          title: '亏吨',
+          param: 'deficiency',
+          width: ''
+        }, {
+          title: '核算吨位',
+          param: 'check_quantity',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'check_quantity_differ'
+        }, {
+          title: '结算价格',
+          param: 'unit_price',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'unit_price_differ'
+        }, {
+          title: '卸车数',
+          param: 'unload_nums',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'unload_nums_differ'
+        }, {
+          title: '卸车待时金额',
+          param: 'waiting_price',
+          width: ''
+        }, {
+          title: '运单状态',
+          param: 'waybill_status',
+          width: ''
+        }, {
+          title: '是否对账',
+          param: 'is_reconciliation',
+          width: ''
+        }, {
+          title: '是否开票',
+          param: 'is_invoice',
+          width: ''
+        }, {
+          title: '销售总额',
+          param: 'sell_rental',
+          width: ''
+        }, {
+          title: '客户是否确认',
+          param: 'consumer_confirm',
+          width: ''
+        }, {
+          title: '备注',
+          param: 'remark',
+          width: '170'
+        }, {
+          title: '对账时间',
+          param: 'reconciliation_time',
+          width: '180'
+        }, {
+          title: '调账备注',
+          param: 'remark_adjust',
+          width: '180'
+        }, {
+          title: '调账时间',
+          param: 'adjust_time',
+          width: '180'
+        }, {
+          title: '开票时间',
+          param: 'invoice_time',
+          width: '180'
+        }
+      ],
       tableData: [],
       multipleSelection: [], //所选数据 
       exportPostData: {}, //导出筛选
@@ -438,15 +435,15 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      chooseCount:{
-        num:0,
-        check_quantity:"0.000",//实际吨位
-        sell_rental:"0.00",//采购总额
-        waiting_charges:"0.00",
-        unload_nums:"0.0"//优惠后总额
+      chooseCount: {
+        num: 0,
+        check_quantity: "0.000", //实际吨位
+        sell_rental: "0.00", //采购总额
+        waiting_charges: "0.00",
+        unload_nums: "0.0" //优惠后总额
       },
-      updateData:{},
-      getNewDataIds:[]//获取最新数据的ID
+      updateData: {},
+      getNewDataIds: [] //获取最新数据的ID
     }
   },
   methods: {
@@ -458,24 +455,24 @@ export default {
       }
       return postData;
     },
-    updateCloseDialog(isSave){
+    updateCloseDialog(isSave) {
       this.updateDataIsShow = false;
       if (isSave) {
         this.getList();
       }
     },
     // 更新数据
-    updatePostData(){
+    updatePostData() {
       this.updateData = this.postDataFilter(this.updateData);
       this.getNewDataIds = [];
-      for(let i in this.multipleSelection){
-        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
+      if (this.getNewDataIds.length || this.pbFunc.objSize(this.updateData)) {
         this.updateDataIsShow = true;
-      }else{
+      } else {
         this.$message.warning('没有勾选未对账运单数据可获取或筛选条件');
       }
     },
@@ -509,7 +506,7 @@ export default {
         title: '车牌号',
         id: 18
       }, {
-        title: '实际液厂',
+        title: '液厂',
         id: 19
       }, {
         title: '实际到厂时间',
@@ -644,21 +641,21 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      if(val.length>0){
+      if (val.length > 0) {
         this.calculation();
       }
     },
-    calculation:function(){
-      var newfifterCount={num:0,check_quantity:"0.000",sell_rental:"0.00",waiting_charges:"0.00",unload_nums:"0.0"};
-      this.multipleSelection.forEach(item=>{
+    calculation: function() {
+      var newfifterCount = { num: 0, check_quantity: "0.000", sell_rental: "0.00", waiting_charges: "0.00", unload_nums: "0.0" };
+      this.multipleSelection.forEach(item => {
         newfifterCount.num++;
         // newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
-        newfifterCount.check_quantity=(parseFloat(newfifterCount.check_quantity)+parseFloat(item.check_quantity)).toFixed(3);
-        newfifterCount.sell_rental=(parseFloat(newfifterCount.sell_rental)+parseFloat(item.sell_rental)).toFixed(2);
-        newfifterCount.waiting_charges=(parseFloat(newfifterCount.waiting_charges)+parseFloat(item.waiting_charges)).toFixed(2);
-        newfifterCount.unload_nums=(parseFloat(newfifterCount.unload_nums)+parseFloat(item.unload_nums)).toFixed(1);
+        newfifterCount.check_quantity = (parseFloat(newfifterCount.check_quantity) + parseFloat(item.check_quantity)).toFixed(3);
+        newfifterCount.sell_rental = (parseFloat(newfifterCount.sell_rental) + parseFloat(item.sell_rental)).toFixed(2);
+        newfifterCount.waiting_charges = (parseFloat(newfifterCount.waiting_charges) + parseFloat(item.waiting_charges)).toFixed(2);
+        newfifterCount.unload_nums = (parseFloat(newfifterCount.unload_nums) + parseFloat(item.unload_nums)).toFixed(1);
       });
-      this.chooseCount=newfifterCount;
+      this.chooseCount = newfifterCount;
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
@@ -772,7 +769,7 @@ export default {
         is_reconciliation: this.searchPostData.is_reconciliation,
         is_invoice: this.searchPostData.is_invoice,
         waybill_status: this.searchPostData.waybill_status,
-        consumer_confirm:this.searchPostData.consumer_confirm
+        consumer_confirm: this.searchPostData.consumer_confirm
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -822,8 +819,8 @@ export default {
   created() {
     let nowDate = new Date();
     let nowDateDetail = this.pbFunc.getDateDetail(nowDate);
-    let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' +  nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' +  nowDateDetail.second;
-    this.leaveTime = this.$route.query.leaveTime ? (this.$route.query.leaveTime).split(','):['2018-09-30 16:00:00',nowDateStr];
+    let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' + nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' + nowDateDetail.second;
+    this.leaveTime = this.$route.query.leaveTime ? (this.$route.query.leaveTime).split(',') : ['2018-09-30 16:00:00', nowDateStr];
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }

@@ -1,14 +1,16 @@
 <style type="text/css" scoped lang="less">
-.operation-btn-content{
+.operation-btn-content {
   padding-right: 490px;
 
-  position:relative;
-  .operation-btn-op{
-    position:absolute;
-    right:0;
-    top:0;
+  position: relative;
+
+  .operation-btn-op {
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 }
+
 </style>
 <template>
   <div>
@@ -89,50 +91,50 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
-                <span v-else>
+                <div v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-              <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-              <span v-else v-html="scope.row[item.param]"></span>
-              </span>
+                  <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                  <span v-else v-html="scope.row[item.param]"></span>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="采购总额" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <div>{{scope.row.unit_sum_price}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="优惠后总额" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <div>
+                <div class="adjust" v-if="scope.row.discounts_sum_differ"><span>{{scope.row.discounts_sum_differ}}</span></div>
+                <span>{{scope.row.discounts_sum_price}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="140" fixed="right">
+            <template slot-scope="scope">
+              <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+                <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="showDialog('adjust',scope.row)">调账</el-button>
+                <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+              </div>
+              <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                <el-button type="primary" size="mini" @click="handleMenuClick({operator:'edit',id:scope.row.id})">编辑</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
       </div>
-      </template>
-      </el-table-column>
-      <el-table-column label="采购总额" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <div>{{scope.row.unit_sum_price}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="优惠后总额" align="center" width="100" fixed="right">
-        <template slot-scope="scope">
-          <div>
-            <div class="adjust" v-if="scope.row.discounts_sum_differ"><span>{{scope.row.discounts_sum_differ}}</span></div>
-            <span>{{scope.row.discounts_sum_price}}</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="140" fixed="right">
-        <template slot-scope="scope">
-          <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-            <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="showDialog('adjust',scope.row)">调账</el-button>
-            <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-          </div>
-          <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-            <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-            <el-button type="primary" size="mini" @click="handleMenuClick({operator:'edit',id:scope.row.id})">编辑</el-button>
-          </div>
-        </template>
-      </el-table-column>
-      </el-table>
-      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+      <div class="page-list text-center">
+        <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+        </el-pagination>
+      </div>
     </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-      </el-pagination>
-    </div>
-  </div>
-  <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
-  <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
-  <batch-update-dialog v-on:closeDialogBtn="batchUpdateCloseDialog" :is-show="batchUpdateIsShow" :number="multipleSelection.length" :ids="batchIds"></batch-update-dialog>
+    <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
+    <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
+    <batch-update-dialog v-on:closeDialogBtn="batchUpdateCloseDialog" :is-show="batchUpdateIsShow" :number="multipleSelection.length" :ids="batchIds"></batch-update-dialog>
   </div>
 </template>
 <script>
@@ -144,8 +146,8 @@ export default {
   name: 'purchaseList',
   components: {
     purchaseAdjustmentDialog: purchaseAdjustmentDialog,
-    updateNewDataDialog:updateNewDataDialog,
-    batchUpdateDialog:batchUpdateDialog
+    updateNewDataDialog: updateNewDataDialog,
+    batchUpdateDialog: batchUpdateDialog
   },
   computed: {
     // statusTabList(){
@@ -156,8 +158,8 @@ export default {
   data() {
     return {
       pageLoading: false,
-      updateDataIsShow:false,//更新数据弹窗
-      batchUpdateIsShow:false,//批量修改
+      updateDataIsShow: false, //更新数据弹窗
+      batchUpdateIsShow: false, //批量修改
       pageData: {
         currentPage: 1,
         totalCount: 0,
@@ -167,15 +169,15 @@ export default {
         len: '', //长度
         data: [], //内容
       },
-      chooseCount:{
-        num:0,
-        active_tonna:"0",//实际吨位
-        unit_sum_pri:"0",//采购总额
-        discounts_sum_pri:"0",//优惠后总额
+      chooseCount: {
+        num: 0,
+        active_tonna: "0", //实际吨位
+        unit_sum_pri: "0", //采购总额
+        discounts_sum_pri: "0", //优惠后总额
       },
       activeName: 'add',
       statusActive: 'create_manager_check',
-      planArriveTime: ['2018-9-30 16:00:00','2018-10-30 16:00:00'], //计划到站时间
+      planArriveTime: ['2018-9-30 16:00:00', '2018-10-30 16:00:00'], //计划到站时间
       createdAt: [], //下计划日期
       searchPostData: {}, //搜索参数
       searchFilters: {
@@ -220,91 +222,89 @@ export default {
       //     { id: 'fluid', value: '液厂' },
       //   ]
       // },
-      thTableList: [
-        {
-          title: '运单号',
-          param: 'waybill',
-          width: ''
-        }, {
-          title: '供应商',
-          param: 'supplier',
-          width: '200',
-          isAdjust: true,
-          adjustParam: 'supplier_adjust'
-        }, {
-          title: '液厂名称',
-          param: 'fluid',
-          width: ''
-        }, {
-          title: '车号',
-          param: 'plate_number',
-          width: ''
-        }, {
-          title: '实际到厂时间',
-          param: 'active_time',
-          width: '200'
-        }, {
-          title: '装车完成时间',
-          param: 'work_end_time',
-          width: '200'
-        }, {
-          title: '实际装车吨位（吨）',
-          param: 'active_tonnage',
-          width: '150',
-          isAdjust: true,
-          adjustParam: 'active_tonnage_differ'
-        }, {
-          title: '采购单价（元）',
-          param: 'unit_price',
-          width: '',
-          isAdjust: true,
-          adjustParam: 'unit_price_differ'
-        }, {
-          title: '卸货站',
-          param: 'station',
-          width: ''
-        }, {
-          title: '业务优惠（元）',
-          param: 'business_price',
-          width: ''
-        }, {
-          title: '采购优惠（元）',
-          param: 'discount_price',
-          width: ''
-        }, {
-          title: '运单状态',
-          param: 'waybill_status',
-          width: ''
-        }, {
-          title: '是否对账',
-          param: 'is_reconciliation',
-          width: ''
-        }, {
-          title: '是否开票',
-          param: 'is_invoice',
-          width: ''
-        }, {
-          title: '备注',
-          param: 'remark',
-          width: '170'
-        }, {
-          title: '对账时间',
-          param: 'reconciliation_time',
-          width: '180'
-        }, {
-          title: '调账备注',
-          param: 'remark_adjust',
-          width: '170'
-        }, {
-          title: '调账时间',
-          param: 'adjust_time',
-          width: '180'
-        }, {
-          title: '开票时间',
-          param: 'invoice_time',
-          width: '180'
-        }
-      ],
+      thTableList: [{
+        title: '运单号',
+        param: 'waybill',
+        width: ''
+      }, {
+        title: '供应商',
+        param: 'supplier',
+        width: '200',
+        isAdjust: true,
+        adjustParam: 'supplier_adjust'
+      }, {
+        title: '供方液厂名称',
+        param: 'fluid',
+        width: ''
+      }, {
+        title: '车号',
+        param: 'plate_number',
+        width: ''
+      }, {
+        title: '实际到厂时间',
+        param: 'active_time',
+        width: '200'
+      }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
+        width: '200'
+      }, {
+        title: '实际装车吨位（吨）',
+        param: 'active_tonnage',
+        width: '150',
+        isAdjust: true,
+        adjustParam: 'active_tonnage_differ'
+      }, {
+        title: '采购单价（元）',
+        param: 'unit_price',
+        width: '',
+        isAdjust: true,
+        adjustParam: 'unit_price_differ'
+      }, {
+        title: '卸货站',
+        param: 'station',
+        width: ''
+      }, {
+        title: '业务优惠（元）',
+        param: 'business_price',
+        width: ''
+      }, {
+        title: '采购优惠（元）',
+        param: 'discount_price',
+        width: ''
+      }, {
+        title: '运单状态',
+        param: 'waybill_status',
+        width: ''
+      }, {
+        title: '是否对账',
+        param: 'is_reconciliation',
+        width: ''
+      }, {
+        title: '是否开票',
+        param: 'is_invoice',
+        width: ''
+      }, {
+        title: '备注',
+        param: 'remark',
+        width: '170'
+      }, {
+        title: '对账时间',
+        param: 'reconciliation_time',
+        width: '180'
+      }, {
+        title: '调账备注',
+        param: 'remark_adjust',
+        width: '170'
+      }, {
+        title: '调账时间',
+        param: 'adjust_time',
+        width: '180'
+      }, {
+        title: '开票时间',
+        param: 'invoice_time',
+        width: '180'
+      }],
       tableData: [],
       multipleSelection: [], //所选数据   
       exportPostData: {}, //导出筛选
@@ -315,22 +315,20 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      filterParam:{
-        fieldSelect:[
-          {
-            id: 'waybill',
-            value: '运单号',
-          },{
-            id: 'supplier',
-            value: '供应商',
-          },{
-            id: 'plate_number',
-            value: '车号',
-          },{
-            id: 'fluid',
-            value: '液厂',
-          },
-        ],
+      filterParam: {
+        fieldSelect: [{
+          id: 'waybill',
+          value: '运单号',
+        }, {
+          id: 'supplier',
+          value: '供应商',
+        }, {
+          id: 'plate_number',
+          value: '车号',
+        }, {
+          id: 'fluid',
+          value: '供方液厂名称',
+        }, ],
         waybillStatus: {
           id: 'waybill_status',
           value: '运单状态',
@@ -358,17 +356,15 @@ export default {
             { id: 'no', value: '未开票' }
           ],
         },
-        times:[
-          {
-            id: 'work_end_time_start',
-            timeEnd:'work_end_time_end',
-            value: '装车完成时间'
-          }
-        ],
-      },//筛选参数
-      updateData:{},
-      batchIds:[],//可批量修改数据的ID
-      getNewDataIds:[]//获取最新数据的ID
+        times: [{
+          id: 'work_end_time_start',
+          timeEnd: 'work_end_time_end',
+          value: '装车完成时间'
+        }],
+      }, //筛选参数
+      updateData: {},
+      batchIds: [], //可批量修改数据的ID
+      getNewDataIds: [] //获取最新数据的ID
     }
   },
   methods: {
@@ -378,36 +374,36 @@ export default {
       })
     },
     // 更新数据
-    updatePostData(){
+    updatePostData() {
       this.updateData = this.postDataFilter(this.updateData);
       this.getNewDataIds = [];
-      for(let i in this.multipleSelection){
-        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
+      if (this.getNewDataIds.length || this.pbFunc.objSize(this.updateData)) {
         this.updateDataIsShow = true;
-      }else{
+      } else {
         this.$message.warning('没有勾选未对账运单数据或筛选条件');
       }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      if(val.length>0){
+      if (val.length > 0) {
         this.calculation();
       }
     },
-    calculation:function(){
-      var newfifterCount={num:0,active_tonna:"0.00",unit_sum_pri:"0.00",discounts_sum_pri:"0.00"};
-      this.multipleSelection.forEach(item=>{
+    calculation: function() {
+      var newfifterCount = { num: 0, active_tonna: "0.00", unit_sum_pri: "0.00", discounts_sum_pri: "0.00" };
+      this.multipleSelection.forEach(item => {
         newfifterCount.num++;
         // newfifterCount.check_quantity_sum=(parseFloat(newfifterCount.check_quantity_sum)+parseFloat(item.check_quantity_sum)).toFixed(2);
-        newfifterCount.active_tonna=(parseFloat(newfifterCount.active_tonna)+parseFloat(item.active_tonnage)).toFixed(2);
-        newfifterCount.unit_sum_pri=(parseFloat(newfifterCount.unit_sum_pri)+parseFloat(item.unit_sum_price)).toFixed(2);
-        newfifterCount.discounts_sum_pri=(parseFloat(newfifterCount.discounts_sum_pri)+parseFloat(item.discounts_sum_price)).toFixed(2);
+        newfifterCount.active_tonna = (parseFloat(newfifterCount.active_tonna) + parseFloat(item.active_tonnage)).toFixed(2);
+        newfifterCount.unit_sum_pri = (parseFloat(newfifterCount.unit_sum_pri) + parseFloat(item.unit_sum_price)).toFixed(2);
+        newfifterCount.discounts_sum_pri = (parseFloat(newfifterCount.discounts_sum_pri) + parseFloat(item.discounts_sum_price)).toFixed(2);
       });
-      this.chooseCount=newfifterCount;
+      this.chooseCount = newfifterCount;
     },
     handleMenuClick(row) {
       if (row.operator === 'check') {
@@ -426,7 +422,6 @@ export default {
       }
     },
     startSearch() {
-      // console.log('planArriveTime',this.planArriveTime);
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
@@ -442,35 +437,35 @@ export default {
 
     },
     // 批量修改 采购优惠 业务优惠
-    batchUpdateCloseDialog(isSave){
+    batchUpdateCloseDialog(isSave) {
       this.batchUpdateIsShow = false;
       if (isSave) {
         this.getList();
       }
     },
-    updateCloseDialog(isSave){
+    updateCloseDialog(isSave) {
       this.updateDataIsShow = false;
       if (isSave) {
         this.getList();
       }
     },
     // 调账
-    showDialog(type,row) {
-      if(type === 'adjust'){
+    showDialog(type, row) {
+      if (type === 'adjust') {
         this.accountAdjustIsShow = true;
-      }else if(type === 'batch'){
-        if(this.multipleSelection.length){
+      } else if (type === 'batch') {
+        if (this.multipleSelection.length) {
           this.batchIds = this.batchDataHandle('reconciliation');
-          if(this.batchIds.length){
+          if (this.batchIds.length) {
             this.batchUpdateIsShow = true;
-          }else{
+          } else {
             this.$message.warning('已勾选中没有可修改（未对账）数据！');
           }
-        }else{
+        } else {
           this.$message.warning('没有勾选批量修改数据！');
         }
       }
-      if(row){
+      if (row) {
         this.purchaseRow = row;
       }
     },
@@ -520,10 +515,10 @@ export default {
       this.reconciliations(true, ids, price / 100, type);
     },
     // 不同状态的id列表
-    batchDataHandle(type){
+    batchDataHandle(type) {
       let ids = [];
-      for(let i in this.multipleSelection){
-        if(this.multipleSelection[i].is_reconciliation.key === 'unfinished'&&type==='reconciliation'){
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
           ids.push(this.multipleSelection[i].id);
         }
       }
@@ -639,7 +634,7 @@ export default {
         title: '调账供应商',
         id: 174
       }, {
-        title: '液厂名称',
+        title: '供方液厂名称',
         id: 4
       }, {
         title: '车号',
@@ -746,8 +741,8 @@ export default {
   created() {
     let nowDate = new Date();
     let nowDateDetail = this.pbFunc.getDateDetail(nowDate);
-    let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' +  nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' +  nowDateDetail.second;
-    this.planArriveTime = ['2018-10-01 08:00:00',nowDateStr];
+    let nowDateStr = nowDateDetail.year + '-' + nowDateDetail.month + '-' + nowDateDetail.day + ' ' + nowDateDetail.hour + ':' + nowDateDetail.minute + ':' + nowDateDetail.second;
+    this.planArriveTime = ['2018-10-01 08:00:00', nowDateStr];
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }

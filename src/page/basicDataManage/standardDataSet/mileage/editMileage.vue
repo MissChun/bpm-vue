@@ -1,7 +1,5 @@
 <!-- editMileage.vue -->
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div id="addPerson" class="detail-main">
@@ -23,7 +21,7 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="editForm" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:" prop="fluid">
+                  <el-form-item label="液厂:" prop="fluid">
                     <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" placeholder="请输入选择" @change="chooseFluid">
                       <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>

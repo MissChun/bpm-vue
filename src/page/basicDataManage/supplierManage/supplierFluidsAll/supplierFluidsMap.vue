@@ -13,7 +13,7 @@
                 <el-tab-pane label="地图" name="fluidsMap">
                   <div>
                     <div class="tab-screen">
-                      <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+                      <el-form class="search-filters-form" label-width="120px" :model="searchFilters" status-icon>
                         <el-row :gutter="20">
                           <el-col :span="6">
                             <el-form-item label="供应商:">
@@ -23,7 +23,7 @@
                             </el-form-item>
                           </el-col>
                           <el-col :span="6">
-                            <el-form-item label="液厂名称:">
+                            <el-form-item label="供方液厂名称:">
                               <el-input placeholder="请输入" @keyup.native.13="startSearch" v-model="searchFilters.stationName" class="search-filters-screen">
                               </el-input>
                             </el-form-item>
@@ -201,8 +201,8 @@ export default {
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
               let gasType = data.fluid_type ? data.fluid_type : '无';
-              let infoTitleStr = '<div class="marker-info-window fs-13">液厂名称：<span class="fs-13">' + data.fluid_name + '</span></div>';
-              let infoBodyStr = '<div class="fs-13 md-5">所属供应商：' + data.supplier_name + '</div><div class="fs-13 md-5">实际液厂：' + data.actual_fluid + '</div><div class="fs-13 md-5">气种：' + gasType + '</div><br><div class="text-right "><a href="/#/basicDataManage/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
+              let infoTitleStr = '<div class="marker-info-window fs-13">供方液厂名称：<span class="fs-13">' + data.fluid_name + '</span></div>';
+              let infoBodyStr = '<div class="fs-13 md-5">所属供应商：' + data.supplier_name + '</div><div class="fs-13 md-5">液厂：' + data.actual_fluid + '</div><div class="fs-13 md-5">气种：' + gasType + '</div><br><div class="text-right "><a href="/#/basicDataManage/supplierManage/supplierFluidsAll/supplierFluidsEditAdd?id=' + data.id + '" class="el-button el-button--primary el-button--mini">修改</a></div>';
               if (recycledInfoWindow) {
                 recycledInfoWindow.setInfoTitle(infoTitleStr);
                 recycledInfoWindow.setInfoBody(infoBodyStr);
@@ -317,16 +317,19 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
+
   .map-loading {
     position: absolute;
     height: 50px;
     width: 100%;
     left: 0;
     top: 0;
+
     /deep/ .el-loading-mask {
       background-color: rgba(250, 250, 250, 0);
     }
   }
+
   .icon-description {
     padding: 10px;
     position: absolute;
@@ -342,17 +345,21 @@ export default {
       &:nth-child(2) {
         margin-left: 1px;
       }
+
       line-height: 24px;
       margin-bottom: 4px;
+
       img {
         width: 20px;
         height: 20px;
         margin-right: 5px;
       }
+
       span {
         line-height: 24px;
         font-size: 13px;
       }
+
       i {
         height: 18px;
         width: 18px;
@@ -360,15 +367,19 @@ export default {
         margin: 1px 6px 0 1px;
         font-size: 13px;
       }
+
       .bg-1 {
         background-color: #47d2d0;
       }
+
       .bg-2 {
         background-color: #4a9bf8;
       }
+
       .bg-3 {
         background-color: #f56c6c;
       }
+
       .bg-4 {
         background-color: #7c8fa0;
       }

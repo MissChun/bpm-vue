@@ -64,10 +64,12 @@
   color:#409EFF;
   background-color:white;
 }
-.tab-select{
+/deep/ .tab-select{
+
   .el-input{
     width:90%;
   }
+
 }
 </style>
 <template>
@@ -119,14 +121,12 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-
           <el-col :span="8" v-if="status!='first'&&status!='second'&&status!='fifth'">
             <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_work_end_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
-
         </el-row>
       </el-form>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
@@ -136,15 +136,11 @@
     </div>
     <div class="nav-tab-setting mt-25">
       <el-tabs v-model="status">
-       <el-tab-pane  :name="status" v-loading="pageLoading">
+        <el-tab-pane :name="status" v-loading="pageLoading">
           <div slot="label" style="height:36px">
             <span>状态:</span>
-            <el-select v-model="fifterNameArr" class="tab-select" placeholder="请选择" size="small"  @change="secondMenuChange" multiple collapse-tags>
-              <el-option
-                v-for="item in statusList[status]"
-                :label="item.value"
-                :value="item.key"
-                >
+            <el-select v-model="fifterNameArr" class="tab-select" placeholder="请选择" size="small" @change="secondMenuChange" multiple collapse-tags>
+              <el-option v-for="item in statusList[status]" :label="item.value" :value="item.key">
               </el-option>
             </el-select>
           </div>
@@ -152,12 +148,12 @@
             <el-row :gutter="3" style="height:100%;margin-top:10px;">
               <el-col>
                 <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium">
-                {{tag.value}}
+                  {{tag.value}}
                 </el-tag>
               </el-col>
             </el-row>
             <keep-alive>
-                <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -188,7 +184,7 @@ export default {
   name: 'orderStatusComonents',
   components: {
     orderConFifter: () =>
-      import ("./orderConFifterList.vue")
+      import("./orderConFifterList.vue")
   },
   data() {
     return {
@@ -222,20 +218,20 @@ export default {
       expandStatus: false,
       pageLoading: false,
       exportLoading: false,
-      tagArr:[],
-      fifterNameArr:[],
+      tagArr: [],
+      fifterNameArr: [],
       statusList: {
         'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
-        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }, { key: 'finished', value: '已完成' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' }, { key: 'canceled', value: '已取消' }],
         'fifth': [{ key: 'all', value: '全部' }],
       },
       allStatusList: {
         'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' },{ key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' },{ key: 'finished', value: '已完成' }],
-        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' },{ key: 'canceled', value: '已取消' }],
+        'third': [{ key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }, { key: 'finished', value: '已完成' }],
+        'fourth': [{ key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' }, { key: 'canceled', value: '已取消' }],
         'fifth': [{ key: 'all', value: '全部' }],
       },
       timeParam: {
@@ -243,7 +239,7 @@ export default {
         unload_plan_time: [],
         active_time: [],
         load_plan_time: [],
-        unload_work_end_time:[]
+        unload_work_end_time: []
       },
       carrier_type: "",
       selectData: {
@@ -253,7 +249,7 @@ export default {
           { id: 'carrier_name', value: '承运商' },
           { id: 'order_number', value: '订单号' },
           { id: 'truck_no', value: '车号' },
-          { id: 'fluid_name', value: '液厂名' },
+          { id: 'fluid_name', value: '液厂' },
           { id: 'waybill_number', value: '运单号' },
           { id: 'order_station', value: '卸货站点' },
         ],
@@ -285,14 +281,14 @@ export default {
     secondActiveName: String
   },
   computed: {
-    fifterName: function(){
-      var returnFiferName="";
-      this.fifterNameArr.forEach((item,index)=>{
-        if(item!="all"){
-          if(returnFiferName!=""){
-            returnFiferName+=(","+item);
-          }else{
-            returnFiferName+=item;
+    fifterName: function() {
+      var returnFiferName = "";
+      this.fifterNameArr.forEach((item, index) => {
+        if (item != "all") {
+          if (returnFiferName != "") {
+            returnFiferName += ("," + item);
+          } else {
+            returnFiferName += item;
           }
         }
       });
@@ -300,7 +296,7 @@ export default {
     }
   },
   methods: {
-    handleClose:function(tag) {
+    handleClose: function(tag) {
       this.fifterNameArr.splice(this.fifterNameArr.indexOf(tag.key), 1);
       this.tagArr.splice(this.fifterNameArr.indexOf(tag.key), 1)
       this.secondMenuChange();
@@ -311,32 +307,32 @@ export default {
     changeExtendsStatus: function() {
       this.expandStatus = !this.expandStatus;
     },
-    clickFifterSecond:function(key){
-      if(this.fifterNameArr.indexOf(key)>-1){
-        this.fifterNameArr.splice(this.fifterNameArr.indexOf(key),1);
-      }else{
-         this.fifterNameArr.push(key);
+    clickFifterSecond: function(key) {
+      if (this.fifterNameArr.indexOf(key) > -1) {
+        this.fifterNameArr.splice(this.fifterNameArr.indexOf(key), 1);
+      } else {
+        this.fifterNameArr.push(key);
       }
       this.secondMenuChange();
     },
-    secondMenuChange:function(){
-       var status = this.fifterName;
+    secondMenuChange: function() {
+      var status = this.fifterName;
       //重新查询一次数据
 
       //this.$emit("changeTabs", this.status);
-      let middleTagArr=[];
-      this.fifterNameArr.forEach(item=>{
-        this.statusList[this.status].forEach(tagItem=>{
-          if(tagItem.key==item){
+      let middleTagArr = [];
+      this.fifterNameArr.forEach(item => {
+        this.statusList[this.status].forEach(tagItem => {
+          if (tagItem.key == item) {
             middleTagArr.push(tagItem);
           }
         })
       });
-      this.tagArr=middleTagArr;
-      this.$emit("childchangeTabs", { first: this.status, second:this.fifterName });
-      if(this.fifterNameArr.length==0){
-        this.listFifterData=[];
-      }else{
+      this.tagArr = middleTagArr;
+      this.$emit("childchangeTabs", { first: this.status, second: this.fifterName });
+      if (this.fifterNameArr.length == 0) {
+        this.listFifterData = [];
+      } else {
         this.searchList(this.fifterName);
       }
     },
@@ -348,18 +344,18 @@ export default {
       var vm = this;
       this.exportLoading = true;
 
-      if(this.status=='first'){
-        sendData.search='all_truck_loaded';
-      }else if(this.status=='second'){
-        sendData.search='all_match';
-      }else if(this.status=='third'){
-        sendData.search='all_unload';
-      }else if(this.status=='fourth'){
-        sendData.search='all_change';
-      }else if(this.status=='fifth'){
-        sendData.search='';
+      if (this.status == 'first') {
+        sendData.search = 'all_truck_loaded';
+      } else if (this.status == 'second') {
+        sendData.search = 'all_match';
+      } else if (this.status == 'third') {
+        sendData.search = 'all_unload';
+      } else if (this.status == 'fourth') {
+        sendData.search = 'all_change';
+      } else if (this.status == 'fifth') {
+        sendData.search = '';
       }
-      if(this.fifterName){
+      if (this.fifterName) {
         sendData.child_search = this.fifterName;
       }
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
@@ -391,7 +387,7 @@ export default {
       sendData.export_excel = 'export'
       let url = 'http://bpm.hhtdlng.com';
       let domainUrl = getDomainUrl('http://');
-      axios.get(domainUrl+'/api/v1/section-trips/', {
+      axios.get(domainUrl + '/api/v1/section-trips/', {
         method: 'get',
         responseType: 'blob',
         headers: {
@@ -417,7 +413,7 @@ export default {
           document.body.appendChild(link);
           link.click()
         }
-      }).catch((res)=> {
+      }).catch((res) => {
         this.exportLoading = false;
         console.log(res);
       });
@@ -427,18 +423,18 @@ export default {
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
-      if(this.status=='first'){
-        sendData.search='all_truck_loaded';
-      }else if(this.status=='second'){
-        sendData.search='all_match';
-      }else if(this.status=='third'){
-        sendData.search='all_unload';
-      }else if(this.status=='fourth'){
-        sendData.search='all_change';
-      }else if(this.status=='fifth'){
-        sendData.search='';
+      if (this.status == 'first') {
+        sendData.search = 'all_truck_loaded';
+      } else if (this.status == 'second') {
+        sendData.search = 'all_match';
+      } else if (this.status == 'third') {
+        sendData.search = 'all_unload';
+      } else if (this.status == 'fourth') {
+        sendData.search = 'all_change';
+      } else if (this.status == 'fifth') {
+        sendData.search = '';
       }
-      if(this.fifterName){
+      if (this.fifterName) {
         sendData.child_search = this.fifterName;
       }
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
@@ -595,28 +591,28 @@ export default {
     // this.assemblyData(this.countParam);
   },
   created() {
-    if(!this.secondActiveName||this.secondActiveName=='all'){
-      let fifterName="";
-      this.statusList[this.status].forEach((item,index)=>{
-        if(this.statusList[this.status].length-1!=index&&this.statusList[this.status].length>1){
-          fifterName+=(item.key+",");
-        }else{
-          fifterName+=(item.key);
+    if (!this.secondActiveName || this.secondActiveName == 'all') {
+      let fifterName = "";
+      this.statusList[this.status].forEach((item, index) => {
+        if (this.statusList[this.status].length - 1 != index && this.statusList[this.status].length > 1) {
+          fifterName += (item.key + ",");
+        } else {
+          fifterName += (item.key);
         }
         this.fifterNameArr.push(item.key);
         this.tagArr.push(item);
       })
-    }else{
-      let middleTagArr=[];
-      this.secondActiveName.split(",").forEach(Sitem=>{
+    } else {
+      let middleTagArr = [];
+      this.secondActiveName.split(",").forEach(Sitem => {
         this.fifterNameArr.push(Sitem);
-        this.statusList[this.status].forEach(tagItem=>{
-          if(tagItem.key==Sitem){
+        this.statusList[this.status].forEach(tagItem => {
+          if (tagItem.key == Sitem) {
             middleTagArr.push(tagItem);
           }
         })
       })
-      this.tagArr=middleTagArr;
+      this.tagArr = middleTagArr;
     }
     //this.listFifterData = this.listData;
     this.searchList();

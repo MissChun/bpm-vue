@@ -1,5 +1,5 @@
 <style scoped lang="less">
-// .left-arrow-d {
+  // .left-arrow-d {
 //   height: 80px;
 //   line-height: 80px;
 //   text-align: center;
@@ -99,14 +99,14 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="供应商名称:" prop="supplier">
-                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading" >
+                    <el-select v-model="pickOrderParam.supplier" filterable placeholder="请选择" @change="searchList()" v-loading="loadingArr.supplierLoading">
                       <el-option v-for="(item,key) in selectData.supplierList" :key="item.id" :label="item.supplier_name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂名称:" prop="fluid">
+                  <el-form-item label="供方液厂名称:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="changeBindText('fluidName')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                       </el-option>
@@ -151,24 +151,25 @@
                 </el-col>
               </el-row>
             </div>
-            <el-row class="detail-form-title"><el-col :span="8"  style="color:#F56C6C;font-size:14px;padding-left:20px;">如需提前匹配卸货地，请填写以下信息</el-col> <el-col :span="8" class="text-center">卸货计划详情</el-col></el-row>
+            <el-row class="detail-form-title">
+              <el-col :span="8" style="color:#F56C6C;font-size:14px;padding-left:20px;">如需提前匹配卸货地，请填写以下信息</el-col>
+              <el-col :span="8" class="text-center">卸货计划详情</el-col>
+            </el-row>
             <div class="detail-form">
-
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="生成订单个数:" prop="unload_area">
-                    <el-select v-model="createNum" filterable placeholder="请选择" v-loading="loadingArr.unloadLoading"  @change="changeUnloadNum">
-                      <el-option v-for="(item,key) in selectData.createNumList"  :label="item.value" :value="item.key">
+                    <el-select v-model="createNum" filterable placeholder="请选择" v-loading="loadingArr.unloadLoading" @change="changeUnloadNum">
+                      <el-option v-for="(item,key) in selectData.createNumList" :label="item.value" :value="item.key">
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col class="alreayMatch" :offset="1" :span="13" style="line-height:40px;font-size:14px;"> 系统将按照“订单个数”生成数个托运订单，每个订单一辆车，执行一个单卸/分卸运单"</el-col>
               </el-row>
-
               <el-row v-for="(Citem,Cindex) in creatOrderList">
                 <el-col :span="8" style="font-size:14px;line-height:40px;">
-                  <el-form-item  prop="unload_area">
+                  <el-form-item prop="unload_area">
                     <div slot="label" style="position:relative;">
                       <span style="position:absolute;left:-20px;">
                         <el-tooltip placment="right-end" v-if="creatOrderList.length>0&&Cindex==creatOrderList.length-1">
@@ -177,7 +178,7 @@
                             <div>装车审核通过后，系统自动匹配卸货地，也可在此时变更卸货地。</div>
                           </div>
                           <span><img style="margin-left:5px;vertical-align:middle" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                        </el-tooltip>
+                      </el-tooltip>
                       </span>
                       预匹配卸货地:
                     </div>
@@ -185,7 +186,7 @@
                     <el-tooltip placement="right-end" v-else>
                       <div slot="content" style="width:250px;">
                         <el-row v-for="(unloadItem,unloadIndex) in Citem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
-                          <el-col >业务单号:{{unloadItem.order_number}}</el-col>
+                          <el-col>业务单号:{{unloadItem.order_number}}</el-col>
                           <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
                           <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                           <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
@@ -197,7 +198,6 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-
             </div>
             <div class="detail-form-title text-center">托运计划</div>
             <div class="detail-form">
@@ -246,7 +246,7 @@
         <el-row justify="center">
           <el-col :span="18">
             <div class="label-list">
-              <label>提货液厂:</label>
+              <label>供方液厂名称:</label>
               <div class="detail-form-item" v-html="pbFunc.dealNullData(bindText.fluidName)"></div>
             </div>
           </el-col>
@@ -297,22 +297,21 @@
        <el-button type="primary" @click="sendRe">确认</el-button>
       </span>
     </el-dialog>
-
-    <el-dialog title="匹配卸货单" :visible.sync="unloadMatchDiago" center width="80%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;"  :close-on-click-modal="lockFalg"  :close-on-press-escape="lockFalg" :show-close="lockFalg">
+    <el-dialog title="匹配卸货单" :visible.sync="unloadMatchDiago" center width="80%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :close-on-click-modal="lockFalg" :close-on-press-escape="lockFalg" :show-close="lockFalg">
       <div class="table-list">
         <el-table :data="renderUnloadArr" stripe style="width: 100%" size="mini" max-height="350">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
           </el-table-column>
           <el-table-column label="操作" align="center" width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" class="match-btn"  v-if="!(alreayChooseUnloadID.indexOf(scope.row.id)>-1)" @click="matchUnload(scope.row,'match')">匹配</el-button>
-              <el-button type="text" size="mini" class="match-btn"  v-if="alreayChooseUnloadID.indexOf(scope.row.id)>-1" @click="matchUnload(scope.row,'cancle')">取消匹配</el-button>
+              <el-button type="text" size="mini" class="match-btn" v-if="!(alreayChooseUnloadID.indexOf(scope.row.id)>-1)" @click="matchUnload(scope.row,'match')">匹配</el-button>
+              <el-button type="text" size="mini" class="match-btn" v-if="alreayChooseUnloadID.indexOf(scope.row.id)>-1" @click="matchUnload(scope.row,'cancle')">取消匹配</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div class="page-list text-center ">
-        <el-pagination  layout="prev, pager, next ,jumper" :page-count="pageData.totalPage " :page-size="pageData.pageSize " :current-page.sync="pageData.currentPage " @current-change="pageChange " v-if="pageData.totalPage>1">
+        <el-pagination layout="prev, pager, next ,jumper" :page-count="pageData.totalPage " :page-size="pageData.pageSize " :current-page.sync="pageData.currentPage " @current-change="pageChange " v-if="pageData.totalPage>1">
         </el-pagination>
       </div>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
@@ -320,7 +319,6 @@
        <el-button type="primary" @click="sureUnloadMatch">确认匹配</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -328,7 +326,7 @@ export default {
   name: 'addNewPickUpOrder',
   data() {
     var needNumVa = (rule, value, callback) => {
-      if (!((value+"").match(/^[0-9]\d{0,1}$/)) || value == '0') {
+      if (!((value + "").match(/^[0-9]\d{0,1}$/)) || value == '0') {
         callback(new Error("只能是1-99的正整数"));
       } else {
         callback();
@@ -342,10 +340,10 @@ export default {
       }
     };
     var discountVa = (rule, value, callback) => {
-      if(value==""){
-       callback();
-      }else{
-       if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
+      if (value == "") {
+        callback();
+      } else {
+        if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
           callback(new Error("不能大于采购价"));
         } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
           callback(new Error("只能输入数字"));
@@ -357,7 +355,7 @@ export default {
     return {
       lockFalg: false,
       sureAdd: false,
-      unloadMatchDiago:false,
+      unloadMatchDiago: false,
       loadingArr: {
         supplierLoading: false,
         pageLoading: false,
@@ -379,17 +377,17 @@ export default {
         unload_area: ''
       },
       thTableList: [
-        {title: '业务单号',param: 'order_number',width: ''},
-        {title: '业务单状态',param: 'status_display',width: ''},
-        {title: '客户简称',param: 'short_name',width: ''},
-        {title: '业务员',param: 'sale_name',width: ''},
-        {title: '液厂',param: 'actual_fluid_name',width: ''},
-        {title: '站点',param: 'station',width: '180'},
-        {title: '站点地址',param: 'station_address',width: ''},
-        {title: '计划到站时间',param: 'plan_arrive_time', width: ''},
-        {title: '计划吨位',param: 'plan_tonnage',width: ''},
-        {title: '收货人',param: 'consignee',width: ''},
-        {title: '收货人电话',param: 'consignee_phone',width: ''},
+        { title: '业务单号', param: 'order_number', width: '' },
+        { title: '业务单状态', param: 'status_display', width: '' },
+        { title: '客户简称', param: 'short_name', width: '' },
+        { title: '业务员', param: 'sale_name', width: '' },
+        { title: '液厂', param: 'actual_fluid_name', width: '' },
+        { title: '站点', param: 'station', width: '180' },
+        { title: '站点地址', param: 'station_address', width: '' },
+        { title: '计划到站时间', param: 'plan_arrive_time', width: '' },
+        { title: '计划吨位', param: 'plan_tonnage', width: '' },
+        { title: '收货人', param: 'consignee', width: '' },
+        { title: '收货人电话', param: 'consignee_phone', width: '' },
       ],
       bindText: {
         fluidName: '',
@@ -400,7 +398,7 @@ export default {
         ownCarriers: "",
         extendCarriers: ""
       },
-      unloadOrderArr:[],
+      unloadOrderArr: [],
       rules: {
         supplier: [
           { required: true, message: '请选择供应商', trigger: 'change' },
@@ -433,13 +431,13 @@ export default {
         unloadList: [],
         carriersOwnList: [],
         carriersOutList: [],
-        createNumList:[
-          {value:"不匹配卸货",key:0},
-          {value:"1单",key:1},
-          {value:"2单",key:2},
-          {value:"3单",key:3},
-          {value:"4单",key:4},
-          {value:"5单",key:5},
+        createNumList: [
+          { value: "不匹配卸货", key: 0 },
+          { value: "1单", key: 1 },
+          { value: "2单", key: 2 },
+          { value: "3单", key: 3 },
+          { value: "4单", key: 4 },
+          { value: "5单", key: 5 },
         ]
       },
       pageData: {
@@ -447,108 +445,108 @@ export default {
         totalPage: 1,
         pageSize: 10,
       },
-      createNum:0,
-      creatOrderList:[],
-      allUnloadArr:[],
-      alreayChooseUnloadID:[],
-      opearIndex:0,
-      saveInfo:[],
-      renderUnloadArr:[],
-      saveNum:"",
-      balance:0
+      createNum: 0,
+      creatOrderList: [],
+      allUnloadArr: [],
+      alreayChooseUnloadID: [],
+      opearIndex: 0,
+      saveInfo: [],
+      renderUnloadArr: [],
+      saveNum: "",
+      balance: 0
     };
   },
   computed: {
 
   },
   methods: {
-    matchUnload:function(unloadData,status){
-      let thisCar=this.creatOrderList[this.opearIndex];
-      if(status==='match'){
+    matchUnload: function(unloadData, status) {
+      let thisCar = this.creatOrderList[this.opearIndex];
+      if (status === 'match') {
         this.alreayChooseUnloadID.push(unloadData.id);
         thisCar.unloadInfo.push(unloadData);
-      }else if(status==='cancle'){
-        var middleArr=[];
-        var middleIDarr=[];
-          thisCar.unloadInfo.forEach((item,index)=>{
-            if(!(item.id===unloadData.id)){
-              middleArr.push(item);
-            }
-          });
-          this.alreayChooseUnloadID.forEach((idItem,idIndex)=>{
-            if(!(idItem==unloadData.id)){
-              middleIDarr.push(idItem);
-            }
-          });
-          thisCar.unloadInfo=middleArr;
-          this.alreayChooseUnloadID=middleIDarr;
-        }
+      } else if (status === 'cancle') {
+        var middleArr = [];
+        var middleIDarr = [];
+        thisCar.unloadInfo.forEach((item, index) => {
+          if (!(item.id === unloadData.id)) {
+            middleArr.push(item);
+          }
+        });
+        this.alreayChooseUnloadID.forEach((idItem, idIndex) => {
+          if (!(idItem == unloadData.id)) {
+            middleIDarr.push(idItem);
+          }
+        });
+        thisCar.unloadInfo = middleArr;
+        this.alreayChooseUnloadID = middleIDarr;
+      }
     },
-    sureUnloadMatch:function(){
+    sureUnloadMatch: function() {
       //this.aCarMatchId=[];
-      this.unloadMatchDiago=false;
+      this.unloadMatchDiago = false;
     },
-    closeUnloadMatch:function(){
+    closeUnloadMatch: function() {
       //this.aCarMatchId=[];
-      this.unloadMatchDiago=false;
-      this.pageData.currentPage=1;
-      if(this.opearIndex){
-       this.creatOrderList[this.opearIndex].unloadInfo=this.saveInfo;
+      this.unloadMatchDiago = false;
+      this.pageData.currentPage = 1;
+      if (this.opearIndex) {
+        this.creatOrderList[this.opearIndex].unloadInfo = this.saveInfo;
       }
     },
 
-    changeUnloadNum:function(){
-      if(this.creatOrderList.length>this.createNum){
-        let spliceNum=this.createNum;
-        this.creatOrderList=this.creatOrderList.splice(0,spliceNum);
-        if(this.createNum==0){
-          this.creatOrderList=[];
-          if(this.saveNum||this.saveNum==0){
-            this.pickOrderParam.require_car_number=this.saveNum;
-          }else{
-            this.pickOrderParam.require_car_number="";
+    changeUnloadNum: function() {
+      if (this.creatOrderList.length > this.createNum) {
+        let spliceNum = this.createNum;
+        this.creatOrderList = this.creatOrderList.splice(0, spliceNum);
+        if (this.createNum == 0) {
+          this.creatOrderList = [];
+          if (this.saveNum || this.saveNum == 0) {
+            this.pickOrderParam.require_car_number = this.saveNum;
+          } else {
+            this.pickOrderParam.require_car_number = "";
           }
         }
-      }else if(this.creatOrderList.length<this.createNum){
-        if(this.creatOrderList.length==0){
-          this.saveNum=this.pickOrderParam.require_car_number;
+      } else if (this.creatOrderList.length < this.createNum) {
+        if (this.creatOrderList.length == 0) {
+          this.saveNum = this.pickOrderParam.require_car_number;
         }
-         this.pickOrderParam.require_car_number=1;
-        let addNum=this.createNum-this.creatOrderList.length;
-        for(let i=0;i<addNum;i++){
-          this.creatOrderList.push({unloadInfo:[]});
+        this.pickOrderParam.require_car_number = 1;
+        let addNum = this.createNum - this.creatOrderList.length;
+        for (let i = 0; i < addNum; i++) {
+          this.creatOrderList.push({ unloadInfo: [] });
         }
       }
     },
-    changeUnload:function(orderUnloadAlone,index){
-      this.renderUnloadArr=[];
-      this.pageData.currentPage=1;
+    changeUnload: function(orderUnloadAlone, index) {
+      this.renderUnloadArr = [];
+      this.pageData.currentPage = 1;
       this.getAllUnloadOrder(index);
-      this.opearIndex=index;
-      this.unloadMatchDiago=true;
-      this.saveInfo=this.creatOrderList[this.opearIndex].unloadInfo;
+      this.opearIndex = index;
+      this.unloadMatchDiago = true;
+      this.saveInfo = this.creatOrderList[this.opearIndex].unloadInfo;
     },
-    fifterRnderUnload:function(index){
-      var middleArr=[];
-        this.renderUnloadArr=[];
-        this.allUnloadArr.forEach((unloadItem)=>{
-          var addFalge=true;
-          if(this.alreayChooseUnloadID.indexOf(unloadItem.id)>-1){
-            addFalge=false;
+    fifterRnderUnload: function(index) {
+      var middleArr = [];
+      this.renderUnloadArr = [];
+      this.allUnloadArr.forEach((unloadItem) => {
+        var addFalge = true;
+        if (this.alreayChooseUnloadID.indexOf(unloadItem.id) > -1) {
+          addFalge = false;
+        }
+        if (addFalge) {
+          this.renderUnloadArr.push(unloadItem);
+        }
+      });
+      var addList = [];
+      this.creatOrderList[index].unloadInfo.forEach(item => {
+        this.allUnloadArr.forEach((unItem) => {
+          if (unItem.id == item.id) {
+            addList.push(item);
           }
-          if(addFalge){
-            this.renderUnloadArr.push(unloadItem);
-          }
-        });
-        var addList=[];
-        this.creatOrderList[index].unloadInfo.forEach(item=>{
-          this.allUnloadArr.forEach((unItem)=>{
-            if(unItem.id==item.id){
-              addList.push(item);
-            }
-          })
-        });
-        this.renderUnloadArr=addList.concat(this.renderUnloadArr);
+        })
+      });
+      this.renderUnloadArr = addList.concat(this.renderUnloadArr);
     },
     goOrderList: function() {
       this.$router.push({ path: "/orderManage/pickupOrders/ordersList" });
@@ -572,21 +570,21 @@ export default {
         }
       }
       var sendData = this.pbFunc.deepcopy(this.pickOrderParam);
-      let pre_business_order_list=[];
-      this.creatOrderList.forEach(Citem=>{
-        let middleString="";
-        Citem.unloadInfo.forEach((unItem,index)=>{
-          if(index!=Citem.unloadInfo.length-1){
-            middleString+=(unItem.id+",");
-          }else{
-            middleString+=unItem.id;
+      let pre_business_order_list = [];
+      this.creatOrderList.forEach(Citem => {
+        let middleString = "";
+        Citem.unloadInfo.forEach((unItem, index) => {
+          if (index != Citem.unloadInfo.length - 1) {
+            middleString += (unItem.id + ",");
+          } else {
+            middleString += unItem.id;
           }
         });
-        if(middleString){
+        if (middleString) {
           pre_business_order_list.push(middleString);
         }
       });
-      sendData.pre_business_order_list=pre_business_order_list;
+      sendData.pre_business_order_list = pre_business_order_list;
       sendData.carriers = carriers;
       this.loadingArr.pageLoading = true;
       this.$$http("cratePickUpOrder", sendData).then((results) => {
@@ -606,23 +604,23 @@ export default {
       this.getFulid(this.pickOrderParam.supplier);
       this.searchBalance();
     },
-    searchBalance:function(){
-      let sendData={};
-      var newDate=this.pbFunc.getNowTime();
-      sendData.active_time_start=newDate;
-      sendData.active_time_end=newDate;
-      this.selectData.supplierList.forEach(item=>{
-        if(item.id==this.pickOrderParam.supplier){
-          sendData.supplier_name=item.supplier_name;
+    searchBalance: function() {
+      let sendData = {};
+      var newDate = this.pbFunc.getNowTime();
+      sendData.active_time_start = newDate;
+      sendData.active_time_end = newDate;
+      this.selectData.supplierList.forEach(item => {
+        if (item.id == this.pickOrderParam.supplier) {
+          sendData.supplier_name = item.supplier_name;
         }
       })
       this.$$http('getSupplierMeetList', sendData).then((results) => {
-        if(results.data&&results.data.code==0){
-          this.balance=results.data.data.data&&results.data.data.data[0]&&results.data.data.data[0].first_amount;
+        if (results.data && results.data.code == 0) {
+          this.balance = results.data.data.data && results.data.data.data[0] && results.data.data.data[0].first_amount;
         }
       });
     },
-    changeBindText: function(type,carriersType) {
+    changeBindText: function(type, carriersType) {
       if (type == 'fluidName') {
         //液厂变化
         var fluidId = this.pickOrderParam.fluid;
@@ -633,7 +631,7 @@ export default {
         }
       } else {
         //承运商变化
-        if(carriersType){
+        if (carriersType) {
           var ownCarriersId = this.carriersParam.ownCarriers;
           var extendCarriersId = this.carriersParam.extendCarriers;
 
@@ -660,7 +658,7 @@ export default {
         this.loadingArr.fluidLoading = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data;
-          this.pickOrderParam.fluid="";
+          this.pickOrderParam.fluid = "";
           this.selectData.fluidList = dataBody;
         }
       }).catch(() => {
@@ -668,7 +666,7 @@ export default {
       });
     },
     getSupplier: function() {
-      var sendData = {need_all:'true'};
+      var sendData = { need_all: 'true' };
 
       this.loadingArr.supplierLoading = true;
       this.$$http("getSupplier", sendData).then((results) => {
@@ -693,8 +691,8 @@ export default {
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
           this.selectData.carriersOwnList = dataBody;
-          if(dataBody&&dataBody.length>0){
-            this.carriersParam.ownCarriers=dataBody[0].id;
+          if (dataBody && dataBody.length > 0) {
+            this.carriersParam.ownCarriers = dataBody[0].id;
             this.bindText.owncarriersName = dataBody[0].carrier_name;
           }
         }
@@ -737,9 +735,9 @@ export default {
       });
     },
 
-    getAllUnloadOrder:function(index){
-      let postData={
-        status:'waiting_related',
+    getAllUnloadOrder: function(index) {
+      let postData = {
+        status: 'waiting_related',
         // need_all:true,
       };
       this.loadingArr.unloadLoading = true;
@@ -747,21 +745,21 @@ export default {
       postData.page = this.pageData.currentPage;
       this.$$http('getBusinessList', postData).then((results) => {
         this.loadingArr.unloadLoading = false;
-        if(results.data.code==0){
-          this.allUnloadArr=results.data.data.data;
+        if (results.data.code == 0) {
+          this.allUnloadArr = results.data.data.data;
           this.pageData.totalPage = Math.ceil(results.data.data.count / this.pageData.pageSize);
-          if(index!=undefined){
+          if (index != undefined) {
             this.fifterRnderUnload(index);
           }
-        }else{
+        } else {
           this.$message.error('获取卸货单失败');
         }
-      }).catch(()=>{
+      }).catch(() => {
         this.loadingArr.unloadLoading = false;
         this.$message.error('获取卸货单失败');
       });
     },
-     pageChange: function() {
+    pageChange: function() {
       setTimeout(() => {
         this.getAllUnloadOrder(this.opearIndex);
       })

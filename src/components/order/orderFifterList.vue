@@ -1,6 +1,5 @@
 <style scoped lang="less">
-
-.el-table {
+  .el-table {
    th{
       background-color: transparent;
     }
@@ -113,16 +112,16 @@
 <template>
   <div style="position:relative;">
     <noData v-if="ListData.length==0"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus"  :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick"  :cell-click="rowClick">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
+                液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
                 <el-tooltip v-else class="item" effect="lightlight" :content="props.row.actual_fluid_address" placement="top-start">
                   <span>{{props.row.actual_fluid_address.slice(0,8)}}....</span>
-                  </el-tooltip>
+                </el-tooltip>
               </el-col>
               <el-col :span="4">
                 采购价:{{props.row.unit_price}}
@@ -163,10 +162,10 @@
               </el-col>
               <el-col :span="4" class="whiteSpan">
                 下计划时间:
-                <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
-                    <span >{{props.row.created_at}}</span>
-                 </el-tooltip>
-                 <span v-else>无</span>
+                <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
+                  <span >{{props.row.created_at}}</span>
+                </el-tooltip>
+                <span v-else>无</span>
               </el-col>
               <el-col :span="4">
                 提交车数:{{props.row.submit_car_number}}
@@ -176,15 +175,15 @@
           <div style="width:100px;float:right;padding-left:10px;" class="buttonContent">
             <el-row v-if="props.row.status.key=='appoint'||props.row.status.key=='determine'">
               <el-col style="text-align:left" class="">
-                <el-button  type="danger" size="mini" plain @click="operation('cancleOrder',props.row)">取消订单</el-button>
-              </el-col>
-            </el-row >
-            <el-row >
-              <el-col v-if="props.row.status.key=='determine'" style="text-align:left">
-                <el-button  type="success" size="mini" plain @click="operation('suerOrder',props.row)">确认订单</el-button>
+                <el-button type="danger" size="mini" plain @click="operation('cancleOrder',props.row)">取消订单</el-button>
               </el-col>
             </el-row>
-            <el-row >
+            <el-row>
+              <el-col v-if="props.row.status.key=='determine'" style="text-align:left">
+                <el-button type="success" size="mini" plain @click="operation('suerOrder',props.row)">确认订单</el-button>
+              </el-col>
+            </el-row>
+            <el-row>
               <el-col style="text-align:left">
                 <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
               </el-col>
@@ -198,49 +197,48 @@
           <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="液厂" prop="" min-width="150">
+      <el-table-column label="供方液厂名称" prop="" min-width="150">
         <template slot-scope="props">
           <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
         </template>
       </el-table-column>
       <el-table-column label="供应商" prop="" min-width="150">
         <template slot-scope="props">
-              <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" v-if="props.row.supplier_name.length<8"><span>{{props.row.supplier_name}}</span></el-button>
+          <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" v-if="props.row.supplier_name.length<8"><span>{{props.row.supplier_name}}</span></el-button>
           <el-tooltip v-else class="item" effect="light" :content="props.row.supplier_name" placement="top-start">
-              <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" ><span>{{props.row.supplier_name.slice(0,6)}}....</span></el-button>
+            <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0"><span>{{props.row.supplier_name.slice(0,6)}}....</span></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
-                 <span >{{props.row.plan_time}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+            <span >{{props.row.plan_time}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
-
       <el-table-column label="计划吨位" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.plan_tonnage}}</span>
+          <span class="fontContro">{{props.row.plan_tonnage}}</span>
         </template>
       </el-table-column>
       <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.sure_car_number}}/{{props.row.require_car_number}}</span>
+          <span class="fontContro">{{props.row.sure_car_number}}/{{props.row.require_car_number}}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.status.verbose}}</span>
+          <span class="fontContro">{{props.row.status.verbose}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="卸车信息" prop="" min-width="150" >
+      <el-table-column label="卸车信息" prop="" min-width="150">
         <template slot-scope="props">
           <el-tooltip class="item" effect="light" placement="bottom-start" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
             <div slot="content" style="width:250px;">
-              <el-row  v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
-                <el-col >业务单号:{{Uitem.order_number}}</el-col>
+              <el-row v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
+                <el-col>业务单号:{{Uitem.order_number}}</el-col>
                 <el-col style="margin-top:10px;">站点:{{Uitem.station}}</el-col>
                 <el-col style="margin-top:10px;">需求液厂:{{Uitem.actual_fluid_name}}</el-col>
                 <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.plan_tonnage">{{Uitem.plan_tonnage}}吨</span></el-col>
@@ -255,10 +253,10 @@
             </div>
             <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.pre_business_order_list"><span v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>1&&Uindex!=props.row.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
           </el-tooltip>
-            <span v-else>无</span>
+          <span v-else>无</span>
         </template>
       </el-table-column>
-       <el-table-column label="操作" prop="" fixed="right" width="100">
+      <el-table-column label="操作" prop="" fixed="right" width="100">
         <template slot-scope="props">
           <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="danger" size="mini" plain @click="operation('cancleOrder',props.row)">取消订单</el-button>
           <el-button class="fontContro" v-if="props.row.status.key=='determine'" type="success" size="mini" plain @click="operation('suerOrder',props.row)">确认订单</el-button>
@@ -285,10 +283,10 @@ export default {
       expandFalg: false,
       lockFalg: false,
       loadPosition: {},
-      returnId:[]
+      returnId: []
     };
   },
-  props:['expandStatus','ListData'],
+  props: ['expandStatus', 'ListData'],
   components: {
     noData: noData
   },
@@ -297,16 +295,16 @@ export default {
   },
 
   methods: {
-    rowClick:function(row, event, column){
+    rowClick: function(row, event, column) {
 
     },
     expandArr: function() {
-      if(this.expandStatus){
-        this.ListData.forEach((item)=>{
+      if (this.expandStatus) {
+        this.ListData.forEach((item) => {
           this.returnId.push(item.id);
         });
-      }else{
-        this.returnId=[];
+      } else {
+        this.returnId = [];
       }
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
@@ -374,15 +372,15 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$$http("canclePickOrder", sendData,(results)=>{
+          this.$$http("canclePickOrder", sendData, (results) => {
             if (results.data.code == 0) {
               vm.$emit("refreshList");
-            }else if(results.data.code == -1){
+            } else if (results.data.code == -1) {
               this.$alert(results.data.msg, '提示', {
                 confirmButtonText: '确定',
               });
             }
-          },function(){
+          }, function() {
 
           }).catch(() => {
 
@@ -432,8 +430,8 @@ export default {
     }
   },
   created() {
-    if(this.expandStatus){
-      this.ListData.forEach((item)=>{
+    if (this.expandStatus) {
+      this.ListData.forEach((item) => {
         this.returnId.push(item.id)
       });
     }
@@ -445,10 +443,10 @@ export default {
       },
       deep: true
     },
-    expandStatus:{
+    expandStatus: {
       handler(val, oldVal) {
-        var vm=this;
-        setTimeout(()=>{
+        var vm = this;
+        setTimeout(() => {
           vm.expandArr();
         })
       },

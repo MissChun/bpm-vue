@@ -121,7 +121,7 @@ export default {
           { id: 'waybill', value: '运单号' },
           { id: 'business_order', value: '业务单' },
           { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '实际液厂' },
+          { id: 'fluid', value: '液厂' },
           { id: 'supplier', value: '供应商' },
           { id: 'station', value: '卸货地' },
           { id: 'consumer_name', value: '客户名称' },
@@ -174,11 +174,11 @@ export default {
         param: 'plate_number',
         width: ''
       }, {
-        title: '实际液厂',
+        title: '液厂',
         param: 'fluid',
         width: ''
       }, {
-        title: '液厂名称',
+        title: '供方液厂名称',
         param: 'fluid_name',
         width: ''
       }, {
@@ -322,164 +322,165 @@ export default {
     },
     exportTableData(type) {
       const exportThTableList = [{
-        title:'运单号',
-        id:76
-      },{
-        title:'业务单号',
-        id:77
-      },{
-        title:'业务类型',
-        id:225
-      },{
-        title:'承运商',
-        id:81
-      },{
-        title:'调账承运商',
-        id:208
-      },{
-        title:'客户简称',
-        id:211
-      },{
-        title:'调账简称',
-        id:210
-      },{
-        title:'客户名称',
-        id:82
-      },{
-        title:'付款方名称',
-        id:90
-      },{
-        title:'调账付款方',
-        id:201
-      },{
-        title:'车号',
-        id:113
-      },{
-        title:'实际到厂时间',
-        id:84
-      },{
-        title:'装车完成时间',
-        id:127
-      },{
-        title:'供应商',
-        id:78
-      },{
-        title:'调账供应商',
-        id:209
-      },{
-        title:'实际液厂',
-        id:79
-      },
-      {
-        title:'液厂名称',
-        id:212
-      },
-      {
-        title:'采购单价',
-        id:91
-      },{
-        title:'调账采购单价差值',
-        id:189
-      },{
-        title:'优惠单价',
-        id:92
-      },{
-        title:'业务优惠',
-        id:94
-      },{
-        title:'实际装车吨位',
-        id:93
-      },{
-        title:'调账实际装车吨位差值',
-        id:191
-      },{
-        title:'采购优惠后总额',
-        id:83
-      },{
-        title:'采购总额',
-        id:108
-      },{
-        title:'调账优惠后总额差值',
-        id:193
-      },{
-        title:'实际离站时间',
-        id:85
-      },{
-        title:'卸货站',
-        id:80
-      },{
-        title:'销售单价',
-        id:95
-      },{
-        title:'调帐结算价格差值',
-        id:203
-      },{
-        title:'实收吨位',
-        id:97
-      },{
-        title:'亏吨',
-        id:96
-      },{
-        title:'核算吨位',
-        id:98
-      },{
-        title:'调账吨位差值',
-        id:195
-      },{
-        title:'销售总额',
-        id:101
-      },{
-        title:'卸车待时金额',
-        id:100
-      },{
-        title:'销售待时后总额',
-        id:86
-      },{
-        title:'调账待时后总额差值',
-        id:199
-      },{
-        title:'卸车数',
-        id:99
-      },{
-        title:'调账卸车差值',
-        id:197
-      },{
-        title:'业务员',
-        id:102
-      },{
-        title:'毛利润',
-        id:88
-      },{
-        title:'标准里程',
-        id:103
-      },{
-        title:'调账标准里程差值',
-        id:205
-      },{
-        title:'起步价',
-        id:104
-      },{
-        title:'运输费率',
-        id:105
-      },{
-        title:'标准运价',
-        id:173
-      },{
-        title:'运费合计',
-        id:87
-      },{
-        title:'调账运费合计差值',
-        id:207
-      },{
-        title:'气差金额',
-        id:106
-      },{
-        title:'分卸费',
-        id:107
-      },{
-        title:'能源利润',
-        id:89
-      },]
+          title: '运单号',
+          id: 76
+        }, {
+          title: '业务单号',
+          id: 77
+        }, {
+          title: '业务类型',
+          id: 225
+        }, {
+          title: '承运商',
+          id: 81
+        }, {
+          title: '调账承运商',
+          id: 208
+        }, {
+          title: '客户简称',
+          id: 211
+        }, {
+          title: '调账简称',
+          id: 210
+        }, {
+          title: '客户名称',
+          id: 82
+        }, {
+          title: '付款方名称',
+          id: 90
+        }, {
+          title: '调账付款方',
+          id: 201
+        }, {
+          title: '车号',
+          id: 113
+        }, {
+          title: '实际到厂时间',
+          id: 84
+        }, {
+          title: '装车完成时间',
+          id: 127
+        }, {
+          title: '供应商',
+          id: 78
+        }, {
+          title: '调账供应商',
+          id: 209
+        }, {
+          title: '实际液厂',
+          id: 79
+        },
+        {
+          title: '液厂名称',
+          id: 212
+        },
+        {
+          title: '采购单价',
+          id: 91
+        }, {
+          title: '调账采购单价差值',
+          id: 189
+        }, {
+          title: '优惠单价',
+          id: 92
+        }, {
+          title: '业务优惠',
+          id: 94
+        }, {
+          title: '实际装车吨位',
+          id: 93
+        }, {
+          title: '调账实际装车吨位差值',
+          id: 191
+        }, {
+          title: '采购优惠后总额',
+          id: 83
+        }, {
+          title: '采购总额',
+          id: 108
+        }, {
+          title: '调账优惠后总额差值',
+          id: 193
+        }, {
+          title: '实际离站时间',
+          id: 85
+        }, {
+          title: '卸货站',
+          id: 80
+        }, {
+          title: '销售单价',
+          id: 95
+        }, {
+          title: '调帐结算价格差值',
+          id: 203
+        }, {
+          title: '实收吨位',
+          id: 97
+        }, {
+          title: '亏吨',
+          id: 96
+        }, {
+          title: '核算吨位',
+          id: 98
+        }, {
+          title: '调账吨位差值',
+          id: 195
+        }, {
+          title: '销售总额',
+          id: 101
+        }, {
+          title: '卸车待时金额',
+          id: 100
+        }, {
+          title: '销售待时后总额',
+          id: 86
+        }, {
+          title: '调账待时后总额差值',
+          id: 199
+        }, {
+          title: '卸车数',
+          id: 99
+        }, {
+          title: '调账卸车差值',
+          id: 197
+        }, {
+          title: '业务员',
+          id: 102
+        }, {
+          title: '毛利润',
+          id: 88
+        }, {
+          title: '标准里程',
+          id: 103
+        }, {
+          title: '调账标准里程差值',
+          id: 205
+        }, {
+          title: '起步价',
+          id: 104
+        }, {
+          title: '运输费率',
+          id: 105
+        }, {
+          title: '标准运价',
+          id: 173
+        }, {
+          title: '运费合计',
+          id: 87
+        }, {
+          title: '调账运费合计差值',
+          id: 207
+        }, {
+          title: '气差金额',
+          id: 106
+        }, {
+          title: '分卸费',
+          id: 107
+        }, {
+          title: '能源利润',
+          id: 89
+        },
+      ]
 
       const exportThTableListIds = exportThTableList.map(item => item.id);
 

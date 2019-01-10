@@ -1,5 +1,5 @@
 <style scoped lang="less">
-/deep/ .code {
+  /deep/ .code {
   input {
     border-color: #dcdfe6!important;
   }
@@ -49,7 +49,7 @@
                 <el-col :span="8">
                   <el-form-item label="客户简称:" prop="short_name">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input> -->
-                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable  @change="getConsumer" @blur="selectId('short')" :remote-method="getConsumer" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable @change="getConsumer" @blur="selectId('short')" :remote-method="getConsumer" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.consumerSelect" :key="item.id" :label="item.short_name" :value="item.short_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -62,7 +62,7 @@
                 <el-col :span="8">
                   <el-form-item label="付款方:" prop="payer_name">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.payer_name"></el-input> -->
-                    <el-select v-model="editMsgForm.payer_name" :loading="payerLoading" filterable remote clearable  @change="getPayer" @blur="selectId('payer')" :remote-method="getPayer" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.payer_name" :loading="payerLoading" filterable remote clearable @change="getPayer" @blur="selectId('payer')" :remote-method="getPayer" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.payerSelect" :key="item.id" :label="item.payer" :value="item.payer"></el-option>
                     </el-select>
                   </el-form-item>
@@ -83,7 +83,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:">
+                  <el-form-item label="液厂:">
                     <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
                   </el-form-item>
                 </el-col>
@@ -245,9 +245,9 @@ export default {
         plate_number: '', //车牌号
         short_name: '', //客户简称
         consumer_name: '', //客户名称
-        consumer_id:'',
+        consumer_id: '',
         payer_name: '', //付款方
-        payer_id:'',
+        payer_id: '',
         station: '', //站点
         // plate_number: '', //车牌号
         leave_time: '', //l离站时间
@@ -281,20 +281,20 @@ export default {
       },
 
       rules: {
-        business_type:[
+        business_type: [
           { required: true, message: '请选择业务类型', trigger: 'change' },
         ],
-        short_name:[
+        short_name: [
           { required: true, message: '请选择输入客户简称', trigger: 'change' },
         ],
-        payer_name:[
+        payer_name: [
           { required: true, message: '请选择输入付款方', trigger: 'change' },
         ],
-        plate_number:[
+        plate_number: [
           { required: true, message: '请输入车牌号', trigger: 'change' },
           // { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
         ],
-        leave_time:[
+        leave_time: [
           { required: true, message: '请选择输入实际离站时间', trigger: 'blur' },
         ],
         actual_quantity: [
@@ -338,31 +338,31 @@ export default {
       },
       detail: {},
       customerList: [],
-      consumerLoading:false,
-      payerLoading:false,
-      isUpdatePlateNumber:true,
-      selectData:{
-        businessTypeSelect:[{
-          title:'批发',
-          id:0
-        },{
-          title:'零售',
-          id:1
-        },{
-          title:'点供',
-          id:2
-        },{
-          title:'外销',
-          id:3
-        },{
-          title:'外采',
-          id:4
-        },{
-          title:'承运',
-          id:5
+      consumerLoading: false,
+      payerLoading: false,
+      isUpdatePlateNumber: true,
+      selectData: {
+        businessTypeSelect: [{
+          title: '批发',
+          id: 0
+        }, {
+          title: '零售',
+          id: 1
+        }, {
+          title: '点供',
+          id: 2
+        }, {
+          title: '外销',
+          id: 3
+        }, {
+          title: '外采',
+          id: 4
+        }, {
+          title: '承运',
+          id: 5
         }],
-        consumerSelect:[],//客户列表
-        payerSelect:[],//付款方列表
+        consumerSelect: [], //客户列表
+        payerSelect: [], //付款方列表
       }
     }
   },
@@ -382,29 +382,29 @@ export default {
       this.$router.push({ path: "/statistics/sales/salesList" });
       // }
     },
-    selectId(type){
-      setTimeout(()=>{
-        if(type === 'short'){
-          for(let i in this.selectData.consumerSelect){
-            if(this.editMsgForm.short_name === this.selectData.consumerSelect[i].short_name){
+    selectId(type) {
+      setTimeout(() => {
+        if (type === 'short') {
+          for (let i in this.selectData.consumerSelect) {
+            if (this.editMsgForm.short_name === this.selectData.consumerSelect[i].short_name) {
               this.editMsgForm.consumer_id = this.selectData.consumerSelect[i].id;
             }
           }
-        }else if(type === 'payer'){
-          for(let i in this.selectData.payerSelect){
-            if(this.editMsgForm.payer_name === this.selectData.payerSelect[i].payer){
+        } else if (type === 'payer') {
+          for (let i in this.selectData.payerSelect) {
+            if (this.editMsgForm.payer_name === this.selectData.payerSelect[i].payer) {
               this.editMsgForm.payer_id = this.selectData.payerSelect[i].id;
             }
           }
         }
         // console.log('consumer_id',this.editMsgForm.payer_id)
-      },200)
+      }, 200)
     },
-    businessChange(){
+    businessChange() {
       // this.editMsgForm.plate_number = '';
-      if(this.editMsgForm.business_type === 3){
+      if (this.editMsgForm.business_type === 3) {
         this.isUpdatePlateNumber = false;
-      }else{
+      } else {
         this.isUpdatePlateNumber = true;
         this.editMsgForm.plate_number = this.detail.plate_number;
       }
@@ -413,10 +413,10 @@ export default {
     getPayer: function(query) {
       let postData = {
         page: 1,
-        page_size:100,
+        page_size: 100,
       }
-      if(query){
-          postData.payer = query;
+      if (query) {
+        postData.payer = query;
       }
       this.payerLoading = true;
       this.$$http('searchCustomerPayList', postData).then((results) => {
@@ -432,10 +432,10 @@ export default {
     getConsumer: function(query) {
       let postData = {
         page: 1,
-        page_size:100,
+        page_size: 100,
       }
-      if(query){
-          postData.short_name = query;
+      if (query) {
+        postData.short_name = query;
       }
       this.consumerLoading = true;
       this.$$http('searchCustomerList', postData).then((results) => {
@@ -460,7 +460,7 @@ export default {
             consumer_name: this.detail.consumer_name, //客户名称
             consumer_id: this.detail.consumer_id,
             payer_name: this.detail.payer_name, //付款方
-            payer_id:this.detail.payer_id,
+            payer_id: this.detail.payer_id,
             station: this.detail.station, //站点
             // plate_number: this.detail.plate_number, //车牌号
             leave_time: this.detail.leave_time, //l离站时间
@@ -492,7 +492,7 @@ export default {
             waybill_status: this.detail.waybill_status.verbose, //运单状态
             business_type: this.detail.business_type.key
           }
-          if(this.editMsgForm.business_type === 3){
+          if (this.editMsgForm.business_type === 3) {
             this.isUpdatePlateNumber = false;
           }
         }
@@ -532,7 +532,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plate_number','short_name','payer_id','payer_name','consumer_id','business_type','leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
+      let keyArray = ['plate_number', 'short_name', 'payer_id', 'payer_name', 'consumer_id', 'business_type', 'leave_time', 'plan_tonnage', 'actual_quantity', 'stand_mile', 'deficiency', 'check_quantity', 'unload_nums', 'unit_price', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
