@@ -26,7 +26,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6" v-if="false">
-                  <el-form-item label="实际液厂:">
+                  <el-form-item label="液厂:">
                     <el-select v-model="searchFilters.fluid" clearable filterable @change="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.actual_fluid_name" :value="item.id"></el-option>
                     </el-select>
@@ -111,7 +111,7 @@ export default {
       },
       selectData: {
         fieldSelect: [
-          { id: 'fluid_name', value: '实际液厂' },
+          { id: 'fluid_name', value: '液厂' },
           { id: 'station_name', value: '站点' },
         ],
         carrierSelect: [{
@@ -135,7 +135,7 @@ export default {
         }], //标准里程
       },
       thTableList: [{
-        title: '实际液厂',
+        title: '液厂',
         param: 'actual_fluid_name',
         width: ''
       }, {

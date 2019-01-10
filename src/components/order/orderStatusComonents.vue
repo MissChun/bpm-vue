@@ -64,10 +64,12 @@
   color:#409EFF;
   background-color:white;
 }
-.tab-select{
+/deep/ .tab-select{
+
   .el-input{
     width:90%;
   }
+
 }
 </style>
 <template>
@@ -247,7 +249,7 @@ export default {
           { id: 'carrier_name', value: '承运商' },
           { id: 'order_number', value: '订单号' },
           { id: 'truck_no', value: '车号' },
-          { id: 'fluid_name', value: '标准液厂' },
+          { id: 'fluid_name', value: '液厂' },
           { id: 'waybill_number', value: '运单号' },
           { id: 'order_station', value: '卸货站点' },
         ],

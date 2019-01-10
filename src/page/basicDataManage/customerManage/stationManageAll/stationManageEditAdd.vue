@@ -160,7 +160,7 @@ export default {
         key: 'position_name',
         verbose: '实际站点',
       }],
-      showLeftWindow: false,
+      showLeftWindow: true,
       formData: {
         position_name: '',
         map_position: '',
@@ -673,16 +673,19 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
+
   .map-loading {
     position: absolute;
     height: 50px;
     width: 100%;
     left: 0;
     top: 0;
+
     /deep/ .el-loading-mask {
       background-color: rgba(250, 250, 250, 0);
     }
   }
+
   .icon-description {
     padding: 10px;
     position: absolute;
@@ -698,17 +701,21 @@ export default {
       &:nth-child(2) {
         margin-left: 1px;
       }
+
       line-height: 24px;
       margin-bottom: 4px;
+
       img {
         width: 20px;
         height: 20px;
         margin-right: 5px;
       }
+
       span {
         line-height: 24px;
         font-size: 13px;
       }
+
       i {
         height: 18px;
         width: 18px;
@@ -716,15 +723,19 @@ export default {
         margin: 1px 6px 0 1px;
         font-size: 13px;
       }
+
       .bg-1 {
         background-color: #47d2d0;
       }
+
       .bg-2 {
         background-color: #4a9bf8;
       }
+
       .bg-3 {
         background-color: #f56c6c;
       }
+
       .bg-4 {
         background-color: #7c8fa0;
       }
@@ -771,6 +782,7 @@ export default {
   background-color: #fff;
   color: #4a9bf8;
   z-index: 999;
+
   span {
     font-size: 16px;
   }
@@ -791,10 +803,13 @@ export default {
   width: 400px;
   padding-bottom: 30px;
   background-color: #fff;
+  z-index: 999;
+
   h4 {
     text-align: center;
     line-height: 60px;
   }
+
   /deep/ .el-select {
     display: block;
   }

@@ -17,7 +17,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <div class="text-right edit-btn-box">
+      <div class="text-right edit-btn-box" v-if="detailData.position_type && (detailData.position_type.key !== 'LNG_FACTORY')">
         <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
       </div>
       <el-main v-loading="pageLoading">
@@ -162,21 +162,21 @@
           </div>
           <div class="img-box clearfix">
             <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
-            <div v-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
+              <div v-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
+            </div>
           </div>
-        </div>
-        <div class="detail-list detail-form">
-          <div class="detail-form-title">
-            <el-row>
-              <el-col :span="12" :offset="6" class="text-center">
-                地标位置
-              </el-col>
-            </el-row>
+          <div class="detail-list detail-form">
+            <div class="detail-form-title">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  地标位置
+                </el-col>
+              </el-row>
+            </div>
+            <div class="landmark-address">地标位置：{{detailData.address}}</div>
+            <div id="map-container">
+            </div>
           </div>
-          <div class="landmark-address">地标位置：{{detailData.address}}</div>
-          <div id="map-container">
-          </div>
-        </div>
       </el-main>
     </el-container>
     <img-review :imgObject.sync='imgObject'></img-review>
@@ -328,6 +328,7 @@ export default {
     height: 100px;
     width: 100px;
   }
+
   >div {
     margin-right: 5px;
   }

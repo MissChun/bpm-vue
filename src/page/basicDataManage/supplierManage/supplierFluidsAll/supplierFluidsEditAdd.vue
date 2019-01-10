@@ -67,7 +67,7 @@
           </el-row>
           <el-row>
             <el-col :span="20">
-              <el-form-item label="实际液厂:" prop="actual_fluid">
+              <el-form-item label="液厂:" prop="actual_fluid">
                 <span>{{choosedActualFluid.position_name}}</span>
               </el-form-item>
             </el-col>
@@ -167,7 +167,7 @@ export default {
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{0,20})$/gi, message: '液厂名称为1～20个字符', trigger: 'blur' },
         ],
         actual_fluid: [
-          { required: true, message: '请选择实际液厂', trigger: 'change' },
+          { required: true, message: '请选择液厂', trigger: 'change' },
         ],
       },
       address: {

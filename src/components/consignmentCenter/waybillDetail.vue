@@ -77,7 +77,7 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>液厂名称:</label>
+                <label>供方液厂名称:</label>
                 <div class="detail-form-item">{{detailData.delivery_order.fluid_name}}</div>
               </div>
             </el-col>
@@ -121,7 +121,7 @@
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
-                  <label>实际液厂:</label>
+                  <label>液厂:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.actual_fluid_name)"></div>
                 </div>
               </el-col>

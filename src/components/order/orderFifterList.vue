@@ -197,7 +197,7 @@
           <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="供方液厂" prop="" min-width="150">
+      <el-table-column label="供方液厂名称" prop="" min-width="150">
         <template slot-scope="props">
           <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
         </template>

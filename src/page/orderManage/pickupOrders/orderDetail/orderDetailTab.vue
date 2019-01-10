@@ -80,7 +80,7 @@
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>供方液厂:</label>
+                        <label>供方液厂名称:</label>
                         <div class="detail-form-item">{{detailData.fluid_name}}</div>
                       </div>
                     </el-col>
