@@ -17,7 +17,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <div class="text-right edit-btn-box" v-if="detailData.position_type && (detailData.position_type.key !== 'LNG_FACTORY')">
+      <div class="text-right edit-btn-box" v-if="detailData.position_type && (detailData.position_type.key !== 'LNG_FACTORY' || username ==='18990001000')">
         <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
       </div>
       <el-main v-loading="pageLoading">
@@ -214,7 +214,8 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
-      }
+      },
+      username: '',
 
     }
   },
@@ -292,7 +293,9 @@ export default {
     }
   },
   created: function() {
-
+    const users = this.pbFunc.getLocalData('user', true);
+    this.username = users.username;
+    console.log('this.userPhone', this.username, users);
   },
   mounted: function() {
     /*生成地图*/
