@@ -1787,17 +1787,6 @@ const api = {
     }
   },
 
-  getLandmarkDetail: {
-    url: '/position/base_position/',
-    method: 'get',
-    desc: '坐标详情',
-    param: {
-      id: {
-        desc: '资源id',
-      },
-    }
-  },
-
   getFulid: {
     url: '/api/v1/fluids/',
     method: 'get',
@@ -2794,6 +2783,14 @@ const api = {
     url: '/api/v1/associated-notunload/',
     method: 'GET',
     desc: "概览-已关联未卸车",
+    param: {
+
+    }
+  },
+  getLandmarkOverview: {
+    url: '/api/v1/fluid-sites/overview/',
+    method: 'GET',
+    desc: "获取所有省份的地标概览数据",
     param: {
 
     }
