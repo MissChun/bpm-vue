@@ -445,10 +445,17 @@ export default {
         this.pageData.currentPage = 1;
         this.getList();
       } else {
-        this.$message({
-          message: '上传失败！',
-          type: 'error'
-        });
+        if (response.msg) {
+          this.$message({
+            message: response.msg,
+            type: 'error'
+          });
+        } else {
+          this.$message({
+            message: '上传失败！',
+            type: 'error'
+          });
+        }
       }
 
     },
