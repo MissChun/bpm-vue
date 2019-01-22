@@ -56,6 +56,15 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row :gutter="10">
+             <el-col :span="6">
+              <el-form-item label="磅单:">
+                <el-select v-model="searchFilters.weight_status" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in filterParam.billboard.data" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
       </div>
       <div class="operation-btn">
@@ -91,6 +100,9 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'">{{scope.row[item.param].verbose}}</span>
+                <div v-else-if="item.param ==='weight_status'" :class="{'text-red':scope.row[item.param].key ==='wrong'}">
+                  <div class="cursor-pointer" @click="openUploadPounListDialog(scope.row)">{{scope.row[item.param].verbose}}</div>
+                </div>
                 <div v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
                   <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
@@ -135,19 +147,22 @@
     <purchase-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :purchase-row="purchaseRow"></purchase-adjustment-dialog>
     <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updatePurchaseStatisticsList'" :type-str="'采购数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
     <batch-update-dialog v-on:closeDialogBtn="batchUpdateCloseDialog" :is-show="batchUpdateIsShow" :number="multipleSelection.length" :ids="batchIds"></batch-update-dialog>
+    <purchase-upload-pound-list-dialog v-on:closeDialogBtn="uploadPoundListCloseDialog" :is-show="uploadPoundListIsShow" :row="uploadPoundListRow"></purchase-upload-pound-list-dialog>
   </div>
 </template>
 <script>
 import purchaseAdjustmentDialog from '@/components/statistics/purchaseAdjustmentDialog';
 import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
 import batchUpdateDialog from '@/components/statistics/batchUpdateDialog';
+import purchaseUploadPoundListDialog from '@/components/statistics/purchaseUploadPoundListDialog';
 
 export default {
   name: 'purchaseList',
   components: {
     purchaseAdjustmentDialog: purchaseAdjustmentDialog,
     updateNewDataDialog: updateNewDataDialog,
-    batchUpdateDialog: batchUpdateDialog
+    batchUpdateDialog: batchUpdateDialog,
+    purchaseUploadPoundListDialog:purchaseUploadPoundListDialog
   },
   computed: {
     // statusTabList(){
@@ -160,6 +175,8 @@ export default {
       pageLoading: false,
       updateDataIsShow: false, //更新数据弹窗
       batchUpdateIsShow: false, //批量修改
+      uploadPoundListIsShow:false,//上传榜单
+      uploadPoundListRow:{},//上传榜单info
       pageData: {
         currentPage: 1,
         totalCount: 0,
@@ -183,6 +200,7 @@ export default {
       searchFilters: {
         plan_arrive_time: [],
         waybill_status: '',
+        weight_status:'',
         is_reconciliation: this.$route.query.is_reconciliation ? this.$route.query.is_reconciliation : '',
         is_invoice: this.$route.query.is_invoice ? this.$route.query.is_invoice : '',
         keyword: '',
@@ -284,6 +302,10 @@ export default {
         title: '是否开票',
         param: 'is_invoice',
         width: ''
+      },{
+        title: '磅单',
+        param: 'weight_status',
+        width: ''
       }, {
         title: '备注',
         param: 'remark',
@@ -354,6 +376,14 @@ export default {
             { id: '', value: '全部' },
             { id: 'yes', value: '已开票' },
             { id: 'no', value: '未开票' }
+          ],
+        },
+        billboard: {
+          id: 'weight_status',
+          value: '磅单',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'wrong', value: '有误' }
           ],
         },
         times: [{
@@ -449,6 +479,17 @@ export default {
         this.getList();
       }
     },
+    // 磅单上传
+    uploadPoundListCloseDialog(isSave) {
+      this.uploadPoundListIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    openUploadPounListDialog(row){
+      this.uploadPoundListIsShow = true;
+      this.uploadPoundListRow = row;
+    },
     // 调账
     showDialog(type, row) {
       if (type === 'adjust') {
@@ -471,19 +512,9 @@ export default {
     },
     // 全部对账
     getUnReconciliations() {
-      let postData = {
-        is_reconciliation: this.searchPostData.is_reconciliation
-      };
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
+      let postData = this.postDataFilter(this.updateData);
       postData.batch = 'unfinished';
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      // postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.reconciliationsBtn.isDisabled = true;
       this.reconciliationsBtn.isLoading = true;
@@ -573,6 +604,7 @@ export default {
         waybill_status: this.searchPostData.waybill_status,
         is_reconciliation: this.searchPostData.is_reconciliation,
         is_invoice: this.searchPostData.is_invoice,
+        weight_status:this.searchPostData.weight_status
       };
       if (this.planArriveTime instanceof Array && this.planArriveTime.length > 0) {
         postData.work_end_time_start = this.planArriveTime[0];
