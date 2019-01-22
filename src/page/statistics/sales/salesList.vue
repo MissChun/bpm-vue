@@ -52,6 +52,13 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="磅单:">
+                <el-select v-model="searchFilters.weight_status" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in filterParam.billboard.data" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -92,6 +99,9 @@
               </div>
               <div v-else>
                 <span v-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'||item.param ==='waybill_status'||item.param ==='business_type' || item.param === 'consumer_confirm'">{{scope.row[item.param].verbose}}</span>
+                <div v-else-if="item.param ==='weight_status'" :class="{'text-red':scope.row[item.param].key ==='wrong'}">
+                  <div class="cursor-pointer" @click="openUploadPounListDialog(scope.row)">{{scope.row[item.param].verbose}}</div>
+                </div>
                 <div v-else>
                   <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
                   <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
@@ -147,16 +157,19 @@
     <sales-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow">
     </sales-adjustment-dialog>
     <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateSaleStatisticsList'" :type-str="'销售数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
+    <sales-upload-pound-list-dialog v-on:closeDialogBtn="uploadPoundListCloseDialog" :is-show="uploadPoundListIsShow" :row="uploadPoundListRow"></sales-upload-pound-list-dialog>
   </div>
 </template>
 <script>
 import salesAdjustmentDialog from '@/components/statistics/salesAdjustmentDialog';
 import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
+import salesUploadPoundListDialog from '@/components/statistics/salesUploadPoundListDialog';
 export default {
   name: 'salesList',
   components: {
     salesAdjustmentDialog: salesAdjustmentDialog,
-    updateNewDataDialog: updateNewDataDialog
+    updateNewDataDialog: updateNewDataDialog,
+    salesUploadPoundListDialog:salesUploadPoundListDialog,
   },
   computed: {
 
@@ -184,6 +197,7 @@ export default {
         keyword: this.$route.query.consumer_name ? this.$route.query.consumer_name : '',
         waybill_status: '',
         consumer_confirm: '',
+        weight_status:'',
         field: this.$route.query.consumer_name ? 'consumer_name' : 'short_name',
       },
       exportType: {
@@ -270,6 +284,14 @@ export default {
             { id: 'no', value: '客户吨位有误' },
             { id: 'wait_confirm', value: '客户待确认' },
           ]
+        },
+        billboard: {
+          id: 'weight_status',
+          value: '磅单',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'wrong', value: '有误' }
+          ],
         },
         times: [{
           id: 'leave_time_start',
@@ -403,6 +425,10 @@ export default {
           title: '客户是否确认',
           param: 'consumer_confirm',
           width: ''
+        },{
+          title: '磅单',
+          param: 'weight_status',
+          width: ''
         }, {
           title: '备注',
           param: 'remark',
@@ -443,10 +469,19 @@ export default {
         unload_nums: "0.0" //优惠后总额
       },
       updateData: {},
-      getNewDataIds: [] //获取最新数据的ID
+      getNewDataIds: [], //获取最新数据的ID
+      uploadPoundListIsShow:false,//上传榜单
+      uploadPoundListRow:{},//上传榜单info
     }
   },
   methods: {
+    // 磅单上传
+    uploadPoundListCloseDialog(isSave) {
+      this.uploadPoundListIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
     postDataFilter(postData) {
       for (let i in postData) {
         if (i === 'page' || i === 'page_size') {
@@ -634,6 +669,10 @@ export default {
         }
       })
     },
+    openUploadPounListDialog(row){
+      this.uploadPoundListIsShow = true;
+      this.uploadPoundListRow = row;
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
@@ -769,7 +808,8 @@ export default {
         is_reconciliation: this.searchPostData.is_reconciliation,
         is_invoice: this.searchPostData.is_invoice,
         waybill_status: this.searchPostData.waybill_status,
-        consumer_confirm: this.searchPostData.consumer_confirm
+        consumer_confirm: this.searchPostData.consumer_confirm,
+        weight_status:this.searchPostData.weight_status
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];

@@ -9,6 +9,70 @@
  */
 
 const api = {
+  updateExternalMiningUnloadingImg: {
+    url: '/api/v1/outbuy_trip/:id/weight-url/',
+    method: 'patch',
+    desc: "修改外采卸车榜单图片",
+    param: {
+
+    }
+  },
+  updateExternalMiningImg: {
+    url: '/api/v1/outbuy_order/:id/',
+    method: 'patch',
+    desc: "修改外采装车榜单图片",
+    param: {
+
+    }
+  },
+  updateForExportImg: {
+    url: '/api/v1/outsale_order/:id/weight-url/',
+    method: 'patch',
+    desc: "修改外销单装车榜单图片",
+    param: {
+
+    }
+  },
+  updatePurchaseWaybillStatus: {
+    url: '/api/v1/discounts-statistic/:id/',
+    method: 'patch',
+    desc: "修改运单状态",
+    param: {
+
+    }
+  },
+  updatePurchaseWaybillStatus: {
+    url: '/api/v1/discounts-statistic/:id/',
+    method: 'patch',
+    desc: "修改运单状态",
+    param: {
+
+    }
+  },
+  updateSalesWaybillStatus: {
+    url: '/api/v1/sale-statistic/:id/weight-status/',
+    method: 'patch',
+    desc: "修改运单状态",
+    param: {
+
+    }
+  },
+  updatePundList: {
+    url: '/api/v1/weight-note/',
+    method: 'post',
+    desc: "修改磅单数据",
+    param: {
+
+    }
+  },
+  getQiniuKey: {
+    url: '/api/v1/qiniu/retrieve-token/',
+    method: 'GET',
+    desc: "获取骑牛上传key",
+    param: {
+
+    }
+  },
   updateUserInfo: {
     url: '/api/v1/users/:id/modify/',
     method: 'patch',
