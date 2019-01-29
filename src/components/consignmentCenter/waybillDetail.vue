@@ -622,12 +622,12 @@ export default {
             loadArr = [];
 
           for (var i = 0; i < vm.detailData.trips.length; i++) {
-            if (vm.detailData.trips[i].section_type.key == 'unload') {
+            if (vm.detailData.trips[i].section_type.key == 'unload'&&vm.detailData.trips[i].status.key!='canceled') {
               unloadArr.push(vm.detailData.trips[i]);
               if (vm.detailData.trips[i].business_order.id === this.orderId) {
                 this.unloadInfo = this.detailData.trips[i];
               }
-            } else {
+            } else if(vm.detailData.trips[i].section_type.key == 'pickup'){
               loadArr.push(this.detailData.trips[i]);
               this.loadingInfo = this.detailData.trips[i];
             }
