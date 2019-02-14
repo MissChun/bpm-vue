@@ -425,7 +425,7 @@ a {
       <el-footer>
         <div class="bpm-footer">
           <div>Copyright © {{newYear}} 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
-            <br> QQ：963819358(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
+            <br> QQ：1373724944(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
         </div>
       </el-footer>
     </el-container>
