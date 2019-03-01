@@ -196,6 +196,12 @@
                     <span>{{props.row.delivery_order.actual_fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
+                <el-col :span="4">
+                  供方液厂名称: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
+                  <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.fluid" placement="top-start">
+                    <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
+                  </el-tooltip>
+                </el-col>
                 <el-col :span="4" class="whiteSpan">
                   计划装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
