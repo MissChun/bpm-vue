@@ -149,6 +149,14 @@ export default {
         title: '状态',
         param: 'is_active',
         width: ''
+      }, {
+        title: '状态',
+        param: 'is_active',
+        width: ''
+      }, {
+        title: '站点类别',
+        param: 'station_category_display',
+        width: ''
       }],
       tableData: [],
       customerSearchList: []

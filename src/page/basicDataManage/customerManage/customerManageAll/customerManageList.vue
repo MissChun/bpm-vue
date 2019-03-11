@@ -107,6 +107,10 @@ export default {
           title: '添加时间',
           param: 'created_at',
           width: '170'
+        }, {
+          title: '客户类别',
+          param: 'consumer_category_display',
+          width: ''
         }
       ],
       pageStatus: false,

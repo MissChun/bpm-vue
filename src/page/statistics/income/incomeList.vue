@@ -479,6 +479,15 @@ export default {
         }, {
           title: '能源利润',
           id: 89
+        }, {
+          title: '省',
+          id: 227
+        }, {
+          title: '市',
+          id: 228
+        }, {
+          title: '区',
+          id: 229
         },
       ]
 

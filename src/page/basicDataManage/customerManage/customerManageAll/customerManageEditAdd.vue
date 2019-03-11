@@ -1,4 +1,4 @@
-  <template>
+<template>
   <div id="addeditTailCarPage" class="detail-main">
     <el-container>
       <el-header class="mt-5">
@@ -51,9 +51,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="分属业务员:" prop="sale_man" v-loading="saleManPading" >
-                    <el-select v-model="customerFrom.sale_man" filterable placeholder="请选择" >
-                      <el-option  v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
+                  <el-form-item label="分属业务员:" prop="sale_man" v-loading="saleManPading">
+                    <el-select v-model="customerFrom.sale_man" filterable placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.saleMan" :key="key" :label="item.nick_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -74,13 +74,12 @@
                 </el-col>
                 <el-col :span="8" v-if="customerId">
                   <el-form-item label="付款方:" prop="payer_name">
-                    <el-select v-model="customerFrom.payer_name" v-loading="payerLoading" filterable multiple clearable @change="payerSelect" placeholder="请输入选择" >
-                      <el-option  v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
+                    <el-select v-model="customerFrom.payer_name" v-loading="payerLoading" filterable multiple clearable @change="payerSelect" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
                     </el-select>
-
                   </el-form-item>
                 </el-col>
-                <el-col :span="24" v-else>
+                <el-col :span="8" v-else>
                   <el-form-item label="付款方:" prop="payerType">
                     <el-row :gutter="0">
                       <el-col :span="10" style="width:300px">
@@ -90,11 +89,18 @@
                         </el-radio-group>
                       </el-col>
                       <el-col :span="6" v-if="customerFrom.payerType">
-                        <el-select v-model="customerFrom.payer" v-loading="payerLoading" filterable multiple clearable placeholder="请输入选择" >
-                          <el-option  v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
+                        <el-select v-model="customerFrom.payer" v-loading="payerLoading" filterable multiple clearable placeholder="请输入选择">
+                          <el-option v-for="(item,key) in payerList" :key="item.id" :label="item.payer" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                     </el-row>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="客户类别:">
+                    <el-select v-model="customerFrom.consumer_category" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.consumerCategoryList" :key="key" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -190,23 +196,23 @@ export default {
   name: 'customerManageEditAdd',
   data() {
     var phoneVa = (rule, value, callback) => {
-      if ((value+"").match(/^\d{3,4}-?\d{7,8}$/) || value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
+      if ((value + "").match(/^\d{3,4}-?\d{7,8}$/) || value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
         callback();
       } else {
         callback(new Error("应为11位手机号或12位座机号"));
       }
     };
     var numVa = (rule, value, callback) => {
-      if ((value+"").match(/^([1-9]\d*|0)(\.\d{1,2})?$/) || value == "") {
+      if ((value + "").match(/^([1-9]\d*|0)(\.\d{1,2})?$/) || value == "") {
         callback();
       } else {
         callback(new Error("应为最多两位小数的有效数值"));
       }
     };
     var startVa = (rule, value, callback) => {
-      if(!value){
+      if (!value) {
         callback();
-      }else{
+      } else {
         if ((this.customerFrom.contract_end_date != "" && this.customerFrom.contract_end_date != 'undefined')) {
           if (((new Date(value)) - (new Date(this.customerFrom.contract_end_date)) < 0) || value == "") {
             callback();
@@ -219,9 +225,9 @@ export default {
       }
     };
     var endVa = (rule, value, callback) => {
-      if(!value){
+      if (!value) {
         callback();
-      }else{
+      } else {
         if ((this.customerFrom.contract_start_date != "" && this.customerFrom.contract_start_date != 'undefined')) {
           if (((new Date(this.customerFrom.contract_start_date)) - (new Date(value)) < 0) || value == "") {
             callback();
@@ -234,14 +240,14 @@ export default {
       }
     };
     var social_credit_codeVa = (rule, value, callback) => {
-      if ((value+"").match(/^([A-Z0-9]{18})$/) || !value) {
+      if ((value + "").match(/^([A-Z0-9]{18})$/) || !value) {
         callback();
       } else {
         callback(new Error("由18位数字和大写字母组成"));
       }
     }
     var needNumVa = (rule, value, callback) => {
-      if (!((value+"").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/)||value==""||value==null)||value>1000000) {
+      if (!((value + "").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/) || value == "" || value == null) || value > 1000000) {
         callback(new Error("请输入0-100万正数"));
       } else {
         callback();
@@ -254,39 +260,40 @@ export default {
       editable: false,
       pageLoading: false,
       saleManPading: false,
-      payerLoading:false,
-      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address','credit_limit','payer'],
+      payerLoading: false,
+      customerFrom1Arr: ['consumer_name', 'short_name', 'consumer_level', 'contact_person', 'contact_phone', 'sale_man', 'social_credit_code', 'consumer_address', 'credit_limit', 'payer', 'consumer_category'],
       customerFrom2Arr: ['free_hour', 'waiting_price', 'kui_tons_standard', 'settlement_cycle'],
       customerFrom3Arr: ['contract_no', 'contract_start_date', 'contract_end_date'],
       customerFrom: {
-        free_hour:"",
-        waiting_price:"",
-        contract_start_date:"",
-        contract_end_date:"",
-        social_credit_codeVa:"",
-        kui_tons_standard:200,
-        credit_limit:"",
-        payerType:'',
-        payer:[],
-        payer_name:[],
-        free_hour:'',
-        waiting_price:'',
-        contract_start_date:'',
-        contract_end_date:'',
-        social_credit_codeVa:'',
-        kui_tons_standard:'',
-        credit_limit:'',
-        consumer_name:'',
-        short_name:'',
-        consumer_level:'',
-        contact_person:'',
-        contact_phone:'',
-        sale_man:'',
-        social_credit_code:'',
-        consumer_address:'',
-        credit_limit:'',
+        free_hour: "",
+        waiting_price: "",
+        contract_start_date: "",
+        contract_end_date: "",
+        social_credit_codeVa: "",
+        kui_tons_standard: 200,
+        credit_limit: "",
+        payerType: '',
+        payer: [],
+        payer_name: [],
+        free_hour: '',
+        waiting_price: '',
+        contract_start_date: '',
+        contract_end_date: '',
+        social_credit_codeVa: '',
+        kui_tons_standard: '',
+        credit_limit: '',
+        consumer_name: '',
+        short_name: '',
+        consumer_level: '',
+        contact_person: '',
+        contact_phone: '',
+        sale_man: '',
+        social_credit_code: '',
+        consumer_address: '',
+        credit_limit: '',
+        consumer_category: 'empty'
       },
-      payerList:[],
+      payerList: [],
       rules: {
         //1
         payerType: [
@@ -337,11 +344,12 @@ export default {
         contract_end_date: [
           { validator: endVa, trigger: 'blur' },
         ],
-        credit_limit:[
+        credit_limit: [
           { validator: needNumVa, trigger: 'blur' },
         ]
       },
-      customerId:''
+      customerId: '',
+
     }
   },
   created() {
@@ -357,9 +365,61 @@ export default {
   computed: {
     selectData: function() {
       return {
-        customerType: [{ verbose: "一类客户", key: "a" }, { verbose: "二类客户", key: "b" }, { verbose: "三类客户", key: "c" }],
+        customerType: [{
+          verbose: "一类客户",
+          key: "a"
+        }, {
+          verbose: "二类客户",
+          key: "b"
+        }, {
+          verbose: "三类客户",
+          key: "c"
+        }],
         //saleMan: this.$store.state.common.selectData.saleMan,
-        settlementType: [{ verbose: "预付", key: "0" }, { verbose: "货到付款", key: "1" }, { verbose: "周结", key: "2" }, { verbose: "月结", key: "3" }, { verbose: "见票付款", key: "4" }],
+        settlementType: [{
+          verbose: "预付",
+          key: "0"
+        }, {
+          verbose: "货到付款",
+          key: "1"
+        }, {
+          verbose: "周结",
+          key: "2"
+        }, {
+          verbose: "月结",
+          key: "3"
+        }, {
+          verbose: "见票付款",
+          key: "4"
+        }],
+        consumerCategoryList: [{
+          label: "--空--",
+          value: "empty"
+        }, {
+          label: "加气站",
+          value: "gas_station"
+        }, {
+          label: "城市燃气",
+          value: "urban_gas"
+        }, {
+          label: "工业用气",
+          value: "industrial_gas"
+        }, {
+          label: "发电用气",
+          value: "generate_electricity"
+        }, {
+          label: "固定站点",
+          value: "fixation"
+        }, {
+          label: "贸易商",
+          value: "trafficker"
+        }, {
+          label: "大客户",
+          value: "big_customer"
+        }, {
+          label: "其他",
+          value: "other"
+        }],
       }
     },
     returnPage: function() {
@@ -386,38 +446,38 @@ export default {
     }
   },
   methods: {
-    selectPayerType(label){
+    selectPayerType(label) {
       this.customerFrom.payerType = label;
-      if(!label){
+      if (!label) {
         this.customerFrom.payer = '';
       }
     },
-    payerSelect(payers){
+    payerSelect(payers) {
 
       this.customerFrom.payer = [];
-      for(let i in this.payerList){
-        for(let j in payers){
-          console.log(this.payerList[i].payer,payers[j])
-          if(this.payerList[i].payer === payers[j]){
+      for (let i in this.payerList) {
+        for (let j in payers) {
+          console.log(this.payerList[i].payer, payers[j])
+          if (this.payerList[i].payer === payers[j]) {
             this.customerFrom.payer.push(this.payerList[i].id);
           }
         }
       }
-      console.log(this.customerFrom.payer,payers)
+      console.log(this.customerFrom.payer, payers)
     },
     getPayerList(query) {
       let postData = {
         // page: 1,
         // page_size: 100
-        need_all:true
+        need_all: true
       }
-      if(query){
+      if (query) {
         postData.payer = query;
       }
       this.payerLoading = true;
       this.$$http('searchCustomerPayList', postData).then((result) => {
         this.payerLoading = false;
-        if (result.data&&result.data.code == 0) {
+        if (result.data && result.data.code == 0) {
           this.payerList = result.data.data;
         }
       })
@@ -444,7 +504,7 @@ export default {
     getSaleMan: function() {
       var sendData = {
         department_identity: 'business',
-        need_all:true
+        need_all: true
       };
       var vm = this;
       this.saleManPading = true;
@@ -459,7 +519,9 @@ export default {
     },
     updateFrom: function(operation, formName) {
       var vm = this;
+
       this.validatorFrom(formName, (result) => {
+
         if (result == 'true') {
           var sendData = this.pbFunc.deepcopy(vm.customerFrom);
           sendData = vm.pbFunc.fifterObjIsNull(sendData);
@@ -510,23 +572,24 @@ export default {
           detailData = result.data.data;
 
 
-          let peyerArr = [],payerNameArr = [];
-          if(detailData.payer_info){
-            for(let i in detailData.payer_info){
+          let peyerArr = [],
+            payerNameArr = [];
+          if (detailData.payer_info) {
+            for (let i in detailData.payer_info) {
               peyerArr.push(detailData.payer_info[i].id);
               payerNameArr.push(detailData.payer_info[i].payer_name);
             }
           }
-          for(let i in this.customerFrom){
-            if(i==='peyer'||i==='payer_name'){
-              this.$set(this.customerFrom,i, []);
-            }else{
-              this.$set(this.customerFrom,i, detailData[i]);
+          for (let i in this.customerFrom) {
+            if (i === 'peyer' || i === 'payer_name') {
+              this.$set(this.customerFrom, i, []);
+            } else {
+              this.$set(this.customerFrom, i, detailData[i]);
             }
             // console.log(i, detailData[i])
           }
-          this.customerFrom.payer=[...new Set(peyerArr)];
-          this.customerFrom.payer_name =[...new Set(payerNameArr)];
+          this.customerFrom.payer = [...new Set(peyerArr)];
+          this.customerFrom.payer_name = [...new Set(payerNameArr)];
           // console.log('detailData',this.customerFrom);
           this.pageLoading = false;
         } else {
@@ -553,7 +616,7 @@ export default {
 
           sendData = this.pbFunc.fifterObjIsNull(sendData);
           sendData = this.pbFunc.fifterbyArr(sendData, this.customerFrom1Arr);
-          sendData.is_confirmed=1;
+          sendData.is_confirmed = 1;
           this.$$http('creatCustomerFrom', sendData).then((result) => {
             vm.pageLoading = false;
             if (result.data.code == 0) {
@@ -607,9 +670,11 @@ export default {
 
 .addTailcarform {
   margin: 30px 5%;
+
   .el-input {
     width: 100%;
   }
+
   .el-select {
     width: 100%;
   }
