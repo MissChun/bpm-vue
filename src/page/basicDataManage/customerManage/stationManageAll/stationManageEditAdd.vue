@@ -204,7 +204,7 @@ export default {
         },
       ],
       stationCategoryList: [{
-        label: '—空—',
+        label: '--空--',
         value: 'empty'
       }, {
         label: '加气站',
@@ -668,6 +668,8 @@ export default {
             this.formData.address = this.siteOfCusmerDetail.address;
 
             this.formData.is_active = this.siteOfCusmerDetail.is_active;
+
+            this.formData.station_category = this.siteOfCusmerDetail.station_category;
 
 
             resolve(results);

@@ -528,7 +528,6 @@ export default {
           sendData = vm.pbFunc.fifterbyArr(sendData, vm['customerFrom' + (parseInt(vm.activeStep) + 1) + 'Arr']);
           vm.pageLoading = true;
           sendData.id = vm.customerId;
-          return
           this.$$http('upadtecustomerFrom', sendData).then((result) => {
             if (result.data.code == 0) {
               vm.$message({
