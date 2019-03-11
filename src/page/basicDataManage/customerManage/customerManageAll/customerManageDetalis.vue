@@ -1,6 +1,6 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
-.el-form-item {
+  .el-form-item {
   margin-bottom: 0px;
 }
 
@@ -110,10 +110,16 @@
                   </div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="客户类别:">
+                  <div class="detail-form-item item-row-font">
+                    <div class="detail-form-item" v-html="pbFunc.dealNullData(customerData.consumer_category_display)"></div>
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
             <!-- </el-form> -->
           </div>
-
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>
@@ -173,23 +179,23 @@
               </el-row>
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="合同编号:" prop="qualification_certificate_number">
-                    <div class="detail-form-item">{{customerData.contract_no}}</div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="合同起始日期:">
-                    <div class="detail-form-item">{{customerData.contract_start_date}}</div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="合同截止日期:">
-                    <div class="detail-form-item">{{customerData.contract_end_date}}</div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="合同编号:" prop="qualification_certificate_number">
+                  <div class="detail-form-item">{{customerData.contract_no}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="合同起始日期:">
+                  <div class="detail-form-item">{{customerData.contract_start_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="合同截止日期:">
+                  <div class="detail-form-item">{{customerData.contract_end_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <!-- </el-form> -->
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
@@ -235,7 +241,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/basicDataManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.customerId +"&operate=edit"});
+      this.$router.push({ path: "/basicDataManage/customerManage/customerManageAll/customerManageEditAdd?activeStep=" + number + "&customerId=" + this.customerId + "&operate=edit" });
     },
 
   }

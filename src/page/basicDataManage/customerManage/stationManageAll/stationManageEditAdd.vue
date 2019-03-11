@@ -71,6 +71,15 @@
           </el-row>
           <el-row>
             <el-col :span="20">
+              <el-form-item label="站点类别:">
+                <el-select v-model="formData.station_category" placeholder="请选择">
+                  <el-option v-for="(item,key) in stationCategoryList" :key="key" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="20">
               <el-form-item label="客户简称:" prop="short_name">
                 <el-select v-model="formData.short_name" filterable placeholder="请选择">
                   <el-option v-for="(item,key) in customerList" :key="key" :label="item.short_name" :value="item.id"></el-option>
@@ -170,6 +179,7 @@ export default {
         consignee_phone: '',
         is_active: true,
         address: '',
+        station_category: 'empty'
       },
       addressDetail: {},
       submitBtn: {
@@ -193,6 +203,34 @@ export default {
           verbose: '其他',
         },
       ],
+      stationCategoryList: [{
+        label: '—空—',
+        value: 'empty'
+      }, {
+        label: '加气站',
+        value: 'gas_station'
+      }, {
+        label: '城市燃气',
+        value: 'urban_gas'
+      }, {
+        label: '工业用气',
+        value: 'industrial_gas'
+      }, {
+        label: '发电用气',
+        value: 'generate_electricity'
+      }, {
+        label: '固定站点',
+        value: 'fixation'
+      }, {
+        label: '贸易商',
+        value: 'trafficker'
+      }, {
+        label: '大客户',
+        value: 'big_customer'
+      }, {
+        label: '其他',
+        value: 'other'
+      }],
       rules: {
         position_name: [
           { required: true, message: '请输入地标名称', trigger: 'blur' },
@@ -488,6 +526,7 @@ export default {
           consumer_id: this.formData.short_name,
           station_type: this.formData.station_type,
           station_name: this.formData.position_name,
+          station_category: this.formData.station_category,
 
           longitude: this.choosedActualSite.location.longitude,
           latitude: this.choosedActualSite.location.latitude,
