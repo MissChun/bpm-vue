@@ -247,8 +247,8 @@ export default {
       }
     }
     var needNumVa = (rule, value, callback) => {
-      if (!((value + "").match(/^([0-9]\d{0,6})(\.\d{1,2})?$/) || value == "" || value == null) || value > 1000000) {
-        callback(new Error("请输入0-100万正数"));
+      if (!((value + "").match(/^([0-9]\d{0,7})(\.\d{1,2})?$/) || value == "" || value == null) || value > 100000000) {
+        callback(new Error("请输入0-1千万正数"));
       } else {
         callback();
       }
@@ -391,6 +391,9 @@ export default {
         }, {
           verbose: "见票付款",
           key: "4"
+        }, {
+          verbose: "卸货付款",
+          key: "5"
         }],
         consumerCategoryList: [{
           label: "--空--",

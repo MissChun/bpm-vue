@@ -1,5 +1,5 @@
 <style scoped lang="less">
-@import '../assets/css/themeStyle.less';
+  @import '../assets/css/themeStyle.less';
 @import '../assets/css/reset.less';
 .el-container {
   background: #fff;
@@ -331,7 +331,7 @@ a {
                   <div class="advantage-list-img">
                     <img src="@/assets/img/cooperationImg.png">
                   </div>
-                </div>
+                  </div>
               </el-col>
               <el-col :span="8">
                 <div class="advantage-list">
@@ -343,7 +343,7 @@ a {
                   <div class="advantage-list-img">
                     <img src="@/assets/img/dataImg.png">
                   </div>
-                </div>
+                  </div>
               </el-col>
               <el-col :span="8">
                 <div class="advantage-list">
@@ -355,7 +355,7 @@ a {
                   <div class="advantage-list-img">
                     <img src="@/assets/img/ProcessImg.png">
                   </div>
-                </div>
+                  </div>
               </el-col>
             </el-row>
           </div>
@@ -425,7 +425,7 @@ a {
       <el-footer>
         <div class="bpm-footer">
           <div>Copyright © {{newYear}} 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
-            <br> QQ：1373724944(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
+            <br>邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
         </div>
       </el-footer>
     </el-container>
