@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.dispatchTitle {
+  .dispatchTitle {
   margin: 40px 0 0 10px;
   padding: 1px;
   height: 40px;
@@ -24,36 +24,14 @@
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
-    <input value="1">
     <div v-for="(itemList,index) in renderDashboard" :key="index">
       <div class="dashboradContent">
-        <div
-          class="dispatchTitle border-bottom"
-          v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}"
-        >{{itemList.title}}</div>
-        <el-form
-          class="search-filters-form"
-          label-width="80px"
-          status-icon
-          ref="seachHeadCarListFrom"
-          v-if="itemList.searchShow"
-          style="margin-top:30px;"
-        >
+        <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}">{{itemList.title}}</div>
+        <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" v-if="itemList.searchShow" style="margin-top:30px;">
           <el-row>
             <el-col :span="8">
               <el-form-item align="right" label="时间搜索:">
-                <el-date-picker
-                  style="width:100%"
-                  :editable="editable"
-                  :clearable="clearable"
-                  v-model="itemList.searchData"
-                  type="datetimerange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  :default-time="['00:00:00', '23:59:59']"
-                ></el-date-picker>
+                <el-date-picker style="width:100%" :editable="editable" :clearable="clearable" v-model="itemList.searchData" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="2" style="margin-left:20px;">
@@ -61,36 +39,13 @@
             </el-col>
           </el-row>
         </el-form>
-        <el-row
-          v-for="(Ritem,Rindex) in itemList.renderDashboard"
-          :gutter="20"
-          style="margin:10px 0 40px 0"
-          :key="Rindex"
-        >
-          <el-col
-            v-for="(item,itemIndex) in Ritem"
-            :span="4"
-            style="margin-top:15px;"
-            :key="item.key"
-          >
-            <dashboradSqure
-              :dashboradSqureData="item"
-              @clickExtendTable="clickExtendTable"
-              v-loading="item.vLoading"
-              :activeData="extendgetData"
-            ></dashboradSqure>
+        <el-row v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20" style="margin:10px 0 40px 0" :key="Rindex">
+          <el-col v-for="(item,itemIndex) in Ritem" :span="4" style="margin-top:15px;" :key="item.key">
+            <dashboradSqure :dashboradSqureData="item" @clickExtendTable="clickExtendTable" v-loading="item.vLoading" :activeData="extendgetData"></dashboradSqure>
           </el-col>
           <el-collapse-transition>
-            <el-col
-              :span="24"
-              :id="'extendTab-'+extendgetData.key"
-              v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"
-            >
-              <dashboardTable
-                :dashboardTableData="extendData[extendgetData.key]"
-                :tableType="extendgetData.key"
-                :sendTime="itemList.searchData"
-              ></dashboardTable>
+            <el-col :span="24" :id="'extendTab-'+extendgetData.key" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus">
+              <dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :sendTime="itemList.searchData"></dashboardTable>
             </el-col>
           </el-collapse-transition>
         </el-row>
@@ -116,32 +71,27 @@ export default {
       extendgetData: {},
       tableShowSatus: false,
       defaultStart: "", //new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate()-1) + " 16:00:00",
-      defaultEnd:
-        new Date().getFullYear() +
+      defaultEnd: new Date().getFullYear() +
         "-" +
         (new Date().getMonth() + 1) +
         "-" +
         new Date().getDate() +
         " 16:00:00",
       allDashboard: {
-        purchaseDashboard: [
-          {
+        purchaseDashboard: [{
             //采购概览
-            dashboardSqureData: [
-              {
-                key: "determine_count",
-                value: "待确认计划数",
-                goUrl: "/orderManage/pickupOrders/ordersList?goTo=determine",
-                dimension: "单"
-              }
-            ],
+            dashboardSqureData: [{
+              key: "determine_count",
+              value: "待确认计划数",
+              goUrl: "/orderManage/pickupOrders/ordersList?goTo=determine",
+              dimension: "单"
+            }],
             searchShow: false,
             type: "procurement_centre_scedule",
             title: "待办事项"
           },
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "car_plan_count",
                 value: "用车计划",
                 extendTable: true,
@@ -172,8 +122,7 @@ export default {
         serviceCentreDashboard: [
           //服务中心概览
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "create_department_check_count",
                 value: "待部门审核",
                 goUrl: "/orderManage/businessOrder/businessList",
@@ -182,15 +131,13 @@ export default {
               {
                 key: "section_waiting_match_count",
                 value: "待匹配卸货单",
-                goUrl:
-                  "/logisticsManage/platformWaybill/ordersList?goTo=second&secondActiveName=waiting_match",
+                goUrl: "/logisticsManage/platformWaybill/ordersList?goTo=second&secondActiveName=waiting_match",
                 dimension: "单"
               },
               {
                 key: "standard_mile_count",
                 value: "待测里程数",
-                goUrl:
-                  "/basicDataManage/standardDataSet/mileage/mileageList?mile=0",
+                goUrl: "/basicDataManage/standardDataSet/mileage/mileageList?mile=0",
                 dimension: "条"
               }
             ],
@@ -199,8 +146,7 @@ export default {
             title: "待办事项"
           },
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "car_plan_count",
                 value: "用车计划",
                 extendTable: true,
@@ -247,12 +193,10 @@ export default {
         puchaseStatisticsDashboard: [
           //采购统计概览
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "is_reconciliation_count",
                 value: "未对账",
-                goUrl:
-                  "/statistics/purchase/purchaseList?is_reconciliation=unfinished",
+                goUrl: "/statistics/purchase/purchaseList?is_reconciliation=unfinished",
                 dimension: "车"
               },
               {
@@ -267,15 +211,13 @@ export default {
             title: "数据概览"
           },
           {
-            dashboardSqureData: [
-              {
-                key: "associated_not_unload_count",
-                value: "库存单数量",
-                extendTable: true,
-                dimension: "车",
-                vLoading: false
-              }
-            ],
+            dashboardSqureData: [{
+              key: "associated_not_unload_count",
+              value: "库存单数量",
+              extendTable: true,
+              dimension: "车",
+              vLoading: false
+            }],
             searchShow: true,
             searchData: [],
             type: "procurement_statistics_weightnote",
@@ -285,12 +227,10 @@ export default {
         salesStatisticsDashboard: [
           //销售概览
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "is_reconciliation_count",
                 value: "未对账",
-                goUrl:
-                  "/statistics/sales/salesList?is_reconciliation=unfinished",
+                goUrl: "/statistics/sales/salesList?is_reconciliation=unfinished",
                 dimension: "车",
                 vLoading: false
               }
@@ -302,8 +242,7 @@ export default {
             title: "数据概览"
           },
           {
-            dashboardSqureData: [
-              {
+            dashboardSqureData: [{
                 key: "waiting_settlement_count",
                 value: "已卸车",
                 extendTable: true,
@@ -511,4 +450,5 @@ export default {
     }
   }
 };
+
 </script>
