@@ -35,14 +35,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="供应商:" prop="supplier">
-                    <el-select v-model="editMsgForm.supplier" :loading="supplierLoading" filterable remote clearable @change="getSupplier" @blur="selectId('supplier')" :remote-method="getSupplier" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.supplier" :loading="supplierLoading" filterable remote clearable @change="getSupplier" :remote-method="getSupplier" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.supplierSelect" :key="item.id" :label="item.supplier_name" :value="item.supplier_name"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="供方液厂名称:" prop="fluid">
-                    <el-select v-model="editMsgForm.fluid" :loading="fluidLoading" filterable remote clearable @change="getFluidList" @blur="selectId('fluid')" :remote-method="getFluidList" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.fluid" :loading="fluidLoading" filterable remote clearable @change="getFluidList" :remote-method="getFluidList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.fluidSelect" :key="item.id" :label="item.fluid_name" :value="item.fluid_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -301,7 +301,7 @@ export default {
         //     }
         //   }
         // }
-        console.log('id', this.editMsgForm.fluid_id)
+        // console.log('id', this.editMsgForm.fluid_id)
       }, 200)
 
     },
@@ -319,6 +319,7 @@ export default {
         this.supplierLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.supplierSelect = results.data.data.data;
+          this.selectId('supplier');
         }
       }).catch((err) => {
         this.supplierLoading = false;
@@ -338,6 +339,7 @@ export default {
         this.fluidLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.fluidSelect = results.data.data.data;
+          this.selectId('fluid');
         }
       }).catch((err) => {
         this.fluidLoading = false;
