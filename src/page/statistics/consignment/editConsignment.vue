@@ -41,7 +41,7 @@
                 <el-col :span="8">
                   <el-form-item label="承运商:" prop="carrier">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.carrier"></el-input> -->
-                    <el-select v-model="editMsgForm.carrier" :loading="carrierLoading" filterable remote clearable @change="getCarrier" @blur="selectId('carrier')" :remote-method="getCarrier" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.carrier" :loading="carrierLoading" filterable remote clearable @change="getCarrier" :remote-method="getCarrier" placeholder="请输入选择">
                       <el-option v-for="(item,key) in carriers" :key="item.id" :label="item.carrier_name" :value="item.carrier_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -324,7 +324,7 @@ export default {
             }
           }
         }
-        console.log('consumer_id', this.editMsgForm.carrier_id)
+        // console.log('consumer_id', this.editMsgForm.carrier_id)
       }, 200)
     },
     getCarrier(query) {
@@ -341,7 +341,7 @@ export default {
         this.carrierLoading = false;
         if (results.data && results.data.code == 0) {
           this.carriers = results.data.data.data;
-
+          this.selectId('carrier');
         }
       }).catch((err) => {
         this.carrierLoading = false;

@@ -49,7 +49,7 @@
                 <el-col :span="8">
                   <el-form-item label="客户简称:" prop="short_name">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.short_name"></el-input> -->
-                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable @change="getConsumer" @blur="selectId('short')" :remote-method="getConsumer" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.short_name" :loading="consumerLoading" filterable remote clearable @change="getConsumer" :remote-method="getConsumer" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.consumerSelect" :key="item.id" :label="item.short_name" :value="item.short_name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -62,7 +62,7 @@
                 <el-col :span="8">
                   <el-form-item label="付款方:" prop="payer_name">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.payer_name"></el-input> -->
-                    <el-select v-model="editMsgForm.payer_name" :loading="payerLoading" filterable remote clearable @change="getPayer" @blur="selectId('payer')" :remote-method="getPayer" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.payer_name" :loading="payerLoading" filterable remote clearable @change="getPayer"  :remote-method="getPayer" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.payerSelect" :key="item.id" :label="item.payer" :value="item.payer"></el-option>
                     </el-select>
                   </el-form-item>
@@ -383,6 +383,7 @@ export default {
       // }
     },
     selectId(type) {
+      // console.log('fk',this.editMsgForm.payer_name);
       setTimeout(() => {
         if (type === 'short') {
           for (let i in this.selectData.consumerSelect) {
@@ -393,12 +394,13 @@ export default {
         } else if (type === 'payer') {
           for (let i in this.selectData.payerSelect) {
             if (this.editMsgForm.payer_name === this.selectData.payerSelect[i].payer) {
+              // console.log('付款方',this.editMsgForm.payer_name,this.selectData.payerSelect[i].payer,this.selectData.payerSelect[i].id)
               this.editMsgForm.payer_id = this.selectData.payerSelect[i].id;
             }
           }
         }
         // console.log('consumer_id',this.editMsgForm.payer_id)
-      }, 200)
+      }, 10)
     },
     businessChange() {
       // this.editMsgForm.plate_number = '';
@@ -423,6 +425,7 @@ export default {
         this.payerLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.payerSelect = results.data.data.data;
+          this.selectId('payer');
         }
       }).catch((err) => {
         this.payerLoading = false;
@@ -442,6 +445,7 @@ export default {
         this.consumerLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.consumerSelect = results.data.data.data;
+          selectId('short');
         }
       }).catch((err) => {
         this.consumerLoading = false;
@@ -508,6 +512,7 @@ export default {
           btnObject.btnText = '正在提交';
           btnObject.isLoading = true;
           postData.id = this.id;
+          console.log('postData',postData)
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
