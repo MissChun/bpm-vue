@@ -383,7 +383,7 @@ export default {
       // }
     },
     selectId(type) {
-      // console.log('fk',this.editMsgForm.payer_name);
+      console.log('fk',this.editMsgForm.short_name);
       setTimeout(() => {
         if (type === 'short') {
           for (let i in this.selectData.consumerSelect) {
@@ -399,7 +399,7 @@ export default {
             }
           }
         }
-        // console.log('consumer_id',this.editMsgForm.payer_id)
+        console.log('consumer_id',this.editMsgForm.consumer_id)
       }, 10)
     },
     businessChange() {
@@ -445,7 +445,7 @@ export default {
         this.consumerLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.consumerSelect = results.data.data.data;
-          selectId('short');
+          this.selectId('short');
         }
       }).catch((err) => {
         this.consumerLoading = false;
