@@ -304,7 +304,7 @@ export default {
         ],
         consumer_name: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
-          { min: 1, max: 20, message: '客户名称为1~20个字符', trigger: 'blur' }
+          { min: 1, max: 40, message: '客户名称为1~40个字符', trigger: 'blur' }
         ],
         short_name: [
           { required: true, message: '该项为必填项', trigger: 'blur' },
