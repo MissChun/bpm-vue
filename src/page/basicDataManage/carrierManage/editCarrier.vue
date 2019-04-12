@@ -25,111 +25,105 @@
         </el-row>
       </el-header>
       <el-main v-show="!pageLoading" class="mt-30">
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==0">
-            <div class="detail-form-title text-center">承运商信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="editMsgForm" status-icon>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="承运商名称:" prop="carrier_name">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.carrier_name"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="联系人:" prop="contact">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="联系电话:" prop="contact_phone">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact_phone"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="地址:">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.address"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="承运类型:" prop="carrier_type">
-                    <el-select v-model="editMsgForm.carrier_type" placeholder="请选择" @change="changeCarrier">
-                      <el-option v-for="(item,key) in selectData.carrierTypeSelect" :key="key" :label="item.value" :value="item.id" ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="是否启用:">
-                    <el-switch v-model="editMsgForm.isValidName" active-color="#13ce66" inactive-color="#ff4949">
-                    </el-switch>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="16">
-                  <el-form-item label="代码:" prop="codeMsg">
-                    <el-row>
-                      <el-col :span="8">
-                        <div class="code">
-                          <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='credit_code'&&detail.credit_code?true:false">
-                            <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                          </el-select>
-                        </div>
-                      </el-col>
-                      <el-col :span="10">
-                        <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.codeMsg"></el-input>
-                      </el-col>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8" v-if="false">
-                  <el-form-item label="营业执照:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
+        <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="editMsgForm" status-icon>
+          <transition name="el-fade-in-linear">
+            <div>
+              <div class="detail-form-title text-center">承运商信息</div>
+              <div style="margin:30px 2%">
+                <el-row :gutter="40">
+                  <el-col :span="8">
+                    <el-form-item label="承运商名称:" prop="carrier_name">
+                      <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.carrier_name"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="联系人:" prop="contact">
+                      <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="联系电话:" prop="contact_phone">
+                      <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.contact_phone"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="40">
+                  <el-col :span="8">
+                    <el-form-item label="地址:">
+                      <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.address"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="承运类型:" prop="carrier_type">
+                      <el-select v-model="editMsgForm.carrier_type" placeholder="请选择" @change="changeCarrier">
+                        <el-option v-for="(item,key) in selectData.carrierTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="是否启用:">
+                      <el-switch v-model="editMsgForm.isValidName" active-color="#13ce66" inactive-color="#ff4949">
+                      </el-switch>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="40">
+                  <el-col :span="16">
+                    <el-form-item label="代码:" prop="codeMsg">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="code">
+                            <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='credit_code'&&detail.credit_code?true:false">
+                              <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                            </el-select>
+                          </div>
+                        </el-col>
+                        <el-col :span="10">
+                          <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.codeMsg"></el-input>
+                        </el-col>
+                      </el-row>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8" v-if="false">
+                    <el-form-item label="营业执照:">
+                      <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="editMsgForm.license_pic" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="editBasics(nextStepBtn,'next')" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
-                  <el-button type="primary" @click="editBasics(saveBasicAndReviewBtn,'out')" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
+                        <el-button size="small" type="primary" plain>上传图片</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                      </el-upload>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
-          </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==1">
-            <div class="detail-form-title text-center">卸车待时规则</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpTwo" :rules="rules" :model="editMsgForm" status-icon>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="免费等待时长:" prop="free_hour">
-                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="editMsgForm.free_hour"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="超时计算单价:" prop="overtime_price">
-                    <el-input placeholder="请输入" type="text" v-model="editMsgForm.overtime_price"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="primary" @click="editUnload(saveBasicAndReviewBtn)" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
+          </transition>
+          <transition name="el-fade-in-linear">
+            <div>
+              <div class="detail-form-title text-center">卸车待时规则</div>
+              <div style="margin:30px 2%">
+                <el-row :gutter="40">
+                  <el-col :span="8">
+                    <el-form-item label="免费等待时长:" prop="free_hour">
+                      <el-input placeholder="请输入" type="text" v-model="editMsgForm.free_hour"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="超时计算单价:" prop="overtime_price">
+                      <el-input placeholder="请输入" type="text" v-model="editMsgForm.overtime_price"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="detail-btn">
+                <el-row>
+                  <el-col :span="12" :offset="6" class="text-center">
+                    <el-button type="primary" @click="editBasics(saveBasicAndReviewBtn)" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
+                  </el-col>
+                </el-row>
+              </div>
             </div>
-          </div>
-        </transition>
+          </transition>
+        </el-form>
       </el-main>
     </el-container>
   </div>
@@ -140,9 +134,6 @@ export default {
   computed: {
     titleType: function() {
       return this.$route.query.id ? '编辑承运商' : '新增承运商';
-    },
-    activeStep: function() {
-      return this.$route.query.activeStep || 0;
     },
     id: function() {
       return this.$route.query.id || '';
@@ -221,7 +212,6 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         overtime_price: [
-          { required: true, message: '请输入超时计算单价', trigger: 'blur' },
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
 
@@ -229,11 +219,6 @@ export default {
       saveBasicAndReviewBtn: {
         isLoading: false,
         btnText: '保存并退出',
-        isDisabled: false,
-      },
-      nextStepBtn: {
-        isLoading: false,
-        btnText: '保存并下一步',
         isDisabled: false,
       },
       detail: {},
@@ -256,19 +241,19 @@ export default {
         this.rules.codeMsg = this.structure;
       }
     },
-    changeCarrier:function(){
-      if(this.editMsgForm.carrier_type=='own'){
+    changeCarrier: function() {
+      if (this.editMsgForm.carrier_type == 'own') {
         this.$confirm('自有承运会获得当前公司液厂、卸货站等地标信息，请谨慎选择', '请注意', {
-                confirmButtonText: '确认',
-                type: 'warning',
-                showCancelButton: false,
-                center: true,
-                closeOnClickModal: false,
-                showClose: false,
-                closeOnPressEscape: false
-            }).then(() => {
+          confirmButtonText: '确认',
+          type: 'warning',
+          showCancelButton: false,
+          center: true,
+          closeOnClickModal: false,
+          showClose: false,
+          closeOnPressEscape: false
+        }).then(() => {
 
-          })
+        })
       }
     },
     returnToPage: function() {
@@ -329,33 +314,34 @@ export default {
           btnObject.btnText = '正在提交';
           btnObject.isLoading = true;
 
-          //postData = this.pbFunc.fifterObjIsNull(postData);
+          postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
-            btnObject.btnText = btnTextCopy;
-            btnObject.isLoading = false;
-            btnObject.isDisabled = false;
+            btnObject = {
+              btnText: btnTextCopy,
+              isLoading: false,
+              isDisabled: false,
+            }
 
             if (results.data && results.data.code == 0 && results.data.data) {
               this.$message({
                 message: '提交成功',
                 type: 'success'
               });
-              if (isReview) {
-                if (this.id) {
-                  this.$router.push({ path: `/basicDataManage/carrierManage/carrierDetail/${this.id }` });
-                } else {
-                  this.$router.push({ path: "/basicDataManage/carrierManage/carrierList" });
-                }
 
+              if (this.id) {
+                this.$router.push({ path: `/basicDataManage/carrierManage/carrierDetail/${this.id }` });
               } else {
-                let id = results.data.data.id;
-                this.$router.push({ path: "/basicDataManage/carrierManage/editCarrier", query: { activeStep: stepNum - 1, id: id } });
+                this.$router.push({ path: "/basicDataManage/carrierManage/carrierList" });
               }
+
+
             }
           }).catch((err) => {
-            btnObject.btnText = btnTextCopy;
-            btnObject.isLoading = false;
-            btnObject.isDisabled = false;
+            btnObject = {
+              btnText: btnTextCopy,
+              isLoading: false,
+              isDisabled: false,
+            }
           })
         } else {
           btnObject.isDisabled = false;
@@ -373,7 +359,7 @@ export default {
       } else {
         this.editMsgForm.is_valid = 'invalid'
       }
-      let keyArray = ['carrier_name', 'contact', 'contact_phone', 'address', 'is_valid', 'carrier_type'];
+      let keyArray = ['carrier_name', 'contact', 'contact_phone', 'address', 'is_valid', 'carrier_type', 'free_hour', 'overtime_price'];
       if (this.editMsgForm.code === 'credit_code') {
         this.editMsgForm.credit_code = this.editMsgForm.codeMsg;
         keyArray.push('credit_code');
@@ -382,29 +368,8 @@ export default {
         keyArray.push('organization_code');
       }
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-
-      if (btnType === 'next') {
-        this.editAjax(postData, formName, btnObject, 2);
-      } else if (btnType === 'out') {
-        this.editAjax(postData, formName, btnObject, null, true);
-      }
+      this.editAjax(postData, formName, btnObject);
     },
-    editUnload(btn) {
-
-      let formName = 'addFormSetpTwo';
-      let btnObject = btn;
-      let keyArray = ['free_hour', 'overtime_price'];
-      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      this.editAjax(postData, formName, btnObject, null, true);
-    },
-    // saveBasicAndReview() {
-    //   let formName = 'addClientFormSetpOne';
-    //   let btnObject = this.saveBasicAndReviewBtn;
-    //   let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
-    //   let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-    //   postData.area = this.userForm.address.area || this.userForm.address.city || '';
-    //   this.editAjax(postData, formName, btnObject, null, true);
-    // },
   }
 }
 
