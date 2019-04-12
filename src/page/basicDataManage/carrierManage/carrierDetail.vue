@@ -1,7 +1,7 @@
 <!-- carrierDetail.vue -->
 <!-- clientDetail.vue -->
 <style scoped lang="less">
-.trans-fee {
+  .trans-fee {
   .table-list {
     margin-bottom: 20px;
   }
@@ -38,7 +38,7 @@
                       基础信息
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                      <el-button type="primary" size="mini" @click="goEditDetail()">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -104,7 +104,7 @@
                       卸车待时约定
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                      <el-button type="primary" size="mini" @click="goEditDetail()">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -178,8 +178,8 @@ export default {
     handleClick() {
 
     },
-    goEditDetail: function(number) {
-      this.$router.push({ path: "/basicDataManage/carrierManage/editCarrier?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
+    goEditDetail: function() {
+      this.$router.push({ path: "/basicDataManage/carrierManage/editCarrier", query: { id: this.detailData.id } });
     },
 
   }
